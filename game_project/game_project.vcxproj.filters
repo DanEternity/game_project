@@ -13,10 +13,45 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Enviroment">
+      <UniqueIdentifier>{30329be7-1aa3-4c83-b650-93b46f9c379c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{d6d6c90b-2c46-4a1c-8b18-f6c7c7363f3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ScriptEngine">
+      <UniqueIdentifier>{5d026c38-d2e7-4a06-85d5-3af33d835cb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{cad69b66-4191-4718-a72f-0b97ad5fa432}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="Source\game.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\enviroment.cpp">
+      <Filter>Enviroment</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\game.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\enviroment.h">
+      <Filter>Enviroment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\scriptSystem.h">
+      <Filter>ScriptEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\baseObject.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\scriptDescriptor.h">
+      <Filter>ScriptEngine</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

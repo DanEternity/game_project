@@ -1,9 +1,13 @@
-#include <SFML/Graphics.hpp>
-#include <TGUI/tGui.hpp>
+//#include <SFML/Graphics.hpp>
+//#include <TGUI/tGui.hpp>
+
+#include "Source\enviroment.h"
+#include "Source\game.h"
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1920, 1080), "SFML works!");
+	// Examples
+	/*sf::RenderWindow window(sf::VideoMode(1920, 1080), "SFML works!");
 	sf::CircleShape shape(100.f);
 	shape.setFillColor(sf::Color::Green);
 
@@ -40,7 +44,7 @@ int main()
 	menu->addMenu("Help");
 	menu->addMenuItem("About");
 	gui.add(menu);
-
+	
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -48,12 +52,46 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
+			gui.handleEvent(event);
 		}
 
 		window.clear();
 		window.draw(shape);
 		gui.draw();
 		window.display();
+	}
+	*/
+
+	// Create game enviroment
+	initEnviroment();
+
+	// Create window to display game
+	gEnv->globalWindow.create(sf::VideoMode(gEnv->windowSizeX, gEnv->windowSizeY), "Eternity (development)");
+	gEnv->globalWindow;
+	// Clock to calculate time from previous frame
+	sf::Clock deltaClock;
+
+	while (gEnv->globalWindow.isOpen())
+	{
+		// Handle system events
+		sf::Event event;
+		while (gEnv->globalWindow.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				gEnv->globalWindow.close();
+			//gui.handleEvent(event);
+		}
+
+		gEnv->globalWindow.clear();
+
+		// Delta time calculation
+		sf::Time dt = deltaClock.restart();
+
+		// Start game update
+		updateGameCycle(dt.asSeconds());
+
+		// Display frame
+		gEnv->globalWindow.display();
 	}
 
 	return 0;
