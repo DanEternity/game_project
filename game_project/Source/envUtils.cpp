@@ -13,6 +13,8 @@ bool createModelDescriptor(std::string name)
 	p->objectType = objectType::modelDescriptor;
 	p->tableId = 0;
 
+	gEnv->modelDB[name] = p;
+
 	return true;
 }
 
