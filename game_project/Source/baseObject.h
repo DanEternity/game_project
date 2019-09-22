@@ -1,13 +1,19 @@
 #pragma once
 
-enum ObjectType
-{
+namespace objectType {
 
-};
+	enum ObjectType
+	{
+		modelDescriptor,
+
+	};
+
+} // namespace objectType
+
 // abstact class 
 class BaseObject
 {
 public:
-	ObjectType objectType;
+	objectType::ObjectType objectType;
 	int tableId;
 };

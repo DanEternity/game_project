@@ -25,6 +25,9 @@
     <Filter Include="Objects">
       <UniqueIdentifier>{cad69b66-4191-4718-a72f-0b97ad5fa432}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameMenu">
+      <UniqueIdentifier>{5d62da6b-1187-4a9d-bb91-7e4e56181c55}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -35,6 +38,15 @@
     </ClCompile>
     <ClCompile Include="Source\enviroment.cpp">
       <Filter>Enviroment</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\menuOverlay.cpp">
+      <Filter>GameMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\preload.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\envUtils.cpp">
+      <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +64,30 @@
     </ClInclude>
     <ClInclude Include="Source\scriptDescriptor.h">
       <Filter>ScriptEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\gamedata.h">
+      <Filter>Enviroment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\graphics.h">
+      <Filter>Enviroment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\menuOverlay.h">
+      <Filter>GameMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\menuData.h">
+      <Filter>GameMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\preload.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\graphicsModel.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\envUtils.h">
+      <Filter>Enviroment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\gameLoader.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

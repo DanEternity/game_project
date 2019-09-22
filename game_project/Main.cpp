@@ -3,6 +3,7 @@
 
 #include "Source\enviroment.h"
 #include "Source\game.h"
+#include "Source\preload.h"
 
 int main()
 {
@@ -65,9 +66,19 @@ int main()
 	// Create game enviroment
 	initEnviroment();
 
+	// Preloading and constructing game resources
+	preloadResources();
+
 	// Create window to display game
-	gEnv->globalWindow.create(sf::VideoMode(gEnv->windowSizeX, gEnv->windowSizeY), "Eternity (development)");
-	gEnv->globalWindow;
+	gEnv->globalWindow.create(
+		sf::VideoMode(gEnv->graphics.windowSizeX, gEnv->graphics.windowSizeY), 
+		"Eternity (development)", 
+		gEnv->graphics.fullscreen ? sf::Style::Fullscreen : sf::Style::Default
+	);
+
+	// Bind gui descriptor to main window
+	gEnv->globalGui.setTarget(gEnv->globalWindow);
+
 	// Clock to calculate time from previous frame
 	sf::Clock deltaClock;
 
@@ -79,7 +90,7 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				gEnv->globalWindow.close();
-			//gui.handleEvent(event);
+			gEnv->globalGui.handleEvent(event);
 		}
 
 		gEnv->globalWindow.clear();

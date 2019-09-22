@@ -19,6 +19,11 @@
 // #include "character.h"
 // #include "ship.h"
 #include "scriptDescriptor.h"
+#include "graphicsModel.h"
+#include "gamedata.h"
+#include "graphics.h"
+#include "menuData.h"
+
 
 // Short name for global enviroment 
 #define gEnv globalEnviroment
@@ -33,29 +38,23 @@ class GlobalEnviroment
 
 public:
 
-	/*                                  */
-	/*      SFML variables section      */
-	/*                                  */
-
+	// SFML window descriptor. Used to manipulate window params and draw objects
 	sf::RenderWindow globalWindow;
-	
-	int windowSizeX = 1920;
-	int windowSizeY = 1080;
 
-	/*                                  */
-	/* game.h primary variables section */
-	/*                                  */
+	// TGUI descriptor
+	tgui::Gui globalGui;
 
-	// Does game should check gamemode for draw
-	bool gameModesRequiredDraw;
-	// Does game should update gamemodes
-	bool gameModesRequiredUpdate;
-	// Does game should run script system
-	bool scriptSystemRequiresUpdate;
-	// Does game should update menu (menu will be disabled if FALSE)
-	bool menuOverlayRequiresUpdate;
-	// Does world generator active
-	bool worldGeneratorRequiresUpdate;
+	// Graphical settings and values
+	Graphics graphics;
+
+	// Contain info about states of game engine
+	GameData game;
+
+	// Contains menu data and menu related states
+	MenuData menuData;
+
+	// Contains graphical models (2d textures)
+	std::map<std::string, ModelDescriptor *> modelDB;
 };
 
 extern GlobalEnviroment * globalEnviroment;

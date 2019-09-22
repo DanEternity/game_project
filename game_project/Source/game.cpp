@@ -1,6 +1,7 @@
 #include "game.h"
 #include "enviroment.h"
 #include "scriptSystem.h"
+#include "menuOverlay.h"
 
 void updateGameCycle(double deltaTime)
 {
@@ -9,35 +10,35 @@ void updateGameCycle(double deltaTime)
 
 	/* Calling gamemodes for draw */
 	
-	if (gEnv->gameModesRequiredDraw)
+	if (gEnv->game.gameModesRequiredDraw)
 	{
 
 	}
 
 	/* Calling gamemodes for update */
 	
-	if (gEnv->gameModesRequiredUpdate)
+	if (gEnv->game.gameModesRequiredUpdate)
 	{
 
 	}
 
 	/* Calling script system */
 
-	if (gEnv->scriptSystemRequiresUpdate)
+	if (gEnv->game.scriptSystemRequiresUpdate)
 	{
 
 	}
 
 	/* Calling menu overlay */
 
-	if (gEnv->menuOverlayRequiresUpdate)
+	if (gEnv->game.menuOverlayRequiresUpdate)
 	{
-
+		updateMenuOverlay(deltaTime);
 	}
 
 	/* World generator utility goes here */
 
-	if (gEnv->worldGeneratorRequiresUpdate)
+	if (gEnv->game.worldGeneratorRequiresUpdate)
 	{
 
 	}
