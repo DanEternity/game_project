@@ -10,6 +10,22 @@ public:
 
 };
 
+namespace gameMode 
+{
+
+	enum GameMode
+	{
+		blankMode,
+		loadingMode,
+		gameGenerationMode,
+		adventureMode,
+		groundMode,
+		spaceBattleMode,
+		groundBattleMode,
+	};
+
+} // namespace gameMode
+
 //
 // Class contain info about states of game engine
 //
@@ -33,6 +49,12 @@ public:
 	bool menuOverlayRequiresUpdate;
 	// Does world generator active
 	bool worldGeneratorRequiresUpdate;
+
+	// Active game mode
+	gameMode::GameMode activeGameMode = gameMode::blankMode;
+
+	// Can be used to locate return point if needed
+	gameMode::GameMode lastActiveGameMode = gameMode::blankMode;
 
 	// gameloader.h section
 

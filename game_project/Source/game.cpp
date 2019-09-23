@@ -12,14 +12,28 @@ void updateGameCycle(double deltaTime)
 	
 	if (gEnv->game.gameModesRequiredDraw)
 	{
+		switch (gEnv->game.activeGameMode)
+		{
 
+		default:
+			// invalid game mode
+			// Probably critical error
+			break;
+		}
 	}
 
 	/* Calling gamemodes for update */
 	
 	if (gEnv->game.gameModesRequiredUpdate)
 	{
+		switch (gEnv->game.activeGameMode)
+		{
 
+		default:
+			// invalid game mode
+			// Probably critical error
+			break;
+		}
 	}
 
 	/* Calling script system */
