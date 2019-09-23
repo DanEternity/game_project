@@ -37,6 +37,8 @@ public:
 
 	std::string execDir = "";
 
+	bool debug = true;
+
 	// game.h section
 
 	// Does game should check gamemode for draw

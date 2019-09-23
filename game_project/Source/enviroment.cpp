@@ -17,4 +17,6 @@ void initEnviroment()
 	std::string::size_type pos = std::string(buffer).find_last_of("\\/");
 	globalEnviroment->game.execDir = std::string(buffer).substr(0, pos);
 
+	globalEnviroment->game.menuOverlayRequiresUpdate = true;
+
 }

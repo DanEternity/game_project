@@ -18,4 +18,12 @@ void updateMenuOverlay(double deltaTime)
 
 	}
 
+	if (gEnv->game.debug)
+	{
+
+		sf::CircleShape f(120.f);
+		gEnv->globalWindow.draw(f);
+
+	}
+
 }

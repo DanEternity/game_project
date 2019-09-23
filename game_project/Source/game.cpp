@@ -14,7 +14,9 @@ void updateGameCycle(double deltaTime)
 	{
 		switch (gEnv->game.activeGameMode)
 		{
-
+		case gameMode::loadingMode:
+			// DrawLoadingMode();
+			break;
 		default:
 			// invalid game mode
 			// Probably critical error
