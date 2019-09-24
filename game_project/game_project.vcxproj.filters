@@ -46,7 +46,10 @@
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Source\envUtils.cpp">
-      <Filter>Файлы исходного кода</Filter>
+      <Filter>Enviroment</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\loader.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,7 +89,7 @@
     <ClInclude Include="Source\envUtils.h">
       <Filter>Enviroment</Filter>
     </ClInclude>
-    <ClInclude Include="Source\gameLoader.h">
+    <ClInclude Include="Source\loader.h">
       <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>

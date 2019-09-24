@@ -2,6 +2,7 @@
 #include "enviroment.h"
 #include "scriptSystem.h"
 #include "menuOverlay.h"
+#include "loader.h"
 
 void updateGameCycle(double deltaTime)
 {
@@ -15,7 +16,7 @@ void updateGameCycle(double deltaTime)
 		switch (gEnv->game.activeGameMode)
 		{
 		case gameMode::loadingMode:
-			// DrawLoadingMode();
+			// drawLoadingMode();
 			break;
 		default:
 			// invalid game mode
@@ -30,7 +31,9 @@ void updateGameCycle(double deltaTime)
 	{
 		switch (gEnv->game.activeGameMode)
 		{
-
+		case gameMode::loadingMode:
+			updateLoadingMode();
+			break;
 		default:
 			// invalid game mode
 			// Probably critical error

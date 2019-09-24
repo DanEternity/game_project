@@ -224,6 +224,7 @@
     <ClCompile Include="Source\enviroment.cpp" />
     <ClCompile Include="Source\envUtils.cpp" />
     <ClCompile Include="Source\game.cpp" />
+    <ClCompile Include="Source\loader.cpp" />
     <ClCompile Include="Source\menuOverlay.cpp" />
     <ClCompile Include="Source\preload.cpp" />
   </ItemGroup>
@@ -233,9 +234,9 @@
     <ClInclude Include="Source\envUtils.h" />
     <ClInclude Include="Source\game.h" />
     <ClInclude Include="Source\gamedata.h" />
-    <ClInclude Include="Source\gameLoader.h" />
     <ClInclude Include="Source\graphics.h" />
     <ClInclude Include="Source\graphicsModel.h" />
+    <ClInclude Include="Source\loader.h" />
     <ClInclude Include="Source\menuData.h" />
     <ClInclude Include="Source\menuOverlay.h" />
     <ClInclude Include="Source\preload.h" />

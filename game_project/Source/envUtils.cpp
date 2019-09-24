@@ -24,7 +24,7 @@ bool createModelDescriptor(std::string name, std::string pathToFile, bool highPr
 	if (!createModelDescriptor(name))
 		return false;
 
-	gEnv->modelDB[name]->pathToFile = pathToFile;
+	gEnv->modelDB[name]->pathToFile = gEnv->game.workDir + pathToFile;
 	gEnv->modelDB[name]->priorityLoad = highPriority;
 	gEnv->modelDB[name]->status = modelStatus::notLoaded;
 

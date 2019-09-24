@@ -16,6 +16,8 @@ namespace modelStatus {
 		loaded,
 		// model used by object
 		loadedAndUsed,
+		// error occured
+		error,
 	};
 
 } // namespace modelStatus

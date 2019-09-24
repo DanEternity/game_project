@@ -6,7 +6,10 @@
 class ResourseLoader
 {
 public:
+
 	std::map<std::string, ModelDescriptor *>::iterator pointer;
+
+	std::string task = "null";
 
 };
 
@@ -22,6 +25,7 @@ namespace gameMode
 		groundMode,
 		spaceBattleMode,
 		groundBattleMode,
+		mainMenuMode,
 	};
 
 } // namespace gameMode
@@ -35,7 +39,11 @@ public:
 
 	// system section
 
+	// executable directory
 	std::string execDir = "";
+
+	// work directory
+	std::string workDir = "";
 
 	bool debug = true;
 

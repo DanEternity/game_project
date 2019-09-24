@@ -24,8 +24,10 @@ void updateMenuOverlay(double deltaTime)
 		//sf::CircleShape f(120.f);
 		//gEnv->globalWindow.draw(f);
 
-		tgui::Theme theme("D:/Projects/_project/TGUI/themes/Black.txt");
-		
+		//tgui::Theme theme("D:/Projects/_project/TGUI/themes/Black.txt");
+		//std::string t = gEnv->game.execDir + "\\themes\\Black.txt";
+		tgui::Theme theme(gEnv->game.workDir + "\\Resources\\Themes\\Black.txt");
+
 		auto button = tgui::Button::create();
 		button->setRenderer(theme.getRenderer("Button"));
 		button->setSize(100, 100);
