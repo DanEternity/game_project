@@ -1,6 +1,18 @@
 #pragma once
 
 #include <map>
+#include <TGUI\TGUI.hpp>
+#include <vector>
+
+class MainMenu
+{
+public:
+	bool menuUpdateRequired;
+	bool menuDrawRequired;
+	bool widgetDisable;
+
+	std::vector<tgui::Widget::Ptr> mainMenuWidgets;
+};
 
 // Loader variables
 class ResourseLoader
@@ -26,6 +38,7 @@ namespace gameMode
 		spaceBattleMode,
 		groundBattleMode,
 		mainMenuMode,
+		menuOverlay,
 	};
 
 } // namespace gameMode
@@ -70,5 +83,7 @@ public:
 
 	ResourseLoader loader;
 
+	//mainmenu section
+	MainMenu mainMenu;
 };
 

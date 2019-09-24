@@ -3,6 +3,7 @@
 #include "scriptSystem.h"
 #include "menuOverlay.h"
 #include "loader.h"
+#include "mainMenu.h"
 
 void updateGameCycle(double deltaTime)
 {
@@ -17,6 +18,9 @@ void updateGameCycle(double deltaTime)
 		{
 		case gameMode::loadingMode:
 			// drawLoadingMode();
+			break;
+		case gameMode::mainMenuMode:
+			updateMainMenu();
 			break;
 		default:
 			// invalid game mode

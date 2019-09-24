@@ -53,7 +53,28 @@ void updateLoadingMode()
 
 		// Change active gamemode and variables
 
+		tgui::Widget::Ptr test = tgui::Button::create();
+		tgui::Widget::Ptr test2 = tgui::Button::create();
+		gEnv->globalGui.add(test);
+		gEnv->globalGui.add(test2);
+		gEnv->game.mainMenu.mainMenuWidgets.push_back(test);
+		gEnv->game.mainMenu.mainMenuWidgets.push_back(test2);
+		int i = 0;
+		for (const auto& widget : gEnv->game.mainMenu.mainMenuWidgets)
+		{
+			widget->setSize(200, 200);
+			widget->setPosition(100*i + (i*200), 100);
+			widget->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+			i++;
+		}
+		
+
 		gEnv->game.activeGameMode = gameMode::mainMenuMode;
+		gEnv->game.mainMenu.menuDrawRequired = true;
+		gEnv->game.mainMenu.menuUpdateRequired = true;
+		gEnv->game.gameModesRequiredDraw = true;
+		gEnv->game.gameModesRequiredUpdate = true;
+		gEnv->game.mainMenu.widgetDisable = true;
 
 	}
 }

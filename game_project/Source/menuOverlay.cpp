@@ -26,7 +26,7 @@ void updateMenuOverlay(double deltaTime)
 
 		//tgui::Theme theme("D:/Projects/_project/TGUI/themes/Black.txt");
 		//std::string t = gEnv->game.execDir + "\\themes\\Black.txt";
-		tgui::Theme theme(gEnv->game.workDir + "\\Resources\\Themes\\Black.txt");
+		/*tgui::Theme theme(gEnv->game.workDir + "\\Resources\\Themes\\Black.txt");
 
 		auto button = tgui::Button::create();
 		button->setRenderer(theme.getRenderer("Button"));
@@ -42,7 +42,7 @@ void updateMenuOverlay(double deltaTime)
 		
 		
 		
-		gEnv->globalGui.draw();
+		gEnv->globalGui.draw();*/
 
 	}
 
