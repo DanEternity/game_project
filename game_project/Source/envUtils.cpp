@@ -53,3 +53,42 @@ bool deleteModelDescriptor(std::string name)
 
 	return true;
 }
+
+bool loadTextureToModelDescriptor(std::string name)
+{
+	auto p = gEnv->modelDB[name];
+	if (p->status == modelStatus::notLoaded)
+	{
+		try
+		{
+			p->tex.loadFromFile(p->pathToFile);
+			if (p->tex.getNativeHandle() == 0)
+			{
+				// Loading failed
+				p->status = modelStatus::error;
+				if (debugMode)
+					printf("Debug: Error! Failed to load texture -> %s \n", p->pathToFile.c_str());
+				return false;
+			}
+			else
+			{
+				// Loading successfull
+				p->status = modelStatus::loaded;
+				if (debugMode)
+					printf("Debug: Loaded texture -> %s \n", p->name.c_str());
+				return true;
+			}
+		}
+		catch (const std::exception&)
+		{
+			// Loading failed
+			p->status = modelStatus::error;
+			if (debugMode)
+				printf("Debug: Error! Failed to load texture -> %s \n", p->pathToFile.c_str());
+			return false;
+		}
+
+	}
+
+
+}

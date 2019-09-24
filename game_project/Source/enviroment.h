@@ -23,7 +23,7 @@
 #include "gamedata.h"
 #include "graphics.h"
 #include "menuData.h"
-
+#include "valueObjects.h"
 
 // Short name for global enviroment 
 #define gEnv globalEnviroment
@@ -61,6 +61,9 @@ public:
 
 	// Contains graphical models (2d textures)
 	std::map<std::string, ModelDescriptor *> modelDB;
+
+	// Contains external tables
+	std::map<std::string, ExternalTable*> extTables;
 };
 
 extern GlobalEnviroment * globalEnviroment;

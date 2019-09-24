@@ -242,6 +242,8 @@
     <ClInclude Include="Source\preload.h" />
     <ClInclude Include="Source\scriptDescriptor.h" />
     <ClInclude Include="Source\scriptSystem.h" />
+    <ClInclude Include="Source\scriptTypes.h" />
+    <ClInclude Include="Source\valueObjects.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

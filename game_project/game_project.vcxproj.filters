@@ -92,5 +92,11 @@
     <ClInclude Include="Source\loader.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Source\scriptTypes.h">
+      <Filter>ScriptEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\valueObjects.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

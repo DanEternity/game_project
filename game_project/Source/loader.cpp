@@ -36,35 +36,7 @@ void updateLoadingMode()
 
 		// Load current texture
 
-		if (gEnv->game.loader.pointer->second->status == modelStatus::notLoaded)
-		{
-			try
-			{
-				gEnv->game.loader.pointer->second->tex.loadFromFile(gEnv->game.loader.pointer->second->pathToFile);
-				if (gEnv->game.loader.pointer->second->tex.getNativeHandle() == 0)
-				{
-					// Loading failed
-					gEnv->game.loader.pointer->second->status = modelStatus::error;
-					if (debugMode)
-						printf("Debug: Error! Failed to load texture -> %s \n", gEnv->game.loader.pointer->second->pathToFile.c_str());
-				}
-				else
-				{
-					// Loading successfull
-					gEnv->game.loader.pointer->second->status = modelStatus::loaded;
-					if (debugMode)
-						printf("Debug: Loaded texture -> %s \n", gEnv->game.loader.pointer->second->name.c_str());
-				}
-			}
-			catch (const std::exception&)
-			{
-				// Loading failed
-				gEnv->game.loader.pointer->second->status = modelStatus::error;
-				if (debugMode)
-					printf("Debug: Error! Failed to load texture -> %s \n", gEnv->game.loader.pointer->second->pathToFile.c_str());
-			}
-
-		}
+		loadTextureToModelDescriptor(gEnv->game.loader.pointer->second->name);
 
 		// Move to next
 
@@ -74,6 +46,10 @@ void updateLoadingMode()
 
 	if (gEnv->game.loader.task == "loadingCompleted")
 	{
+		
+		// Post load section
+
+		// Texture binding goes here
 
 		// Change active gamemode and variables
 
