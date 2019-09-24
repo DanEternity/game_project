@@ -34,13 +34,10 @@ void updateMenuOverlay(double deltaTime)
 		button->setTextSize(72);
 		gEnv->globalGui.add(button, "TestButton");
 
-		auto button2 = tgui::Button::create();
+		tgui::Button::Ptr button2 = tgui::Button::copy(button);
 		gEnv->globalGui.add(button2);
 		button2->setPosition("TestButton.x", "TestButton.bottom + 100");
-		button2->setRenderer(theme.getRenderer("Button"));
-		button2->setSize(100, 100);
-		button2->setText("A");
-		button2->setTextSize(72);
+		
 		
 		
 		gEnv->globalGui.draw();
