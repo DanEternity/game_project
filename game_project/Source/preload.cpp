@@ -16,6 +16,7 @@ void preloadResources()
 void preloadModels()
 {
 
-	createModelDescriptor("blankTexture", "resources\blankTexture.png");
-
+	createModelDescriptor("blankTexture", "\\resources\\textures\\blankTexture.png");
+	createModelDescriptor("blankTexture2", "\\resources\\textures\\blankTexture.png");
+	//createModelDescriptor("fsfa", "fsaf", true);
 }

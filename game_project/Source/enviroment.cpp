@@ -17,6 +17,16 @@ void initEnviroment()
 	std::string::size_type pos = std::string(buffer).find_last_of("\\/");
 	globalEnviroment->game.execDir = std::string(buffer).substr(0, pos);
 
+	int length = GetCurrentDirectory(512, buffer);
+
+	gEnv->game.workDir = std::string(buffer).substr(0, length);
+
 	globalEnviroment->game.menuOverlayRequiresUpdate = true;
+
+	gEnv->globalTheme.load(gEnv->game.workDir + "\\Resources\\Themes\\Black.txt");
+
+	gEnv->game.activeGameMode = gameMode::loadingMode;
+
+	gEnv->game.gameModesRequiredUpdate = true;
 
 }

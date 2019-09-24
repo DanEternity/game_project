@@ -23,10 +23,13 @@
 #include "gamedata.h"
 #include "graphics.h"
 #include "menuData.h"
-
+#include "valueObjects.h"
 
 // Short name for global enviroment 
 #define gEnv globalEnviroment
+
+// Debug variable short name
+#define debugMode globalEnviroment->game.debug
 
 //
 // Game enviroment table. Contains all possible game variables. All non-temp variables should be stored here.
@@ -44,6 +47,9 @@ public:
 	// TGUI descriptor
 	tgui::Gui globalGui;
 
+	// TGUI theme 
+	tgui::Theme globalTheme;
+
 	// Graphical settings and values
 	Graphics graphics;
 
@@ -55,6 +61,9 @@ public:
 
 	// Contains graphical models (2d textures)
 	std::map<std::string, ModelDescriptor *> modelDB;
+
+	// Contains external tables
+	std::map<std::string, ExternalTable*> extTables;
 };
 
 extern GlobalEnviroment * globalEnviroment;

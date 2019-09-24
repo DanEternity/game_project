@@ -45,11 +45,10 @@ int main()
 
 		// Start game update
 		updateGameCycle(dt.asSeconds());
+		
 		// DEBUG
-
 		std::wstring debugTitle = L"Eternity(development); FPS: " + std::to_wstring(int(1.0 / dt.asSeconds())) + L"; Latency: " + std::to_wstring(dt.asMilliseconds()) + L" ms";
 		gEnv->globalWindow.setTitle(debugTitle);
-
 		// DEBUG END
 
 		// Display frame
