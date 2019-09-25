@@ -11,7 +11,7 @@ public:
 	bool menuDrawRequired;
 	bool widgetDisable;
 
-	std::vector<tgui::Widget::Ptr> mainMenuWidgets;
+	std::vector<tgui::Button::Ptr> mainMenuWidgets;
 };
 
 // Loader variables

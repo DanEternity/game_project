@@ -1,6 +1,12 @@
 #include "loader.h"
 #include "enviroment.h"
 
+
+void signalHandler(tgui::Widget::Ptr widget, const std::string& signalName)
+{
+
+}
+
 void updateLoadingMode()
 {
 
@@ -53,11 +59,11 @@ void updateLoadingMode()
 
 		// Change active gamemode and variables
 
-		tgui::Widget::Ptr test = tgui::Button::create();
-		tgui::Widget::Ptr test2 = tgui::Button::create();
-		gEnv->globalGui.add(test);
+		tgui::Button::Ptr testButton = tgui::Button::create("testButton");
+		tgui::Button::Ptr test2 = tgui::Button::create();
+		gEnv->globalGui.add(testButton);
 		gEnv->globalGui.add(test2);
-		gEnv->game.mainMenu.mainMenuWidgets.push_back(test);
+		gEnv->game.mainMenu.mainMenuWidgets.push_back(testButton);
 		gEnv->game.mainMenu.mainMenuWidgets.push_back(test2);
 		int i = 0;
 		for (const auto& widget : gEnv->game.mainMenu.mainMenuWidgets)
@@ -67,6 +73,8 @@ void updateLoadingMode()
 			widget->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 			i++;
 		}
+
+		gEnv->game.mainMenu.mainMenuWidgets[0]->connect("MouseReleased", signalHandler);
 		
 
 		gEnv->game.activeGameMode = gameMode::mainMenuMode;
@@ -74,7 +82,7 @@ void updateLoadingMode()
 		gEnv->game.mainMenu.menuUpdateRequired = true;
 		gEnv->game.gameModesRequiredDraw = true;
 		gEnv->game.gameModesRequiredUpdate = true;
-		gEnv->game.mainMenu.widgetDisable = true;
+		//gEnv->game.mainMenu.widgetDisable = true;
 
 	}
 }
