@@ -4,7 +4,8 @@
 
 void signalHandler(tgui::Widget::Ptr widget, const std::string& signalName)
 {
-
+	widget->cast<tgui::Button>()->setText("ANDREY P word");
+	printf("%s\n",widget->getWidgetType().c_str());
 }
 
 void updateLoadingMode()
@@ -75,7 +76,7 @@ void updateLoadingMode()
 		}
 
 		gEnv->game.mainMenu.mainMenuWidgets[0]->connect("MouseReleased", signalHandler);
-		
+		gEnv->game.mainMenu.mainMenuWidgets[1]->connect("MouseReleased", signalHandler);
 
 		gEnv->game.activeGameMode = gameMode::mainMenuMode;
 		gEnv->game.mainMenu.menuDrawRequired = true;
