@@ -165,10 +165,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;tgui-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Londeroner2|x64'">
     <ClCompile>
@@ -228,6 +232,7 @@
     <ClCompile Include="Source\mainMenu.cpp" />
     <ClCompile Include="Source\menuOverlay.cpp" />
     <ClCompile Include="Source\preload.cpp" />
+    <ClCompile Include="Source\scriptSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\baseObject.h" />
@@ -244,6 +249,7 @@
     <ClInclude Include="Source\preload.h" />
     <ClInclude Include="Source\scriptDescriptor.h" />
     <ClInclude Include="Source\scriptSystem.h" />
+    <ClInclude Include="Source\scriptSystemData.h" />
     <ClInclude Include="Source\scriptTypes.h" />
     <ClInclude Include="Source\valueObjects.h" />
   </ItemGroup>

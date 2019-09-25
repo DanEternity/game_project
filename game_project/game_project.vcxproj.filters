@@ -54,6 +54,9 @@
     <ClCompile Include="Source\mainMenu.cpp">
       <Filter>GameMenu</Filter>
     </ClCompile>
+    <ClCompile Include="Source\scriptSystem.cpp">
+      <Filter>ScriptEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\game.h">
@@ -103,6 +106,9 @@
     </ClInclude>
     <ClInclude Include="Source\mainMenu.h">
       <Filter>GameMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\scriptSystemData.h">
+      <Filter>ScriptEngine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
