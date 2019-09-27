@@ -38,6 +38,11 @@ void exitButtons(tgui::Widget::Ptr widget, const std::string& signalName)
 	}
 }
 
+void exitButtonsYes(tgui::Widget::Ptr widget, const std::string& signalName)
+{
+	gEnv->globalWindow.close();
+}
+
 void createMenuButtons()
 {
 	tgui::Button::Ptr startButton = tgui::Button::create();
@@ -67,6 +72,7 @@ void createMenuButtons()
 	exitButtonYes->setText("Yes");
 	exitButtonYes->setEnabled(false);
 	exitButtonYes->setVisible(false);
+	exitButtonYes->connect("MouseReleased", exitButtonsYes);
 	gEnv->game.mainMenu.mainMenuWidgets.push_back(exitButtonNo);
 	exitButtonNo->setSize(150, 150);
 	exitButtonNo->setPosition("exitButton.right + 50", "exitButton.top");
