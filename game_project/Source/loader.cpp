@@ -1,12 +1,6 @@
 #include "loader.h"
 #include "enviroment.h"
-
-
-void signalHandler(tgui::Widget::Ptr widget, const std::string& signalName)
-{
-	widget->cast<tgui::Button>()->setText("ANDREY P word");
-	printf("%s\n",widget->getWidgetType().c_str());
-}
+#include "mainMenu.h"
 
 void updateLoadingMode()
 {
@@ -60,23 +54,7 @@ void updateLoadingMode()
 
 		// Change active gamemode and variables
 
-		tgui::Button::Ptr testButton = tgui::Button::create("testButton");
-		tgui::Button::Ptr test2 = tgui::Button::create();
-		gEnv->globalGui.add(testButton);
-		gEnv->globalGui.add(test2);
-		gEnv->game.mainMenu.mainMenuWidgets.push_back(testButton);
-		gEnv->game.mainMenu.mainMenuWidgets.push_back(test2);
-		int i = 0;
-		for (const auto& widget : gEnv->game.mainMenu.mainMenuWidgets)
-		{
-			widget->setSize(200, 200);
-			widget->setPosition(100*i + (i*200), 100);
-			widget->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-			i++;
-		}
-
-		gEnv->game.mainMenu.mainMenuWidgets[0]->connect("MouseReleased", signalHandler);
-		gEnv->game.mainMenu.mainMenuWidgets[1]->connect("MouseReleased", signalHandler);
+		createMenuButtons();
 
 		gEnv->game.activeGameMode = gameMode::mainMenuMode;
 		gEnv->game.mainMenu.menuDrawRequired = true;

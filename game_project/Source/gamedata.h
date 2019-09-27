@@ -10,8 +10,9 @@ public:
 	bool menuUpdateRequired;
 	bool menuDrawRequired;
 	bool widgetDisable;
+	bool sureExit = false;
 
-	std::vector<tgui::Button::Ptr> mainMenuWidgets;
+	std::vector<tgui::Widget::Ptr> mainMenuWidgets;
 };
 
 // Loader variables
