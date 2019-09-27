@@ -80,5 +80,6 @@ void createMenuButtons()
 	exitButtonNo->setText("No");
 	exitButtonNo->setEnabled(false);
 	exitButtonNo->setVisible(false);
+	exitButtonNo->connect("MouseReleased", exitButtons);
 	exitButton->connect("MouseReleased", exitButtons);
 }
