@@ -1,8 +1,11 @@
 #include "preload.h"
 #include "envUtils.h"
+#include "scriptSystem.h"
 
 void preloadResources()
 {
+
+	scriptSystem = new ScriptSystem();
 
 	// Create table for loading textures
 

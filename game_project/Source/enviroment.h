@@ -24,6 +24,7 @@
 #include "graphics.h"
 #include "menuData.h"
 #include "valueObjects.h"
+#include "scriptSystemData.h"
 
 // Short name for global enviroment 
 #define gEnv globalEnviroment
@@ -64,6 +65,10 @@ public:
 
 	// Contains external tables
 	std::map<std::string, ExternalTable*> extTables;
+
+	// Script system data
+	ScriptSystemData scripts;
+
 };
 
 extern GlobalEnviroment * globalEnviroment;
