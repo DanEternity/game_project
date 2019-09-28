@@ -37,7 +37,7 @@ private:
 	// terminate flag
 	bool p_terminate;
 
-	// Base update func
+	// base update func
 	void p_processFrame();
 	void p_processScriptDescriptor();
 	void p_processCommand(BaseScript * command);
@@ -46,7 +46,22 @@ private:
 	void p_blockGame_ScriptRunning(bool mode = true);
 	void p_blockGame_WaitForReaction(bool mode = true);
 
-	// Commands
+	// converts string to parsed and updated string
+	std::string p_convertText(std::string src);
+
+	// parse convertable fragment ($value)
+	std::string p_convertValue(std::string src);
+	std::string p_convertValue_s(std::string src, int &code);
+
+	// Returns memory cell data as string or "NULL" if does not exist
+	std::string p_getLocalMemoryCellAsString(std::string idx);
+
+	// Returns memory cell data from external table
+	std::string p_getExternalTableValueAsString(std::string tableId, std::string idx);
+
+	std::string p_getGlobalValueAsString(std::string ValueName);
+
+	// commands
 	void p_processText(TextScript * command);
 };
 

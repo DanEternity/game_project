@@ -5,7 +5,9 @@ namespace objectType {
 	enum ObjectType
 	{
 		modelDescriptor,
-
+		integer,
+		string,
+		real,
 	};
 
 } // namespace objectType
