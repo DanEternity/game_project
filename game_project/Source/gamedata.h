@@ -4,6 +4,15 @@
 #include <TGUI\TGUI.hpp>
 #include <vector>
 
+namespace menuState
+{
+	enum MenuState{
+		mainMenu,
+		exitActive,
+		optionsActive,
+	};
+}
+
 class MainMenu
 {
 public:
@@ -13,6 +22,8 @@ public:
 	bool sureExit = false;
 
 	std::vector<tgui::Widget::Ptr> mainMenuWidgets;
+
+	menuState::MenuState active = menuState::mainMenu;
 };
 
 // Loader variables

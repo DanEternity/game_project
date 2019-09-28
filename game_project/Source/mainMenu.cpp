@@ -19,29 +19,45 @@ void updateMainMenu()
 	}
 }
 
-void exitButtons(tgui::Widget::Ptr widget, const std::string& signalName)
+void disableAllMainMenuWidgets()
 {
-	gEnv->game.mainMenu.sureExit = !gEnv->game.mainMenu.sureExit;
-	if (gEnv->game.mainMenu.sureExit)
+	for (const auto& widget : gEnv->game.mainMenu.mainMenuWidgets)
 	{
-		gEnv->globalGui.get<tgui::Button>("exitButtonYes")->setVisible(true);
-		gEnv->globalGui.get<tgui::Button>("exitButtonYes")->setEnabled(true);
-		gEnv->globalGui.get<tgui::Button>("exitButtonNo")->setVisible(true);
-		gEnv->globalGui.get<tgui::Button>("exitButtonNo")->setEnabled(true);
-	}
-	else
-	{
-		gEnv->globalGui.get<tgui::Button>("exitButtonYes")->setVisible(false);
-		gEnv->globalGui.get<tgui::Button>("exitButtonYes")->setEnabled(false);
-		gEnv->globalGui.get<tgui::Button>("exitButtonNo")->setVisible(false);
-		gEnv->globalGui.get<tgui::Button>("exitButtonNo")->setEnabled(false);
+		widget->setVisible(false);
+		widget->setEnabled(false);
 	}
 }
 
-void exitButtonsYes(tgui::Widget::Ptr widget, const std::string& signalName)
+
+void mainMenuChangeState()
 {
-	gEnv->globalWindow.close();
+	disableAllMainMenuWidgets();
+	switch (gEnv->game.mainMenu.active)
+	{
+		case menuState::mainMenu:
+			gEnv->globalGui.get<tgui::Button>("startButton")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Button>("startButton")->setVisible(true);
+			gEnv->globalGui.get<tgui::Button>("exitButton")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Button>("exitButton")->setVisible(true);
+			break;
+		case menuState::optionsActive:
+			break;
+		case menuState::exitActive:
+			gEnv->globalGui.get<tgui::Button>("startButton")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Button>("startButton")->setVisible(true);
+			gEnv->globalGui.get<tgui::Button>("exitButton")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Button>("exitButton")->setVisible(true);
+			gEnv->globalGui.get<tgui::Button>("exitButtonYes")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Button>("exitButtonYes")->setVisible(true);
+			gEnv->globalGui.get<tgui::Button>("exitButtonNo")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Button>("exitButtonNo")->setVisible(true);
+			break;
+		default:
+			break;
+	}
+	
 }
+
 
 void createMenuButtons()
 {
@@ -80,6 +96,50 @@ void createMenuButtons()
 	exitButtonNo->setText("No");
 	exitButtonNo->setEnabled(false);
 	exitButtonNo->setVisible(false);
-	exitButtonNo->connect("MouseReleased", exitButtons);
-	exitButton->connect("MouseReleased", exitButtons);
+	exitButtonNo->connect("MouseReleased", exitClick);
+	exitButton->connect("MouseReleased", exitClick);
+	startButton->connect("MouseReleased", startClick);
+
+
+	//TESTS TESTS TESTS
+
+	tgui::EditBox::Ptr edb = tgui::EditBox::create();
+	gEnv->globalGui.add(edb, "editBox");
+	edb->setRenderer(gEnv->globalTheme.getRenderer("EditBox"));
+	edb->setSize(200, 50);
+	edb->setTextSize(18);
+	edb->setPosition(10, 270);
+	edb->setDefaultText("Click to edit text...");
+
+	tgui::Label::Ptr label = tgui::Label::create();
+	gEnv->globalGui.add(label, "label");
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setText("This is a label.\nAnd these are radio buttons:");
+	label->setPosition(10, 90);
+	label->setTextSize(18);
+
+}
+
+void startClick()
+{
+	
+}
+
+void exitClick()
+{
+	gEnv->game.mainMenu.sureExit = !gEnv->game.mainMenu.sureExit;
+	if (gEnv->game.mainMenu.sureExit)
+	{
+		gEnv->game.mainMenu.active = menuState::exitActive;
+	}
+	else
+	{
+		gEnv->game.mainMenu.active = menuState::mainMenu;
+	}
+	mainMenuChangeState();
+}
+
+void exitButtonsYes()
+{
+	gEnv->globalWindow.close();
 }

@@ -72,7 +72,7 @@ void ScriptSystem::p_processFrame()
 		if (true)
 		{
 			p_blockGame_ScriptRunning(false);
-			p_s == p_sysStatus::idle;
+			p_s = p_sysStatus::idle;
 		}
 
 		break;
@@ -110,7 +110,7 @@ void ScriptSystem::p_processScriptDescriptor()
 			if (debugMode)
 				printf("Debug: Error! Script pointer was out of range\n");
 
-			p_s == p_sysStatus::scriptTerminated;
+			p_s = p_sysStatus::scriptTerminated;
 
 			return;
 		}
