@@ -2,6 +2,7 @@
 
 #include "enviroment.h"
 #include "envUtils.h"
+#include "scriptMemoryUtils.h"
 
 void ScriptSystem::updateScriptEngine()
 {
@@ -217,6 +218,8 @@ std::string ScriptSystem::p_convertValue(std::string src)
 
 	// $value
 
+	std::string result = "";
+
 	if (src.size() <= 1) // nothing to convert
 		return "";
 
@@ -225,7 +228,19 @@ std::string ScriptSystem::p_convertValue(std::string src)
 	{
 
 		// attempting to extract memory data
-		return p_getLocalMemoryCellAsString(src.substr(1, src.size() - 2));
+
+		BaseObject * target;
+		auto code = getMemoryCellFromLocalMemory(&p_d->localMemory, src.substr(1, src.size() - 2), &target);
+		
+		if (code != memoryUtil::ok)
+			return "NULL";
+
+		code = convertToString(target, result);
+
+		if (code != memoryUtil::ok)
+			return "NULL";
+
+		return result;
 
 	}
 
@@ -234,15 +249,36 @@ std::string ScriptSystem::p_convertValue(std::string src)
 
 		// external table
 
-		 return p_getExternalTableValueAsString(src.substr(5, 4), src.substr(10, src.size()-11));
+		BaseObject * target;
+		auto code = getMemoryCellFromExternalTable(src.substr(5, 4), src.substr(10, src.size() - 11), &target);
+
+		if (code != memoryUtil::ok)
+			return "NULL";
+
+		code = convertToString(target, result);
+
+		if (code != memoryUtil::ok)
+			return "NULL";
+
+		return result;
+
 
 	}
 
 	// Game value or incorrect query
 
-	 return p_getGlobalValueAsString(src.substr(1, src.size() - 2));
+	BaseObject * target;
+	auto code = getMemoryCellFromGameEnviroment(src.substr(1, src.size() - 2), &target);
 
-	return std::string();
+	if (code != memoryUtil::ok)
+		return "NULL";
+
+	code = convertToString(target, result);
+
+	if (code != memoryUtil::ok)
+		return "NULL";
+
+	return result;
 }
 
 std::string ScriptSystem::p_getLocalMemoryCellAsString(std::string idx)

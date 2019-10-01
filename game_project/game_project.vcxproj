@@ -232,6 +232,7 @@
     <ClCompile Include="Source\mainMenu.cpp" />
     <ClCompile Include="Source\menuOverlay.cpp" />
     <ClCompile Include="Source\preload.cpp" />
+    <ClCompile Include="Source\scriptMemoryUtils.cpp" />
     <ClCompile Include="Source\scriptSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -248,6 +249,7 @@
     <ClInclude Include="Source\menuOverlay.h" />
     <ClInclude Include="Source\preload.h" />
     <ClInclude Include="Source\scriptDescriptor.h" />
+    <ClInclude Include="Source\scriptMemoryUtils.h" />
     <ClInclude Include="Source\scriptSystem.h" />
     <ClInclude Include="Source\scriptSystemData.h" />
     <ClInclude Include="Source\scriptTypes.h" />
