@@ -201,7 +201,7 @@ std::string ScriptSystem::p_convertText(std::string src)
 
 		int right = src.find_first_of(" ", i);
 
-		std::string fragment = p_convertValue(src.substr(i, right - i));
+		std::string fragment = p_convertValueToString(src.substr(i, right - i));
 
 		i = right;
 
@@ -213,7 +213,7 @@ std::string ScriptSystem::p_convertText(std::string src)
 	return res;
 }
 
-std::string ScriptSystem::p_convertValue(std::string src)
+std::string ScriptSystem::p_convertValueToString(std::string src)
 {
 
 	// $value
@@ -347,6 +347,55 @@ void ScriptSystem::p_processText(TextScript * command)
 		p_nl = p_l;
 
 	}
+}
+
+void ScriptSystem::p_processPut(PutScript * command)
+{
+
+	auto src = command->scr;
+	auto dst = command->dest;
+
+	BaseObject * obj = NULL;
+
+	// check if src is const
+	if (src.size() >= 1)
+	{
+		if (src[0] != '$') 
+		{
+			// value is const
+			auto code = convertConstToObject(src, &obj);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+		}
+		else
+		{
+			// get src object if not a const
+			auto code = getMemoryCell(src, &obj, &p_d->localMemory);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+		}
+	}
+	else
+	{
+		// failed
+		// no source provided
+		return;
+	}
+
+	auto code = putMemoryCell(dst, obj, &p_d->localMemory);
+
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
 }
 
 extern ScriptSystem * scriptSystem = NULL;

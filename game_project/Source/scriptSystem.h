@@ -50,8 +50,10 @@ private:
 	std::string p_convertText(std::string src);
 
 	// parse convertable fragment ($value)
-	std::string p_convertValue(std::string src);
-	std::string p_convertValue_s(std::string src, int &code);
+	std::string p_convertValueToString(std::string src);
+
+	// parse value from fragment
+	///
 
 	// Returns memory cell data as string or "NULL" if does not exist
 	std::string p_getLocalMemoryCellAsString(std::string idx);
@@ -63,6 +65,7 @@ private:
 
 	// commands
 	void p_processText(TextScript * command);
+	void p_processPut(PutScript * command);
 };
 
 extern ScriptSystem * scriptSystem;

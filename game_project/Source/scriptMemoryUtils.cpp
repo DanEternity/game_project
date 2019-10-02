@@ -21,9 +21,9 @@ RETURN_CODE getMemoryCellFromExternalTable(std::string tableID, std::string rowI
 	return RETURN_CODE(memoryUtil::ok);
 }
 
-RETURN_CODE putMemoryCellToExternalTable(std::string tableID, std::string rowID, BaseObject * scr)
+RETURN_CODE putMemoryCellToExternalTable(std::string tableID, std::string rowID, BaseObject * src)
 {
-	if (scr == NULL)
+	if (src == NULL)
 		return RETURN_CODE(memoryUtil::error | memoryUtil::invalidSource);
 
 	auto itTable = gEnv->extTables.find(tableID);
@@ -35,11 +35,12 @@ RETURN_CODE putMemoryCellToExternalTable(std::string tableID, std::string rowID,
 
 	if (itRow == itTable->second->p_memory.end())
 	{
-		itTable->second->p_memory[rowID] = scr;
-		return RETURN_CODE(memoryUtil::ok);
+		itTable->second->p_memory[rowID] = src;
+		auto code = checkSourceMemoryStatus(src);
+		return RETURN_CODE(memoryUtil::ok | code);
 	}
 
-	auto code = replaceValue(scr, &itRow->second);
+	auto code = replaceValue(src, &itRow->second);
 
 	return RETURN_CODE(code);
 }
@@ -60,43 +61,44 @@ RETURN_CODE getMemoryCellFromLocalMemory(LocalMemory * mem, std::string rowID, B
 	return RETURN_CODE(memoryUtil::ok);
 }
 
-RETURN_CODE putMemoryCellToLocalMemory(LocalMemory * mem, std::string rowID, BaseObject * scr)
+RETURN_CODE putMemoryCellToLocalMemory(LocalMemory * mem, std::string rowID, BaseObject * src)
 {
 
-	if (scr == NULL)
+	if (src == NULL)
 		return RETURN_CODE(memoryUtil::error | memoryUtil::invalidSource);
 
 	auto itRow = mem->find(rowID);
 
 	if (itRow == mem->end())
 	{
-		(*mem)[rowID] = scr;
-		return RETURN_CODE(memoryUtil::ok);
+		(*mem)[rowID] = src;
+		auto code = checkSourceMemoryStatus(src);
+		return RETURN_CODE(memoryUtil::ok | code);
 	}
 
-	auto code = replaceValue(scr, &itRow->second);
+	auto code = replaceValue(src, &itRow->second);
 
 	return RETURN_CODE(code);
 }
 
-RETURN_CODE convertToString(BaseObject * scr, std::string & dst)
+RETURN_CODE convertToString(BaseObject * src, std::string & dst)
 {
 
-	switch (scr->objectType)
+	switch (src->objectType)
 	{
 	case objectType::integer:
-		dst = std::to_string(static_cast<IntObject*>(scr)->value);
+		dst = std::to_string(static_cast<IntObject*>(src)->value);
 		break;
 	case objectType::string:
-		dst = static_cast<StringObject*>(scr)->value;
+		dst = static_cast<StringObject*>(src)->value;
 		break;
 	case objectType::real:
-		dst = std::to_string(static_cast<FloatObject*>(scr)->value);
+		dst = std::to_string(static_cast<FloatObject*>(src)->value);
 		break;
 
 	default:
 	{
-		auto code = getObjectName(scr, dst);
+		auto code = getObjectName(src, dst);
 		return RETURN_CODE(code);
 	}
 		break;
@@ -111,39 +113,205 @@ RETURN_CODE getMemoryCellFromGameEnviroment(std::string variableName, BaseObject
 	return RETURN_CODE(memoryUtil::ok);
 }
 
-RETURN_CODE putMemoryCellToGameEnviroment(std::string veriableName, BaseObject * scr)
+RETURN_CODE putMemoryCellToGameEnviroment(std::string veriableName, BaseObject * src)
 {
 
 	return RETURN_CODE(memoryUtil::ok);
 }
 
-RETURN_CODE getObjectName(BaseObject * scr, std::string & dst)
+RETURN_CODE getObjectName(BaseObject * src, std::string & dst)
 {
 	dst = "NOT IMPLEMENTED";
 	return RETURN_CODE(memoryUtil::ok);
 }
 
-RETURN_CODE replaceValue(BaseObject * scr, BaseObject ** dst)
+RETURN_CODE replaceValue(BaseObject * src, BaseObject ** dst)
+{
+	try
+	{
+		if ((*dst)->memoryControl & memoryControl::fixed == 0)
+			delete(*dst);
+
+		if ((*dst)->memoryControl & memoryControl::readOnly != 0)
+		{
+
+			if (src->memoryControl & memoryControl::singleUse != 0)
+				delete src;
+
+			RETURN_CODE(memoryUtil::error | memoryUtil::notAvailable);
+		}
+
+		*dst = src;
+
+		if (src->memoryControl & memoryControl::singleUse != 0)
+			delete src;
+
+	}
+	catch (const std::exception&)
+	{
+		return RETURN_CODE(memoryUtil::error);
+	}
+	return RETURN_CODE(memoryUtil::ok);
+}
+
+RETURN_CODE getMemoryCell(std::string queryString, BaseObject ** dst, LocalMemory * localMem)
 {
 
-	switch ((*dst)->objectType)
+	try
 	{
-	case objectType::integer:
-	case objectType::string:
-	case objectType::real:
-		delete(*dst);
-		*dst = scr;
-		break;
+		// deleting $
+		queryString = queryString.substr(1, queryString.size() - 1);
 
-	// any other objects
-	case objectType::modelDescriptor: 
-		*dst = scr;
-		break;
+		if (queryString[0] == '_')
+		{
+			// local memory
+			if (localMem = NULL)
+				return RETURN_CODE(memoryUtil::error | memoryUtil::notAvailable);
 
-	default:
-		return RETURN_CODE(memoryUtil::error | memoryUtil::invalidDestination);
-		break;
+			auto code = getMemoryCellFromLocalMemory(localMem, queryString.substr(1, queryString.size() - 1), dst);
+
+			return RETURN_CODE(code);
+
+		}
+
+		if (queryString.find_first_of("EXT:", 0) != std::string::npos)
+		{
+			// external table
+			// need parse
+
+			// 01234567890123456789 
+			// EXT:XXXX:VALUE
+
+			int pos = queryString.find_first_of(':', 4);
+
+			std::string tableId = queryString.substr(4, pos - 4);
+
+			std::string rowId = queryString.substr(pos+1, queryString.size() - pos - 1);
+
+			return RETURN_CODE(getMemoryCellFromExternalTable(tableId, rowId, dst));
+		}
+
+		// check game enviroment
+		return RETURN_CODE(getMemoryCellFromGameEnviroment(queryString, dst));
+		
+	}
+	catch (const std::exception&)
+	{
+		// unknown error
+	}
+
+	return RETURN_CODE(memoryUtil::undefined);
+}
+
+RETURN_CODE putMemoryCell(std::string queryString, BaseObject * src, LocalMemory * localMem)
+{
+	try
+	{
+		// deleting $
+		queryString = queryString.substr(1, queryString.size() - 1);
+
+		if (queryString[0] == '_')
+		{
+			// local memory
+			if (localMem = NULL)
+				return RETURN_CODE(memoryUtil::error | memoryUtil::notAvailable);
+
+			auto code = putMemoryCellToLocalMemory(localMem, queryString.substr(1, queryString.size() - 1), src);
+
+			return RETURN_CODE(code);
+
+		}
+
+		if (queryString.find_first_of("EXT:", 0) != std::string::npos)
+		{
+			// external table
+			// need parse
+
+			// 01234567890123456789 
+			// EXT:XXXX:VALUE
+
+			int pos = queryString.find_first_of(':', 4);
+
+			std::string tableId = queryString.substr(4, pos - 4);
+
+			std::string rowId = queryString.substr(pos + 1, queryString.size() - pos - 1);
+
+			return RETURN_CODE(putMemoryCellToExternalTable(tableId, rowId, src));
+		}
+
+		// check game enviroment
+		return RETURN_CODE(putMemoryCellToGameEnviroment(queryString, src));
+
+	}
+	catch (const std::exception&)
+	{
+		// unknown error
+	}
+
+	return RETURN_CODE(memoryUtil::undefined);
+}
+
+RETURN_CODE convertConstToObject(std::string src, BaseObject ** dst)
+{
+
+	try
+	{
+
+		// try to convert to int
+		char *endptr;
+		int valInt = std::strtol(src.c_str(), &endptr, 10);
+		if (*endptr == '\0')
+		{
+			// src is a number
+			IntObject * ptr = new IntObject();
+			ptr->value = valInt;
+			ptr->memoryControl = memoryControl::singleUse;
+			*dst = ptr;
+			return RETURN_CODE(memoryUtil::ok);
+		}
+
+		// try to convert to float
+		float valFloat = std::strtof(src.c_str(), &endptr);
+		if (*endptr == '\0')
+		{
+			// src is a float number
+			FloatObject * ptr = new FloatObject();
+			ptr->value = valFloat;
+			ptr->memoryControl = memoryControl::singleUse;
+			*dst = ptr;
+			return RETURN_CODE(memoryUtil::ok);
+		}
+
+		// convert to string
+		StringObject * ptr = new StringObject();
+		ptr->value = src;
+		ptr->memoryControl = memoryControl::singleUse;
+		*dst = ptr;
+		return RETURN_CODE(memoryUtil::ok);
+
+	}
+	catch (const std::exception&)
+	{
+		// failed
+	}
+
+	return RETURN_CODE(memoryUtil::undefined);
+}
+
+RETURN_CODE checkSourceMemoryStatus(BaseObject * src)
+{
+	try
+	{
+
+		if (src->memoryControl & memoryControl::singleUse != 0)
+			delete src;
+
+	}
+	catch (const std::exception&)
+	{
+		return RETURN_CODE(memoryUtil::error);
 	}
 
 	return RETURN_CODE(memoryUtil::ok);
 }
+

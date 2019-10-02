@@ -18,6 +18,7 @@ namespace memoryUtil
 		convertationFailed	= 8, // cant convert object
 		invalidSource		= 16,
 		invalidDestination	= 32,
+		undefined			= -1000, 
 
 	};
 
@@ -33,19 +34,27 @@ namespace memoryUtil
 
 RETURN_CODE getMemoryCellFromExternalTable(std::string tableID, std::string rowID, BaseObject ** dst);
 
-RETURN_CODE putMemoryCellToExternalTable(std::string tableID, std::string rowID, BaseObject * scr);
+RETURN_CODE putMemoryCellToExternalTable(std::string tableID, std::string rowID, BaseObject * src);
 
 RETURN_CODE getMemoryCellFromLocalMemory(LocalMemory * mem ,std::string rowID, BaseObject ** dst);
 
-RETURN_CODE putMemoryCellToLocalMemory(LocalMemory * mem, std::string rowID, BaseObject * scr);
+RETURN_CODE putMemoryCellToLocalMemory(LocalMemory * mem, std::string rowID, BaseObject * src);
 
-RETURN_CODE convertToString(BaseObject * scr, std::string &dst);
+RETURN_CODE convertToString(BaseObject * src, std::string &dst);
 
 RETURN_CODE getMemoryCellFromGameEnviroment(std::string variableName, BaseObject ** dst);
 
-RETURN_CODE putMemoryCellToGameEnviroment(std::string veriableName, BaseObject * scr);
+RETURN_CODE putMemoryCellToGameEnviroment(std::string veriableName, BaseObject * src);
 
-RETURN_CODE getObjectName(BaseObject * scr, std::string &dst);
+RETURN_CODE getObjectName(BaseObject * src, std::string &dst);
 
-RETURN_CODE replaceValue(BaseObject * scr, BaseObject ** dst);
+RETURN_CODE replaceValue(BaseObject * src, BaseObject ** dst);
+
+RETURN_CODE getMemoryCell(std::string queryString, BaseObject ** dst, LocalMemory * localMem = NULL);
+
+RETURN_CODE putMemoryCell(std::string queryString, BaseObject * src, LocalMemory * localMem = NULL);
+
+RETURN_CODE convertConstToObject(std::string src, BaseObject ** dst);
+
+RETURN_CODE checkSourceMemoryStatus(BaseObject * src);
 
