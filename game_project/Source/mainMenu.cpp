@@ -225,6 +225,12 @@ void createMenuButtons()
 	canvas->display();
 	gEnv->globalGui.add(canvas);
 
+	auto testbox = tgui::TextBox::create();
+	testbox->setRenderer(gEnv->globalTheme.getRenderer("TextBox"));
+	testbox->setText("ROFLAN EBALO WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+	testbox->setPosition({ 500,500 });
+	testbox->setReadOnly();
+	gEnv->globalGui.add(testbox);
 
 }
 
