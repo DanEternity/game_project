@@ -57,6 +57,9 @@
     <ClCompile Include="Source\scriptSystem.cpp">
       <Filter>ScriptEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Source\scriptMemoryUtils.cpp">
+      <Filter>ScriptEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\game.h">
@@ -108,6 +111,9 @@
       <Filter>GameMenu</Filter>
     </ClInclude>
     <ClInclude Include="Source\scriptSystemData.h">
+      <Filter>ScriptEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\scriptMemoryUtils.h">
       <Filter>ScriptEngine</Filter>
     </ClInclude>
   </ItemGroup>

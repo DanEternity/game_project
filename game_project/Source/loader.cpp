@@ -49,7 +49,7 @@ void updateLoadingMode()
 	{
 		
 		// Post load section
-
+		//dfgdfgdfg
 		// Texture binding goes here
 
 		// Change active gamemode and variables

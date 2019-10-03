@@ -24,4 +24,6 @@ public:
 
 	int buttonId;
 
+	std::map<std::string, int> enviromentMap;
+
 };
