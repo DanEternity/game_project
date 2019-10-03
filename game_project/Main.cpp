@@ -23,6 +23,7 @@ int main()
 
 	// Bind gui descriptor to main window
 	gEnv->globalGui.setTarget(gEnv->globalWindow);
+	gEnv->scripts.scriptGui.setTarget(gEnv->globalWindow);
 
 	// Clock to calculate time from previous frame
 	sf::Clock deltaClock;
@@ -36,6 +37,7 @@ int main()
 			if (event.type == sf::Event::Closed)
 				gEnv->globalWindow.close();
 			gEnv->globalGui.handleEvent(event);
+			gEnv->scripts.scriptGui.handleEvent(event);
 		}
 
 		gEnv->globalWindow.clear();

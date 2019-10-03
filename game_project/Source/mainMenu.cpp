@@ -7,6 +7,9 @@ void updateMainMenu()
 	if (gEnv->game.mainMenu.menuDrawRequired)
 	{
 		gEnv->globalGui.draw();
+
+		gEnv->scripts.scriptGui.draw();
+
 		sf::Text text;
 		text.setFont(*gEnv->globalGui.getFont());
 		text.setString("ITS WORKS");
@@ -230,7 +233,8 @@ void createMenuButtons()
 	testbox->setText("ROFLAN EBALO WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
 	testbox->setPosition({ 500,500 });
 	testbox->setReadOnly();
-	gEnv->globalGui.add(testbox);
+	gEnv->scripts.scriptGui.add(testbox, "scriptTextMessage");
+//	gEnv->globalGui.add(testbox);
 
 }
 

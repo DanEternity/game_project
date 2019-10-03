@@ -330,6 +330,8 @@ void ScriptSystem::p_processText(TextScript * command)
 	
 	//gEnv->scripts.huieviiButton.setText(p_convertText(command->text));
 	std::string text = p_convertText(command->text);
+	gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setText(text);
+
 	if (true)
 		printf("TEST: %s\n", text.c_str());
 
