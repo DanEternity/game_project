@@ -65,7 +65,6 @@ void mainMenuChangeState()
 	
 }
 
-
 void createMenuButtons()
 {
 	tgui::Button::Ptr startButton = tgui::Button::create();
@@ -213,7 +212,7 @@ void createMenuButtons()
 	sprite.setTexture(getModelDescriptor("blankTexture")->tex);
 	sprite.setScale(200.f / getModelDescriptor("blankTexture")->tex.getSize().x, 140.f / getModelDescriptor("blankTexture")->tex.getSize().y);
 
-	sf::Text text{ "SFML Canvas", *gEnv->globalGui.getFont(), 48 };
+	sf::Text text{ "SFML Canvas", *gEnv->globalGui.getFont(), 24 };
 	text.setPosition(200, 200);
 	text.setFillColor({ 255, 0, 0 });
 
