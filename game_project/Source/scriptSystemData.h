@@ -3,6 +3,7 @@
 #include <string>
 #include <deque>
 #include "scriptDescriptor.h"
+#include <TGUI\TGUI.hpp>
 
 //
 // This file contains data for script system stored in enviroment
@@ -25,5 +26,7 @@ public:
 	int buttonId;
 
 	std::map<std::string, int> enviromentMap;
+
+	tgui::Gui scriptGui;
 
 };

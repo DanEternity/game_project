@@ -35,9 +35,9 @@ RETURN_CODE putMemoryCellToExternalTable(std::string tableID, std::string rowID,
 
 	if (itRow == itTable->second->p_memory.end())
 	{
-		itTable->second->p_memory[rowID] = src;
-		auto code = checkSourceMemoryStatus(src);
-		return RETURN_CODE(memoryUtil::ok | code);
+		itTable->second->p_memory[rowID] = new BaseObject();
+		//auto code = checkSourceMemoryStatus(src);
+		//return RETURN_CODE(memoryUtil::ok | code);
 	}
 
 	auto code = replaceValue(src, &itRow->second);
@@ -71,9 +71,9 @@ RETURN_CODE putMemoryCellToLocalMemory(LocalMemory * mem, std::string rowID, Bas
 
 	if (itRow == mem->end())
 	{
-		(*mem)[rowID] = src;
-		auto code = checkSourceMemoryStatus(src);
-		return RETURN_CODE(memoryUtil::ok | code);
+		(*mem)[rowID] = new BaseObject();
+		//auto code = checkSourceMemoryStatus(src);
+		//return RETURN_CODE(memoryUtil::ok | code);
 	}
 
 	auto code = replaceValue(src, &itRow->second);
@@ -129,21 +129,35 @@ RETURN_CODE replaceValue(BaseObject * src, BaseObject ** dst)
 {
 	try
 	{
-		if ((*dst)->memoryControl & memoryControl::fixed == 0)
-			delete(*dst);
-
 		if ((*dst)->memoryControl & memoryControl::readOnly != 0)
 		{
 
 			if (src->memoryControl & memoryControl::singleUse != 0)
 				delete src;
 
-			RETURN_CODE(memoryUtil::error | memoryUtil::notAvailable);
+			return RETURN_CODE(memoryUtil::error | memoryUtil::notAvailable);
 		}
 
-		*dst = src;
+		if ((*dst)->memoryControl & memoryControl::fixed == 0)
+			delete(*dst);
 
-		if (src->memoryControl & memoryControl::singleUse != 0)
+		if (src->memoryControl & memoryControl::fixed != 0)
+			*dst = src;
+		else
+		{
+			int code = copyObject(src, dst);
+
+			if (code != memoryUtil::ok)
+			{
+
+				if (src->memoryControl & memoryControl::singleUse != 0)
+					delete src;
+
+				return RETURN_CODE(code);
+			}
+		}
+
+		if ((src->memoryControl & memoryControl::singleUse != 0) && (src->memoryControl & memoryControl::fixed == 0))
 			delete src;
 
 	}
@@ -313,5 +327,48 @@ RETURN_CODE checkSourceMemoryStatus(BaseObject * src)
 	}
 
 	return RETURN_CODE(memoryUtil::ok);
+}
+
+RETURN_CODE copyObject(BaseObject * src, BaseObject ** dst)
+{
+
+	if (src == NULL)
+		return RETURN_CODE(memoryUtil::error | memoryUtil::invalidSource);
+
+	if (dst == NULL)
+		return RETURN_CODE(memoryUtil::error | memoryUtil::invalidDestination);
+
+	try
+	{
+		BaseObject * ptr = NULL;
+		switch (src->objectType)
+		{
+		case objectType::integer:
+			ptr = new IntObject();
+			static_cast<IntObject*>(ptr)->value = static_cast<IntObject*>(src)->value;
+			break;
+		case objectType::string:
+			ptr = new StringObject();
+			static_cast<StringObject*>(ptr)->value = static_cast<StringObject*>(src)->value;
+			break;
+		case objectType::real:
+			ptr = new FloatObject();
+			static_cast<FloatObject*>(ptr)->value = static_cast<FloatObject*>(src)->value;
+			break;
+
+		default:
+			break;
+		}
+		if (ptr == NULL)
+			return RETURN_CODE(memoryUtil::undefined);
+		(*dst) = ptr;
+		return RETURN_CODE(memoryUtil::ok);
+	}
+	catch (const std::exception&)
+	{
+
+	}
+
+	return RETURN_CODE(memoryUtil::undefined);
 }
 

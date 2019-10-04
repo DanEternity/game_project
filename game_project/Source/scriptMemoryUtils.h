@@ -58,3 +58,5 @@ RETURN_CODE convertConstToObject(std::string src, BaseObject ** dst);
 
 RETURN_CODE checkSourceMemoryStatus(BaseObject * src);
 
+RETURN_CODE copyObject(BaseObject * src, BaseObject ** dst);
+
