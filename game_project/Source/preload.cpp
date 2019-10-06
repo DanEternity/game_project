@@ -6,7 +6,7 @@ void preloadResources()
 {
 
 	scriptSystem = new ScriptSystem();
-
+	gEnv->game.scriptSystemRequiresUpdate = true;
 	// Create table for loading textures
 
 	preloadModels();

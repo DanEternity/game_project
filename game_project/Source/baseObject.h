@@ -6,6 +6,8 @@ namespace objectType {
 	{
 		undefined = 0,
 		modelDescriptor,
+		scriptDescriptor,
+		scriptCommand,
 		integer,
 		string,
 		real,

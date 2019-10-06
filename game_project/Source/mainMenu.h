@@ -10,3 +10,6 @@ void disableAllMainMenuWidgets();
 void startClick();
 void exitClick();
 void exitButtonsYes();
+
+void testFunctionCreateScript();
+void testFunctionExecScript();

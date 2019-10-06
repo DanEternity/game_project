@@ -49,7 +49,7 @@ void updateGameCycle(double deltaTime)
 
 	if (gEnv->game.scriptSystemRequiresUpdate)
 	{
-
+		scriptSystem->updateScriptEngine();
 	}
 
 	/* Calling menu overlay */

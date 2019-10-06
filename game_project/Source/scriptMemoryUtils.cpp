@@ -16,7 +16,7 @@ RETURN_CODE getMemoryCellFromExternalTable(std::string tableID, std::string rowI
 	if (itRow == itTable->second->p_memory.end())
 		return RETURN_CODE(memoryUtil::error | memoryUtil::notFound);
 
-	dst = &itRow->second;
+	(*dst) = itRow->second;
 
 	return RETURN_CODE(memoryUtil::ok);
 }
@@ -36,6 +36,7 @@ RETURN_CODE putMemoryCellToExternalTable(std::string tableID, std::string rowID,
 	if (itRow == itTable->second->p_memory.end())
 	{
 		itTable->second->p_memory[rowID] = new BaseObject();
+		itRow = itTable->second->p_memory.find(rowID);
 		//auto code = checkSourceMemoryStatus(src);
 		//return RETURN_CODE(memoryUtil::ok | code);
 	}
@@ -56,7 +57,7 @@ RETURN_CODE getMemoryCellFromLocalMemory(LocalMemory * mem, std::string rowID, B
 	if (itRow == mem->end())
 		return RETURN_CODE(memoryUtil::error | memoryUtil::notFound);
 
-	dst = &itRow->second;
+	(*dst) = itRow->second;
 
 	return RETURN_CODE(memoryUtil::ok);
 }
@@ -72,6 +73,7 @@ RETURN_CODE putMemoryCellToLocalMemory(LocalMemory * mem, std::string rowID, Bas
 	if (itRow == mem->end())
 	{
 		(*mem)[rowID] = new BaseObject();
+		itRow = mem->find(rowID);
 		//auto code = checkSourceMemoryStatus(src);
 		//return RETURN_CODE(memoryUtil::ok | code);
 	}
@@ -110,13 +112,13 @@ RETURN_CODE convertToString(BaseObject * src, std::string & dst)
 RETURN_CODE getMemoryCellFromGameEnviroment(std::string variableName, BaseObject ** dst)
 {
 
-	return RETURN_CODE(memoryUtil::ok);
+	return RETURN_CODE(memoryUtil::error);
 }
 
 RETURN_CODE putMemoryCellToGameEnviroment(std::string veriableName, BaseObject * src)
 {
 
-	return RETURN_CODE(memoryUtil::ok);
+	return RETURN_CODE(memoryUtil::error);
 }
 
 RETURN_CODE getObjectName(BaseObject * src, std::string & dst)
@@ -129,19 +131,19 @@ RETURN_CODE replaceValue(BaseObject * src, BaseObject ** dst)
 {
 	try
 	{
-		if ((*dst)->memoryControl & memoryControl::readOnly != 0)
+		if (((*dst)->memoryControl & memoryControl::readOnly) != 0)
 		{
 
-			if (src->memoryControl & memoryControl::singleUse != 0)
+			if ((src->memoryControl & memoryControl::singleUse) != 0)
 				delete src;
 
 			return RETURN_CODE(memoryUtil::error | memoryUtil::notAvailable);
 		}
 
-		if ((*dst)->memoryControl & memoryControl::fixed == 0)
+		if (((*dst)->memoryControl & memoryControl::fixed) == 0)
 			delete(*dst);
 
-		if (src->memoryControl & memoryControl::fixed != 0)
+		if ((src->memoryControl & memoryControl::fixed) != 0)
 			*dst = src;
 		else
 		{
@@ -150,14 +152,14 @@ RETURN_CODE replaceValue(BaseObject * src, BaseObject ** dst)
 			if (code != memoryUtil::ok)
 			{
 
-				if (src->memoryControl & memoryControl::singleUse != 0)
+				if ((src->memoryControl & memoryControl::singleUse) != 0)
 					delete src;
 
 				return RETURN_CODE(code);
 			}
 		}
 
-		if ((src->memoryControl & memoryControl::singleUse != 0) && (src->memoryControl & memoryControl::fixed == 0))
+		if (((src->memoryControl & memoryControl::singleUse) != 0) && ((src->memoryControl & memoryControl::fixed) == 0))
 			delete src;
 
 	}
@@ -179,7 +181,7 @@ RETURN_CODE getMemoryCell(std::string queryString, BaseObject ** dst, LocalMemor
 		if (queryString[0] == '_')
 		{
 			// local memory
-			if (localMem = NULL)
+			if (localMem == NULL)
 				return RETURN_CODE(memoryUtil::error | memoryUtil::notAvailable);
 
 			auto code = getMemoryCellFromLocalMemory(localMem, queryString.substr(1, queryString.size() - 1), dst);
@@ -227,7 +229,7 @@ RETURN_CODE putMemoryCell(std::string queryString, BaseObject * src, LocalMemory
 		if (queryString[0] == '_')
 		{
 			// local memory
-			if (localMem = NULL)
+			if (localMem == NULL)
 				return RETURN_CODE(memoryUtil::error | memoryUtil::notAvailable);
 
 			auto code = putMemoryCellToLocalMemory(localMem, queryString.substr(1, queryString.size() - 1), src);
@@ -317,7 +319,7 @@ RETURN_CODE checkSourceMemoryStatus(BaseObject * src)
 	try
 	{
 
-		if (src->memoryControl & memoryControl::singleUse != 0)
+		if ((src->memoryControl & memoryControl::singleUse) != 0)
 			delete src;
 
 	}

@@ -4,6 +4,7 @@
 #include "Source\enviroment.h"
 #include "Source\game.h"
 #include "Source\preload.h"
+#include "Source\uiEventHandlers.h"
 
 int main()
 {
@@ -36,8 +37,7 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				gEnv->globalWindow.close();
-			gEnv->globalGui.handleEvent(event);
-			gEnv->scripts.scriptGui.handleEvent(event);
+			handleUIEvents(event);
 		}
 
 		gEnv->globalWindow.clear();

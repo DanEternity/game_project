@@ -56,3 +56,43 @@ bool deleteModelDescriptor(std::string name);
 ///
 bool loadTextureToModelDescriptor(std::string name);
 #pragma endregion
+
+#pragma region createScriptDescriptor()
+///
+/// <summary> Creates object ScriptDescriptor and stores in enviroment.
+/// Will return NULL if failed.
+/// </summary>
+/// 
+///
+ScriptDescriptor * createScriptDescriptor();
+#pragma endregion
+
+#pragma region getScriptDescriptor(int tableId)
+///
+/// <summary> Returns a ScriptDescriptor with selected id.
+/// Will return NULL if failed.
+/// </summary>
+/// 
+///
+ScriptDescriptor * getScriptDescriptor(int id);
+#pragma endregion
+
+#pragma region createScriptCommand(scriptType::ScriptType type)
+///
+/// <summary> Creates a script command of selected type.
+/// Will return NULL if failed.
+/// </summary>
+/// 
+///
+BaseScript * createScriptCommand(scriptType::ScriptType type);
+#pragma endregion
+
+#pragma region addScriptToQueue(ScriptDescriptor * sd)
+///
+/// <summary> Adds ScriptDescriptor to the global script queue.
+/// This will result that script will be executed when script system is ready.
+/// </summary>
+/// 
+///
+bool addScriptToQueue(ScriptDescriptor * sd);
+#pragma endregion

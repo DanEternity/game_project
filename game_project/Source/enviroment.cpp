@@ -29,4 +29,6 @@ void initEnviroment()
 
 	gEnv->game.gameModesRequiredUpdate = true;
 
+	gEnv->game.globalGUIeventsRequiresUpdate = true;
+
 }

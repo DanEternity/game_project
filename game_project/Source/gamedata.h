@@ -75,15 +75,17 @@ public:
 	// game.h section
 
 	// Does game should check gamemode for draw
-	bool gameModesRequiredDraw;
+	bool gameModesRequiredDraw = false;
 	// Does game should update gamemodes
-	bool gameModesRequiredUpdate;
+	bool gameModesRequiredUpdate = false;
 	// Does game should run script system
-	bool scriptSystemRequiresUpdate;
+	bool scriptSystemRequiresUpdate = false;
 	// Does game should update menu (menu will be disabled if FALSE)
-	bool menuOverlayRequiresUpdate;
+	bool menuOverlayRequiresUpdate = false;
 	// Does world generator active
-	bool worldGeneratorRequiresUpdate;
+	bool worldGeneratorRequiresUpdate = false;
+	// Does game should handle globalGui events
+	bool globalGUIeventsRequiresUpdate = false;
 
 	// Active game mode
 	gameMode::GameMode activeGameMode = gameMode::blankMode;

@@ -14,4 +14,10 @@ public:
 	std::vector<BaseScript*> scriptLines;
 	int entryPoint;
 	LocalMemory localMemory;
+
+	ScriptDescriptor()
+	{
+		this->objectType = objectType::scriptDescriptor;
+		this->memoryControl = memoryControl::fixed;
+	}
 };

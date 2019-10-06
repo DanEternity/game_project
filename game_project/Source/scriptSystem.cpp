@@ -51,7 +51,8 @@ void ScriptSystem::p_processFrame()
 	case p_sysStatus::idle:
 		{
 			// check for new script
-
+			if (gEnv->scripts.queue.empty())
+				break;
 			ScriptDescriptor * sd = gEnv->scripts.queue.front();
 			this->p_l = sd->entryPoint;
 			this->p_nl = sd->entryPoint;
@@ -150,7 +151,7 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 		p_processText(static_cast<TextScript*>(command));
 		break;
 	case scriptType::put:
-
+		p_processPut(static_cast<PutScript*>(command));
 		break;
 	case scriptType::choose:
 
@@ -200,6 +201,8 @@ std::string ScriptSystem::p_convertText(std::string src)
 		// looking for first space
 
 		int right = src.find_first_of(" ", i);
+		if (right <= 0)
+			right = src.size();
 
 		std::string fragment = p_convertValueToString(src.substr(i, right - i));
 
@@ -209,6 +212,7 @@ std::string ScriptSystem::p_convertText(std::string src)
 
 	}
 
+	p_s = p_sysStatus::scriptWaitForReaction;
 
 	return res;
 }
@@ -230,7 +234,7 @@ std::string ScriptSystem::p_convertValueToString(std::string src)
 		// attempting to extract memory data
 
 		BaseObject * target;
-		auto code = getMemoryCellFromLocalMemory(&p_d->localMemory, src.substr(1, src.size() - 2), &target);
+		auto code = getMemoryCellFromLocalMemory(&p_d->localMemory, src.substr(2, src.size() - 2), &target);
 		
 		if (code != memoryUtil::ok)
 			return "NULL";

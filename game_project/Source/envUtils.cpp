@@ -92,3 +92,61 @@ bool loadTextureToModelDescriptor(std::string name)
 
 
 }
+
+ScriptDescriptor * createScriptDescriptor()
+{
+
+	ScriptDescriptor * ptr;
+
+	try
+	{
+		ptr = new ScriptDescriptor();
+		ptr->tableId = gEnv->scripts.nextScriptID;
+		gEnv->scripts.scriptDB[gEnv->scripts.nextScriptID++] = ptr;
+	}
+	catch (const std::exception&)
+	{
+		return NULL;
+	}
+
+	return ptr;
+}
+
+ScriptDescriptor * getScriptDescriptor(int id)
+{
+
+	if (gEnv->scripts.scriptDB.find(id) == gEnv->scripts.scriptDB.end())
+		return NULL;
+
+	return gEnv->scripts.scriptDB[id];
+}
+
+BaseScript * createScriptCommand(scriptType::ScriptType type)
+{
+
+	switch (type)
+	{
+	case scriptType::null:
+		return nullptr;
+		break;
+	case scriptType::text:
+		return new TextScript();
+		break;
+	case scriptType::put:
+		return new PutScript();
+		break;
+	case scriptType::choose:
+		return new ChooseScript();
+		break;
+	default:
+		break;
+	}
+
+	return nullptr;
+}
+
+bool addScriptToQueue(ScriptDescriptor * sd)
+{
+	gEnv->scripts.queue.push_back(sd);
+	return true;
+}

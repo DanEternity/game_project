@@ -40,12 +40,21 @@ class BaseScript : public BaseObject
 public:
 	scriptType::ScriptType scriptType;
 	int commandId;
+	BaseScript()
+	{
+		this->memoryControl = memoryControl::free;
+		this->scriptType = scriptType::null;
+	}
 };
 
 class TextScript : public BaseScript
 {
 public:
 	std::string text;
+	TextScript()
+	{
+		this->scriptType = scriptType::text;
+	}
 };
 
 class ChooseScript : public TextScript
@@ -61,4 +70,8 @@ class PutScript : public BaseScript
 public:
 	std::string scr;
 	std::string dest;
+	PutScript()
+	{
+		this->scriptType = scriptType::put;
+	}
 };

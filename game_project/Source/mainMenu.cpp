@@ -236,6 +236,15 @@ void createMenuButtons()
 	gEnv->scripts.scriptGui.add(testbox, "scriptTextMessage");
 //	gEnv->globalGui.add(testbox);
 
+	/* Do not delete */
+	auto testButton = tgui::Button::create();
+	testButton->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	testButton->setPosition({ "90%", "10%" });
+	testButton->setText("TEST SCRIPT");
+	testButton->connect("MouseReleased", testFunctionCreateScript);
+	gEnv->globalGui.add(testButton);
+	/* Do not delete endregion */
+
 }
 
 void startClick()
@@ -260,4 +269,36 @@ void exitClick()
 void exitButtonsYes()
 {
 	gEnv->globalWindow.close();
+}
+
+void testFunctionCreateScript()
+{
+
+	ScriptDescriptor * s = createScriptDescriptor();
+
+	PutScript * ptr;
+	TextScript * ptr2;
+
+	// Put "25" to "$_1"
+	ptr = static_cast<PutScript*>(createScriptCommand(scriptType::put));
+	ptr->scr = "25";
+	ptr->dest = "$_1";
+	s->scriptLines.push_back(ptr);
+
+	// Put "$_1" to "$_2"
+	ptr = static_cast<PutScript*>(createScriptCommand(scriptType::put));
+	ptr->scr = "$_1";
+	ptr->dest = "$_2";
+	s->scriptLines.push_back(ptr);
+
+	ptr2 = static_cast<TextScript*>(createScriptCommand(scriptType::text));
+	ptr2->text = "Fisrt = $_1 ; Second = $_2";
+	s->scriptLines.push_back(ptr2);
+
+	addScriptToQueue(s);
+
+}
+
+void testFunctionExecScript()
+{
 }

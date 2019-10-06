@@ -21,12 +21,20 @@ public:
 	std::deque<ScriptDescriptor *> queue;
 
 	// ExternalReaction
-	bool buttonPressed;
+	bool buttonPressed = false;
 
-	int buttonId;
+	int buttonId = -1;
 
 	std::map<std::string, int> enviromentMap;
 
+	std::map<int, ScriptDescriptor *> scriptDB;
+
+	// This value shouldn't be changed manually
+	int nextScriptID = 0; 
+
 	tgui::Gui scriptGui;
+	
+	// Does game should handle script GUI events
+	bool scriptGuiEventsRequiresUpdate = false;
 
 };
