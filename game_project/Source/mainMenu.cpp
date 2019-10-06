@@ -2,6 +2,8 @@
 #include "enviroment.h"
 #include "envUtils.h"
 
+void optionsClick();
+
 void updateMainMenu()
 {
 	if (gEnv->game.mainMenu.menuDrawRequired)
@@ -10,21 +12,12 @@ void updateMainMenu()
 
 		gEnv->scripts.scriptGui.draw();
 
-		sf::Text text;
-		text.setFont(*gEnv->globalGui.getFont());
-		text.setString("ITS WORKS");
-		text.setPosition(200, 200);
-		text.setFillColor({ 255, 0, 0 });
-		gEnv->globalWindow.draw(text);
+		
 	}
 
 	if (gEnv->game.mainMenu.widgetDisable)
 	{
-		for (const auto& widget : gEnv->game.mainMenu.mainMenuWidgets)
-		{
-			widget->setVisible(false);
-			widget->setEnabled(false);
-		}
+		disableAllMainMenuWidgets();
 		gEnv->game.mainMenu.widgetDisable = false;
 	}
 }
@@ -49,8 +42,18 @@ void mainMenuChangeState()
 			gEnv->globalGui.get<tgui::Button>("startButton")->setVisible(true);
 			gEnv->globalGui.get<tgui::Button>("exitButton")->setEnabled(true);
 			gEnv->globalGui.get<tgui::Button>("exitButton")->setVisible(true);
+			gEnv->globalGui.get<tgui::Button>("optionsButton")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Button>("optionsButton")->setVisible(true);
 			break;
 		case menuState::optionsActive:
+			gEnv->globalGui.get<tgui::Label>("soundLabel")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Label>("soundLabel")->setVisible(true);
+			gEnv->globalGui.get<tgui::Slider>("soundSlider")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Slider>("soundSlider")->setVisible(true);
+			gEnv->globalGui.get<tgui::Label>("videoLabel")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Label>("videoLabel")->setVisible(true);
+			gEnv->globalGui.get<tgui::ComboBox>("videoComboBox")->setEnabled(true);
+			gEnv->globalGui.get<tgui::ComboBox>("videoComboBox")->setVisible(true);
 			break;
 		case menuState::exitActive:
 			gEnv->globalGui.get<tgui::Button>("startButton")->setEnabled(true);
@@ -61,6 +64,8 @@ void mainMenuChangeState()
 			gEnv->globalGui.get<tgui::Button>("exitButtonYes")->setVisible(true);
 			gEnv->globalGui.get<tgui::Button>("exitButtonNo")->setEnabled(true);
 			gEnv->globalGui.get<tgui::Button>("exitButtonNo")->setVisible(true);
+			gEnv->globalGui.get<tgui::Button>("optionsButton")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Button>("optionsButton")->setVisible(true);
 			break;
 		default:
 			break;
@@ -68,29 +73,36 @@ void mainMenuChangeState()
 	
 }
 
-
 void createMenuButtons()
 {
 	tgui::Button::Ptr startButton = tgui::Button::create();
+	tgui::Button::Ptr optionsButton = tgui::Button::create();
 	tgui::Button::Ptr exitButton = tgui::Button::create();
 	tgui::Button::Ptr exitButtonYes = tgui::Button::create();
 	tgui::Button::Ptr exitButtonNo = tgui::Button::create();
 	gEnv->globalGui.add(startButton, "startButton");
 	gEnv->globalGui.add(exitButton, "exitButton");
+	gEnv->globalGui.add(optionsButton, "optionsButton");
 	gEnv->globalGui.add(exitButtonYes, "exitButtonYes");
 	gEnv->globalGui.add(exitButtonNo, "exitButtonNo");
 	startButton->setText("Start");
+	startButton->connect("MouseReleased", startClick);
 	exitButton->setText("Exit");
+	exitButton->connect("MouseReleased", exitClick);
+	optionsButton->setText("Options");
+	optionsButton->connect("MouseReleased", optionsClick);
 	gEnv->game.mainMenu.mainMenuWidgets.push_back(startButton);
+	gEnv->game.mainMenu.mainMenuWidgets.push_back(optionsButton);
 	gEnv->game.mainMenu.mainMenuWidgets.push_back(exitButton);
 	int i = 0;
 	for (const auto& widget : gEnv->game.mainMenu.mainMenuWidgets)
 	{
 		widget->setSize(300, 150);
-		widget->setPosition("(&.size - size) / 2", 400 + i * 200);
+		widget->setPosition("(&.size - size) / 2", 200 + i * 200);
 		widget->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 		i++;
 	}
+
 	gEnv->game.mainMenu.mainMenuWidgets.push_back(exitButtonYes);
 	exitButtonYes->setSize(150, 150);
 	exitButtonYes->setPosition("exitButton.left - 200", "exitButton.top");
@@ -99,6 +111,7 @@ void createMenuButtons()
 	exitButtonYes->setEnabled(false);
 	exitButtonYes->setVisible(false);
 	exitButtonYes->connect("MouseReleased", exitButtonsYes);
+
 	gEnv->game.mainMenu.mainMenuWidgets.push_back(exitButtonNo);
 	exitButtonNo->setSize(150, 150);
 	exitButtonNo->setPosition("exitButton.right + 50", "exitButton.top");
@@ -107,9 +120,52 @@ void createMenuButtons()
 	exitButtonNo->setEnabled(false);
 	exitButtonNo->setVisible(false);
 	exitButtonNo->connect("MouseReleased", exitClick);
-	exitButton->connect("MouseReleased", exitClick);
-	startButton->connect("MouseReleased", startClick);
+	
+	
+	//WIDGETS FOR OPTIONS
 
+	tgui::Label::Ptr soundLabel = tgui::Label::create();
+	gEnv->globalGui.add(soundLabel, "soundLabel");
+	gEnv->game.mainMenu.mainMenuWidgets.push_back(soundLabel);
+	soundLabel->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	soundLabel->setText("Sound: ");
+	soundLabel->setTextSize(48);
+	soundLabel->setPosition("30%", "20%");
+	soundLabel->setEnabled(false);
+	soundLabel->setVisible(false);
+
+	tgui::Slider::Ptr soundSlider = tgui::Slider::create();
+	gEnv->globalGui.add(soundSlider, "soundSlider");
+	soundSlider->setRenderer(gEnv->globalTheme.getRenderer("Slider"));
+	soundSlider->setPosition("45%", "22%");
+	soundSlider->setSize(220, 20);
+	soundSlider->setValue(10);
+	soundSlider->setVisible(false);
+	soundSlider->setEnabled(false);
+
+	tgui::Label::Ptr videoLabel = tgui::Label::create();
+	gEnv->globalGui.add(videoLabel, "videoLabel");
+	gEnv->game.mainMenu.mainMenuWidgets.push_back(videoLabel);
+	videoLabel->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	videoLabel->setText("Graphics: ");
+	videoLabel->setTextSize(48);
+	videoLabel->setPosition("30%", "30%");
+	videoLabel->setEnabled(false);
+	videoLabel->setVisible(false);
+
+	tgui::ComboBox::Ptr videoComboBox = tgui::ComboBox::create();
+	gEnv->globalGui.add(videoComboBox, "videoComboBox");
+	gEnv->game.mainMenu.mainMenuWidgets.push_back(videoComboBox);
+	videoComboBox->setRenderer(gEnv->globalTheme.getRenderer("ComboBox"));
+	videoComboBox->setSize(100, 30);
+	videoComboBox->setPosition("50%", "32%");
+	videoComboBox->addItem("Low");
+	videoComboBox->addItem("Medium");
+	videoComboBox->addItem("High");
+	videoComboBox->addItem("Ultra");
+	videoComboBox->setSelectedItem("Ultra");
+	videoComboBox->setEnabled(false);
+	videoComboBox->setVisible(false);
 
 	//TESTS TESTS TESTS
 
@@ -216,7 +272,7 @@ void createMenuButtons()
 	sprite.setTexture(getModelDescriptor("blankTexture")->tex);
 	sprite.setScale(200.f / getModelDescriptor("blankTexture")->tex.getSize().x, 140.f / getModelDescriptor("blankTexture")->tex.getSize().y);
 
-	sf::Text text{ "SFML Canvas", *gEnv->globalGui.getFont(), 48 };
+	sf::Text text{ "SFML Canvas", *gEnv->globalGui.getFont(), 24 };
 	text.setPosition(200, 200);
 	text.setFillColor({ 255, 0, 0 });
 
@@ -231,7 +287,7 @@ void createMenuButtons()
 	auto testbox = tgui::TextBox::create();
 	testbox->setRenderer(gEnv->globalTheme.getRenderer("TextBox"));
 	testbox->setText("ROFLAN EBALO WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-	testbox->setPosition({ 500,500 });
+	testbox->setPosition({ 50,50 });
 	testbox->setReadOnly();
 	gEnv->scripts.scriptGui.add(testbox, "scriptTextMessage");
 //	gEnv->globalGui.add(testbox);
@@ -263,6 +319,12 @@ void exitClick()
 	{
 		gEnv->game.mainMenu.active = menuState::mainMenu;
 	}
+	mainMenuChangeState();
+}
+
+void optionsClick()
+{
+	gEnv->game.mainMenu.active = menuState::optionsActive;
 	mainMenuChangeState();
 }
 
