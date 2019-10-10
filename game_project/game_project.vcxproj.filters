@@ -128,5 +128,11 @@
     <ClInclude Include="Source\scriptUtilsUI.h">
       <Filter>ScriptEngine</Filter>
     </ClInclude>
+    <ClInclude Include="Source\TableInventory.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\InventoryItem.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
