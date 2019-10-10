@@ -1,5 +1,5 @@
 #include "mainMenu.h"
-#include "enviroment.h"
+#include "tableInventory.h"
 #include "envUtils.h"
 
 void optionsClick();
@@ -316,6 +316,8 @@ void createMenuButtons()
 	testButton->connect("MouseReleased", testFunctionCreateScript);
 	gEnv->globalGui.add(testButton);
 	/* Do not delete endregion */
+
+	TableInventory* tblinv = new TableInventory();
 
 }
 
