@@ -30,6 +30,7 @@ public:
 			scrollablePanel->add(chooseButton);
 			chooseButton->setPosition(10, i*100 + 10);
 			chooseButton->setSize(90, 30);
+			chooseButton->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 			chooseButton->connect("MouseReleased", buttonWasClicked, i);
 		}
 	}
@@ -41,5 +42,17 @@ public:
 		chooseButtons[id]->setVisible(active);
 	}
 
+	void deleteButtons()
+	{
+		for (const auto& widget : chooseButtons)
+		{
+			gEnv->scripts.scriptGui.remove(widget);
+		}
+	}
 
+	void setVisible(bool vis)
+	{
+		scrollablePanel->setVisible(vis);
+		scrollablePanel->setEnabled(vis);
+	}
 };
