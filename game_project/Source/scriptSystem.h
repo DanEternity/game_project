@@ -37,6 +37,10 @@ private:
 	std::stack<StackElement*> p_stack;
 	// terminate flag
 	bool p_terminate;
+	// chache flag;
+	bool p_chached = false;
+	// text chache;
+	std::string p_textChache;
 
 	// base update func
 	void p_processFrame();
@@ -53,8 +57,8 @@ private:
 	// parse convertable fragment ($value)
 	std::string p_convertValueToString(std::string src);
 
-	// parse value from fragment
-	///
+	// UI class
+	ChooseUI * chooseUI = NULL;
 
 	// Returns memory cell data as string or "NULL" if does not exist
 	std::string p_getLocalMemoryCellAsString(std::string idx);

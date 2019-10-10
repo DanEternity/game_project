@@ -364,6 +364,8 @@ void testFunctionCreateScript()
 
 	PutScript * ptr;
 	TextScript * ptr2;
+	ChooseScript * ptr3;
+	TerminateScript * ptr4;
 
 	// Put "25" to "$_1"
 	ptr = static_cast<PutScript*>(createScriptCommand(scriptType::put));
@@ -382,12 +384,21 @@ void testFunctionCreateScript()
 	ptr->scr = "35";
 	ptr->dest = "$_2";
 	s->scriptLines.push_back(ptr);
-
+	
+	/*
 	// Text "Fisrt = $_1 ; Second = $_2"
 	ptr2 = static_cast<TextScript*>(createScriptCommand(scriptType::text));
 	ptr2->text = "Fisrt = $_1 ; Second = $_2";
 	s->scriptLines.push_back(ptr2);
+	*/
 
+	// Choose "text box"; [$_bool_value] "text1" [line_number], 
+	// [true] "text2"[line_number2];
+	ptr3 = static_cast<ChooseScript*>(createScriptCommand(scriptType::choose));
+	ptr3->variants.push_back(ChooseElement("Jump to 7", 7, true, "true", "", ""));
+	ptr3->variants.push_back(ChooseElement("Jump to 9", 9, true, "false", "", ""));
+	s->scriptLines.push_back(ptr3);
+	
 	//
 	// Put "QWERT" to ""
 	// $ - variable
@@ -400,6 +411,27 @@ void testFunctionCreateScript()
 	// "123.1"
 	// "12 iq"
 	//
+
+	ptr4 = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
+	s->scriptLines.push_back(ptr4);
+
+	ptr4 = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
+	s->scriptLines.push_back(ptr4);
+	
+	ptr4 = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
+	s->scriptLines.push_back(ptr4);
+	
+	ptr4 = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
+	s->scriptLines.push_back(ptr4);
+	
+	ptr4 = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
+	s->scriptLines.push_back(ptr4);
+
+	ptr4 = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
+	s->scriptLines.push_back(ptr4);
+
+	ptr4 = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
+	s->scriptLines.push_back(ptr4);
 
 	addScriptToQueue(s);
 
