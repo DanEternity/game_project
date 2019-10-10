@@ -154,7 +154,7 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 		p_processPut(static_cast<PutScript*>(command));
 		break;
 	case scriptType::choose:
-
+		p_processChoose(static_cast<ChooseScript*>(command));
 		break;
 	default:
 		printf("Debug: Error! Script commands has unknown type -> %i", sType);
@@ -175,8 +175,6 @@ void ScriptSystem::p_blockGame_ScriptRunning(bool mode)
 	{
 		gEnv->game.gameModesRequiredUpdate = true;
 	}
-
-
 
 }
 
@@ -303,6 +301,9 @@ std::string ScriptSystem::p_getLocalMemoryCellAsString(std::string idx)
 	case objectType::real:
 		res = std::to_string(static_cast<FloatObject*>(obj)->value);
 		break;
+	case objectType::boolean:
+		res = std::to_string(static_cast<BooleanObject*>(obj)->value);
+		break;
 	case objectType::string:
 		res = static_cast<StringObject*>(obj)->value;
 		break;
@@ -401,6 +402,21 @@ void ScriptSystem::p_processPut(PutScript * command)
 		// failed
 		return;
 	}
+
+}
+
+void ScriptSystem::p_processChoose(ChooseScript * command)
+{
+
+
+
+}
+
+void ScriptSystem::p_processTerminate(TerminateScript * command)
+{
+
+	p_s = p_sysStatus::scriptTerminated;
+	p_terminate = true;
 
 }
 

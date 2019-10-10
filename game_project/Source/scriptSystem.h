@@ -67,6 +67,8 @@ private:
 	// commands
 	void p_processText(TextScript * command);
 	void p_processPut(PutScript * command);
+	void p_processChoose(ChooseScript * command);
+	void p_processTerminate(TerminateScript * command);
 };
 
 extern ScriptSystem * scriptSystem;

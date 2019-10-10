@@ -11,6 +11,7 @@ namespace objectType {
 		integer,
 		string,
 		real,
+		boolean,
 	};
 
 } // namespace objectType
