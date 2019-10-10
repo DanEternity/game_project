@@ -291,6 +291,80 @@ std::string ScriptSystem::p_convertValueToString(std::string src)
 	return result;
 }
 
+bool ScriptSystem::p_calculateComporator(ComparatorElement * comparator)
+{
+	
+	if (comparator->unaryComparator)
+	{
+		std::string res = "";
+		std::string val = comparator->left;
+		if (val.size() <= 1)
+			return false;
+		if (val[0] == '$')
+		{
+			res = p_convertValueToString(val);
+			if (res == "1")
+				res = "true";
+			else
+				res = "false";
+		}
+		else
+		{
+			res = val;
+		}
+		if (res == "true" || res == "True" || res == "TRUE")
+		{
+			return true;
+		}
+		if (res == "false" || res == "False" || res == "FALSE")
+		{
+			return false;
+		}
+	}
+	else
+	{
+		std::string l_arg = p_convertValueToString(comparator->left);
+		std::string r_arg = p_convertValueToString(comparator->right);
+
+		std::string op = comparator->operation;
+
+		float l = std::atof(l_arg.c_str());
+		float r = std::atof(r_arg.c_str());
+
+		if (op == "==")
+		{
+			return (l == r);
+		}
+
+		if (op == "<")
+		{
+			return (l < r);
+		}
+
+		if (op == ">")
+		{
+			return (l > r);
+		}
+
+		if (op == ">=")
+		{
+			return (l >= r);
+		}
+
+		if (op == "<=")
+		{
+			return (l <= r);
+		}
+
+		if (op == "!=" || op == "<>")
+		{
+			return (l != r);
+		}
+	}
+
+	return false;
+}
+
 std::string ScriptSystem::p_getLocalMemoryCellAsString(std::string idx)
 {
 
@@ -445,11 +519,7 @@ void ScriptSystem::p_processChoose(ChooseScript * command)
 		for (int i(0); i < command->variants.size(); i++)
 		{
 			auto elem = command->variants[i];
-			//bool active = calculateComporator(elem.comp);
-			bool active = true;
-			if (i == command->variants.size() - 1)
-				active = false;
-			//elem.textLine;
+			bool active = p_calculateComporator(&elem.comp);
 			std::string text = p_convertText(elem.textLine);
 			chooseUI->setButton(i, text, active);
 		}

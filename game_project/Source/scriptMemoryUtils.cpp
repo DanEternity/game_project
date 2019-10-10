@@ -97,7 +97,9 @@ RETURN_CODE convertToString(BaseObject * src, std::string & dst)
 	case objectType::real:
 		dst = std::to_string(static_cast<FloatObject*>(src)->value);
 		break;
-
+	case objectType::boolean:
+		dst = std::to_string(static_cast<BooleanObject*>(src)->value);
+		break;
 	default:
 	{
 		auto code = getObjectName(src, dst);
@@ -311,7 +313,12 @@ RETURN_CODE convertConstToObject(std::string src, BaseObject ** dst)
 		else
 			if (src == "false" || src == "False" || src == "FALSE")
 			{
-
+				// is a boolean (false)
+				BooleanObject * ptr = new BooleanObject();
+				ptr->value = false;
+				ptr->memoryControl = memoryControl::singleUse;
+				*dst = ptr;
+				return RETURN_CODE(memoryUtil::ok);
 			}
 
 		// convert to string

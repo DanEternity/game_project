@@ -57,6 +57,9 @@ private:
 	// parse convertable fragment ($value)
 	std::string p_convertValueToString(std::string src);
 
+	// get result of comparator
+	bool p_calculateComporator(ComparatorElement * comparator);
+
 	// UI class
 	ChooseUI * chooseUI = NULL;
 

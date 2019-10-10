@@ -375,8 +375,8 @@ void testFunctionCreateScript()
 
 	// Put "$_1" to "$_2"
 	ptr = static_cast<PutScript*>(createScriptCommand(scriptType::put));
-	ptr->scr = "$_1";
-	ptr->dest = "$_2";
+	ptr->scr = "true";
+	ptr->dest = "$_3";
 	s->scriptLines.push_back(ptr);
 
 	// Put "35" to "$_2"
@@ -384,7 +384,16 @@ void testFunctionCreateScript()
 	ptr->scr = "35";
 	ptr->dest = "$_2";
 	s->scriptLines.push_back(ptr);
+
+	ptr = static_cast<PutScript*>(createScriptCommand(scriptType::put));
+	ptr->scr = "35";
+	ptr->dest = "$_4";
+	s->scriptLines.push_back(ptr);
 	
+	ptr = static_cast<PutScript*>(createScriptCommand(scriptType::put));
+	ptr->scr = "55";
+	ptr->dest = "$_5";
+	s->scriptLines.push_back(ptr);
 	/*
 	// Text "Fisrt = $_1 ; Second = $_2"
 	ptr2 = static_cast<TextScript*>(createScriptCommand(scriptType::text));
@@ -397,7 +406,7 @@ void testFunctionCreateScript()
 	ptr3 = static_cast<ChooseScript*>(createScriptCommand(scriptType::choose));
 	ptr3->text = "ANDREY WWWWW X\nX\nX\nX\nX\nX\nX\nX\nX\nX\nX\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 	ptr3->variants.push_back(ChooseElement("Jump to 7", 7, true, "true", "", ""));
-	ptr3->variants.push_back(ChooseElement("Jump to 9", 9, true, "false", "", ""));
+	ptr3->variants.push_back(ChooseElement("Jump to 9", 9, false, "$_4", "==", "$_5"));
 	s->scriptLines.push_back(ptr3);
 	
 	//
@@ -423,12 +432,12 @@ void testFunctionCreateScript()
 	s->scriptLines.push_back(ptr4);
 	
 	ptr3 = static_cast<ChooseScript*>(createScriptCommand(scriptType::choose));
-	ptr3->text = "ANDREY DPidor x 2";
+	ptr3->text = "ANDREY D x 2";
 	ptr3->variants.push_back(ChooseElement("Jump to 8", 8, true, "true", "", ""));
-	ptr3->variants.push_back(ChooseElement("Jump to 1", 1, true, "false", "", ""));
+	ptr3->variants.push_back(ChooseElement("Jump to 1", 1, true, "$_3", "", ""));
 	ptr3->variants.push_back(ChooseElement("Jump to 4", 4, true, "false", "", ""));
 	ptr3->variants.push_back(ChooseElement("Jump to 5", 5, true, "false", "", ""));
-	ptr3->variants.push_back(ChooseElement("Jump to 6", 6, true, "false", "", ""));
+	ptr3->variants.push_back(ChooseElement("Jump to 6", 6, true, "true", "", ""));
 	s->scriptLines.push_back(ptr3);
 
 	//ptr4 = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
