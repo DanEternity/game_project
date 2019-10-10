@@ -192,9 +192,9 @@ RETURN_CODE getMemoryCell(std::string queryString, BaseObject ** dst, LocalMemor
 
 		if (queryString.find_first_of("EXT:", 0) != std::string::npos)
 		{
-			// external table
-			// need parse
-
+			// external table parse
+			// 
+			// Descriptor has following format:
 			// 01234567890123456789 
 			// EXT:XXXX:VALUE
 
@@ -298,6 +298,22 @@ RETURN_CODE convertConstToObject(std::string src, BaseObject ** dst)
 			return RETURN_CODE(memoryUtil::ok);
 		}
 
+		// convert to boolean
+		if (src == "true" || src == "True" || src == "TRUE")
+		{
+			// is a boolean (true)
+			BooleanObject * ptr = new BooleanObject();
+			ptr->value = true;
+			ptr->memoryControl = memoryControl::singleUse;
+			*dst = ptr;
+			return RETURN_CODE(memoryUtil::ok);
+		}
+		else
+			if (src == "false" || src == "False" || src == "FALSE")
+			{
+
+			}
+
 		// convert to string
 		StringObject * ptr = new StringObject();
 		ptr->value = src;
@@ -357,7 +373,10 @@ RETURN_CODE copyObject(BaseObject * src, BaseObject ** dst)
 			ptr = new FloatObject();
 			static_cast<FloatObject*>(ptr)->value = static_cast<FloatObject*>(src)->value;
 			break;
-
+		case objectType::boolean:
+			ptr = new BooleanObject();
+			static_cast<BooleanObject*>(ptr)->value = static_cast<BooleanObject*>(src)->value;
+			break;
 		default:
 			break;
 		}

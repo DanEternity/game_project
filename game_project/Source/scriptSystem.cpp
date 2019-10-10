@@ -15,6 +15,8 @@ void ScriptSystem::updateScriptEngine()
 			// init
 
 			chooseUI = new ChooseUI();
+			chooseUI->setVisible(false);
+			//gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setVisible(false);
 
 			gEnv->scripts.task = "ready";
 
@@ -458,6 +460,8 @@ void ScriptSystem::p_processChoose(ChooseScript * command)
 		p_chached = true;
 		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setVisible(true);
 		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setText(text);
+		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setCaretPosition(0);
+		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setReadOnly(true);
 	}
 	else
 		text = p_textChache;

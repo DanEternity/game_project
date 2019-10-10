@@ -301,9 +301,10 @@ void createMenuButtons()
 
 	auto testbox = tgui::TextBox::create();
 	testbox->setRenderer(gEnv->globalTheme.getRenderer("TextBox"));
-	testbox->setText("ROFLAN EBALO WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+	testbox->setText("ROFLAN EBALO WWWW");
 	testbox->setPosition({ 50,50 });
 	testbox->setReadOnly();
+	testbox->setVisible(false);
 	gEnv->scripts.scriptGui.add(testbox, "scriptTextMessage");
 //	gEnv->globalGui.add(testbox);
 
@@ -394,7 +395,7 @@ void testFunctionCreateScript()
 	// Choose "text box"; [$_bool_value] "text1" [line_number], 
 	// [true] "text2"[line_number2];
 	ptr3 = static_cast<ChooseScript*>(createScriptCommand(scriptType::choose));
-	ptr3->text = "ANDREY DPidor";
+	ptr3->text = "ANDREY WWWWW X\nX\nX\nX\nX\nX\nX\nX\nX\nX\nX\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 	ptr3->variants.push_back(ChooseElement("Jump to 7", 7, true, "true", "", ""));
 	ptr3->variants.push_back(ChooseElement("Jump to 9", 9, true, "false", "", ""));
 	s->scriptLines.push_back(ptr3);

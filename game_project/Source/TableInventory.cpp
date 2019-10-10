@@ -5,7 +5,7 @@ TableInventory::TableInventory()
 	scrollablePanel = tgui::ScrollablePanel::create();
 	gEnv->globalGui.add(scrollablePanel, "inventoryPanel");
 	scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-	scrollablePanel->setPosition("40%", "60%");
+	scrollablePanel->setPosition("10%", "80%");
 	scrollablePanel->setSize(550, 100);
 	for (int i = 0; i < 30; i++)
 	{
