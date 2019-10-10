@@ -18,6 +18,7 @@ namespace scriptType
 		text,
 		put,
 		choose,
+		terminate,
 	};
 }
 
@@ -31,6 +32,15 @@ public:
 
 
 
+};
+
+class ComparatorElement
+{
+public:
+	bool unaryComparator = false;
+	std::string left;
+	std::string operation;
+	std::string right;
 };
 
 // Command types
@@ -62,7 +72,11 @@ class ChooseScript : public TextScript
 public:
 	std::vector<std::string> variants;
 	std::vector<int> jumps;
-	std::vector<std::string> comparators;
+	std::vector<ComparatorElement> comparators;
+	ChooseScript()
+	{
+		this->scriptType = scriptType::choose;
+	}
 };
 
 class PutScript : public BaseScript
@@ -73,5 +87,14 @@ public:
 	PutScript()
 	{
 		this->scriptType = scriptType::put;
+	}
+};
+
+class TerminateScript : public BaseScript
+{
+public:
+	TerminateScript()
+	{
+		this->scriptType = scriptType::terminate;
 	}
 };

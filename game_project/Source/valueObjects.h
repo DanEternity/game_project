@@ -36,6 +36,16 @@ public:
 	}
 };
 
+class BooleanObject : public BaseObject
+{
+public:
+	bool value;
+	BooleanObject()
+	{
+		this->objectType = objectType::boolean;
+	}
+};
+
 class ExternalTable : public BaseObject
 {
 public:

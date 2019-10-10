@@ -343,7 +343,7 @@ void testFunctionCreateScript()
 
 	// Put "25" to "$_1"
 	ptr = static_cast<PutScript*>(createScriptCommand(scriptType::put));
-	ptr->scr = "25";
+	ptr->scr = "12 iq";
 	ptr->dest = "$_1";
 	s->scriptLines.push_back(ptr);
 
@@ -353,9 +353,29 @@ void testFunctionCreateScript()
 	ptr->dest = "$_2";
 	s->scriptLines.push_back(ptr);
 
+	// Put "35" to "$_2"
+	ptr = static_cast<PutScript*>(createScriptCommand(scriptType::put));
+	ptr->scr = "35";
+	ptr->dest = "$_2";
+	s->scriptLines.push_back(ptr);
+
+	// Text "Fisrt = $_1 ; Second = $_2"
 	ptr2 = static_cast<TextScript*>(createScriptCommand(scriptType::text));
 	ptr2->text = "Fisrt = $_1 ; Second = $_2";
 	s->scriptLines.push_back(ptr2);
+
+	//
+	// Put "QWERT" to ""
+	// $ - variable
+	// _ - local variable
+	// $_
+	// $EXT - external table
+	// $EXT:FFFFF:1234 FFFFF - tableID , 1234 - value name
+	// $fgdgdfgdfgdfg - game enviroment
+	// "123"
+	// "123.1"
+	// "12 iq"
+	//
 
 	addScriptToQueue(s);
 
