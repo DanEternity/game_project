@@ -29,6 +29,8 @@ int main()
 	// Clock to calculate time from previous frame
 	sf::Clock deltaClock;
 
+	gEnv->globalWindow.setFramerateLimit(120);
+
 	while (gEnv->globalWindow.isOpen())
 	{
 		// Handle system events

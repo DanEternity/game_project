@@ -160,6 +160,9 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::choose:
 		p_processChoose(static_cast<ChooseScript*>(command));
 		break;
+	case scriptType::terminate:
+		p_processTerminate(static_cast<TerminateScript*>(command));
+		break;
 	default:
 		printf("Debug: Error! Script commands has unknown type -> %i", sType);
 		break;
@@ -184,6 +187,7 @@ void ScriptSystem::p_blockGame_ScriptRunning(bool mode)
 
 void ScriptSystem::p_blockGame_WaitForReaction(bool mode)
 {
+	gEnv->scripts.scriptGuiEventsRequiresUpdate = mode;
 }
 
 std::string ScriptSystem::p_convertText(std::string src)
@@ -213,8 +217,6 @@ std::string ScriptSystem::p_convertText(std::string src)
 		res += fragment;
 
 	}
-
-	p_s = p_sysStatus::scriptWaitForReaction;
 
 	return res;
 }
@@ -334,6 +336,7 @@ void ScriptSystem::p_processText(TextScript * command)
 	// Need to block/pause game
 
 	p_blockGame_WaitForReaction();
+	p_s = p_sysStatus::scriptWaitForReaction;
 
 	// Draw text OwO
 	std::string text;
@@ -342,14 +345,17 @@ void ScriptSystem::p_processText(TextScript * command)
 		text = p_convertText(command->text);
 		p_textChache = text;
 		p_chached = true;
+		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setVisible(true);
+		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setText(text);
+		if (true)
+			printf("TEST: %s\n", text.c_str());
 	}
 	else
 		text = p_textChache;
 
-	gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setText(text);
+	
 
-	if (true)
-		printf("TEST: %s\n", text.c_str());
+
 
 	// Check buttons
 
@@ -357,7 +363,8 @@ void ScriptSystem::p_processText(TextScript * command)
 	{
 
 		p_blockGame_WaitForReaction(false);
-
+		p_s = p_sysStatus::processingScript;
+		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setVisible(false);
 	}
 	else
 	{
@@ -421,13 +428,16 @@ void ScriptSystem::p_processChoose(ChooseScript * command)
 	// Need to block/pause game
 
 	p_blockGame_WaitForReaction();
-
+	p_s = p_sysStatus::scriptWaitForReaction;
 	// chache check
 
 	std::string text;
 
 	if (!p_chached)
 	{
+		
+		chooseUI->deleteButtons();
+		chooseUI->setVisible(true);
 		chooseUI->initButtons(command->variants.size());
 
 		for (int i(0); i < command->variants.size(); i++)
@@ -435,6 +445,8 @@ void ScriptSystem::p_processChoose(ChooseScript * command)
 			auto elem = command->variants[i];
 			//bool active = calculateComporator(elem.comp);
 			bool active = true;
+			if (i == command->variants.size() - 1)
+				active = false;
 			//elem.textLine;
 			std::string text = p_convertText(elem.textLine);
 			chooseUI->setButton(i, text, active);
@@ -444,21 +456,26 @@ void ScriptSystem::p_processChoose(ChooseScript * command)
 		text = p_convertText(command->text);
 		p_textChache = text;
 		p_chached = true;
+		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setVisible(true);
+		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setText(text);
 	}
 	else
 		text = p_textChache;
-	
-	gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setText(text);
 
 	// Check buttons
 
 	if (gEnv->scripts.buttonPressed)
 	{
-
+		gEnv->scripts.buttonPressed = false;
 		p_blockGame_WaitForReaction(false);
 		// change line
 		int id = gEnv->scripts.buttonId;
 		p_nl = command->variants[id].jump;
+		p_s = p_sysStatus::processingScript;
+		p_chached = false;
+		chooseUI->deleteButtons();
+		chooseUI->setVisible(false);
+		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setVisible(false);
 	}
 	else
 	{

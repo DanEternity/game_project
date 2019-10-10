@@ -12,7 +12,6 @@ void updateMainMenu()
 		gEnv->globalGui.draw();
 
 		gEnv->scripts.scriptGui.draw();
-
 		
 	}
 
@@ -393,6 +392,7 @@ void testFunctionCreateScript()
 	// Choose "text box"; [$_bool_value] "text1" [line_number], 
 	// [true] "text2"[line_number2];
 	ptr3 = static_cast<ChooseScript*>(createScriptCommand(scriptType::choose));
+	ptr3->text = "ANDREY DPidor";
 	ptr3->variants.push_back(ChooseElement("Jump to 7", 7, true, "true", "", ""));
 	ptr3->variants.push_back(ChooseElement("Jump to 9", 9, true, "false", "", ""));
 	s->scriptLines.push_back(ptr3);
@@ -419,8 +419,17 @@ void testFunctionCreateScript()
 	ptr4 = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
 	s->scriptLines.push_back(ptr4);
 	
-	ptr4 = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
-	s->scriptLines.push_back(ptr4);
+	ptr3 = static_cast<ChooseScript*>(createScriptCommand(scriptType::choose));
+	ptr3->text = "ANDREY DPidor x 2";
+	ptr3->variants.push_back(ChooseElement("Jump to 8", 8, true, "true", "", ""));
+	ptr3->variants.push_back(ChooseElement("Jump to 1", 1, true, "false", "", ""));
+	ptr3->variants.push_back(ChooseElement("Jump to 4", 4, true, "false", "", ""));
+	ptr3->variants.push_back(ChooseElement("Jump to 5", 5, true, "false", "", ""));
+	ptr3->variants.push_back(ChooseElement("Jump to 6", 6, true, "false", "", ""));
+	s->scriptLines.push_back(ptr3);
+
+	//ptr4 = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
+	//s->scriptLines.push_back(ptr4);
 	
 	ptr4 = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
 	s->scriptLines.push_back(ptr4);

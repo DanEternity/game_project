@@ -15,7 +15,7 @@ public:
 	{
 		scrollablePanel = tgui::ScrollablePanel::create();
 		gEnv->scripts.scriptGui.add(scrollablePanel);
-		scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("ScrollablePanel"));
+		scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
 		scrollablePanel->setPosition("40%", "60%");
 		scrollablePanel->setSize(500, 200);
 	}
@@ -44,10 +44,14 @@ public:
 
 	void deleteButtons()
 	{
-		for (const auto& widget : chooseButtons)
+
+		for (int i(0); i < chooseButtons.size(); i++)
 		{
-			gEnv->scripts.scriptGui.remove(widget);
+			auto p = chooseButtons[i];
+			scrollablePanel->remove(p);
+			p.reset();
 		}
+		chooseButtons.clear();
 	}
 
 	void setVisible(bool vis)

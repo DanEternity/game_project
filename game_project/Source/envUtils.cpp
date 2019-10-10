@@ -138,6 +138,9 @@ BaseScript * createScriptCommand(scriptType::ScriptType type)
 	case scriptType::choose:
 		return new ChooseScript();
 		break;
+	case scriptType::terminate:
+		return new TerminateScript();
+		break;
 	default:
 		break;
 	}
