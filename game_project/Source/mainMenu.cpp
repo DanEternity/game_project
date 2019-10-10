@@ -3,6 +3,7 @@
 #include "envUtils.h"
 
 void optionsClick();
+void optionsBackButton();
 
 void updateMainMenu()
 {
@@ -54,6 +55,8 @@ void mainMenuChangeState()
 			gEnv->globalGui.get<tgui::Label>("videoLabel")->setVisible(true);
 			gEnv->globalGui.get<tgui::ComboBox>("videoComboBox")->setEnabled(true);
 			gEnv->globalGui.get<tgui::ComboBox>("videoComboBox")->setVisible(true);
+			gEnv->globalGui.get<tgui::Button>("optionsBack")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Button>("optionsBack")->setVisible(true);
 			break;
 		case menuState::exitActive:
 			gEnv->globalGui.get<tgui::Button>("startButton")->setEnabled(true);
@@ -136,6 +139,7 @@ void createMenuButtons()
 
 	tgui::Slider::Ptr soundSlider = tgui::Slider::create();
 	gEnv->globalGui.add(soundSlider, "soundSlider");
+	gEnv->game.mainMenu.mainMenuWidgets.push_back(soundSlider);
 	soundSlider->setRenderer(gEnv->globalTheme.getRenderer("Slider"));
 	soundSlider->setPosition("45%", "22%");
 	soundSlider->setSize(220, 20);
@@ -166,6 +170,18 @@ void createMenuButtons()
 	videoComboBox->setSelectedItem("Ultra");
 	videoComboBox->setEnabled(false);
 	videoComboBox->setVisible(false);
+
+	tgui::Button::Ptr optionsBack = tgui::Button::create();
+	gEnv->globalGui.add(optionsBack, "optionsBack");
+	gEnv->game.mainMenu.mainMenuWidgets.push_back(optionsBack);
+	optionsBack->setSize(200, 150);
+	optionsBack->setPosition("45%", "60%");
+	optionsBack->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	optionsBack->setText("Back");
+	optionsBack->setEnabled(false);
+	optionsBack->setVisible(false);
+	optionsBack->connect("MouseReleased", optionsBackButton);
+
 
 	//TESTS TESTS TESTS
 
@@ -331,6 +347,12 @@ void optionsClick()
 void exitButtonsYes()
 {
 	gEnv->globalWindow.close();
+}
+
+void optionsBackButton()
+{
+	gEnv->game.mainMenu.active = menuState::mainMenu;
+	mainMenuChangeState();
 }
 
 void testFunctionCreateScript()

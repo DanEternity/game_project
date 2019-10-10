@@ -1,6 +1,7 @@
 #pragma once
 
 #include "enviroment.h"
+#include "scriptUtilsUI.h"
 #include <stack>
 //#include "scriptDescriptor.h"
 
