@@ -66,6 +66,9 @@
     <ClCompile Include="Source\scriptUtilsUI.cpp">
       <Filter>ScriptEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Source\TableInventory.cpp">
+      <Filter>Заголовочные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\game.h">
@@ -129,9 +132,6 @@
       <Filter>ScriptEngine</Filter>
     </ClInclude>
     <ClInclude Include="Source\TableInventory.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\InventoryItem.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>

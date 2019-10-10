@@ -235,6 +235,7 @@
     <ClCompile Include="Source\scriptMemoryUtils.cpp" />
     <ClCompile Include="Source\scriptSystem.cpp" />
     <ClCompile Include="Source\scriptUtilsUI.cpp" />
+    <ClCompile Include="Source\TableInventory.cpp" />
     <ClCompile Include="Source\uiEventHandlers.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -245,7 +246,6 @@
     <ClInclude Include="Source\gamedata.h" />
     <ClInclude Include="Source\graphics.h" />
     <ClInclude Include="Source\graphicsModel.h" />
-    <ClInclude Include="Source\InventoryItem.h" />
     <ClInclude Include="Source\loader.h" />
     <ClInclude Include="Source\mainMenu.h" />
     <ClInclude Include="Source\menuData.h" />
