@@ -41,6 +41,28 @@ public:
 	std::string left;
 	std::string operation;
 	std::string right;
+	ComparatorElement(bool a, std::string left, std::string op, std::string right)
+	{
+		unaryComparator = a;
+		this->left = left;
+		this->operation = op;
+		this->right = right;
+	}
+	ComparatorElement() {}
+};
+
+class ChooseElement
+{
+public:
+	std::string textLine;
+	int jump;
+	ComparatorElement comp;
+	ChooseElement(std::string textLine, int jump, bool a, std::string left, std::string op, std::string right)
+	{
+		this->textLine = textLine;
+		this->jump = jump;
+		this->comp = ComparatorElement(a, left, op, right);
+	}
 };
 
 // Command types
@@ -70,9 +92,7 @@ public:
 class ChooseScript : public TextScript
 {
 public:
-	std::vector<std::string> variants;
-	std::vector<int> jumps;
-	std::vector<ComparatorElement> comparators;
+	std::vector<ChooseElement> variants;
 	ChooseScript()
 	{
 		this->scriptType = scriptType::choose;

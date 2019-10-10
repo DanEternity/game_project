@@ -3,6 +3,8 @@
 #include <TGUI\TGUI.hpp>
 #include <string>
 
+void buttonWasClicked(int i);
+
 class ChooseUI
 {
 public:

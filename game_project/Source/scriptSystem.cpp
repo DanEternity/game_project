@@ -14,6 +14,8 @@ void ScriptSystem::updateScriptEngine()
 
 			// init
 
+			chooseUI = new ChooseUI();
+
 			gEnv->scripts.task = "ready";
 
 		}
@@ -125,6 +127,8 @@ void ScriptSystem::p_processScriptDescriptor()
 
 		if (p_s == p_sysStatus::scriptWaitForReaction)
 			break;
+
+		p_chached = false;
 
 	}
 
@@ -332,9 +336,16 @@ void ScriptSystem::p_processText(TextScript * command)
 	p_blockGame_WaitForReaction();
 
 	// Draw text OwO
-	
-	//gEnv->scripts.huieviiButton.setText(p_convertText(command->text));
-	std::string text = p_convertText(command->text);
+	std::string text;
+	if (!p_chached)
+	{
+		text = p_convertText(command->text);
+		p_textChache = text;
+		p_chached = true;
+	}
+	else
+		text = p_textChache;
+
 	gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setText(text);
 
 	if (true)
@@ -407,8 +418,54 @@ void ScriptSystem::p_processPut(PutScript * command)
 
 void ScriptSystem::p_processChoose(ChooseScript * command)
 {
+	// Need to block/pause game
+
+	p_blockGame_WaitForReaction();
+
+	// chache check
+
+	std::string text;
+
+	if (!p_chached)
+	{
+		chooseUI->initButtons(command->variants.size());
+
+		for (int i(0); i < command->variants.size(); i++)
+		{
+			auto elem = command->variants[i];
+			//bool active = calculateComporator(elem.comp);
+			bool active = true;
+			//elem.textLine;
+			std::string text = p_convertText(elem.textLine);
+			chooseUI->setButton(i, text, active);
+		}
 
 
+		text = p_convertText(command->text);
+		p_textChache = text;
+		p_chached = true;
+	}
+	else
+		text = p_textChache;
+	
+	gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setText(text);
+
+	// Check buttons
+
+	if (gEnv->scripts.buttonPressed)
+	{
+
+		p_blockGame_WaitForReaction(false);
+		// change line
+		int id = gEnv->scripts.buttonId;
+		p_nl = command->variants[id].jump;
+	}
+	else
+	{
+
+		p_nl = p_l;
+
+	}
 
 }
 
