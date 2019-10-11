@@ -19,6 +19,9 @@ namespace scriptType
 		put,
 		choose,
 		terminate,
+		jump,
+		ariphmetic,
+		ifDoJump,
 	};
 }
 
@@ -116,5 +119,39 @@ public:
 	TerminateScript()
 	{
 		this->scriptType = scriptType::terminate;
+	}
+};
+
+class JumpScript : public BaseScript
+{
+public:
+	int lineId;
+	JumpScript()
+	{
+		this->scriptType = scriptType::jump;
+	}
+};
+
+class AriphmeticScript : public BaseScript
+{
+public:
+	std::string dest;
+	std::string operation;
+	std::string left;
+	std::string right;
+	AriphmeticScript()
+	{
+		this->scriptType = scriptType::ariphmetic;
+	}
+};
+
+class IfDoJumpScript : public BaseScript
+{
+public:
+	ComparatorElement condition;
+	int lineId; // jump to line
+	IfDoJumpScript()
+	{
+		this->scriptType = scriptType::ifDoJump;
 	}
 };

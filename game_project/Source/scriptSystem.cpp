@@ -165,8 +165,17 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::terminate:
 		p_processTerminate(static_cast<TerminateScript*>(command));
 		break;
+	case scriptType::ariphmetic:
+		p_processAriphmetic(static_cast<AriphmeticScript*>(command));
+		break;
+	case scriptType::jump:
+		p_processJump(static_cast<JumpScript*>(command));
+		break;
+	case scriptType::ifDoJump:
+		p_processIfDoJump(static_cast<IfDoJumpScript*>(command));
+		break;
 	default:
-		printf("Debug: Error! Script commands has unknown type -> %i", sType);
+		printf("Debug: Error! Script command has unknown type -> %i", sType);
 		break;
 	}
 
@@ -363,6 +372,130 @@ bool ScriptSystem::p_calculateComporator(ComparatorElement * comparator)
 	}
 
 	return false;
+}
+
+bool ScriptSystem::p_calculateExpression(BaseObject * left, BaseObject * right, std::string operation, BaseObject ** dest)
+{
+
+	auto tr = p_getNumResultType(left, right, operation);
+	if (tr == objectType::undefined)
+		return false;
+	
+	float resultF = 0;
+	int resultI = 0;
+
+	float leftF = 0;
+	float rightF = 0;
+	int leftI = 0;
+	int rightI = 0;
+
+	if (tr == objectType::real)
+	{
+		*dest = new FloatObject();
+		(*dest)->memoryControl = memoryControl::singleUse;
+
+		if (left->objectType == objectType::integer)
+			leftF = static_cast<IntObject*>(left)->value;
+		else
+			leftF = static_cast<FloatObject*>(left)->value;
+
+		if (right->objectType == objectType::integer)
+			rightF = static_cast<IntObject*>(right)->value;
+		else
+			rightF = static_cast<FloatObject*>(right)->value;
+	}
+	else
+	{
+		*dest = new IntObject();
+		(*dest)->memoryControl = memoryControl::singleUse;
+
+		leftI = static_cast<IntObject*>(left)->value;
+
+		rightI = static_cast<IntObject*>(right)->value;
+
+
+	}
+
+	if (operation == "+")
+	{
+		if ((*dest)->objectType == objectType::real)
+			static_cast<FloatObject*>(*dest)->value = leftF + rightF;
+		else
+			static_cast<IntObject*>(*dest)->value = leftI + rightI;
+	}
+
+	if (operation == "-")
+	{
+		if ((*dest)->objectType == objectType::real)
+			static_cast<FloatObject*>(*dest)->value = leftF - rightF;
+		else
+			static_cast<IntObject*>(*dest)->value = leftI - rightI;
+	}
+
+	if (operation == "*")
+	{
+		if ((*dest)->objectType == objectType::real)
+			static_cast<FloatObject*>(*dest)->value = leftF * rightF;
+		else
+			static_cast<IntObject*>(*dest)->value = leftI * rightI;
+	}
+
+	if (operation == "/")
+	{
+		if ((*dest)->objectType == objectType::real)
+		{
+			if (rightF < 0.000001)
+			{
+				printf("Error! Ariphmetic script - Division by zero\n");
+				delete *dest;
+				return false;
+			}
+		}
+		else
+		{
+			if (rightI == 0)
+			{
+				printf("Error! Ariphmetic script - Division by zero\n");
+				delete *dest;
+				return false;
+			}
+		}
+		if ((*dest)->objectType == objectType::real)
+			static_cast<FloatObject*>(*dest)->value = leftF / rightF;
+		else
+			static_cast<IntObject*>(*dest)->value = leftI / rightI;
+	}
+
+	return true;
+}
+
+objectType::ObjectType ScriptSystem::p_getNumResultType(BaseObject * left, BaseObject * right, std::string operation)
+{
+
+	if (left == NULL || right == NULL)
+		return objectType::undefined;
+
+	auto t1 = left->objectType;
+	auto t2 = right->objectType;
+
+	if ((t1 != objectType::integer && t1 != objectType::real) || (t2 != objectType::integer && t2 != objectType::real))
+	{
+		return objectType::ObjectType(objectType::undefined);
+	}
+
+	if (t1 == objectType::real || t2 == objectType::real)
+	{
+		return objectType::real;
+	}
+	else
+		if (operation == "/")
+		{
+			return objectType::real;
+		}
+		else
+			return objectType::integer;
+
+	return objectType::ObjectType(objectType::undefined);
 }
 
 std::string ScriptSystem::p_getLocalMemoryCellAsString(std::string idx)
@@ -565,6 +698,121 @@ void ScriptSystem::p_processTerminate(TerminateScript * command)
 
 	p_s = p_sysStatus::scriptTerminated;
 	p_terminate = true;
+
+}
+
+void ScriptSystem::p_processJump(JumpScript * command)
+{
+
+	p_nl = command->lineId;
+
+}
+
+void ScriptSystem::p_processAriphmetic(AriphmeticScript * command)
+{
+
+	auto src = command->left;
+	auto dst = command->dest;
+
+	BaseObject * objLeft = NULL;
+	BaseObject * objRight = NULL;
+
+	// Collecting left operand
+	// check if src is const
+	if (src.size() >= 1)
+	{
+		if (src[0] != '$')
+		{
+			// value is const
+			auto code = convertConstToObject(src, &objLeft);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+		}
+		else
+		{
+			// get src object if not a const
+			auto code = getMemoryCell(src, &objLeft, &p_d->localMemory);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+		}
+	}
+	else
+	{
+		// failed
+		// no source provided
+		return;
+	}
+
+	src = command->right;
+
+	// Collecting right operand
+	// check if src is const
+	if (src.size() >= 1)
+	{
+		if (src[0] != '$')
+		{
+			// value is const
+			auto code = convertConstToObject(src, &objRight);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+		}
+		else
+		{
+			// get src object if not a const
+			auto code = getMemoryCell(src, &objRight, &p_d->localMemory);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+		}
+	}
+	else
+	{
+		// failed
+		// no source provided
+		return;
+	}
+
+	auto op = command->operation;
+	BaseObject * objResult = NULL;
+
+	bool result = p_calculateExpression(objLeft, objRight, op, &objResult);
+
+//	delete objLeft;
+//	delete objRight;
+
+	if (!result)
+		return;
+
+	auto code = putMemoryCell(dst, objResult, &p_d->localMemory);
+
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+}
+
+void ScriptSystem::p_processIfDoJump(IfDoJumpScript * command)
+{
+
+	bool result = p_calculateComporator(&command->condition);
+
+	if (result)
+	{
+		p_nl = command->lineId;
+	}
 
 }
 

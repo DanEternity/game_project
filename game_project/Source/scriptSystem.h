@@ -60,6 +60,12 @@ private:
 	// get result of comparator
 	bool p_calculateComporator(ComparatorElement * comparator);
 
+	// calculate expression
+	bool p_calculateExpression(BaseObject * left, BaseObject * right, std::string operation, BaseObject ** dest);
+
+	// get numerical result type
+	objectType::ObjectType p_getNumResultType(BaseObject * left, BaseObject * right, std::string operation);
+
 	// UI class
 	ChooseUI * chooseUI = NULL;
 
@@ -76,6 +82,9 @@ private:
 	void p_processPut(PutScript * command);
 	void p_processChoose(ChooseScript * command);
 	void p_processTerminate(TerminateScript * command);
+	void p_processJump(JumpScript * command);
+	void p_processAriphmetic(AriphmeticScript * command);
+	void p_processIfDoJump(IfDoJumpScript * command);
 };
 
 extern ScriptSystem * scriptSystem;

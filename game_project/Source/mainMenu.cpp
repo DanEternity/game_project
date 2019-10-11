@@ -366,6 +366,16 @@ void testFunctionCreateScript()
 	TextScript * ptr2;
 	ChooseScript * ptr3;
 	TerminateScript * ptr4;
+	JumpScript * ptr5;
+	AriphmeticScript * ptr6;
+	IfDoJumpScript * ptr7;
+
+	/*
+	// Jump "7"
+	ptr5 = static_cast<JumpScript*>(createScriptCommand(scriptType::jump));
+	ptr5->lineId = 7;
+	s->scriptLines.push_back(ptr5);
+	*/
 
 	// Put "25" to "$_1"
 	ptr = static_cast<PutScript*>(createScriptCommand(scriptType::put));
@@ -394,6 +404,19 @@ void testFunctionCreateScript()
 	ptr->scr = "55";
 	ptr->dest = "$_5";
 	s->scriptLines.push_back(ptr);
+
+	ptr7 = static_cast<IfDoJumpScript*>(createScriptCommand(scriptType::ifDoJump));
+	ptr7->lineId = 10;
+	ptr7->condition = ComparatorElement(false, "$_5", "==", "55");
+	s->scriptLines.push_back(ptr7);
+
+	ptr6 = static_cast<AriphmeticScript*>(createScriptCommand(scriptType::ariphmetic));
+	ptr6->dest = "$_5";
+	ptr6->left = "$_5";
+	ptr6->operation = "/";
+	ptr6->right = "55";
+	s->scriptLines.push_back(ptr6);
+
 	/*
 	// Text "Fisrt = $_1 ; Second = $_2"
 	ptr2 = static_cast<TextScript*>(createScriptCommand(scriptType::text));
@@ -404,9 +427,9 @@ void testFunctionCreateScript()
 	// Choose "text box"; [$_bool_value] "text1" [line_number], 
 	// [true] "text2"[line_number2];
 	ptr3 = static_cast<ChooseScript*>(createScriptCommand(scriptType::choose));
-	ptr3->text = "ANDREY WWWWW X\nX\nX\nX\nX\nX\nX\nX\nX\nX\nX\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+	ptr3->text = "WWWWW X\n $_5  X\nX\nX\nX\nX\nX\nX\nX\nX\nX\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 	ptr3->variants.push_back(ChooseElement("Jump to 7", 7, true, "true", "", ""));
-	ptr3->variants.push_back(ChooseElement("Jump to 9", 9, false, "$_4", "==", "$_5"));
+	ptr3->variants.push_back(ChooseElement("Jump to 9", 9, true, "true", "", ""));
 	s->scriptLines.push_back(ptr3);
 	
 	//

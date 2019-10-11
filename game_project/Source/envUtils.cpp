@@ -141,7 +141,17 @@ BaseScript * createScriptCommand(scriptType::ScriptType type)
 	case scriptType::terminate:
 		return new TerminateScript();
 		break;
+	case scriptType::ariphmetic:
+		return new AriphmeticScript();
+		break;
+	case scriptType::jump:
+		return new JumpScript();
+		break;
+	case scriptType::ifDoJump:
+		return new IfDoJumpScript();
+		break;
 	default:
+		printf("Error! Script command creation failed. Invalid type\n");
 		break;
 	}
 
