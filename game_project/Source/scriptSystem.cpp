@@ -243,7 +243,7 @@ std::string ScriptSystem::p_convertValueToString(std::string src)
 		return "";
 
 	// start from digit or _ means local memory
-	if ((src[2] >= '0' && src[2] <= '9') || src[2] == '_')
+	if ((src[2] >= '0' && src[2] <= '9') || src[1] == '_')
 	{
 
 		// attempting to extract memory data

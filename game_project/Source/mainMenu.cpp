@@ -1,6 +1,8 @@
 #include "mainMenu.h"
 #include "tableInventory.h"
 #include "envUtils.h"
+#include "scriptCompiler.h"
+#include <fstream>
 
 void optionsClick();
 void optionsBackButton();
@@ -313,7 +315,8 @@ void createMenuButtons()
 	testButton->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	testButton->setPosition({ "90%", "10%" });
 	testButton->setText("TEST SCRIPT");
-	testButton->connect("MouseReleased", testFunctionCreateScript);
+	testButton->connect("MouseReleased", testFunctionExecScript);
+	//testButton->connect("MouseReleased", testFunctionCreateScript);
 	gEnv->globalGui.add(testButton);
 	/* Do not delete endregion */
 
@@ -481,4 +484,29 @@ void testFunctionCreateScript()
 
 void testFunctionExecScript()
 {
+
+	std::vector<std::string> t;
+
+	//t.push_back("Put """"25"""" to """"$_abc"""" ");
+
+	//t.push_back("Text ""Value abc = $_abc \n Sybmols: #%@%Y^H%&EIK*OO:"" ");
+
+	std::string filename;
+	filename = gEnv->game.workDir;
+	filename += "\\resources\\scripts\\test\\test.txt";
+	std::ifstream fin(filename);
+
+	while (!fin.eof())
+	{
+		std::string line;
+		std::getline(fin, line);
+		t.push_back(line);
+	}
+	fin.close();
+	ScriptCompiler * c = new ScriptCompiler();
+
+	c->compileScriptText(t);
+
+	addScriptToQueue(c->getScriptDescriptor());
+
 }

@@ -232,6 +232,7 @@
     <ClCompile Include="Source\mainMenu.cpp" />
     <ClCompile Include="Source\menuOverlay.cpp" />
     <ClCompile Include="Source\preload.cpp" />
+    <ClCompile Include="Source\scriptCompiler.cpp" />
     <ClCompile Include="Source\scriptMemoryUtils.cpp" />
     <ClCompile Include="Source\scriptSystem.cpp" />
     <ClCompile Include="Source\scriptUtilsUI.cpp" />
@@ -251,6 +252,7 @@
     <ClInclude Include="Source\menuData.h" />
     <ClInclude Include="Source\menuOverlay.h" />
     <ClInclude Include="Source\preload.h" />
+    <ClInclude Include="Source\scriptCompiler.h" />
     <ClInclude Include="Source\scriptDescriptor.h" />
     <ClInclude Include="Source\scriptMemoryUtils.h" />
     <ClInclude Include="Source\scriptSystem.h" />
@@ -260,6 +262,9 @@
     <ClInclude Include="Source\TableInventory.h" />
     <ClInclude Include="Source\uiEventHandlers.h" />
     <ClInclude Include="Source\valueObjects.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Resources\Scripts\Test\Test.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

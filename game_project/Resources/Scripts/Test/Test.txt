@@ -1,0 +1,2 @@
+Put "25" to "$_abc"
+Text "Value abc = $_abc  Sybmols: #%@%Y^H%&EIK*OO:" 
