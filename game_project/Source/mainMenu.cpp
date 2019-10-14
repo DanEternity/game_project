@@ -1,4 +1,5 @@
 #include "mainMenu.h"
+#include "ShipModulesUI.h"
 #include "tableInventory.h"
 #include "envUtils.h"
 #include "scriptCompiler.h"
@@ -321,6 +322,7 @@ void createMenuButtons()
 	/* Do not delete endregion */
 
 	TableInventory* tblinv = new TableInventory();
+	UIShipModules *uism = new UIShipModules(UIShipModules::shipType::eagle, 2);
 
 }
 
