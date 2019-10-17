@@ -50,4 +50,9 @@ class ExternalTable : public BaseObject
 {
 public:
 	std::map<std::string, BaseObject*> p_memory;
+	ExternalTable()
+	{
+		this->objectType = objectType::externalTable;
+		this->memoryControl = memoryControl::fixed;
+	}
 };

@@ -1,2 +1,11 @@
-Put "25" to "$_abc"
-Text "Value abc = $_abc  Sybmols: #%@%Y^H%&EIK*OO:" 
+Put "0" to "$_counter"
+Put "20" to "$_maximum"
+@start
+
+Ariphmetic "$_counter + 1" to "$_counter"
+
+Choose "Counter: $_counter", [true]"variant 1"[@start], [$_counter > $_maximum]"variant 2"[@qqqq];
+
+@qqqq
+
+Terminate

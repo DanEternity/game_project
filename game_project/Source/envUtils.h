@@ -96,3 +96,13 @@ BaseScript * createScriptCommand(scriptType::ScriptType type);
 ///
 bool addScriptToQueue(ScriptDescriptor * sd);
 #pragma endregion
+
+#pragma region createExternalTable()
+///
+/// <summary> Creates External table and returns its name
+/// 
+/// </summary>
+/// 
+///
+std::string createExternalTable();
+#pragma endregion

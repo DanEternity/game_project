@@ -163,3 +163,15 @@ bool addScriptToQueue(ScriptDescriptor * sd)
 	gEnv->scripts.queue.push_back(sd);
 	return true;
 }
+
+std::string createExternalTable()
+{
+
+	std::string internalId = std::to_string(gEnv->game.nextExternalTableId);
+
+	gEnv->game.nextExternalTableId++;
+
+	gEnv->extTables[internalId] = new ExternalTable();
+
+	return internalId;
+}

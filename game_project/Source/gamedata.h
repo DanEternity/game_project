@@ -72,6 +72,10 @@ public:
 
 	bool debug = true;
 
+	// envUtil.h section
+
+	int nextExternalTableId = 0;
+
 	// game.h section
 
 	// Does game should check gamemode for draw

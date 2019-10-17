@@ -255,6 +255,7 @@
     <ClInclude Include="Source\preload.h" />
     <ClInclude Include="Source\scriptCompiler.h" />
     <ClInclude Include="Source\scriptDescriptor.h" />
+    <ClInclude Include="Source\scriptDescriptorGroups.h" />
     <ClInclude Include="Source\scriptMemoryUtils.h" />
     <ClInclude Include="Source\scriptSystem.h" />
     <ClInclude Include="Source\scriptSystemData.h" />

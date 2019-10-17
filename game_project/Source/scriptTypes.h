@@ -59,12 +59,19 @@ class ChooseElement
 public:
 	std::string textLine;
 	int jump;
+	std::string chache;
 	ComparatorElement comp;
 	ChooseElement(std::string textLine, int jump, bool a, std::string left, std::string op, std::string right)
 	{
 		this->textLine = textLine;
 		this->jump = jump;
 		this->comp = ComparatorElement(a, left, op, right);
+	}
+	ChooseElement(std::string textLine, int jump, ComparatorElement comp)
+	{
+		this->textLine = textLine;
+		this->jump = jump;
+		this->comp = comp;
 	}
 };
 
@@ -126,6 +133,7 @@ class JumpScript : public BaseScript
 {
 public:
 	int lineId;
+	std::string chache = "";
 	JumpScript()
 	{
 		this->scriptType = scriptType::jump;
@@ -150,6 +158,7 @@ class IfDoJumpScript : public BaseScript
 public:
 	ComparatorElement condition;
 	int lineId; // jump to line
+	std::string chache = "";
 	IfDoJumpScript()
 	{
 		this->scriptType = scriptType::ifDoJump;

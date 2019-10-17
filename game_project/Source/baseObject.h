@@ -12,6 +12,7 @@ namespace objectType {
 		string,
 		real,
 		boolean,
+		externalTable,
 	};
 
 } // namespace objectType

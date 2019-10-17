@@ -4,6 +4,7 @@
 #include <deque>
 #include "scriptDescriptor.h"
 #include <TGUI\TGUI.hpp>
+#include "scriptDescriptorGroups.h"
 
 //
 // This file contains data for script system stored in enviroment
@@ -32,6 +33,10 @@ public:
 	// This value shouldn't be changed manually
 	int nextScriptID = 0; 
 
+	// Descriptor groups
+	std::map<std::string, ScriptDescriptorGroup> scriptGroups;
+
+	// Script gui objects (window with choses, textboxes etc)
 	tgui::Gui scriptGui;
 	
 	// Does game should handle script GUI events

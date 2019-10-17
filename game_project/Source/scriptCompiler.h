@@ -54,7 +54,10 @@ namespace syntaxType {
 		command,
 		c_put,
 		c_text,
-		
+		c_terminate,
+		c_jump,
+		c_choose,
+		c_ariphmetic,
 
 	};
 
@@ -64,10 +67,13 @@ class ScriptCompiler
 {
 public:
 	bool compileScriptText(std::vector<std::string> src);
+
 	ScriptDescriptor * getScriptDescriptor();
 
+	void setFamilyId(std::string id);
+
 private:
-	
+
 	std::string errText;
 	bool error = false;
 
@@ -75,16 +81,28 @@ private:
 	int idx = 0;
 
 	std::string selection = "";
-	std::map<std::string, int> markers;
 	ScriptDescriptor * p_s = NULL;
 	syntaxType::sType tp = syntaxType::none;
 	bool emptyLine = true;
-	
 	int commandsCount;
+
+	// reference to script descriptor group
+	std::string familyId = "";
+
+	// local ext reference
+	std::map<std::string, std::string> localExtReference;
+
+	// marker table
+	std::map<std::string, int> markers;
 
 	// util variables
 	int parameterCount;
 	int bracketCount;
+	int squareBracketCount;
+	int status;
+
+	// post processing
+	void postProcessCommands();
 
 	// fragment parser
 	bool parseDirecive(std::string s);
@@ -92,8 +110,20 @@ private:
 	bool parseMarker(std::string s);
 
 	// command parsers
-	//bool checkPut(std::string s);
 	bool parsePut(std::string s);
 	bool parseText(std::string s);
+	bool parseTerminate(std::string s);
+	bool parseJump(std::string s);
+	bool parseChoose(std::string s);
+	bool parseAriphmetic(std::string s);
+
+	ComparatorElement parseCondition(std::string s);
+
+	// post update
+	bool postUpdateChoose(BaseScript * ptr);
+	bool postUpdateJump(BaseScript * ptr);
+	bool postUpdateIfDoJump(BaseScript * ptr);
+
+	int convertMarkerToLine(std::string marker);
 };
 
