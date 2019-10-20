@@ -284,7 +284,7 @@ void createMenuButtons()
 	chatbox->addLine("texus: Thanks! :)", sf::Color::Green);
 	chatbox->addLine("Me: The widgets rock ^^", sf::Color::Yellow);
 	gEnv->globalGui.add(chatbox);
-	*/
+	
 	sf::Sprite sprite;
 
 	sprite.setTexture(getModelDescriptor("blankTexture")->tex);
@@ -300,7 +300,7 @@ void createMenuButtons()
 	canvas->draw(sprite);
 	canvas->draw(text);
 	canvas->display();
-	gEnv->globalGui.add(canvas);
+	gEnv->globalGui.add(canvas);*/
 
 	auto testbox = tgui::TextBox::create();
 	testbox->setRenderer(gEnv->globalTheme.getRenderer("TextBox"));

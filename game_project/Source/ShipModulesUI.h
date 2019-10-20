@@ -2,7 +2,7 @@
 
 #include "enviroment.h"
 
-void UIbuttonWasClicked(std::string buttonName);
+void UIbuttonWasClicked(std::string buttonName, tgui::Widget::Ptr widget, const std::string& signalName);
 
 class UIShipModules
 {
