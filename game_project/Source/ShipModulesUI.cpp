@@ -78,7 +78,8 @@ UIShipModules::UIShipModules(shipType st, int subModulesCount)
 	}
 }
 
-void UIbuttonWasClicked(std::string buttonName)
+void UIbuttonWasClicked(std::string buttonName, tgui::Widget::Ptr widget, const std::string& signalName)
 {
-	gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setText(buttonName);
+	//if (widget->rightMousePressed)
+		//gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setText(buttonName);
 }

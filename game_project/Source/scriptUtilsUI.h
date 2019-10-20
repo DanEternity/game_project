@@ -11,12 +11,12 @@ public:
 	std::vector<tgui::Button::Ptr> chooseButtons;
 	tgui::ScrollablePanel::Ptr scrollablePanel;
 
-	ChooseUI()
+	ChooseUI(int x, int y)
 	{
 		scrollablePanel = tgui::ScrollablePanel::create();
 		gEnv->scripts.scriptGui.add(scrollablePanel);
 		scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-		scrollablePanel->setPosition("40%", "60%");
+		scrollablePanel->setPosition(x, y);
 		scrollablePanel->setSize(500, 200);
 	}
 
