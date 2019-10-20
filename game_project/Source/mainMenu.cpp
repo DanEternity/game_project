@@ -321,6 +321,18 @@ void createMenuButtons()
 	gEnv->globalGui.add(testButton);
 	/* Do not delete endregion */
 
+	/*do not delete*/
+	auto testButton2 = tgui::Button::create();
+	testButton2->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	testButton2->setPosition({ "15%-40", "15%+50" });
+	testButton2->setSize({"80", "40"});
+	testButton2->setText("Next");
+	testButton2->setEnabled(false);
+	testButton2->setVisible(false);
+	testButton2->connect("MouseReleased", btnNextPressed);	
+	gEnv->scripts.scriptGui.add(testButton2, "ScriptButtonNext");
+	/*endregion*/
+
 	TableInventory* tblinv = new TableInventory();
 	UIShipModules *uism = new UIShipModules(UIShipModules::shipType::eagle, 2);
 
@@ -511,4 +523,9 @@ void testFunctionExecScript()
 
 	addScriptToQueue(c->getScriptDescriptor());
 
+}
+
+void btnNextPressed()
+{
+	gEnv->scripts.buttonPressed = true;
 }

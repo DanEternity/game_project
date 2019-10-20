@@ -1,4 +1,4 @@
-Put "0" to "$_counter"
+Put "15" to "$_counter"
 Put "20" to "$_maximum"
 @start
 
