@@ -13,3 +13,4 @@ void exitButtonsYes();
 
 void testFunctionCreateScript();
 void testFunctionExecScript();
+void btnNextPressed();
