@@ -8,7 +8,7 @@ void buttonWasClicked(int i);
 class ChooseUI
 {
 public:
-	std::vector<tgui::Button::Ptr> chooseButtons;
+	std::vector<tgui::BitmapButton::Ptr> chooseButtons;
 	tgui::ScrollablePanel::Ptr scrollablePanel;
 
 	ChooseUI(int x, int y)
@@ -17,19 +17,19 @@ public:
 		gEnv->scripts.scriptGui.add(scrollablePanel);
 		scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
 		scrollablePanel->setPosition(x, y);
-		scrollablePanel->setSize(500, 200);
+		scrollablePanel->setSize(250, 200);
 	}
 
 	void initButtons(int count)
 	{
-		tgui::Button::Ptr chooseButton;
+		tgui::BitmapButton::Ptr chooseButton;
 		for (int i = 0; i < count; i++)
 		{
-			chooseButton = tgui::Button::create();
+			chooseButton = tgui::BitmapButton::create();
 			chooseButtons.push_back(chooseButton);
 			scrollablePanel->add(chooseButton);
-			chooseButton->setPosition(10, i*100 + 10);
-			chooseButton->setSize(90, 30);
+			chooseButton->setPosition(0, i*35 + 10);
+			chooseButton->setSize(250, 30);
 			chooseButton->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 			chooseButton->connect("MouseReleased", buttonWasClicked, i);
 		}

@@ -49,7 +49,7 @@ UIShipModules::UIShipModules(shipType st, int subModulesCount)
 		temp->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 		temp->setSize(moduleSizeUI, moduleSizeUI);
 		temp->setText("submodule#" + std::to_string(i));
-		temp->connect("MouseReleased", UIbuttonWasClicked, temp->getText());
+		temp->connect("RightMouseReleased", UIbuttonWasClicked, temp->getText());
 	}
 
 	reactor->connect("MouseReleased", UIbuttonWasClicked, reactor->getText());
@@ -80,6 +80,5 @@ UIShipModules::UIShipModules(shipType st, int subModulesCount)
 
 void UIbuttonWasClicked(std::string buttonName, tgui::Widget::Ptr widget, const std::string& signalName)
 {
-	//if (widget->rightMousePressed)
-		//gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setText(buttonName);
+		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setText(buttonName);
 }
