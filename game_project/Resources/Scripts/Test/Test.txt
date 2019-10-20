@@ -8,4 +8,5 @@ Choose "Counter: $_counter", [true]"variant 1"[@start], [$_counter > $_maximum]"
 
 @qqqq
 
+Text "sdasdad"
 Terminate
