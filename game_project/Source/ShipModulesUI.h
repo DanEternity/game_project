@@ -2,11 +2,10 @@
 
 #include "enviroment.h"
 
-void UIbuttonWasClicked(std::string buttonName, tgui::Widget::Ptr widget, const std::string& signalName);
-
 class UIShipModules
 {
 public:
+	bool rmWasClicked;
 	int moduleSizeUI = 30;
 	tgui::Panel::Ptr mainShipPanel;
 	tgui::Button::Ptr reactor, engine, compCore, hyperDrive, primWeap, secWeap;
@@ -18,5 +17,9 @@ public:
 	} shiptype;
 
 	UIShipModules(shipType st, int subModulesCount);
-
+	
 };
+
+
+void UIbuttonWasClicked(UIShipModules * ui, tgui::Widget::Ptr widget, const std::string& signalName);
+void rmPanelClicked(const UIShipModules * ui, tgui::Widget::Ptr widget, const std::string& signalName);
