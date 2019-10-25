@@ -14,13 +14,13 @@ UIShipModules::UIShipModules(shipType st, int subModulesCount)
 	hyperDrive = tgui::Button::create();
 	primWeap = tgui::Button::create();
 	secWeap = tgui::Button::create();
-	gEnv->globalGui.add(mainShipPanel);
-	mainShipPanel->add(reactor);
-	mainShipPanel->add(engine);
-	mainShipPanel->add(compCore);
-	mainShipPanel->add(hyperDrive);
-	mainShipPanel->add(primWeap);
-	mainShipPanel->add(secWeap);
+	gEnv->globalGui.add(mainShipPanel, "mainShipPanel");
+	mainShipPanel->add(reactor, "reactor");
+	mainShipPanel->add(engine, "engine");
+	mainShipPanel->add(compCore, "computer core");
+	mainShipPanel->add(hyperDrive, "hyperdrive");
+	mainShipPanel->add(primWeap, "weapon");
+	mainShipPanel->add(secWeap, "sec weapon");
 	reactor->setSize(moduleSizeUI, moduleSizeUI);
 	engine->setSize(moduleSizeUI, moduleSizeUI);
 	compCore->setSize(moduleSizeUI, moduleSizeUI);
@@ -45,7 +45,7 @@ UIShipModules::UIShipModules(shipType st, int subModulesCount)
 	{
 		tgui::Button::Ptr temp = tgui::Button::create();
 		subModules.push_back(temp);
-		mainShipPanel->add(temp);
+		mainShipPanel->add(temp, "submodule#" + std::to_string(i));
 		temp->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 		temp->setSize(moduleSizeUI, moduleSizeUI);
 		temp->setText("submodule#" + std::to_string(i));
@@ -59,6 +59,13 @@ UIShipModules::UIShipModules(shipType st, int subModulesCount)
 	hyperDrive->connect("MouseReleased", UIbuttonWasClicked, this);
 	primWeap->connect("MouseReleased", UIbuttonWasClicked, this);
 	secWeap->connect("MouseReleased", UIbuttonWasClicked, this);
+
+	reactor->connect("RightMouseReleased", UIbuttonWasClicked, this);
+	engine->connect("RightMouseReleased", UIbuttonWasClicked, this);
+	compCore->connect("RightMouseReleased", UIbuttonWasClicked, this);
+	hyperDrive->connect("RightMouseReleased", UIbuttonWasClicked, this);
+	primWeap->connect("RightMouseReleased", UIbuttonWasClicked, this);
+	secWeap->connect("RightMouseReleased", UIbuttonWasClicked, this);
 	
 	switch (st)
 	{
@@ -85,8 +92,9 @@ void UIbuttonWasClicked(UIShipModules * ui, tgui::Widget::Ptr widget, const std:
 		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setText(gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->getText());
 	else if (signalName == "RightMouseReleased" && !ui->rmWasClicked)
 	{
+		ui->activermModule = widget->cast<tgui::Button>()->getText();
 		tgui::Panel::Ptr temp = tgui::Panel::create();
-		temp->setSize(100, 30);
+		temp->setSize(100, 60);
 		int x = sf::Mouse::getPosition().x;
 		int y = sf::Mouse::getPosition().y - 5;
 		temp->setPosition(x, y);
@@ -96,19 +104,33 @@ void UIbuttonWasClicked(UIShipModules * ui, tgui::Widget::Ptr widget, const std:
 
 		tgui::Button::Ptr btn = tgui::Button::create();
 		temp->add(btn);
-		btn->setSize(100, 20);
+		btn->setSize(107, 31);
 		btn->setPosition(0, 0);
+		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+		btn->setText("Cancel");
+		btn->connect("MouseReleased", rmPanelClicked, &(*ui));
+
+		btn = tgui::Button::create();
+		temp->add(btn);
+		btn->setSize(107, 31);
+		btn->setPosition(0, 30);
 		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 		btn->setText("Delete");
 		btn->connect("MouseReleased", rmPanelClicked, &(*ui));
 	}
 }
 
-void rmPanelClicked(UIShipModules * ui,tgui::Widget::Ptr widget, const std::string& signalName)
+void rmPanelClicked(UIShipModules * ui, tgui::Widget::Ptr widget, const std::string& signalName)
 {
-	if (widget->cast<tgui::Button>()->getText() == "Delete")
+	if (widget->cast<tgui::Button>()->getText() == "Cancel")
 	{
 		gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempRightPanel"));
+		ui->rmWasClicked = false;
+	}
+	else if (widget->cast<tgui::Button>()->getText() == "Delete")
+	{
+		gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempRightPanel"));
+		ui->mainShipPanel->cast<tgui::Panel>()->remove(ui->mainShipPanel->cast<tgui::Panel>()->get<tgui::Button>(ui->activermModule));
 		ui->rmWasClicked = false;
 	}
 }

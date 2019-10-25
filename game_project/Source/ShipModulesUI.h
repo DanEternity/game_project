@@ -6,6 +6,7 @@ class UIShipModules
 {
 public:
 	bool rmWasClicked;
+	std::string activermModule;
 	int moduleSizeUI = 30;
 	tgui::Panel::Ptr mainShipPanel;
 	tgui::Button::Ptr reactor, engine, compCore, hyperDrive, primWeap, secWeap;
