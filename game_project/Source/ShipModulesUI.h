@@ -22,4 +22,4 @@ public:
 
 
 void UIbuttonWasClicked(UIShipModules * ui, tgui::Widget::Ptr widget, const std::string& signalName);
-void rmPanelClicked(const UIShipModules * ui, tgui::Widget::Ptr widget, const std::string& signalName);
+void rmPanelClicked(UIShipModules * ui, tgui::Widget::Ptr widget, const std::string& signalName);

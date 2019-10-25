@@ -100,15 +100,15 @@ void UIbuttonWasClicked(UIShipModules * ui, tgui::Widget::Ptr widget, const std:
 		btn->setPosition(0, 0);
 		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 		btn->setText("Delete");
-		btn->connect("MouseReleased", rmPanelClicked, ui);
+		btn->connect("MouseReleased", rmPanelClicked, &(*ui));
 	}
 }
 
-void rmPanelClicked(const UIShipModules * ui,tgui::Widget::Ptr widget, const std::string& signalName)
+void rmPanelClicked(UIShipModules * ui,tgui::Widget::Ptr widget, const std::string& signalName)
 {
 	if (widget->cast<tgui::Button>()->getText() == "Delete")
 	{
 		gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempRightPanel"));
-		//(*ui)->rmWasClicked = false;
+		ui->rmWasClicked = false;
 	}
 }
