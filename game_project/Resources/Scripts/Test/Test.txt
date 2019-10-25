@@ -1,12 +1,17 @@
-Put "15" to "$_counter"
-Put "20" to "$_maximum"
-@start
+// Sample event 
+// "Ship wreckege"
 
-Ariphmetic "$_counter + 1" to "$_counter"
-
-Choose "Counter: $_counter", [true]"variant 1"[@start], [$_counter > $_maximum]"variant 2"[@qqqq];
-
-@qqqq
-
-Text "sdasdad"
+Text "Вы обнаружили обломки торгового корабля. Сенсоры не фиксируют 
+никакой жизненной активности, скорее всего экипаж уже давно мертв. 
+Однако здесь всё ещё могут находится контейнеры с товарами"
+Choose "Обыскать обломки?", [true]"Отправить команду на поиск"[@a1], [true]"Покинуть место"[@exit];
+@a1
+Text "Кажется в обломках остались какие-то контейнеры"
+// Добавить предметы
+// ...
+// ChangeScriptEntryPoint "@alternative"
+@exit
+Terminate
+@alternative
+Text "Всё полезное, что здесь было вы уже забрали"
 Terminate

@@ -22,6 +22,8 @@ namespace scriptType
 		jump,
 		ariphmetic,
 		ifDoJump,
+		changeScriptEntryPoint,
+
 	};
 }
 

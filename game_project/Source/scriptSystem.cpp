@@ -654,6 +654,7 @@ void ScriptSystem::p_processChoose(ChooseScript * command)
 		chooseUI->setVisible(true);
 		chooseUI->initButtons(command->variants.size());
 
+
 		for (int i(0); i < command->variants.size(); i++)
 		{
 			auto elem = command->variants[i];
@@ -670,6 +671,7 @@ void ScriptSystem::p_processChoose(ChooseScript * command)
 		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setText(text);
 		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setCaretPosition(0);
 		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setReadOnly(true);
+		gEnv->scripts.buttonPressed = false;
 	}
 	else
 		text = p_textChache;
