@@ -107,7 +107,7 @@ void UIbuttonWasClicked(UIShipModules * ui, tgui::Widget::Ptr widget, const std:
 		btn->setSize(107, 31);
 		btn->setPosition(0, 0);
 		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-		btn->setText("Cancel");
+		btn->setText("Delete");
 		btn->connect("MouseReleased", rmPanelClicked, &(*ui));
 
 		btn = tgui::Button::create();
@@ -115,7 +115,7 @@ void UIbuttonWasClicked(UIShipModules * ui, tgui::Widget::Ptr widget, const std:
 		btn->setSize(107, 31);
 		btn->setPosition(0, 30);
 		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-		btn->setText("Delete");
+		btn->setText("Cancel");
 		btn->connect("MouseReleased", rmPanelClicked, &(*ui));
 	}
 }
