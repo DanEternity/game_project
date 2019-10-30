@@ -334,6 +334,9 @@ void createMenuButtons()
 	/*endregion*/
 
 	TableInventory* tblinv = new TableInventory();
+	tblinv->addItem("Item 1");
+	tblinv->addItem("Item 2");
+	tblinv->addItem("Item 3");
 	UIShipModules *uism = new UIShipModules(UIShipModules::shipType::eagle, 2);
 
 }
