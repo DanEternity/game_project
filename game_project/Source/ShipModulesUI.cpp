@@ -95,8 +95,8 @@ void UIbuttonWasClicked(UIShipModules * ui, tgui::Widget::Ptr widget, const std:
 		ui->activermModule = widget->cast<tgui::Button>()->getText();
 		tgui::Panel::Ptr temp = tgui::Panel::create();
 		temp->setSize(100, 60);
-		int x = sf::Mouse::getPosition().x;
-		int y = sf::Mouse::getPosition().y - 5;
+		int x = sf::Mouse::getPosition(gEnv->globalWindow).x;
+		int y = sf::Mouse::getPosition(gEnv->globalWindow).y - 5;
 		temp->setPosition(x, y);
 		temp->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
 		gEnv->globalGui.add(temp, "tempRightPanel");
