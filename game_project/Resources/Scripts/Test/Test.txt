@@ -9,7 +9,8 @@ Choose "Обыскать обломки?", [true]"Отправить команду на поиск"[@a1], [true]"Поки
 Text "Кажется в обломках остались какие-то контейнеры"
 // Добавить предметы
 // ...
-// ChangeScriptEntryPoint "@alternative"
+SpendTime "1day"
+ChangeScriptEntryPoint "$self" "@alternative"
 @exit
 Terminate
 @alternative

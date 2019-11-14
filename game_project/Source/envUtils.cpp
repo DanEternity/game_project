@@ -150,6 +150,12 @@ BaseScript * createScriptCommand(scriptType::ScriptType type)
 	case scriptType::ifDoJump:
 		return new IfDoJumpScript();
 		break;
+	case scriptType::changeScriptEntryPoint:
+		return new ChangeScriptEntryPointScript();
+		break;
+	case scriptType::spendTime:
+		return new SpendTimeScript();
+		break;
 	default:
 		printf("Error! Script command creation failed. Invalid type\n");
 		break;

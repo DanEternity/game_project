@@ -45,6 +45,9 @@ private:
 	// base update func
 	void p_processFrame();
 	void p_processScriptDescriptor();
+
+	// switch and cast function
+	// need to add your cast operation
 	void p_processCommand(BaseScript * command);
 
 	// util
@@ -85,6 +88,8 @@ private:
 	void p_processJump(JumpScript * command);
 	void p_processAriphmetic(AriphmeticScript * command);
 	void p_processIfDoJump(IfDoJumpScript * command);
+	void p_processChangeScriptEntryPoint(ChangeScriptEntryPointScript * command);
+	void p_processSpendTime(SpendTimeScript * command);
 };
 
 extern ScriptSystem * scriptSystem;

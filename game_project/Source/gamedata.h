@@ -3,6 +3,7 @@
 #include <map>
 #include <TGUI\TGUI.hpp>
 #include <vector>
+#include "adventureData.h"
 
 namespace menuState
 {
@@ -103,5 +104,8 @@ public:
 
 	//mainmenu section
 	MainMenu mainMenu;
+
+	//adventure section
+	AdnvetureData adventureData;
 };
 

@@ -23,7 +23,7 @@ namespace scriptType
 		ariphmetic,
 		ifDoJump,
 		changeScriptEntryPoint,
-
+		spendTime,
 	};
 }
 
@@ -164,5 +164,27 @@ public:
 	IfDoJumpScript()
 	{
 		this->scriptType = scriptType::ifDoJump;
+	}
+};
+
+class ChangeScriptEntryPointScript : public BaseScript
+{
+public:
+	std::string scriptId;
+	int lineId;
+	std::string chache = "";
+	ChangeScriptEntryPointScript()
+	{
+		this->scriptType = scriptType::changeScriptEntryPoint;
+	}
+};
+
+class SpendTimeScript : public BaseScript
+{
+public:
+	std::string amount;
+	SpendTimeScript()
+	{
+		this->scriptType = scriptType::spendTime;
 	}
 };

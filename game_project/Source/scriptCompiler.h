@@ -58,7 +58,8 @@ namespace syntaxType {
 		c_jump,
 		c_choose,
 		c_ariphmetic,
-
+		c_changeScriptEntryPoint,
+		c_spendTime,
 	};
 
 }
@@ -66,9 +67,13 @@ namespace syntaxType {
 class ScriptCompiler
 {
 public:
+
+	// Compile strings to object code. Return true if successful. Use getScriptDescriptor to get result
 	bool compileScriptText(std::vector<std::string> src);
 
+	// Return compiled script descriptor
 	ScriptDescriptor * getScriptDescriptor();
+
 
 	void setFamilyId(std::string id);
 
@@ -116,6 +121,8 @@ private:
 	bool parseJump(std::string s);
 	bool parseChoose(std::string s);
 	bool parseAriphmetic(std::string s);
+	bool parseChangeScriptEntryPoint(std::string s);
+	bool parseSpendTime(std::string s);
 
 	ComparatorElement parseCondition(std::string s);
 
@@ -123,6 +130,7 @@ private:
 	bool postUpdateChoose(BaseScript * ptr);
 	bool postUpdateJump(BaseScript * ptr);
 	bool postUpdateIfDoJump(BaseScript * ptr);
+	bool postUpdateChangeScriptEntryPoint(BaseScript * ptr);
 
 	int convertMarkerToLine(std::string marker);
 };

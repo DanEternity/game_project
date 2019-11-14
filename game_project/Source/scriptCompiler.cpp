@@ -325,6 +325,42 @@ bool ScriptCompiler::compileScriptText(std::vector<std::string> src)
 
 		}
 
+		if (tp == syntaxType::c_changeScriptEntryPoint)
+		{
+			selection += src[line][idx];
+			if (src[line][idx] == '"')
+			{
+				bracketCount++;
+				if (bracketCount == 2)
+				{
+					bracketCount = 0;
+					parameterCount++;
+					if (parameterCount == 2)
+					{
+						parseChangeScriptEntryPoint(selection);
+					}
+				}
+			}
+		}
+
+		if (tp == syntaxType::c_spendTime)
+		{
+			selection += src[line][idx];
+			if (src[line][idx] == '"')
+			{
+				bracketCount++;
+				if (bracketCount == 2)
+				{
+					bracketCount = 0;
+					parameterCount++;
+					if (parameterCount == 1)
+					{
+						parseSpendTime(selection);
+					}
+				}
+			}
+		}
+
 		// move right
 		if (idx < src[line].size() - 1)
 			idx++;
@@ -443,6 +479,9 @@ void ScriptCompiler::postProcessCommands()
 		case scriptType::ifDoJump:
 			postUpdateIfDoJump(ptr);
 			break;
+		case scriptType::changeScriptEntryPoint:
+			postUpdateChangeScriptEntryPoint(ptr);
+			break;
 		default:
 			break;
 		}
@@ -558,6 +597,34 @@ bool ScriptCompiler::parseCommand(std::string s)
 	if (s == "Ariphmetic" || s == "ariphmetic")
 	{
 		tp = syntaxType::c_ariphmetic;
+		bracketCount = 0;
+		parameterCount = 0;
+		selection = "";
+		if (quote)
+		{
+			selection += '"';
+			bracketCount = 1;
+		}
+		return true;
+	}
+
+	if (s == "ChangeScriptEntryPoint" || s == "changeScriptEntryPoint")
+	{
+		tp = syntaxType::c_changeScriptEntryPoint;
+		bracketCount = 0;
+		parameterCount = 0;
+		selection = "";
+		if (quote)
+		{
+			selection += '"';
+			bracketCount = 1;
+		}
+		return true;
+	}
+
+	if (s == "SpendTime" || s == "spendTime")
+	{
+		tp = syntaxType::c_spendTime;
 		bracketCount = 0;
 		parameterCount = 0;
 		selection = "";
@@ -911,6 +978,85 @@ bool ScriptCompiler::parseAriphmetic(std::string s)
 	return true;
 }
 
+bool ScriptCompiler::parseChangeScriptEntryPoint(std::string s)
+{
+
+	std::string f1;
+	std::string f2;
+	int pos1;
+	int pos2;
+	int pos3;
+	int pos4;
+
+	pos1 = s.find('"', 0);
+	pos2 = s.find('"', pos1 + 1);
+	pos3 = s.find('"', pos2 + 1);
+	pos4 = s.find('"', pos3 + 1);
+
+	f2 = s.substr(pos3 + 1, pos4 - pos3 - 1);
+	s = s.substr(pos1 + 1, pos2 - pos1 - 1);
+
+	ChangeScriptEntryPointScript * ptr = static_cast<ChangeScriptEntryPointScript*>(createScriptCommand(scriptType::changeScriptEntryPoint));
+
+	ptr->chache = f2;
+	ptr->scriptId = s;
+
+	ptr->commandId = commandsCount++;
+
+	tp = syntaxType::none;
+	selection = "";
+	emptyLine = true;
+
+	if (error)
+	{
+		delete ptr;
+		return false;
+	}
+
+	p_s->scriptLines.push_back(ptr);
+
+	return true;
+}
+
+bool ScriptCompiler::parseSpendTime(std::string s)
+{
+//	std::string f1;
+//	std::string f2;
+	int pos1;
+	int pos2;
+//	int pos3;
+//	int pos4;
+
+	pos1 = s.find('"', 0);
+	pos2 = s.find('"', pos1 + 1);
+//	pos3 = s.find('"', pos2 + 1);
+//	pos4 = s.find('"', pos3 + 1);
+
+	//f2 = s.substr(pos3 + 1, pos4 - pos3 - 1);
+	s = s.substr(pos1 + 1, pos2 - pos1 - 1);
+
+	SpendTimeScript * ptr = static_cast<SpendTimeScript *>(createScriptCommand(scriptType::spendTime));
+
+	ptr->amount = s;
+
+	ptr->commandId = commandsCount++;
+
+	tp = syntaxType::none;
+	selection = "";
+	emptyLine = true;
+
+	if (error)
+	{
+		delete ptr;
+		return false;
+	}
+
+	p_s->scriptLines.push_back(ptr);
+
+	return true;
+
+}
+
 ComparatorElement ScriptCompiler::parseCondition(std::string s)
 {
 
@@ -1102,6 +1248,24 @@ bool ScriptCompiler::postUpdateIfDoJump(BaseScript * ptr)
 	p->chache = "";
 	return true;
 	
+}
+
+bool ScriptCompiler::postUpdateChangeScriptEntryPoint(BaseScript * ptr)
+{
+
+	ChangeScriptEntryPointScript * p = static_cast<ChangeScriptEntryPointScript*>(ptr);
+
+	if (p->chache[0] == '@')
+	{
+		p->lineId = convertMarkerToLine(p->chache);
+	}
+	else
+	{
+		p->lineId = atoi(p->chache.c_str());
+	}
+	p->chache = "";
+
+	return true;
 }
 
 int ScriptCompiler::convertMarkerToLine(std::string marker)

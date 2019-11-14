@@ -174,6 +174,12 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::ifDoJump:
 		p_processIfDoJump(static_cast<IfDoJumpScript*>(command));
 		break;
+	case scriptType::changeScriptEntryPoint:
+		p_processChangeScriptEntryPoint(static_cast<ChangeScriptEntryPointScript*>(command));
+		break;
+	case scriptType::spendTime:
+		p_processSpendTime(static_cast<SpendTimeScript*>(command));
+		break;
 	default:
 		printf("Debug: Error! Script command has unknown type -> %i", sType);
 		break;
@@ -820,6 +826,47 @@ void ScriptSystem::p_processIfDoJump(IfDoJumpScript * command)
 	{
 		p_nl = command->lineId;
 	}
+
+}
+
+void ScriptSystem::p_processChangeScriptEntryPoint(ChangeScriptEntryPointScript * command)
+{
+	if (command->scriptId == "" || command->scriptId == "$self")
+	{
+		p_d->entryPoint = command->lineId;
+	}
+	else
+	{
+		// doesnt work xd
+	}
+
+
+}
+
+void ScriptSystem::p_processSpendTime(SpendTimeScript * command)
+{
+
+	auto t = command->amount;
+
+	if (t == "1/4day")
+	{
+		gEnv->game.adventureData.gameTime += 6;
+		return;
+	}
+	if (t == "1/2day")
+	{
+		gEnv->game.adventureData.gameTime += 12;
+		return;
+	}
+	if (t == "1day")
+	{
+		gEnv->game.adventureData.gameTime += 24;
+		return;
+	}
+	
+	int p = atoi(t.c_str());
+
+	gEnv->game.adventureData.gameTime += p;
 
 }
 
