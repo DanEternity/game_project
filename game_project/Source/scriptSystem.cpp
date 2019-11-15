@@ -180,6 +180,9 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::spendTime:
 		p_processSpendTime(static_cast<SpendTimeScript*>(command));
 		break;
+	case scriptType::initRewardBuffer:
+		p_processInitRewardBuffer(static_cast<InitRewardBufferScript*>(command));
+		break;
 	default:
 		printf("Debug: Error! Script command has unknown type -> %i", sType);
 		break;
@@ -868,6 +871,14 @@ void ScriptSystem::p_processSpendTime(SpendTimeScript * command)
 	int p = _wtoi(t.c_str());
 
 	gEnv->game.adventureData.gameTime += p;
+
+}
+
+void ScriptSystem::p_processInitRewardBuffer(InitRewardBufferScript * command)
+{
+	printf("Initializing reward buffer...\n");
+
+	// Code goes here...
 
 }
 

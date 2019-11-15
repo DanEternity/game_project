@@ -360,6 +360,7 @@ bool ScriptCompiler::compileScriptText(std::vector<std::wstring> src)
 					}
 				}
 			}
+
 		}
 		// move right
 		if (idx < src[line].size() - 1 && src[line][idx] !='\n')
@@ -647,6 +648,13 @@ bool ScriptCompiler::parseCommand(std::wstring s)
 			selection += '"';
 			bracketCount = 1;
 		}
+		return true;
+	}
+
+	if (s == L"InitRewardBuffer" || L"initRewardBuffer")
+	{
+		//tp = syntaxType::c_initRewardBuffer
+		parseInitRewardBuffer(s);
 		return true;
 	}
 
@@ -1037,19 +1045,11 @@ bool ScriptCompiler::parseChangeScriptEntryPoint(std::wstring s)
 
 bool ScriptCompiler::parseSpendTime(std::wstring s)
 {
-//	std::wstring f1;
-//	std::wstring f2;
 	int pos1;
 	int pos2;
-//	int pos3;
-//	int pos4;
-
 	pos1 = s.find('"', 0);
 	pos2 = s.find('"', pos1 + 1);
-//	pos3 = s.find('"', pos2 + 1);
-//	pos4 = s.find('"', pos3 + 1);
 
-	//f2 = s.substr(pos3 + 1, pos4 - pos3 - 1);
 	s = s.substr(pos1 + 1, pos2 - pos1 - 1);
 
 	SpendTimeScript * ptr = static_cast<SpendTimeScript *>(createScriptCommand(scriptType::spendTime));
@@ -1072,6 +1072,26 @@ bool ScriptCompiler::parseSpendTime(std::wstring s)
 
 	return true;
 
+}
+
+bool ScriptCompiler::parseInitRewardBuffer(std::wstring s)
+{
+	InitRewardBufferScript * ptr = static_cast<InitRewardBufferScript *>(createScriptCommand(scriptType::initRewardBuffer));
+
+	ptr->commandId = commandsCount++;
+
+	tp = syntaxType::none;
+	selection = L"";
+	emptyLine = true;
+
+	if (error)
+	{
+		delete ptr;
+		return false;
+	}
+
+	p_s->scriptLines.push_back(ptr);
+	return true;
 }
 
 ComparatorElement ScriptCompiler::parseCondition(std::wstring s)

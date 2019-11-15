@@ -24,6 +24,7 @@ namespace scriptType
 		ifDoJump,
 		changeScriptEntryPoint,
 		spendTime,
+		initRewardBuffer,
 	};
 }
 
@@ -186,5 +187,14 @@ public:
 	SpendTimeScript()
 	{
 		this->scriptType = scriptType::spendTime;
+	}
+};
+
+class InitRewardBufferScript : public BaseScript
+{
+public:
+	InitRewardBufferScript()
+	{
+		this->scriptType = scriptType::initRewardBuffer;
 	}
 };

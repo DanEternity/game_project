@@ -90,6 +90,7 @@ private:
 	void p_processIfDoJump(IfDoJumpScript * command);
 	void p_processChangeScriptEntryPoint(ChangeScriptEntryPointScript * command);
 	void p_processSpendTime(SpendTimeScript * command);
+	void p_processInitRewardBuffer(InitRewardBufferScript * command);
 };
 
 extern ScriptSystem * scriptSystem;

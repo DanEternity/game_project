@@ -156,6 +156,9 @@ BaseScript * createScriptCommand(scriptType::ScriptType type)
 	case scriptType::spendTime:
 		return new SpendTimeScript();
 		break;
+	case scriptType::initRewardBuffer:
+		return new InitRewardBufferScript();
+		break;
 	default:
 		printf("Error! Script command creation failed. Invalid type\n");
 		break;

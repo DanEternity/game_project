@@ -60,6 +60,7 @@ namespace syntaxType {
 		c_ariphmetic,
 		c_changeScriptEntryPoint,
 		c_spendTime,
+		c_initRewardBuffer,
 	};
 
 }
@@ -123,6 +124,7 @@ private:
 	bool parseAriphmetic(std::wstring s);
 	bool parseChangeScriptEntryPoint(std::wstring s);
 	bool parseSpendTime(std::wstring s);
+	bool parseInitRewardBuffer(std::wstring s);
 
 	ComparatorElement parseCondition(std::wstring s);
 
