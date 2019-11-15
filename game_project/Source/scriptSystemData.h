@@ -13,10 +13,10 @@
 class ScriptSystemData
 {
 public:
-	std::string task = "notInitialized";
+	std::wstring task = L"notInitialized";
 
 	// external status
-	std::string status = "null";
+	std::wstring status = L"null";
 
 	// scriptQueue
 	std::deque<ScriptDescriptor *> queue;
@@ -26,7 +26,7 @@ public:
 
 	int buttonId = -1;
 
-	std::map<std::string, int> enviromentMap;
+	std::map<std::wstring, int> enviromentMap;
 
 	std::map<int, ScriptDescriptor *> scriptDB;
 
@@ -34,7 +34,7 @@ public:
 	int nextScriptID = 0; 
 
 	// Descriptor groups
-	std::map<std::string, ScriptDescriptorGroup> scriptGroups;
+	std::map<std::wstring, ScriptDescriptorGroup> scriptGroups;
 
 	// Script gui objects (window with choses, textboxes etc)
 	tgui::Gui scriptGui;

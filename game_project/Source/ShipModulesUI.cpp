@@ -33,22 +33,22 @@ UIShipModules::UIShipModules(shipType st, int subModulesCount)
 	hyperDrive->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	primWeap->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	secWeap->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	reactor->setText("reactor");
-	engine->setText("engine");
-	compCore->setText("computer core");
-	hyperDrive->setText("hyperdrive");
-	primWeap->setText("weapon");
-	secWeap->setText("sec weapon");
+	reactor->setText(L"reactor");
+	engine->setText(L"engine");
+	compCore->setText(L"computer core");
+	hyperDrive->setText(L"hyperdrive");
+	primWeap->setText(L"weapon");
+	secWeap->setText(L"sec weapon");
 	rmWasClicked = false;
 
 	for (int i = 0; i < subModulesCount; i++)
 	{
 		tgui::Button::Ptr temp = tgui::Button::create();
 		subModules.push_back(temp);
-		mainShipPanel->add(temp, "submodule#" + std::to_string(i));
+		mainShipPanel->add(temp, L"submodule#" + std::to_wstring(i));
 		temp->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 		temp->setSize(moduleSizeUI, moduleSizeUI);
-		temp->setText("submodule#" + std::to_string(i));
+		temp->setText(L"submodule#" + std::to_wstring(i));
 		temp->connect("MouseReleased", UIbuttonWasClicked, this);
 		temp->connect("RightMouseReleased", UIbuttonWasClicked, this);
 	}
@@ -107,7 +107,7 @@ void UIbuttonWasClicked(UIShipModules * ui, tgui::Widget::Ptr widget, const std:
 		btn->setSize(107, 31);
 		btn->setPosition(0, 0);
 		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-		btn->setText("Delete");
+		btn->setText(L"Delete");
 		btn->connect("MouseReleased", rmPanelClicked, &(*ui));
 
 		btn = tgui::Button::create();
@@ -115,19 +115,19 @@ void UIbuttonWasClicked(UIShipModules * ui, tgui::Widget::Ptr widget, const std:
 		btn->setSize(107, 31);
 		btn->setPosition(0, 30);
 		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-		btn->setText("Cancel");
+		btn->setText(L"Cancel");
 		btn->connect("MouseReleased", rmPanelClicked, &(*ui));
 	}
 }
 
 void rmPanelClicked(UIShipModules * ui, tgui::Widget::Ptr widget, const std::string& signalName)
 {
-	if (widget->cast<tgui::Button>()->getText() == "Cancel")
+	if (widget->cast<tgui::Button>()->getText() == L"Cancel")
 	{
 		gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempRightPanel"));
 		ui->rmWasClicked = false;
 	}
-	else if (widget->cast<tgui::Button>()->getText() == "Delete")
+	else if (widget->cast<tgui::Button>()->getText() == L"Delete")
 	{
 		gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempRightPanel"));
 		ui->mainShipPanel->cast<tgui::Panel>()->remove(ui->mainShipPanel->cast<tgui::Panel>()->get<tgui::Button>(ui->activermModule));

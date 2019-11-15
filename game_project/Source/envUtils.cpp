@@ -1,6 +1,6 @@
 #include "envUtils.h"
 
-bool createModelDescriptor(std::string name)
+bool createModelDescriptor(std::wstring name)
 {
 	// cant create models with same names
 	if (gEnv->modelDB.find(name) != gEnv->modelDB.end())
@@ -18,7 +18,7 @@ bool createModelDescriptor(std::string name)
 	return true;
 }
 
-bool createModelDescriptor(std::string name, std::string pathToFile, bool highPriority)
+bool createModelDescriptor(std::wstring name, std::string pathToFile, bool highPriority)
 {
 
 	if (!createModelDescriptor(name))
@@ -31,7 +31,7 @@ bool createModelDescriptor(std::string name, std::string pathToFile, bool highPr
 	return true;
 }
 
-ModelDescriptor * getModelDescriptor(std::string name)
+ModelDescriptor * getModelDescriptor(std::wstring name)
 {
 
 	if (gEnv->modelDB.find(name) == gEnv->modelDB.end())
@@ -41,7 +41,7 @@ ModelDescriptor * getModelDescriptor(std::string name)
 
 }
 
-bool deleteModelDescriptor(std::string name)
+bool deleteModelDescriptor(std::wstring name)
 {
 
 	if (gEnv->modelDB.find(name) != gEnv->modelDB.end())
@@ -54,7 +54,7 @@ bool deleteModelDescriptor(std::string name)
 	return true;
 }
 
-bool loadTextureToModelDescriptor(std::string name)
+bool loadTextureToModelDescriptor(std::wstring name)
 {
 	auto p = gEnv->modelDB[name];
 	if (p->status == modelStatus::notLoaded)
@@ -150,6 +150,12 @@ BaseScript * createScriptCommand(scriptType::ScriptType type)
 	case scriptType::ifDoJump:
 		return new IfDoJumpScript();
 		break;
+	case scriptType::changeScriptEntryPoint:
+		return new ChangeScriptEntryPointScript();
+		break;
+	case scriptType::spendTime:
+		return new SpendTimeScript();
+		break;
 	default:
 		printf("Error! Script command creation failed. Invalid type\n");
 		break;
@@ -164,10 +170,10 @@ bool addScriptToQueue(ScriptDescriptor * sd)
 	return true;
 }
 
-std::string createExternalTable()
+std::wstring createExternalTable()
 {
 
-	std::string internalId = std::to_string(gEnv->game.nextExternalTableId);
+	std::wstring internalId = std::to_wstring(gEnv->game.nextExternalTableId);
 
 	gEnv->game.nextExternalTableId++;
 

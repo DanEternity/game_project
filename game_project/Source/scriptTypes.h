@@ -23,7 +23,7 @@ namespace scriptType
 		ariphmetic,
 		ifDoJump,
 		changeScriptEntryPoint,
-
+		spendTime,
 	};
 }
 
@@ -31,7 +31,7 @@ class StackElement
 {
 public:
 	
-	std::map<std::string, BaseObject*> localMemory;
+	std::map<std::wstring, BaseObject*> localMemory;
 
 	int returnPoint;
 
@@ -43,10 +43,10 @@ class ComparatorElement
 {
 public:
 	bool unaryComparator = false;
-	std::string left;
-	std::string operation;
-	std::string right;
-	ComparatorElement(bool a, std::string left, std::string op, std::string right)
+	std::wstring left;
+	std::wstring operation;
+	std::wstring right;
+	ComparatorElement(bool a, std::wstring left, std::wstring op, std::wstring right)
 	{
 		unaryComparator = a;
 		this->left = left;
@@ -59,17 +59,17 @@ public:
 class ChooseElement
 {
 public:
-	std::string textLine;
+	std::wstring textLine;
 	int jump;
-	std::string chache;
+	std::wstring chache;
 	ComparatorElement comp;
-	ChooseElement(std::string textLine, int jump, bool a, std::string left, std::string op, std::string right)
+	ChooseElement(std::wstring textLine, int jump, bool a, std::wstring left, std::wstring op, std::wstring right)
 	{
 		this->textLine = textLine;
 		this->jump = jump;
 		this->comp = ComparatorElement(a, left, op, right);
 	}
-	ChooseElement(std::string textLine, int jump, ComparatorElement comp)
+	ChooseElement(std::wstring textLine, int jump, ComparatorElement comp)
 	{
 		this->textLine = textLine;
 		this->jump = jump;
@@ -94,7 +94,7 @@ public:
 class TextScript : public BaseScript
 {
 public:
-	std::string text;
+	std::wstring text;
 	TextScript()
 	{
 		this->scriptType = scriptType::text;
@@ -114,8 +114,8 @@ public:
 class PutScript : public BaseScript
 {
 public:
-	std::string scr;
-	std::string dest;
+	std::wstring scr;
+	std::wstring dest;
 	PutScript()
 	{
 		this->scriptType = scriptType::put;
@@ -135,7 +135,7 @@ class JumpScript : public BaseScript
 {
 public:
 	int lineId;
-	std::string chache = "";
+	std::wstring chache = L"";
 	JumpScript()
 	{
 		this->scriptType = scriptType::jump;
@@ -145,10 +145,10 @@ public:
 class AriphmeticScript : public BaseScript
 {
 public:
-	std::string dest;
-	std::string operation;
-	std::string left;
-	std::string right;
+	std::wstring dest;
+	std::wstring operation;
+	std::wstring left;
+	std::wstring right;
 	AriphmeticScript()
 	{
 		this->scriptType = scriptType::ariphmetic;
@@ -160,9 +160,31 @@ class IfDoJumpScript : public BaseScript
 public:
 	ComparatorElement condition;
 	int lineId; // jump to line
-	std::string chache = "";
+	std::wstring chache = L"";
 	IfDoJumpScript()
 	{
 		this->scriptType = scriptType::ifDoJump;
+	}
+};
+
+class ChangeScriptEntryPointScript : public BaseScript
+{
+public:
+	std::wstring scriptId;
+	int lineId;
+	std::wstring chache = L"";
+	ChangeScriptEntryPointScript()
+	{
+		this->scriptType = scriptType::changeScriptEntryPoint;
+	}
+};
+
+class SpendTimeScript : public BaseScript
+{
+public:
+	std::wstring amount;
+	SpendTimeScript()
+	{
+		this->scriptType = scriptType::spendTime;
 	}
 };

@@ -9,20 +9,20 @@ void ScriptSystem::updateScriptEngine()
 
 	if (gEnv->game.scriptSystemRequiresUpdate)
 	{
-		if (gEnv->scripts.task == "notInitialized")
+		if (gEnv->scripts.task == L"notInitialized")
 		{
 
 			// init
 
 			chooseUI = new ChooseUI(100, 300);
 			chooseUI->setVisible(false);
-			//gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setVisible(false);
+			//gEnv->scripts.scriptGui.get<tgui::TextBox>(L"scriptTextMessage")->setVisible(false);
 
-			gEnv->scripts.task = "ready";
+			gEnv->scripts.task = L"ready";
 
 		}
 
-		if (gEnv->scripts.task == "ready")
+		if (gEnv->scripts.task == L"ready")
 		{
 
 			p_processFrame();
@@ -174,6 +174,12 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::ifDoJump:
 		p_processIfDoJump(static_cast<IfDoJumpScript*>(command));
 		break;
+	case scriptType::changeScriptEntryPoint:
+		p_processChangeScriptEntryPoint(static_cast<ChangeScriptEntryPointScript*>(command));
+		break;
+	case scriptType::spendTime:
+		p_processSpendTime(static_cast<SpendTimeScript*>(command));
+		break;
 	default:
 		printf("Debug: Error! Script command has unknown type -> %i", sType);
 		break;
@@ -201,10 +207,10 @@ void ScriptSystem::p_blockGame_WaitForReaction(bool mode)
 	gEnv->scripts.scriptGuiEventsRequiresUpdate = mode;
 }
 
-std::string ScriptSystem::p_convertText(std::string src)
+std::wstring ScriptSystem::p_convertText(std::wstring src)
 {
 
-	std::string res = "";
+	std::wstring res = L"";
 
 	for (int i(0); i < src.size(); i++)
 	{
@@ -217,11 +223,11 @@ std::string ScriptSystem::p_convertText(std::string src)
 
 		// looking for first space
 
-		int right = src.find_first_of(" ", i);
+		int right = src.find_first_of(L" ", i);
 		if (right <= 0)
 			right = src.size();
 
-		std::string fragment = p_convertValueToString(src.substr(i, right - i));
+		std::wstring fragment = p_convertValueToString(src.substr(i, right - i));
 
 		i = right;
 
@@ -232,15 +238,15 @@ std::string ScriptSystem::p_convertText(std::string src)
 	return res;
 }
 
-std::string ScriptSystem::p_convertValueToString(std::string src)
+std::wstring ScriptSystem::p_convertValueToString(std::wstring src)
 {
 
 	// $value
 
-	std::string result = "";
+	std::wstring result = L"";
 
 	if (src.size() <= 1) // nothing to convert
-		return "";
+		return L"";
 
 	// start from digit or _ means local memory
 	if ((src[2] >= '0' && src[2] <= '9') || src[1] == '_')
@@ -252,18 +258,18 @@ std::string ScriptSystem::p_convertValueToString(std::string src)
 		auto code = getMemoryCellFromLocalMemory(&p_d->localMemory, src.substr(2, src.size() - 2), &target);
 		
 		if (code != memoryUtil::ok)
-			return "NULL";
+			return L"NULL";
 
 		code = convertToString(target, result);
 
 		if (code != memoryUtil::ok)
-			return "NULL";
+			return L"NULL";
 
 		return result;
 
 	}
 
-	if (src.find("$EXT:") != std::string::npos)
+	if (src.find(L"$EXT:") != std::wstring::npos)
 	{
 
 		// external table
@@ -272,12 +278,12 @@ std::string ScriptSystem::p_convertValueToString(std::string src)
 		auto code = getMemoryCellFromExternalTable(src.substr(5, 4), src.substr(10, src.size() - 11), &target);
 
 		if (code != memoryUtil::ok)
-			return "NULL";
+			return L"NULL";
 
 		code = convertToString(target, result);
 
 		if (code != memoryUtil::ok)
-			return "NULL";
+			return L"NULL";
 
 		return result;
 
@@ -290,12 +296,12 @@ std::string ScriptSystem::p_convertValueToString(std::string src)
 	auto code = getMemoryCellFromGameEnviroment(src.substr(1, src.size() - 2), &target);
 
 	if (code != memoryUtil::ok)
-		return "NULL";
+		return L"NULL";
 
 	code = convertToString(target, result);
 
 	if (code != memoryUtil::ok)
-		return "NULL";
+		return L"NULL";
 
 	return result;
 }
@@ -305,67 +311,68 @@ bool ScriptSystem::p_calculateComporator(ComparatorElement * comparator)
 	
 	if (comparator->unaryComparator)
 	{
-		std::string res = "";
-		std::string val = comparator->left;
+		std::wstring res = L"";
+		std::wstring val = comparator->left;
 		if (val.size() <= 1)
 			return false;
 		if (val[0] == '$')
 		{
 			res = p_convertValueToString(val);
-			if (res == "1")
-				res = "true";
+			if (res == L"1")
+				res = L"true";
 			else
-				res = "false";
+				res = L"false";
 		}
 		else
 		{
 			res = val;
 		}
-		if (res == "true" || res == "True" || res == "TRUE")
+		if (res == L"true" || res == L"True" || res == L"TRUE")
 		{
 			return true;
 		}
-		if (res == "false" || res == "False" || res == "FALSE")
+		if (res == L"false" || res == L"False" || res == L"FALSE")
 		{
 			return false;
 		}
 	}
 	else
 	{
-		std::string l_arg = p_convertValueToString(comparator->left);
-		std::string r_arg = p_convertValueToString(comparator->right);
+		std::wstring l_arg = p_convertValueToString(comparator->left);
+		std::wstring r_arg = p_convertValueToString(comparator->right);
 
-		std::string op = comparator->operation;
+		std::wstring op = comparator->operation;
 
-		float l = std::atof(l_arg.c_str());
-		float r = std::atof(r_arg.c_str());
 
-		if (op == "==")
+		float l = _wtof(l_arg.c_str());
+		float r = _wtof(r_arg.c_str());
+
+		if (op == L"==")
 		{
 			return (l == r);
 		}
 
-		if (op == "<")
+		if (op == L"<")
 		{
 			return (l < r);
 		}
 
-		if (op == ">")
+		if (op == L">")
 		{
 			return (l > r);
 		}
 
-		if (op == ">=")
+		if (op == L">=")
 		{
 			return (l >= r);
 		}
 
-		if (op == "<=")
+		if (op == L"<=")
 		{
 			return (l <= r);
 		}
 
-		if (op == "!=" || op == "<>")
+		if (op == L"!=" || op == L"<>")
 		{
 			return (l != r);
 		}
@@ -374,7 +381,7 @@ bool ScriptSystem::p_calculateComporator(ComparatorElement * comparator)
 	return false;
 }
 
-bool ScriptSystem::p_calculateExpression(BaseObject * left, BaseObject * right, std::string operation, BaseObject ** dest)
+bool ScriptSystem::p_calculateExpression(BaseObject * left, BaseObject * right, std::wstring operation, BaseObject ** dest)
 {
 
 	auto tr = p_getNumResultType(left, right, operation);
@@ -416,7 +423,7 @@ bool ScriptSystem::p_calculateExpression(BaseObject * left, BaseObject * right, 
 
 	}
 
-	if (operation == "+")
+	if (operation == L"+")
 	{
 		if ((*dest)->objectType == objectType::real)
 			static_cast<FloatObject*>(*dest)->value = leftF + rightF;
@@ -424,7 +431,7 @@ bool ScriptSystem::p_calculateExpression(BaseObject * left, BaseObject * right, 
 			static_cast<IntObject*>(*dest)->value = leftI + rightI;
 	}
 
-	if (operation == "-")
+	if (operation == L"-")
 	{
 		if ((*dest)->objectType == objectType::real)
 			static_cast<FloatObject*>(*dest)->value = leftF - rightF;
@@ -432,7 +439,7 @@ bool ScriptSystem::p_calculateExpression(BaseObject * left, BaseObject * right, 
 			static_cast<IntObject*>(*dest)->value = leftI - rightI;
 	}
 
-	if (operation == "*")
+	if (operation == L"*")
 	{
 		if ((*dest)->objectType == objectType::real)
 			static_cast<FloatObject*>(*dest)->value = leftF * rightF;
@@ -440,7 +447,7 @@ bool ScriptSystem::p_calculateExpression(BaseObject * left, BaseObject * right, 
 			static_cast<IntObject*>(*dest)->value = leftI * rightI;
 	}
 
-	if (operation == "/")
+	if (operation == L"/")
 	{
 		if ((*dest)->objectType == objectType::real)
 		{
@@ -469,7 +476,7 @@ bool ScriptSystem::p_calculateExpression(BaseObject * left, BaseObject * right, 
 	return true;
 }
 
-objectType::ObjectType ScriptSystem::p_getNumResultType(BaseObject * left, BaseObject * right, std::string operation)
+objectType::ObjectType ScriptSystem::p_getNumResultType(BaseObject * left, BaseObject * right, std::wstring operation)
 {
 
 	if (left == NULL || right == NULL)
@@ -488,7 +495,7 @@ objectType::ObjectType ScriptSystem::p_getNumResultType(BaseObject * left, BaseO
 		return objectType::real;
 	}
 	else
-		if (operation == "/")
+		if (operation == L"/")
 		{
 			return objectType::real;
 		}
@@ -498,26 +505,26 @@ objectType::ObjectType ScriptSystem::p_getNumResultType(BaseObject * left, BaseO
 	return objectType::ObjectType(objectType::undefined);
 }
 
-std::string ScriptSystem::p_getLocalMemoryCellAsString(std::string idx)
+std::wstring ScriptSystem::p_getLocalMemoryCellAsString(std::wstring idx)
 {
 
 	if (p_d->localMemory.find(idx) == p_d->localMemory.end())
-		return "NULL";
+		return L"NULL";
 
 	auto obj = p_d->localMemory[idx];
 
-	std::string res = "";
+	std::wstring res = L"";
 
 	switch (obj->objectType)
 	{
 	case objectType::integer:
-		res = std::to_string(static_cast<IntObject*>(obj)->value);
+		res = std::to_wstring(static_cast<IntObject*>(obj)->value);
 		break;
 	case objectType::real:
-		res = std::to_string(static_cast<FloatObject*>(obj)->value);
+		res = std::to_wstring(static_cast<FloatObject*>(obj)->value);
 		break;
 	case objectType::boolean:
-		res = std::to_string(static_cast<BooleanObject*>(obj)->value);
+		res = std::to_wstring(static_cast<BooleanObject*>(obj)->value);
 		break;
 	case objectType::string:
 		res = static_cast<StringObject*>(obj)->value;
@@ -529,14 +536,14 @@ std::string ScriptSystem::p_getLocalMemoryCellAsString(std::string idx)
 	return res;
 }
 
-std::string ScriptSystem::p_getExternalTableValueAsString(std::string tableId, std::string idx)
+std::wstring ScriptSystem::p_getExternalTableValueAsString(std::wstring tableId, std::wstring idx)
 {
-	return std::string();
+	return std::wstring();
 }
 
-std::string ScriptSystem::p_getGlobalValueAsString(std::string ValueName)
+std::wstring ScriptSystem::p_getGlobalValueAsString(std::wstring ValueName)
 {
-	return std::string();
+	return std::wstring();
 }
 
 void ScriptSystem::p_processText(TextScript * command)
@@ -548,17 +555,17 @@ void ScriptSystem::p_processText(TextScript * command)
 	p_s = p_sysStatus::scriptWaitForReaction;
 
 	// Draw text OwO
-	std::string text;
+	std::wstring text;
 	if (!p_chached)
 	{
 		text = p_convertText(command->text);
 		p_textChache = text;
 		p_chached = true;
-		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setVisible(true);
-		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setText(text);
-		gEnv->scripts.scriptGui.get<tgui::Button>("ScriptButtonNext")->setVisible(true);
-		gEnv->scripts.scriptGui.get<tgui::Button>("ScriptButtonNext")->setEnabled(true);
-		//gEnv->scripts.scriptGui.get<tgui::Button>("ScriptButtonNext")->setText(text);
+		gEnv->scripts.scriptGui.get<tgui::TextBox>(L"scriptTextMessage")->setVisible(true);
+		gEnv->scripts.scriptGui.get<tgui::TextBox>(L"scriptTextMessage")->setText(text);
+		gEnv->scripts.scriptGui.get<tgui::Button>(L"ScriptButtonNext")->setVisible(true);
+		gEnv->scripts.scriptGui.get<tgui::Button>(L"ScriptButtonNext")->setEnabled(true);
+		//gEnv->scripts.scriptGui.get<tgui::Button>(L"ScriptButtonNext")->setText(text);
 		if (true)
 			printf("TEST: %s\n", text.c_str());
 	}
@@ -576,9 +583,9 @@ void ScriptSystem::p_processText(TextScript * command)
 
 		p_blockGame_WaitForReaction(false);
 		p_s = p_sysStatus::processingScript;
-		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setVisible(false);
-		gEnv->scripts.scriptGui.get<tgui::Button>("ScriptButtonNext")->setVisible(false);
-		gEnv->scripts.scriptGui.get<tgui::Button>("ScriptButtonNext")->setEnabled(false);
+		gEnv->scripts.scriptGui.get<tgui::TextBox>(L"scriptTextMessage")->setVisible(false);
+		gEnv->scripts.scriptGui.get<tgui::Button>(L"ScriptButtonNext")->setVisible(false);
+		gEnv->scripts.scriptGui.get<tgui::Button>(L"ScriptButtonNext")->setEnabled(false);
 	}
 	else
 	{
@@ -645,7 +652,7 @@ void ScriptSystem::p_processChoose(ChooseScript * command)
 	p_s = p_sysStatus::scriptWaitForReaction;
 	// chache check
 
-	std::string text;
+	std::wstring text;
 
 	if (!p_chached)
 	{
@@ -659,7 +666,7 @@ void ScriptSystem::p_processChoose(ChooseScript * command)
 		{
 			auto elem = command->variants[i];
 			bool active = p_calculateComporator(&elem.comp);
-			std::string text = p_convertText(elem.textLine);
+			std::wstring text = p_convertText(elem.textLine);
 			chooseUI->setButton(i, text, active);
 		}
 
@@ -667,10 +674,10 @@ void ScriptSystem::p_processChoose(ChooseScript * command)
 		text = p_convertText(command->text);
 		p_textChache = text;
 		p_chached = true;
-		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setVisible(true);
-		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setText(text);
-		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setCaretPosition(0);
-		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setReadOnly(true);
+		gEnv->scripts.scriptGui.get<tgui::TextBox>(L"scriptTextMessage")->setVisible(true);
+		gEnv->scripts.scriptGui.get<tgui::TextBox>(L"scriptTextMessage")->setText(text);
+		gEnv->scripts.scriptGui.get<tgui::TextBox>(L"scriptTextMessage")->setCaretPosition(0);
+		gEnv->scripts.scriptGui.get<tgui::TextBox>(L"scriptTextMessage")->setReadOnly(true);
 		gEnv->scripts.buttonPressed = false;
 	}
 	else
@@ -689,7 +696,7 @@ void ScriptSystem::p_processChoose(ChooseScript * command)
 		p_chached = false;
 		chooseUI->deleteButtons();
 		chooseUI->setVisible(false);
-		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setVisible(false);
+		gEnv->scripts.scriptGui.get<tgui::TextBox>(L"scriptTextMessage")->setVisible(false);
 	}
 	else
 	{
@@ -820,6 +827,47 @@ void ScriptSystem::p_processIfDoJump(IfDoJumpScript * command)
 	{
 		p_nl = command->lineId;
 	}
+
+}
+
+void ScriptSystem::p_processChangeScriptEntryPoint(ChangeScriptEntryPointScript * command)
+{
+	if (command->scriptId == L"" || command->scriptId == L"$self")
+	{
+		p_d->entryPoint = command->lineId;
+	}
+	else
+	{
+		// doesnt work xd
+	}
+
+
+}
+
+void ScriptSystem::p_processSpendTime(SpendTimeScript * command)
+{
+
+	auto t = command->amount;
+
+	if (t == L"1/4day")
+	{
+		gEnv->game.adventureData.gameTime += 6;
+		return;
+	}
+	if (t == L"1/2day")
+	{
+		gEnv->game.adventureData.gameTime += 12;
+		return;
+	}
+	if (t == L"1day")
+	{
+		gEnv->game.adventureData.gameTime += 24;
+		return;
+	}
+	
+	int p = _wtoi(t.c_str());
+
+	gEnv->game.adventureData.gameTime += p;
 
 }
 

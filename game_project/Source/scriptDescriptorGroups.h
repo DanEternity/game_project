@@ -5,8 +5,8 @@
 class ScriptDescriptorGroup
 {
 public:
-	std::string modName;
-	std::string id; // used as key
-	std::map<std::string, std::string> extReference;
+	std::wstring modName;
+	std::wstring id; // used as key
+	std::map<std::wstring, std::wstring> extReference;
 
 };

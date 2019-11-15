@@ -4,6 +4,8 @@
 #include "envUtils.h"
 #include "scriptCompiler.h"
 #include <fstream>
+#include <sstream>
+#include <codecvt>
 
 void optionsClick();
 void optionsBackButton();
@@ -41,36 +43,36 @@ void mainMenuChangeState()
 	switch (gEnv->game.mainMenu.active)
 	{
 		case menuState::mainMenu:
-			gEnv->globalGui.get<tgui::Button>("startButton")->setEnabled(true);
-			gEnv->globalGui.get<tgui::Button>("startButton")->setVisible(true);
-			gEnv->globalGui.get<tgui::Button>("exitButton")->setEnabled(true);
-			gEnv->globalGui.get<tgui::Button>("exitButton")->setVisible(true);
-			gEnv->globalGui.get<tgui::Button>("optionsButton")->setEnabled(true);
-			gEnv->globalGui.get<tgui::Button>("optionsButton")->setVisible(true);
+			gEnv->globalGui.get<tgui::Button>(L"startButton")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Button>(L"startButton")->setVisible(true);
+			gEnv->globalGui.get<tgui::Button>(L"exitButton")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Button>(L"exitButton")->setVisible(true);
+			gEnv->globalGui.get<tgui::Button>(L"optionsButton")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Button>(L"optionsButton")->setVisible(true);
 			break;
 		case menuState::optionsActive:
-			gEnv->globalGui.get<tgui::Label>("soundLabel")->setEnabled(true);
-			gEnv->globalGui.get<tgui::Label>("soundLabel")->setVisible(true);
-			gEnv->globalGui.get<tgui::Slider>("soundSlider")->setEnabled(true);
-			gEnv->globalGui.get<tgui::Slider>("soundSlider")->setVisible(true);
-			gEnv->globalGui.get<tgui::Label>("videoLabel")->setEnabled(true);
-			gEnv->globalGui.get<tgui::Label>("videoLabel")->setVisible(true);
-			gEnv->globalGui.get<tgui::ComboBox>("videoComboBox")->setEnabled(true);
-			gEnv->globalGui.get<tgui::ComboBox>("videoComboBox")->setVisible(true);
-			gEnv->globalGui.get<tgui::Button>("optionsBack")->setEnabled(true);
-			gEnv->globalGui.get<tgui::Button>("optionsBack")->setVisible(true);
+			gEnv->globalGui.get<tgui::Label>(L"soundLabel")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Label>(L"soundLabel")->setVisible(true);
+			gEnv->globalGui.get<tgui::Slider>(L"soundSlider")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Slider>(L"soundSlider")->setVisible(true);
+			gEnv->globalGui.get<tgui::Label>(L"videoLabel")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Label>(L"videoLabel")->setVisible(true);
+			gEnv->globalGui.get<tgui::ComboBox>(L"videoComboBox")->setEnabled(true);
+			gEnv->globalGui.get<tgui::ComboBox>(L"videoComboBox")->setVisible(true);
+			gEnv->globalGui.get<tgui::Button>(L"optionsBack")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Button>(L"optionsBack")->setVisible(true);
 			break;
 		case menuState::exitActive:
-			gEnv->globalGui.get<tgui::Button>("startButton")->setEnabled(true);
-			gEnv->globalGui.get<tgui::Button>("startButton")->setVisible(true);
-			gEnv->globalGui.get<tgui::Button>("exitButton")->setEnabled(true);
-			gEnv->globalGui.get<tgui::Button>("exitButton")->setVisible(true);
-			gEnv->globalGui.get<tgui::Button>("exitButtonYes")->setEnabled(true);
-			gEnv->globalGui.get<tgui::Button>("exitButtonYes")->setVisible(true);
-			gEnv->globalGui.get<tgui::Button>("exitButtonNo")->setEnabled(true);
-			gEnv->globalGui.get<tgui::Button>("exitButtonNo")->setVisible(true);
-			gEnv->globalGui.get<tgui::Button>("optionsButton")->setEnabled(true);
-			gEnv->globalGui.get<tgui::Button>("optionsButton")->setVisible(true);
+			gEnv->globalGui.get<tgui::Button>(L"startButton")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Button>(L"startButton")->setVisible(true);
+			gEnv->globalGui.get<tgui::Button>(L"exitButton")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Button>(L"exitButton")->setVisible(true);
+			gEnv->globalGui.get<tgui::Button>(L"exitButtonYes")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Button>(L"exitButtonYes")->setVisible(true);
+			gEnv->globalGui.get<tgui::Button>(L"exitButtonNo")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Button>(L"exitButtonNo")->setVisible(true);
+			gEnv->globalGui.get<tgui::Button>(L"optionsButton")->setEnabled(true);
+			gEnv->globalGui.get<tgui::Button>(L"optionsButton")->setVisible(true);
 			break;
 		default:
 			break;
@@ -90,11 +92,11 @@ void createMenuButtons()
 	gEnv->globalGui.add(optionsButton, "optionsButton");
 	gEnv->globalGui.add(exitButtonYes, "exitButtonYes");
 	gEnv->globalGui.add(exitButtonNo, "exitButtonNo");
-	startButton->setText("Start");
+	startButton->setText(L"Start");
 	startButton->connect("MouseReleased", startClick);
-	exitButton->setText("Exit");
+	exitButton->setText(L"Exit");
 	exitButton->connect("MouseReleased", exitClick);
-	optionsButton->setText("Options");
+	optionsButton->setText(L"Options");
 	optionsButton->connect("MouseReleased", optionsClick);
 	gEnv->game.mainMenu.mainMenuWidgets.push_back(startButton);
 	gEnv->game.mainMenu.mainMenuWidgets.push_back(optionsButton);
@@ -112,7 +114,7 @@ void createMenuButtons()
 	exitButtonYes->setSize(150, 150);
 	exitButtonYes->setPosition("exitButton.left - 200", "exitButton.top");
 	exitButtonYes->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	exitButtonYes->setText("Yes");
+	exitButtonYes->setText(L"Yes");
 	exitButtonYes->setEnabled(false);
 	exitButtonYes->setVisible(false);
 	exitButtonYes->connect("MouseReleased", exitButtonsYes);
@@ -121,7 +123,7 @@ void createMenuButtons()
 	exitButtonNo->setSize(150, 150);
 	exitButtonNo->setPosition("exitButton.right + 50", "exitButton.top");
 	exitButtonNo->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	exitButtonNo->setText("No");
+	exitButtonNo->setText(L"No");
 	exitButtonNo->setEnabled(false);
 	exitButtonNo->setVisible(false);
 	exitButtonNo->connect("MouseReleased", exitClick);
@@ -133,7 +135,7 @@ void createMenuButtons()
 	gEnv->globalGui.add(soundLabel, "soundLabel");
 	gEnv->game.mainMenu.mainMenuWidgets.push_back(soundLabel);
 	soundLabel->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	soundLabel->setText("Sound: ");
+	soundLabel->setText(L"Sound: ");
 	soundLabel->setTextSize(48);
 	soundLabel->setPosition("30%", "20%");
 	soundLabel->setEnabled(false);
@@ -153,7 +155,7 @@ void createMenuButtons()
 	gEnv->globalGui.add(videoLabel, "videoLabel");
 	gEnv->game.mainMenu.mainMenuWidgets.push_back(videoLabel);
 	videoLabel->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	videoLabel->setText("Graphics: ");
+	videoLabel->setText(L"Graphics: ");
 	videoLabel->setTextSize(48);
 	videoLabel->setPosition("30%", "30%");
 	videoLabel->setEnabled(false);
@@ -165,11 +167,11 @@ void createMenuButtons()
 	videoComboBox->setRenderer(gEnv->globalTheme.getRenderer("ComboBox"));
 	videoComboBox->setSize(100, 30);
 	videoComboBox->setPosition("50%", "32%");
-	videoComboBox->addItem("Low");
-	videoComboBox->addItem("Medium");
-	videoComboBox->addItem("High");
-	videoComboBox->addItem("Ultra");
-	videoComboBox->setSelectedItem("Ultra");
+	videoComboBox->addItem(L"Low");
+	videoComboBox->addItem(L"Medium");
+	videoComboBox->addItem(L"High");
+	videoComboBox->addItem(L"Ultra");
+	videoComboBox->setSelectedItem(L"Ultra");
 	videoComboBox->setEnabled(false);
 	videoComboBox->setVisible(false);
 
@@ -179,7 +181,7 @@ void createMenuButtons()
 	optionsBack->setSize(200, 150);
 	optionsBack->setPosition("45%", "60%");
 	optionsBack->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	optionsBack->setText("Back");
+	optionsBack->setText(L"Back");
 	optionsBack->setEnabled(false);
 	optionsBack->setVisible(false);
 	optionsBack->connect("MouseReleased", optionsBackButton);
@@ -193,12 +195,12 @@ void createMenuButtons()
 	edb->setSize(200, 50);
 	edb->setTextSize(18);
 	edb->setPosition(10, 270);
-	edb->setDefaultText("Click to edit text...");
+	edb->setDefaultText(L"Click to edit text...");
 
 	tgui::Label::Ptr label0 = tgui::Label::create();
 	gEnv->globalGui.add(label0, "label");
 	label0->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label0->setText("This is a label.");
+	label0->setText(L"This is a label.");
 	label0->setPosition(10, 90);
 	label0->setTextSize(18);
 
@@ -208,9 +210,9 @@ void createMenuButtons()
 	lb->setSize(250, 120);
 	lb->setItemHeight(24);
 	lb->setPosition(10, 340);
-	lb->addItem("Item 1");
-	lb->addItem("Item 2");
-	lb->addItem("Item 3");
+	lb->addItem(L"Item 1");
+	lb->addItem(L"Item 2");
+	lb->addItem(L"Item 3");
 
 	tgui::ProgressBar::Ptr pb = tgui::ProgressBar::create();
 	gEnv->globalGui.add(pb);
@@ -238,22 +240,22 @@ void createMenuButtons()
 	comboBox->setRenderer(gEnv->globalTheme.getRenderer("ComboBox"));
 	comboBox->setSize(120, 21);
 	comboBox->setPosition(420, 40);
-	comboBox->addItem("Item 1");
-	comboBox->addItem("Item 2");
-	comboBox->addItem("Item 3");
-	comboBox->setSelectedItem("Item 2");
+	comboBox->addItem(L"Item 1");
+	comboBox->addItem(L"Item 2");
+	comboBox->addItem(L"Item 3");
+	comboBox->setSelectedItem(L"Item 2");
 	gEnv->globalGui.add(comboBox);
 
 	auto child = tgui::ChildWindow::create();
 	child->setRenderer(gEnv->globalTheme.getRenderer("ChildWindow"));
 	child->setSize(250, 120);
 	child->setPosition(420, 80);
-	child->setTitle("Child window");
+	child->setTitle(L"Child window");
 	gEnv->globalGui.add(child);
 
 	auto label = tgui::Label::create();
 	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label->setText("Hi! I'm a child window.");
+	label->setText(L"Hi! I'm a child window.");
 	label->setPosition(30, 30);
 	label->setTextSize(15);
 	child->add(label);
@@ -261,7 +263,7 @@ void createMenuButtons()
 	auto button = tgui::Button::create();
 	button->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	button->setPosition(75, 70);
-	button->setText("OK");
+	button->setText(L"OK");
 	button->setSize(100, 30);
 	button->connect("pressed", [=]() { child->setVisible(false); });
 	child->add(button);
@@ -269,7 +271,7 @@ void createMenuButtons()
 	auto checkbox = tgui::CheckBox::create();
 	checkbox->setRenderer(gEnv->globalTheme.getRenderer("CheckBox"));
 	checkbox->setPosition(420, 240);
-	checkbox->setText("Ok, I got it");
+	checkbox->setText(L"Ok, I got it");
 	checkbox->setSize(25, 25);
 	gEnv->globalGui.add(checkbox);
 
@@ -279,16 +281,16 @@ void createMenuButtons()
 	chatbox->setTextSize(18);
 	chatbox->setPosition(420, 310);
 	chatbox->setLinesStartFromTop();
-	chatbox->addLine("texus: Hey, this is TGUI!", sf::Color::Green);
-	chatbox->addLine("Me: Looks awesome! ;)", sf::Color::Yellow);
-	chatbox->addLine("texus: Thanks! :)", sf::Color::Green);
-	chatbox->addLine("Me: The widgets rock ^^", sf::Color::Yellow);
+	chatbox->addLine(L"texus: Hey, this is TGUI!", sf::Color::Green);
+	chatbox->addLine(L"Me: Looks awesome! ;)", sf::Color::Yellow);
+	chatbox->addLine(L"texus: Thanks! :)", sf::Color::Green);
+	chatbox->addLine(L"Me: The widgets rock ^^", sf::Color::Yellow);
 	gEnv->globalGui.add(chatbox);
 	
 	sf::Sprite sprite;
 
-	sprite.setTexture(getModelDescriptor("blankTexture")->tex);
-	sprite.setScale(200.f / getModelDescriptor("blankTexture")->tex.getSize().x, 140.f / getModelDescriptor("blankTexture")->tex.getSize().y);
+	sprite.setTexture(getModelDescriptor(L"blankTexture")->tex);
+	sprite.setScale(200.f / getModelDescriptor(L"blankTexture")->tex.getSize().x, 140.f / getModelDescriptor(L"blankTexture")->tex.getSize().y);
 
 	sf::Text text{ "SFML Canvas", *gEnv->globalGui.getFont(), 24 };
 	text.setPosition(200, 200);
@@ -304,7 +306,7 @@ void createMenuButtons()
 
 	auto testbox = tgui::TextBox::create();
 	testbox->setRenderer(gEnv->globalTheme.getRenderer("TextBox"));
-	testbox->setText("ROFLAN EBALO WWWW");
+	testbox->setText(L"ROFLAN EBALO WWWW");
 	testbox->setPosition({ 50,50 });
 	testbox->setReadOnly();
 	testbox->setVisible(false);
@@ -315,7 +317,7 @@ void createMenuButtons()
 	auto testButton = tgui::Button::create();
 	testButton->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	testButton->setPosition({ "90%", "10%" });
-	testButton->setText("TEST SCRIPT");
+	testButton->setText(L"TEST SCRIPT");
 	testButton->connect("MouseReleased", testFunctionExecScript);
 	//testButton->connect("MouseReleased", testFunctionCreateScript);
 	gEnv->globalGui.add(testButton);
@@ -326,7 +328,7 @@ void createMenuButtons()
 	testButton2->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	testButton2->setPosition({ "15%-40", "15%+50" });
 	testButton2->setSize({"80", "40"});
-	testButton2->setText("Next");
+	testButton2->setText(L"Next");
 	testButton2->setEnabled(false);
 	testButton2->setVisible(false);
 	testButton2->connect("MouseReleased", btnNextPressed);	
@@ -334,10 +336,10 @@ void createMenuButtons()
 	/*endregion*/
 
 	TableInventory* tblinv = new TableInventory();
-	tblinv->addItem("Item 1");
-	tblinv->addItem("Item 2");
-	tblinv->addItem("Item 3");
-	UIShipModules* uism = new UIShipModules(UIShipModules::shipType::eagle, 2);
+	tblinv->addItem(L"Item 1");
+	tblinv->addItem(L"Item 2");
+	tblinv->addItem(L"Item 3");
+	UIShipModules *uism = new UIShipModules(UIShipModules::shipType::eagle, 2);
 
 }
 
@@ -380,146 +382,43 @@ void optionsBackButton()
 void testFunctionCreateScript()
 {
 
-	ScriptDescriptor * s = createScriptDescriptor();
 
-	PutScript * ptr;
-	TextScript * ptr2;
-	ChooseScript * ptr3;
-	TerminateScript * ptr4;
-	JumpScript * ptr5;
-	AriphmeticScript * ptr6;
-	IfDoJumpScript * ptr7;
-
-	/*
-	// Jump "7"
-	ptr5 = static_cast<JumpScript*>(createScriptCommand(scriptType::jump));
-	ptr5->lineId = 7;
-	s->scriptLines.push_back(ptr5);
-	*/
-
-	// Put "25" to "$_1"
-	ptr = static_cast<PutScript*>(createScriptCommand(scriptType::put));
-	ptr->scr = "12 iq";
-	ptr->dest = "$_1";
-	s->scriptLines.push_back(ptr);
-
-	// Put "$_1" to "$_2"
-	ptr = static_cast<PutScript*>(createScriptCommand(scriptType::put));
-	ptr->scr = "true";
-	ptr->dest = "$_3";
-	s->scriptLines.push_back(ptr);
-
-	// Put "35" to "$_2"
-	ptr = static_cast<PutScript*>(createScriptCommand(scriptType::put));
-	ptr->scr = "35";
-	ptr->dest = "$_2";
-	s->scriptLines.push_back(ptr);
-
-	ptr = static_cast<PutScript*>(createScriptCommand(scriptType::put));
-	ptr->scr = "35";
-	ptr->dest = "$_4";
-	s->scriptLines.push_back(ptr);
-	
-	ptr = static_cast<PutScript*>(createScriptCommand(scriptType::put));
-	ptr->scr = "55";
-	ptr->dest = "$_5";
-	s->scriptLines.push_back(ptr);
-
-	ptr7 = static_cast<IfDoJumpScript*>(createScriptCommand(scriptType::ifDoJump));
-	ptr7->lineId = 10;
-	ptr7->condition = ComparatorElement(false, "$_5", "==", "55");
-	s->scriptLines.push_back(ptr7);
-
-	ptr6 = static_cast<AriphmeticScript*>(createScriptCommand(scriptType::ariphmetic));
-	ptr6->dest = "$_5";
-	ptr6->left = "$_5";
-	ptr6->operation = "/";
-	ptr6->right = "55";
-	s->scriptLines.push_back(ptr6);
-
-	/*
-	// Text "Fisrt = $_1 ; Second = $_2"
-	ptr2 = static_cast<TextScript*>(createScriptCommand(scriptType::text));
-	ptr2->text = "Fisrt = $_1 ; Second = $_2";
-	s->scriptLines.push_back(ptr2);
-	*/
-
-	// Choose "text box"; [$_bool_value] "text1" [line_number], 
-	// [true] "text2"[line_number2];
-	ptr3 = static_cast<ChooseScript*>(createScriptCommand(scriptType::choose));
-	ptr3->text = "WWWWW X\n $_5  X\nX\nX\nX\nX\nX\nX\nX\nX\nX\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-	ptr3->variants.push_back(ChooseElement("Jump to 7", 7, true, "true", "", ""));
-	ptr3->variants.push_back(ChooseElement("Jump to 9", 9, true, "true", "", ""));
-	s->scriptLines.push_back(ptr3);
-	
-	//
-	// Put "QWERT" to ""
-	// $ - variable
-	// _ - local variable
-	// $_
-	// $EXT - external table
-	// $EXT:FFFFF:1234 FFFFF - tableID , 1234 - value name
-	// $fgdgdfgdfgdfg - game enviroment
-	// "123"
-	// "123.1"
-	// "12 iq"
-	//
-
-	ptr4 = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
-	s->scriptLines.push_back(ptr4);
-
-	ptr4 = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
-	s->scriptLines.push_back(ptr4);
-	
-	ptr4 = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
-	s->scriptLines.push_back(ptr4);
-	
-	ptr3 = static_cast<ChooseScript*>(createScriptCommand(scriptType::choose));
-	ptr3->text = "ANDREY D x 2";
-	ptr3->variants.push_back(ChooseElement("Jump to 8", 8, true, "true", "", ""));
-	ptr3->variants.push_back(ChooseElement("Jump to 1", 1, true, "$_3", "", ""));
-	ptr3->variants.push_back(ChooseElement("Jump to 4", 4, true, "false", "", ""));
-	ptr3->variants.push_back(ChooseElement("Jump to 5", 5, true, "false", "", ""));
-	ptr3->variants.push_back(ChooseElement("Jump to 6", 6, true, "true", "", ""));
-	s->scriptLines.push_back(ptr3);
-
-	//ptr4 = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
-	//s->scriptLines.push_back(ptr4);
-	
-	ptr4 = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
-	s->scriptLines.push_back(ptr4);
-
-	ptr4 = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
-	s->scriptLines.push_back(ptr4);
-
-	ptr4 = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
-	s->scriptLines.push_back(ptr4);
-
-	addScriptToQueue(s);
 
 }
 
 void testFunctionExecScript()
 {
 
-	std::vector<std::string> t;
+	std::vector<std::wstring> t;
 
-	//t.push_back("Put """"25"""" to """"$_abc"""" ");
+	//t.push_back(L"Put """"25"""" to """"$_abc"""" ");
 
-	//t.push_back("Text ""Value abc = $_abc \n Sybmols: #%@%Y^H%&EIK*OO:"" ");
+	//t.push_back(L"Text ""Value abc = $_abc \n Sybmols: #%@%Y^H%&EIK*OO:"" ");
 
 	std::string filename;
 	filename = gEnv->game.workDir;
 	filename += "\\resources\\scripts\\test\\test.txt";
-	std::ifstream fin(filename);
+	/*std::wifstream fin(filename);
 
 	while (!fin.eof())
 	{
-		std::string line;
+		std::wstring line;
 		std::getline(fin, line);
 		t.push_back(line);
 	}
-	fin.close();
+	fin.close();*/
+	std::wifstream wif(filename);
+	wif.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
+	std::wstringstream wss;
+	//while (!wif.eof())
+	//{
+	//	wss << wif.rdbuf();
+	//	t.push_back(std::wstring(wss.str()));
+	//	wss.clear();
+	//}
+	wss << wif.rdbuf();
+	t.push_back(std::wstring(wss.str()));
+	wss.clear();
 	ScriptCompiler * c = new ScriptCompiler();
 
 	c->compileScriptText(t);

@@ -149,6 +149,15 @@
     <ClInclude Include="Source\scriptDescriptorGroups.h">
       <Filter>ScriptEngine</Filter>
     </ClInclude>
+    <ClInclude Include="Source\adventureData.h">
+      <Filter>Enviroment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\item.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\convertUtils.h">
+      <Filter>ScriptEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\Scripts\Test\Test.txt">

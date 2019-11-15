@@ -35,7 +35,7 @@ public:
 		}
 	}
 
-	void setButton(int id, std::string text, bool active)
+	void setButton(int id, std::wstring text, bool active)
 	{
 		chooseButtons[id]->setText(text);
 		chooseButtons[id]->setEnabled(active);

@@ -8,6 +8,7 @@ void preloadResources()
 	scriptSystem = new ScriptSystem();
 	gEnv->game.scriptSystemRequiresUpdate = true;
 	// Create table for loading textures
+	
 
 	preloadModels();
 
@@ -19,7 +20,12 @@ void preloadResources()
 void preloadModels()
 {
 
-	createModelDescriptor("blankTexture", "\\resources\\textures\\blankTexture.png");
-	createModelDescriptor("blankTexture2", "\\resources\\textures\\blankTexture.png");
-	//createModelDescriptor("fsfa", "fsaf", true);
+	createModelDescriptor(L"blankTexture", "\\resources\\textures\\blankTexture.png");
+	createModelDescriptor(L"blankTexture2", "\\resources\\textures\\blankTexture.png");
+	//createModelDescriptor(L"fsfa", "fsaf", true);
+}
+
+void postLoad()
+{
+	
 }

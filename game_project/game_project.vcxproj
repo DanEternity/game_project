@@ -241,13 +241,16 @@
     <ClCompile Include="Source\uiEventHandlers.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\adventureData.h" />
     <ClInclude Include="Source\baseObject.h" />
+    <ClInclude Include="Source\convertUtils.h" />
     <ClInclude Include="Source\enviroment.h" />
     <ClInclude Include="Source\envUtils.h" />
     <ClInclude Include="Source\game.h" />
     <ClInclude Include="Source\gamedata.h" />
     <ClInclude Include="Source\graphics.h" />
     <ClInclude Include="Source\graphicsModel.h" />
+    <ClInclude Include="Source\item.h" />
     <ClInclude Include="Source\loader.h" />
     <ClInclude Include="Source\mainMenu.h" />
     <ClInclude Include="Source\menuData.h" />
