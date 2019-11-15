@@ -152,6 +152,9 @@
     <ClInclude Include="Source\adventureData.h">
       <Filter>Enviroment</Filter>
     </ClInclude>
+    <ClInclude Include="Source\item.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\Scripts\Test\Test.txt">

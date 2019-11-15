@@ -249,6 +249,7 @@
     <ClInclude Include="Source\gamedata.h" />
     <ClInclude Include="Source\graphics.h" />
     <ClInclude Include="Source\graphicsModel.h" />
+    <ClInclude Include="Source\item.h" />
     <ClInclude Include="Source\loader.h" />
     <ClInclude Include="Source\mainMenu.h" />
     <ClInclude Include="Source\menuData.h" />
