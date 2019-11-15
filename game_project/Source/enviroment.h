@@ -68,7 +68,6 @@ public:
 
 	// Script system data
 	ScriptSystemData scripts;
-
 };
 
 extern GlobalEnviroment * globalEnviroment;
