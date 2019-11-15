@@ -61,10 +61,10 @@ public:
 	MenuData menuData;
 
 	// Contains graphical models (2d textures)
-	std::map<std::string, ModelDescriptor *> modelDB;
+	std::map<std::wstring, ModelDescriptor *> modelDB;
 
 	// Contains external tables
-	std::map<std::string, ExternalTable*> extTables;
+	std::map<std::wstring, ExternalTable*> extTables;
 
 	// Script system data
 	ScriptSystemData scripts;

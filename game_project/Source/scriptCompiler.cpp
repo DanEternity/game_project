@@ -1,6 +1,6 @@
 #include "scriptCompiler.h"
 
-bool ScriptCompiler::compileScriptText(std::vector<std::string> src)
+bool ScriptCompiler::compileScriptText(std::vector<std::wstring> src)
 { 
 
 	// Available directives
@@ -41,347 +41,347 @@ bool ScriptCompiler::compileScriptText(std::vector<std::string> src)
 			}
 			continue;
 		}
-
-
-		// zero sybmols in selection
-		if (emptyLine)
+		if (src[line][idx] < 60000)
 		{
-			// directive
-			if (src[line][idx] == '#')
+			// zero sybmols in selection
+			if (emptyLine)
 			{
 				// directive
-				emptyLine = false;
-				//selection += src[line][idx];
-				directiveHasOpenBracket = false;
-			}
-
-			if ((src[line][idx] >= 'a' && src[line][idx] <= 'z') || (src[line][idx] >= 'A' && src[line][idx] <= 'Z'))
-			{
-				// function
-
-				// If started with any letter will be considered function name
-				
-				//selection += src[line][idx];
-				emptyLine = false;
-				tp = syntaxType::command;
-
-			}
-
-			if (src[line][idx] == '@')
-			{
-				// marker
-				//selection += src[line][idx];
-				emptyLine = false;
-				tp = syntaxType::marker;
-			}
-
-			if (src[line][idx] == '/')
-			{
-				// this line is a comment
-				emptyLine = false;
-				tp = syntaxType::comment;
-			}
-			
-			if (src[line][idx] <= '9' && src[line][idx] >= '0')
-			{
-				// invalid character
-
-			}
-
-		}
-
-		if (tp == syntaxType::directive)
-		{
-			selection += src[line][idx];
-			if (src[line][idx] == '"')
-			{
-				if (directiveHasOpenBracket)
+				if (src[line][idx] == '#')
 				{
-					
-					// directive selection completed
-					tp = syntaxType::none;
-					
-					parseDirecive(selection);
-
-					selection = "";
-					emptyLine = true;
-	
+					// directive
+					emptyLine = false;
+					//selection += src[line][idx];
+					directiveHasOpenBracket = false;
 				}
-				else
+
+				if ((src[line][idx] >= 'a' && src[line][idx] <= 'z') || (src[line][idx] >= 'A' && src[line][idx] <= 'Z'))
 				{
-					directiveHasOpenBracket = true;
+					// function
+
+					// If started with any letter will be considered function name
+
+					//selection += src[line][idx];
+					emptyLine = false;
+					tp = syntaxType::command;
+
 				}
+
+				if (src[line][idx] == '@')
+				{
+					// marker
+					//selection += src[line][idx];
+					emptyLine = false;
+					tp = syntaxType::marker;
+				}
+
+				if (src[line][idx] == '/')
+				{
+					// this line is a comment
+					emptyLine = false;
+					tp = syntaxType::comment;
+				}
+
+				if (src[line][idx] <= '9' && src[line][idx] >= '0')
+				{
+					// invalid character
+
+				}
+
 			}
 
-			if (
-				src[line][idx] == '/' ||
-				src[line][idx] == '@' ||
-				src[line][idx] == '#' ||
-				src[line][idx] == '$' ||
-				src[line][idx] == '[' ||
-				src[line][idx] == ']' ||
-				src[line][idx] == ';'
-				)
+			if (tp == syntaxType::directive)
 			{
-				// invalid symbol
-				printf("Error while script parsing! Expected [#directive ""value""] found (%s <-)\n", selection.c_str());
-				printf("Hint: You probably forgot "" "". Directive comments should be inside brackets.\n");
-			}
+				selection += src[line][idx];
+				if (src[line][idx] == '"')
+				{
+					if (directiveHasOpenBracket)
+					{
 
-		}
+						// directive selection completed
+						tp = syntaxType::none;
 
-		if (tp == syntaxType::command)
-		{
-			selection += src[line][idx];
-			if (src[line][idx] == '"' || src[line][idx] == ' ')
-			{
-				bool code = parseCommand(selection);
-			}
-			else
-			{
+						parseDirecive(selection);
+
+						selection = L"";
+						emptyLine = true;
+
+					}
+					else
+					{
+						directiveHasOpenBracket = true;
+					}
+				}
+
 				if (
 					src[line][idx] == '/' ||
 					src[line][idx] == '@' ||
 					src[line][idx] == '#' ||
-					src[line][idx] == ':' ||
 					src[line][idx] == '$' ||
-					src[line][idx] == '_' ||
 					src[line][idx] == '[' ||
 					src[line][idx] == ']' ||
 					src[line][idx] == ';'
 					)
-					printf("Error while script parsing! [Line: %i] Invalid command: (%s <-)", line, selection.c_str());
-
-			}
-		}
-
-		if (tp == syntaxType::marker)
-		{
-			selection += src[line][idx];
-			if (src[line][idx] == ' ')
-			{
-				parseMarker(selection);
-				emptyLine = true;
-				selection = "";
-				tp = syntaxType::none;
-			}
-		}
-
-		if (tp == syntaxType::c_put)
-		{
-			selection += src[line][idx];
-			if (src[line][idx] == '"')
-			{
-				bracketCount++;
-				if (bracketCount == 2)
 				{
-					bracketCount = 0;
-					parameterCount++;
-					if (parameterCount == 2)
-					{
-						parsePut(selection);
-					}
+					// invalid symbol
+					printf("Error while script parsing! Expected [#directive ""value""] found (%ws <-)\n", selection.c_str());
+					printf("Hint: You probably forgot "" "". Directive comments should be inside brackets.\n");
+				}
+
+			}
+
+			if (tp == syntaxType::command)
+			{
+				selection += src[line][idx];
+				if (src[line][idx] == '"' || src[line][idx] == ' ')
+				{
+					bool code = parseCommand(selection);
+				}
+				else
+				{
+					if (
+						src[line][idx] == '/' ||
+						src[line][idx] == '@' ||
+						src[line][idx] == '#' ||
+						src[line][idx] == ':' ||
+						src[line][idx] == '$' ||
+						src[line][idx] == '_' ||
+						src[line][idx] == '[' ||
+						src[line][idx] == ']' ||
+						src[line][idx] == ';'
+						)
+						printf("Error while script parsing! [Line: %i] Invalid command: (%ws <-)", line, selection.c_str());
+
 				}
 			}
-		}
 
-		if (tp == syntaxType::c_ariphmetic)
-		{
-			selection += src[line][idx];
-			if (src[line][idx] == '"')
+			if (tp == syntaxType::marker)
 			{
-				bracketCount++;
-				if (bracketCount == 2)
+				selection += src[line][idx];
+				if (src[line][idx] == ' ')
 				{
-					bracketCount = 0;
-					parameterCount++;
-					if (parameterCount == 2)
-					{
-						parseAriphmetic(selection);
-					}
+					parseMarker(selection);
+					emptyLine = true;
+					selection = L"";
+					tp = syntaxType::none;
 				}
 			}
-		}
 
-		if (tp == syntaxType::c_text)
-		{
-			selection += src[line][idx];
-			if (src[line][idx] == '"')
+			if (tp == syntaxType::c_put)
 			{
-				bracketCount++;
-				if (bracketCount == 2)
-				{
-					bracketCount = 0;
-					parameterCount++;
-					if (parameterCount == 1)
-					{
-						parseText(selection);
-					}
-				}
-			}
-		}
-
-		if (tp == syntaxType::c_choose)
-		{
-			selection += src[line][idx];
-
-			switch (status)
-			{
-			case 0:
-			{
+				selection += src[line][idx];
 				if (src[line][idx] == '"')
 				{
 					bracketCount++;
 					if (bracketCount == 2)
 					{
 						bracketCount = 0;
-						status = 1;
+						parameterCount++;
+						if (parameterCount == 2)
+						{
+							parsePut(selection);
+						}
 					}
 				}
 			}
-				break;
-			case 1:
+
+			if (tp == syntaxType::c_ariphmetic)
 			{
-				if (src[line][idx] == ';')
+				selection += src[line][idx];
+				if (src[line][idx] == '"')
 				{
-					if (parameterCount == 0)
+					bracketCount++;
+					if (bracketCount == 2)
 					{
-						printf("Error while script parsing! [Line: %i] ';' found, ',' expected: (%s <-). Choose should have at least 1 variant", line, selection.c_str());
-						error = true;
-					}
-					else
-					{
-						parseChoose(selection);
+						bracketCount = 0;
+						parameterCount++;
+						if (parameterCount == 2)
+						{
+							parseAriphmetic(selection);
+						}
 					}
 				}
-				else
-					if (src[line][idx] == ',')
+			}
+
+			if (tp == syntaxType::c_text)
+			{
+				selection += src[line][idx];
+				if (src[line][idx] == '"')
+				{
+					bracketCount++;
+					if (bracketCount == 2)
 					{
-						status = 2;
 						bracketCount = 0;
-						squareBracketCount = 0;
-					}
-					else
-						if (src[line][idx] != ' ')
+						parameterCount++;
+						if (parameterCount == 1)
 						{
-							printf("Error while script parsing! [Line: %i] Invalid character: (%s <-)", line, selection.c_str());
+							parseText(selection);
+						}
+					}
+				}
+			}
+
+			if (tp == syntaxType::c_choose)
+			{
+				selection += src[line][idx];
+
+				switch (status)
+				{
+				case 0:
+				{
+					if (src[line][idx] == '"')
+					{
+						bracketCount++;
+						if (bracketCount == 2)
+						{
+							bracketCount = 0;
+							status = 1;
+						}
+					}
+				}
+				break;
+				case 1:
+				{
+					if (src[line][idx] == ';')
+					{
+						if (parameterCount == 0)
+						{
+							printf("Error while script parsing! [Line: %i] ';' found, ',' expected: (%ws <-). Choose should have at least 1 variant", line, selection.c_str());
 							error = true;
 						}
-			}
+						else
+						{
+							parseChoose(selection);
+						}
+					}
+					else
+						if (src[line][idx] == ',')
+						{
+							status = 2;
+							bracketCount = 0;
+							squareBracketCount = 0;
+						}
+						else
+							if (src[line][idx] != ' ')
+							{
+								printf("Error while script parsing! [Line: %i] Invalid character: (%ws <-)", line, selection.c_str());
+								error = true;
+							}
+				}
 				break;
-			case 2:
-			{
-				if (src[line][idx] == '[')
+				case 2:
 				{
+					if (src[line][idx] == '[')
+					{
 						status = 3;
-				}
-			}
-				break;
-			case 3:
-			{
-				if (src[line][idx] == ']')
-				{
-					status = 4;
+					}
 				}
 				break;
-			}
-			case 4:
-			{
-				if (src[line][idx] == '"')
+				case 3:
 				{
-					status = 5;
-				}
-				break;
-			}
-			case 5:
-			{
-				if (src[line][idx] == '"')
-				{
-					status = 6;
-				}
-				break;
-			}
-			case 6:
-			{
-				if (src[line][idx] == '[')
-				{
-					status = 7;
-				}
-				break;
-			}
-			case 7:
-			{
-				if (src[line][idx] == ']')
-				{
-					parameterCount += 1;
-					status = 1;
-				}
-				break;
-			}
-			default:
-				break;
-			}
-
-
-		}
-
-		if (tp == syntaxType::c_changeScriptEntryPoint)
-		{
-			selection += src[line][idx];
-			if (src[line][idx] == '"')
-			{
-				bracketCount++;
-				if (bracketCount == 2)
-				{
-					bracketCount = 0;
-					parameterCount++;
-					if (parameterCount == 2)
+					if (src[line][idx] == ']')
 					{
-						parseChangeScriptEntryPoint(selection);
+						status = 4;
+					}
+					break;
+				}
+				case 4:
+				{
+					if (src[line][idx] == '"')
+					{
+						status = 5;
+					}
+					break;
+				}
+				case 5:
+				{
+					if (src[line][idx] == '"')
+					{
+						status = 6;
+					}
+					break;
+				}
+				case 6:
+				{
+					if (src[line][idx] == '[')
+					{
+						status = 7;
+					}
+					break;
+				}
+				case 7:
+				{
+					if (src[line][idx] == ']')
+					{
+						parameterCount += 1;
+						status = 1;
+					}
+					break;
+				}
+				default:
+					break;
+				}
+
+
+			}
+
+			if (tp == syntaxType::c_changeScriptEntryPoint)
+			{
+				selection += src[line][idx];
+				if (src[line][idx] == '"')
+				{
+					bracketCount++;
+					if (bracketCount == 2)
+					{
+						bracketCount = 0;
+						parameterCount++;
+						if (parameterCount == 2)
+						{
+							parseChangeScriptEntryPoint(selection);
+						}
+					}
+				}
+			}
+
+			if (tp == syntaxType::c_spendTime)
+			{
+				selection += src[line][idx];
+				if (src[line][idx] == '"')
+				{
+					bracketCount++;
+					if (bracketCount == 2)
+					{
+						bracketCount = 0;
+						parameterCount++;
+						if (parameterCount == 1)
+						{
+							parseSpendTime(selection);
+						}
 					}
 				}
 			}
 		}
-
-		if (tp == syntaxType::c_spendTime)
-		{
-			selection += src[line][idx];
-			if (src[line][idx] == '"')
-			{
-				bracketCount++;
-				if (bracketCount == 2)
-				{
-					bracketCount = 0;
-					parameterCount++;
-					if (parameterCount == 1)
-					{
-						parseSpendTime(selection);
-					}
-				}
-			}
-		}
-
 		// move right
-		if (idx < src[line].size() - 1)
+		if (idx < src[line].size() - 1 && src[line][idx] !='\n')
 			idx++;
 		else // next line
 		{
 			// probalby need to add space
 			// because some functions can be parsed wrong if
 			// located in multiple lines
-			idx = 0;
+			
 
 			if (tp == syntaxType::comment)
 			{
 				tp = syntaxType::none;
 				emptyLine = true;
-				selection = "";
+				selection = L"";
 			}
 			if (tp == syntaxType::marker)
 			{
 				parseMarker(selection);
 				emptyLine = true;
-				selection = "";
+				selection = L"";
 				tp = syntaxType::none;
 			}
 
@@ -403,7 +403,7 @@ bool ScriptCompiler::compileScriptText(std::vector<std::string> src)
 
 						parseDirecive(selection);
 
-						selection = "";
+						selection = L"";
 						emptyLine = true;
 
 					}
@@ -414,22 +414,31 @@ bool ScriptCompiler::compileScriptText(std::vector<std::string> src)
 				}
 				if (tp != syntaxType::none)
 				{
-					printf("Error while script parsing! [Line: %i] Invalid directive: (%s <-)", line, selection.c_str());
+					printf("Error while script parsing! [Line: %i] Invalid directive: (%ws <-)", line, selection.c_str());
 					error = true;
 				}
 			}
-			if (line < src.size() - 1)
-				line++;
-			else
+			if (src[line][idx] == '\n')
 			{
-				// end of file
-
-				// if there are any selection we should process it
-				// then finilize parsing because no text left;
-				//
-				break;
+				idx++;
 			}
+			else
+				if (line < src.size() - 1)
+				{
+					line++;
+					idx = 0;
+				}
+				else
+				{
+					// end of file
+
+					// if there are any selection we should process it
+					// then finilize parsing because no text left;
+					//
+					break;
+				}
 		}
+
 
 	}
 
@@ -444,7 +453,7 @@ ScriptDescriptor * ScriptCompiler::getScriptDescriptor()
 	return p_s;
 }
 
-void ScriptCompiler::setFamilyId(std::string id)
+void ScriptCompiler::setFamilyId(std::wstring id)
 {
 	familyId = id;
 }
@@ -489,11 +498,11 @@ void ScriptCompiler::postProcessCommands()
 
 }
 
-bool ScriptCompiler::parseDirecive(std::string s)
+bool ScriptCompiler::parseDirecive(std::wstring s)
 {
 
-	std::string f1;
-	std::string f2;
+	std::wstring f1;
+	std::wstring f2;
 
 	int pos1;
 	int pos2;
@@ -509,9 +518,9 @@ bool ScriptCompiler::parseDirecive(std::string s)
 	pos3 = f1.find(' ', 0);
 	f1 = f1.substr(0, pos3);
 
-	if (f1 == "#ext")
+	if (f1 == L"#ext")
 	{
-		if (familyId == "")
+		if (familyId == L"")
 		{
 			// creating ext
 			localExtReference[f2] = createExternalTable();
@@ -524,7 +533,7 @@ bool ScriptCompiler::parseDirecive(std::string s)
 	return false;
 }
 
-bool ScriptCompiler::parseCommand(std::string s)
+bool ScriptCompiler::parseCommand(std::wstring s)
 {
 
 	int pos = 0;
@@ -540,13 +549,18 @@ bool ScriptCompiler::parseCommand(std::string s)
 		s = s.substr(0, pos);
 		quote = true;
 	}
-	if (s == "Put" || s == "put")
+
+	pos = s.find('\n', 0);
+	if (pos > 0)
+		s = s.substr(0, pos);
+
+	if (s == L"Put" || s == L"put")
 	{
 		// Put "value/const" to "value"
 		this->tp = syntaxType::c_put;
 		bracketCount = 0;
 		parameterCount = 0;
-		selection = "";
+		selection = L"";
 
 		if (quote)
 		{
@@ -556,13 +570,13 @@ bool ScriptCompiler::parseCommand(std::string s)
 		return true;
 	}
 
-	if (s == "Text" || s == "text")
+	if (s == L"Text" || s == L"text")
 	{
 		// Put "value/const" to "value"
 		this->tp = syntaxType::c_text;
 		bracketCount = 0;
 		parameterCount = 0;
-		selection = "";
+		selection = L"";
 
 		if (quote)
 		{
@@ -572,18 +586,18 @@ bool ScriptCompiler::parseCommand(std::string s)
 		return true;
 	}
 
-	if (s == "Terminate" || s == "terminate")
+	if (s == L"Terminate" || s == L"terminate")
 	{
 		parseTerminate(s);
 		return true;
 	}
 
-	if (s == "Choose" || s == "choose")
+	if (s == L"Choose" || s == L"choose")
 	{
 		this->tp = syntaxType::c_choose;
 		bracketCount = 0;
 		parameterCount = 0;
-		selection = "";
+		selection = L"";
 		status = 0;
 		squareBracketCount = 0;
 		if (quote)
@@ -594,12 +608,12 @@ bool ScriptCompiler::parseCommand(std::string s)
 		return true;
 	}
 
-	if (s == "Ariphmetic" || s == "ariphmetic")
+	if (s == L"Ariphmetic" || s == L"ariphmetic")
 	{
 		tp = syntaxType::c_ariphmetic;
 		bracketCount = 0;
 		parameterCount = 0;
-		selection = "";
+		selection = L"";
 		if (quote)
 		{
 			selection += '"';
@@ -608,12 +622,12 @@ bool ScriptCompiler::parseCommand(std::string s)
 		return true;
 	}
 
-	if (s == "ChangeScriptEntryPoint" || s == "changeScriptEntryPoint")
+	if (s == L"ChangeScriptEntryPoint" || s == L"changeScriptEntryPoint")
 	{
 		tp = syntaxType::c_changeScriptEntryPoint;
 		bracketCount = 0;
 		parameterCount = 0;
-		selection = "";
+		selection = L"";
 		if (quote)
 		{
 			selection += '"';
@@ -622,12 +636,12 @@ bool ScriptCompiler::parseCommand(std::string s)
 		return true;
 	}
 
-	if (s == "SpendTime" || s == "spendTime")
+	if (s == L"SpendTime" || s == L"spendTime")
 	{
 		tp = syntaxType::c_spendTime;
 		bracketCount = 0;
 		parameterCount = 0;
-		selection = "";
+		selection = L"";
 		if (quote)
 		{
 			selection += '"';
@@ -636,20 +650,23 @@ bool ScriptCompiler::parseCommand(std::string s)
 		return true;
 	}
 
-	printf("Error! [Line: %i] Undefined command: (%s)", line, s.c_str());
+	printf("Error! [Line: %i] Undefined command: (%ws)", line, s.c_str());
 	error = true;
 
 	return false;
 }
 
-bool ScriptCompiler::parseMarker(std::string s)
+bool ScriptCompiler::parseMarker(std::wstring s)
 {
-	std::string id;
+	std::wstring id;
 	//s = s.substr(1, s.size() - 1);
-	if (s.find(' ') != std::string::npos)
+	if (s.find(' ') != std::wstring::npos)
 		id = s.substr(0, s.size() - 1);
 	else
 		id = s;
+
+	if (s.find('\n') != std::wstring::npos)
+		id = s.substr(0, s.size() - 1);
 
 	// register marker
 		
@@ -661,15 +678,15 @@ bool ScriptCompiler::parseMarker(std::string s)
 	return true;
 }
 
-bool ScriptCompiler::parsePut(std::string s)
+bool ScriptCompiler::parsePut(std::wstring s)
 {
 
 	// "value/const" to "value"
 	// it's possible to not use "to"
 	// example: "value/const" "value"	
 
-	std::string f1;
-	std::string f2;
+	std::wstring f1;
+	std::wstring f2;
 	int posf1;
 	int posf12;
 	int posf2;
@@ -694,17 +711,17 @@ bool ScriptCompiler::parsePut(std::string s)
 	p_s->scriptLines.push_back(ptr);
 
 	tp = syntaxType::none;
-	selection = "";
+	selection = L"";
 	emptyLine = true;
 	return true;
 }
 
-bool ScriptCompiler::parseText(std::string s)
+bool ScriptCompiler::parseText(std::wstring s)
 {
 
 	// Text "text" 
 
-	std::string f1;
+	std::wstring f1;
 	int posf1;
 
 	posf1 = s.find('"', 0);
@@ -726,12 +743,12 @@ bool ScriptCompiler::parseText(std::string s)
 
 
 	tp = syntaxType::none;
-	selection = "";
+	selection = L"";
 	emptyLine = true;
 	return true;
 }
 
-bool ScriptCompiler::parseTerminate(std::string s)
+bool ScriptCompiler::parseTerminate(std::wstring s)
 {
 	TerminateScript * ptr = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
 
@@ -741,19 +758,19 @@ bool ScriptCompiler::parseTerminate(std::string s)
 
 	p_s->scriptLines.push_back(ptr);
 	tp = syntaxType::none;
-	selection = "";
+	selection = L"";
 	emptyLine = true;
 
 
 	return true;
 }
 
-bool ScriptCompiler::parseJump(std::string s)
+bool ScriptCompiler::parseJump(std::wstring s)
 {
 
 	// jump command cant be determined immediantly because of not all marks parsed
 
-	std::string f1;
+	std::wstring f1;
 	int posf1;
 
 	posf1 = s.find('"', 0);
@@ -771,17 +788,17 @@ bool ScriptCompiler::parseJump(std::string s)
 
 	p_s->scriptLines.push_back(ptr);
 	tp = syntaxType::none;
-	selection = "";
+	selection = L"";
 	emptyLine = true;
 	return true;
 }
 
-bool ScriptCompiler::parseChoose(std::string s)
+bool ScriptCompiler::parseChoose(std::wstring s)
 {
 
 	// Choose "some text", [true]"variant 1"[1], [true]"variant 2"[2], [true]"variant 3"[3];
 
-	std::string f1;
+	std::wstring f1;
 	int posf1;
 	int posf2;
 	posf1 = s.find('"', 0);
@@ -799,16 +816,16 @@ bool ScriptCompiler::parseChoose(std::string s)
 		if (p > s.size()-1)
 		{
 			// error
-			printf("Error! [Line: %i] ';' or ',' expected. (%s)", line, s.c_str());
+			printf("Error! [Line: %i] ';' or ',' expected. (%ws)", line, s.c_str());
 			error = true;
 			break;
 		}
 
 		if (s[p] == ',')
 		{
-			std::string a1;
-			std::string a2;
-			std::string a3;
+			std::wstring a1;
+			std::wstring a2;
+			std::wstring a3;
 
 			int posB1;
 			int posB2;
@@ -847,7 +864,7 @@ bool ScriptCompiler::parseChoose(std::string s)
 	ptr->commandId = commandsCount++;
 
 	tp = syntaxType::none;
-	selection = "";
+	selection = L"";
 	emptyLine = true;
 
 	if (error)
@@ -861,15 +878,15 @@ bool ScriptCompiler::parseChoose(std::string s)
 	return true;
 }
 
-bool ScriptCompiler::parseAriphmetic(std::string s)
+bool ScriptCompiler::parseAriphmetic(std::wstring s)
 {
 
 	// "value/const operator value/const" to "value"
 
 	AriphmeticScript * ptr = static_cast<AriphmeticScript*>(createScriptCommand(scriptType::ariphmetic));
 
-	std::string f1;
-	std::string f2;
+	std::wstring f1;
+	std::wstring f2;
 	int pos1;
 	int pos2;
 	int pos3;
@@ -889,35 +906,35 @@ bool ScriptCompiler::parseAriphmetic(std::string s)
 	int size = 1;
 	int pos = -1;
 
-	if (!operatorFound && s.find("+", 0) != std::string::npos)
+	if (!operatorFound && s.find(L"+", 0) != std::wstring::npos)
 	{
-		pos = s.find("+", 0);
+		pos = s.find(L"+", 0);
 		operatorFound = true;
 	}
 
-	if (!operatorFound && s.find("-", 0) != std::string::npos)
+	if (!operatorFound && s.find(L"-", 0) != std::wstring::npos)
 	{
-		pos = s.find("-", 0);
+		pos = s.find(L"-", 0);
 		operatorFound = true;
 	}
 
-	if (!operatorFound && s.find("/", 0) != std::string::npos)
+	if (!operatorFound && s.find(L"/", 0) != std::wstring::npos)
 	{
-		pos = s.find("/", 0);
+		pos = s.find(L"/", 0);
 		operatorFound = true;
 	}
 
-	if (!operatorFound && s.find("*", 0) != std::string::npos)
+	if (!operatorFound && s.find(L"*", 0) != std::wstring::npos)
 	{
-		pos = s.find("*", 0);
+		pos = s.find(L"*", 0);
 		operatorFound = true;
 	}
 
 	if (operatorFound)
 	{
-		std::string f1;
-		std::string op;
-		std::string f2;
+		std::wstring f1;
+		std::wstring op;
+		std::wstring f2;
 
 		int ps;
 
@@ -925,12 +942,12 @@ bool ScriptCompiler::parseAriphmetic(std::string s)
 
 		// need to erase spaces
 		ps = f1.find(' ');
-		if (ps != std::string::npos)
+		if (ps != std::wstring::npos)
 			if (ps == 0)
 				f1 = f1.substr(1, f1.size() - 1);
 
 		ps = f1.find(' ');
-		if (ps != std::string::npos)
+		if (ps != std::wstring::npos)
 			if (ps > 0)
 				f1 = f1.substr(0, ps);
 
@@ -941,12 +958,12 @@ bool ScriptCompiler::parseAriphmetic(std::string s)
 
 
 		ps = f2.find(' ');
-		if (ps != std::string::npos)
+		if (ps != std::wstring::npos)
 			if (ps == 0)
 				f2 = f2.substr(1, f2.size() - 1);
 
 		ps = f2.find(' ');
-		if (ps != std::string::npos)
+		if (ps != std::wstring::npos)
 			if (ps > 0)
 				f2 = f2.substr(0, ps);
 
@@ -964,7 +981,7 @@ bool ScriptCompiler::parseAriphmetic(std::string s)
 	ptr->commandId = commandsCount++;
 
 	tp = syntaxType::none;
-	selection = "";
+	selection = L"";
 	emptyLine = true;
 
 	if (error)
@@ -978,11 +995,11 @@ bool ScriptCompiler::parseAriphmetic(std::string s)
 	return true;
 }
 
-bool ScriptCompiler::parseChangeScriptEntryPoint(std::string s)
+bool ScriptCompiler::parseChangeScriptEntryPoint(std::wstring s)
 {
 
-	std::string f1;
-	std::string f2;
+	std::wstring f1;
+	std::wstring f2;
 	int pos1;
 	int pos2;
 	int pos3;
@@ -1004,7 +1021,7 @@ bool ScriptCompiler::parseChangeScriptEntryPoint(std::string s)
 	ptr->commandId = commandsCount++;
 
 	tp = syntaxType::none;
-	selection = "";
+	selection = L"";
 	emptyLine = true;
 
 	if (error)
@@ -1018,10 +1035,10 @@ bool ScriptCompiler::parseChangeScriptEntryPoint(std::string s)
 	return true;
 }
 
-bool ScriptCompiler::parseSpendTime(std::string s)
+bool ScriptCompiler::parseSpendTime(std::wstring s)
 {
-//	std::string f1;
-//	std::string f2;
+//	std::wstring f1;
+//	std::wstring f2;
 	int pos1;
 	int pos2;
 //	int pos3;
@@ -1042,7 +1059,7 @@ bool ScriptCompiler::parseSpendTime(std::string s)
 	ptr->commandId = commandsCount++;
 
 	tp = syntaxType::none;
-	selection = "";
+	selection = L"";
 	emptyLine = true;
 
 	if (error)
@@ -1057,7 +1074,7 @@ bool ScriptCompiler::parseSpendTime(std::string s)
 
 }
 
-ComparatorElement ScriptCompiler::parseCondition(std::string s)
+ComparatorElement ScriptCompiler::parseCondition(std::wstring s)
 {
 
 	// "true"
@@ -1067,54 +1084,54 @@ ComparatorElement ScriptCompiler::parseCondition(std::string s)
 	int size = 2;
 	int pos = -1;
 
-	if (!operatorFound && s.find("==", 0) != std::string::npos)
+	if (!operatorFound && s.find(L"==", 0) != std::wstring::npos)
 	{
-		pos = s.find("==", 0);
+		pos = s.find(L"==", 0);
 		operatorFound = true;
 	}
 
-	if (!operatorFound && s.find("!=", 0) != std::string::npos)
+	if (!operatorFound && s.find(L"!=", 0) != std::wstring::npos)
 	{
-		pos = s.find("!=", 0);
+		pos = s.find(L"!=", 0);
 		operatorFound = true;
 	}
 
-	if (!operatorFound && s.find("<=", 0) != std::string::npos)
+	if (!operatorFound && s.find(L"<=", 0) != std::wstring::npos)
 	{
-		pos = s.find("<=", 0);
+		pos = s.find(L"<=", 0);
 		operatorFound = true;
 	}
 
-	if (!operatorFound && s.find(">=", 0) != std::string::npos)
+	if (!operatorFound && s.find(L">=", 0) != std::wstring::npos)
 	{
-		pos = s.find(">=", 0);
+		pos = s.find(L">=", 0);
 		operatorFound = true;
 	}
 
-	if (!operatorFound && s.find("<>", 0) != std::string::npos)
+	if (!operatorFound && s.find(L"<>", 0) != std::wstring::npos)
 	{
-		pos = s.find("<>", 0);
+		pos = s.find(L"<>", 0);
 		operatorFound = true;
 	}
 
 	if (operatorFound)
 	{
 
-		std::string f1;
-		std::string op;
-		std::string f2;
+		std::wstring f1;
+		std::wstring op;
+		std::wstring f2;
 
 		int ps;
 
 		f1 = s.substr(0, pos);
 		// need to erase spaces
 		ps = f1.find(' ');
-		if (ps != std::string::npos)
+		if (ps != std::wstring::npos)
 			if (ps == 0)
 				f1 = f1.substr(1, f1.size() - 1);
 
 		ps = f1.find(' ');
-		if (ps != std::string::npos)
+		if (ps != std::wstring::npos)
 			if (ps > 0)
 				f1 = f1.substr(0, ps);
 
@@ -1123,12 +1140,12 @@ ComparatorElement ScriptCompiler::parseCondition(std::string s)
 
 		f2 = s.substr(pos + size, s.size() - pos - size);
 		ps = f2.find(' ');
-		if (ps != std::string::npos)
+		if (ps != std::wstring::npos)
 			if (ps == 0)
 				f2 = f2.substr(1, f2.size() - 1);
 
 		ps = f2.find(' ');
-		if (ps != std::string::npos)
+		if (ps != std::wstring::npos)
 			if (ps > 0)
 				f2 = f2.substr(0, ps);
 
@@ -1137,23 +1154,23 @@ ComparatorElement ScriptCompiler::parseCondition(std::string s)
 
 	size = 1;
 
-	if (!operatorFound && s.find("<", 0) != std::string::npos)
+	if (!operatorFound && s.find(L"<", 0) != std::wstring::npos)
 	{
-		pos = s.find("<", 0);
+		pos = s.find(L"<", 0);
 		operatorFound = true;
 	}
 
-	if (!operatorFound && s.find(">", 0) != std::string::npos)
+	if (!operatorFound && s.find(L">", 0) != std::wstring::npos)
 	{
-		pos = s.find(">", 0);
+		pos = s.find(L">", 0);
 		operatorFound = true;
 	}
 
 	if (operatorFound)
 	{
-		std::string f1;
-		std::string op;
-		std::string f2;
+		std::wstring f1;
+		std::wstring op;
+		std::wstring f2;
 
 		int ps;
 
@@ -1161,12 +1178,12 @@ ComparatorElement ScriptCompiler::parseCondition(std::string s)
 
 		// need to erase spaces
 		ps = f1.find(' ');
-		if (ps != std::string::npos)
+		if (ps != std::wstring::npos)
 			if (ps == 0)
 				f1 = f1.substr(1, f1.size() - 1);
 
 		ps = f1.find(' ');
-		if (ps != std::string::npos)
+		if (ps != std::wstring::npos)
 			if (ps > 0)
 				f1 = f1.substr(0, ps);
 
@@ -1175,12 +1192,12 @@ ComparatorElement ScriptCompiler::parseCondition(std::string s)
 
 		f2 = s.substr(pos + size, s.size() - pos - size);
 		ps = f2.find(' ');
-		if (ps != std::string::npos)
+		if (ps != std::wstring::npos)
 			if (ps == 0)
 				f2 = f2.substr(1, f2.size() - 1);
 
 		ps = f2.find(' ');
-		if (ps != std::string::npos)
+		if (ps != std::wstring::npos)
 			if (ps > 0)
 				f2 = f2.substr(0, ps);
 
@@ -1192,7 +1209,7 @@ ComparatorElement ScriptCompiler::parseCondition(std::string s)
 
 
 
-	return ComparatorElement(true, s, "","");
+	return ComparatorElement(true, s, L"",L"");
 }
 
 bool ScriptCompiler::postUpdateChoose(BaseScript * ptr)
@@ -1207,9 +1224,9 @@ bool ScriptCompiler::postUpdateChoose(BaseScript * ptr)
 		}
 		else
 		{
-			p->variants[i].jump = atoi(p->variants[i].chache.c_str());
+			p->variants[i].jump = _wtoi(p->variants[i].chache.c_str());
 		}
-		p->variants[i].chache = "";
+		p->variants[i].chache = L"";
 	}
 
 	return true;
@@ -1226,9 +1243,9 @@ bool ScriptCompiler::postUpdateJump(BaseScript * ptr)
 	}
 	else
 	{
-		p->lineId = atoi(p->chache.c_str());
+		p->lineId = _wtoi(p->chache.c_str());
 	}
-	p->chache = "";
+	p->chache = L"";
 	return true;
 }
 
@@ -1243,9 +1260,9 @@ bool ScriptCompiler::postUpdateIfDoJump(BaseScript * ptr)
 	}
 	else
 	{
-		p->lineId = atoi(p->chache.c_str());
+		p->lineId = _wtoi(p->chache.c_str());
 	}
-	p->chache = "";
+	p->chache = L"";
 	return true;
 	
 }
@@ -1261,20 +1278,20 @@ bool ScriptCompiler::postUpdateChangeScriptEntryPoint(BaseScript * ptr)
 	}
 	else
 	{
-		p->lineId = atoi(p->chache.c_str());
+		p->lineId = _wtoi(p->chache.c_str());
 	}
-	p->chache = "";
+	p->chache = L"";
 
 	return true;
 }
 
-int ScriptCompiler::convertMarkerToLine(std::string marker)
+int ScriptCompiler::convertMarkerToLine(std::wstring marker)
 {
 	
 	if (markers.find(marker) == markers.end())
 	{
 		// error
-		printf("Error! [Line: %i] Undefined marker reference: (%s)", line, marker.c_str());
+		printf("Error! [Line: %i] Undefined marker reference: (%ws)", line, marker.c_str());
 		error = true;
 	}
 

@@ -32,7 +32,7 @@ class ResourseLoader
 {
 public:
 
-	std::map<std::string, ModelDescriptor *>::iterator pointer;
+	std::map<std::wstring, ModelDescriptor *>::iterator pointer;
 
 	std::string task = "null";
 

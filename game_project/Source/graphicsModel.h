@@ -30,7 +30,7 @@ public:
 	// Descriptor status
 	modelStatus::ModelStatus status = modelStatus::notAssigned;
 	std::string pathToFile = "";
-	std::string name = "";
+	std::wstring name = L"";
 	bool priorityLoad = false;
 
 };

@@ -155,6 +155,9 @@
     <ClInclude Include="Source\item.h">
       <Filter>Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Source\convertUtils.h">
+      <Filter>ScriptEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\Scripts\Test\Test.txt">

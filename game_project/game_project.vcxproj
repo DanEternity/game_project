@@ -243,6 +243,7 @@
   <ItemGroup>
     <ClInclude Include="Source\adventureData.h" />
     <ClInclude Include="Source\baseObject.h" />
+    <ClInclude Include="Source\convertUtils.h" />
     <ClInclude Include="Source\enviroment.h" />
     <ClInclude Include="Source\envUtils.h" />
     <ClInclude Include="Source\game.h" />

@@ -73,7 +73,7 @@ public:
 	int rarity;
 	int itemId;
 	itemType::ItemType itemType;
-	std::string name;
+	std::wstring name;
 	Item()
 	{
 		itemType = itemType::null;

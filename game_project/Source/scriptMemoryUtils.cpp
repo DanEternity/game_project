@@ -1,6 +1,7 @@
 #include "scriptMemoryUtils.h"
+#include "convertUtils.h"
 
-RETURN_CODE getMemoryCellFromExternalTable(std::string tableID, std::string rowID, BaseObject ** dst)
+RETURN_CODE getMemoryCellFromExternalTable(std::wstring tableID, std::wstring rowID, BaseObject ** dst)
 {
 
 	if (dst == NULL)
@@ -21,7 +22,7 @@ RETURN_CODE getMemoryCellFromExternalTable(std::string tableID, std::string rowI
 	return RETURN_CODE(memoryUtil::ok);
 }
 
-RETURN_CODE putMemoryCellToExternalTable(std::string tableID, std::string rowID, BaseObject * src)
+RETURN_CODE putMemoryCellToExternalTable(std::wstring tableID, std::wstring rowID, BaseObject * src)
 {
 	if (src == NULL)
 		return RETURN_CODE(memoryUtil::error | memoryUtil::invalidSource);
@@ -46,7 +47,7 @@ RETURN_CODE putMemoryCellToExternalTable(std::string tableID, std::string rowID,
 	return RETURN_CODE(code);
 }
 
-RETURN_CODE getMemoryCellFromLocalMemory(LocalMemory * mem, std::string rowID, BaseObject ** dst)
+RETURN_CODE getMemoryCellFromLocalMemory(LocalMemory * mem, std::wstring rowID, BaseObject ** dst)
 {
 
 	if (dst == NULL)
@@ -62,7 +63,7 @@ RETURN_CODE getMemoryCellFromLocalMemory(LocalMemory * mem, std::string rowID, B
 	return RETURN_CODE(memoryUtil::ok);
 }
 
-RETURN_CODE putMemoryCellToLocalMemory(LocalMemory * mem, std::string rowID, BaseObject * src)
+RETURN_CODE putMemoryCellToLocalMemory(LocalMemory * mem, std::wstring rowID, BaseObject * src)
 {
 
 	if (src == NULL)
@@ -83,22 +84,22 @@ RETURN_CODE putMemoryCellToLocalMemory(LocalMemory * mem, std::string rowID, Bas
 	return RETURN_CODE(code);
 }
 
-RETURN_CODE convertToString(BaseObject * src, std::string & dst)
+RETURN_CODE convertToString(BaseObject * src, std::wstring & dst)
 {
 
 	switch (src->objectType)
 	{
 	case objectType::integer:
-		dst = std::to_string(static_cast<IntObject*>(src)->value);
+		dst = std::to_wstring(static_cast<IntObject*>(src)->value);
 		break;
 	case objectType::string:
 		dst = static_cast<StringObject*>(src)->value;
 		break;
 	case objectType::real:
-		dst = std::to_string(static_cast<FloatObject*>(src)->value);
+		dst = std::to_wstring(static_cast<FloatObject*>(src)->value);
 		break;
 	case objectType::boolean:
-		dst = std::to_string(static_cast<BooleanObject*>(src)->value);
+		dst = std::to_wstring(static_cast<BooleanObject*>(src)->value);
 		break;
 	default:
 	{
@@ -111,21 +112,21 @@ RETURN_CODE convertToString(BaseObject * src, std::string & dst)
 	return RETURN_CODE(memoryUtil::ok);
 }
 
-RETURN_CODE getMemoryCellFromGameEnviroment(std::string variableName, BaseObject ** dst)
+RETURN_CODE getMemoryCellFromGameEnviroment(std::wstring variableName, BaseObject ** dst)
 {
 
 	return RETURN_CODE(memoryUtil::error);
 }
 
-RETURN_CODE putMemoryCellToGameEnviroment(std::string veriableName, BaseObject * src)
+RETURN_CODE putMemoryCellToGameEnviroment(std::wstring veriableName, BaseObject * src)
 {
 
 	return RETURN_CODE(memoryUtil::error);
 }
 
-RETURN_CODE getObjectName(BaseObject * src, std::string & dst)
+RETURN_CODE getObjectName(BaseObject * src, std::wstring & dst)
 {
-	dst = "NOT IMPLEMENTED";
+	dst = L"NOT IMPLEMENTED";
 	return RETURN_CODE(memoryUtil::ok);
 }
 
@@ -172,7 +173,7 @@ RETURN_CODE replaceValue(BaseObject * src, BaseObject ** dst)
 	return RETURN_CODE(memoryUtil::ok);
 }
 
-RETURN_CODE getMemoryCell(std::string queryString, BaseObject ** dst, LocalMemory * localMem)
+RETURN_CODE getMemoryCell(std::wstring queryString, BaseObject ** dst, LocalMemory * localMem)
 {
 
 	try
@@ -192,7 +193,7 @@ RETURN_CODE getMemoryCell(std::string queryString, BaseObject ** dst, LocalMemor
 
 		}
 
-		if (queryString.find_first_of("EXT:", 0) != std::string::npos)
+		if (queryString.find_first_of(L"EXT:", 0) != std::wstring::npos)
 		{
 			// external table parse
 			// 
@@ -202,9 +203,9 @@ RETURN_CODE getMemoryCell(std::string queryString, BaseObject ** dst, LocalMemor
 
 			int pos = queryString.find_first_of(':', 4);
 
-			std::string tableId = queryString.substr(4, pos - 4);
+			std::wstring tableId = queryString.substr(4, pos - 4);
 
-			std::string rowId = queryString.substr(pos+1, queryString.size() - pos - 1);
+			std::wstring rowId = queryString.substr(pos+1, queryString.size() - pos - 1);
 
 			return RETURN_CODE(getMemoryCellFromExternalTable(tableId, rowId, dst));
 		}
@@ -221,7 +222,7 @@ RETURN_CODE getMemoryCell(std::string queryString, BaseObject ** dst, LocalMemor
 	return RETURN_CODE(memoryUtil::undefined);
 }
 
-RETURN_CODE putMemoryCell(std::string queryString, BaseObject * src, LocalMemory * localMem)
+RETURN_CODE putMemoryCell(std::wstring queryString, BaseObject * src, LocalMemory * localMem)
 {
 	try
 	{
@@ -240,7 +241,7 @@ RETURN_CODE putMemoryCell(std::string queryString, BaseObject * src, LocalMemory
 
 		}
 
-		if (queryString.find_first_of("EXT:", 0) != std::string::npos)
+		if (queryString.find_first_of(L"EXT:", 0) != std::wstring::npos)
 		{
 			// external table
 			// need parse
@@ -250,9 +251,9 @@ RETURN_CODE putMemoryCell(std::string queryString, BaseObject * src, LocalMemory
 
 			int pos = queryString.find_first_of(':', 4);
 
-			std::string tableId = queryString.substr(4, pos - 4);
+			std::wstring tableId = queryString.substr(4, pos - 4);
 
-			std::string rowId = queryString.substr(pos + 1, queryString.size() - pos - 1);
+			std::wstring rowId = queryString.substr(pos + 1, queryString.size() - pos - 1);
 
 			return RETURN_CODE(putMemoryCellToExternalTable(tableId, rowId, src));
 		}
@@ -269,16 +270,29 @@ RETURN_CODE putMemoryCell(std::string queryString, BaseObject * src, LocalMemory
 	return RETURN_CODE(memoryUtil::undefined);
 }
 
-RETURN_CODE convertConstToObject(std::string src, BaseObject ** dst)
+RETURN_CODE convertConstToObject(std::wstring src, BaseObject ** dst)
 {
 
 	try
 	{
 
 		// try to convert to int
-		char *endptr;
-		int valInt = std::strtol(src.c_str(), &endptr, 10);
-		if (*endptr == '\0')
+		bool correct = false;
+		int valInt = 0;
+		try
+		{
+			valInt = _wtoi(src.c_str());
+			std::wstring test = std::to_wstring(valInt);
+			if (test == src)
+				correct = true;
+		}
+		catch (const std::exception&)
+		{
+			
+		}
+		
+		
+		if (correct)
 		{
 			// src is a number
 			IntObject * ptr = new IntObject();
@@ -289,8 +303,23 @@ RETURN_CODE convertConstToObject(std::string src, BaseObject ** dst)
 		}
 
 		// try to convert to float
-		float valFloat = std::strtof(src.c_str(), &endptr);
-		if (*endptr == '\0')
+		float valFloat;
+		try
+		{
+			src = L"2.51";
+			float a = 0;
+			a = _wtof(src.c_str());
+			valFloat = _wtof(src.c_str());
+		//	std::wstring test = std::to_wstring(valFloat);
+		//	if (test == src)
+			if (isUfloat(src.c_str()));
+				correct = true;
+		}
+		catch (const std::exception&)
+		{
+
+		}
+		if (correct)
 		{
 			// src is a float number
 			FloatObject * ptr = new FloatObject();
@@ -301,7 +330,7 @@ RETURN_CODE convertConstToObject(std::string src, BaseObject ** dst)
 		}
 
 		// convert to boolean
-		if (src == "true" || src == "True" || src == "TRUE")
+		if (src == L"true" || src == L"True" || src == L"TRUE")
 		{
 			// is a boolean (true)
 			BooleanObject * ptr = new BooleanObject();
@@ -311,7 +340,7 @@ RETURN_CODE convertConstToObject(std::string src, BaseObject ** dst)
 			return RETURN_CODE(memoryUtil::ok);
 		}
 		else
-			if (src == "false" || src == "False" || src == "FALSE")
+			if (src == L"false" || src == L"False" || src == L"FALSE")
 			{
 				// is a boolean (false)
 				BooleanObject * ptr = new BooleanObject();

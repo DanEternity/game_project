@@ -19,7 +19,7 @@ public:
 class StringObject : public BaseObject
 {
 public:
-	std::string value;
+	std::wstring value;
 	StringObject()
 	{
 		this->objectType = objectType::string;
@@ -49,7 +49,7 @@ public:
 class ExternalTable : public BaseObject
 {
 public:
-	std::map<std::string, BaseObject*> p_memory;
+	std::map<std::wstring, BaseObject*> p_memory;
 	ExternalTable()
 	{
 		this->objectType = objectType::externalTable;

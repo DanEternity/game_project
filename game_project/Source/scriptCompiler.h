@@ -69,36 +69,36 @@ class ScriptCompiler
 public:
 
 	// Compile strings to object code. Return true if successful. Use getScriptDescriptor to get result
-	bool compileScriptText(std::vector<std::string> src);
+	bool compileScriptText(std::vector<std::wstring> src);
 
 	// Return compiled script descriptor
 	ScriptDescriptor * getScriptDescriptor();
 
 
-	void setFamilyId(std::string id);
+	void setFamilyId(std::wstring id);
 
 private:
 
-	std::string errText;
+	std::wstring errText;
 	bool error = false;
 
 	int line = 0;
 	int idx = 0;
 
-	std::string selection = "";
+	std::wstring selection = L"";
 	ScriptDescriptor * p_s = NULL;
 	syntaxType::sType tp = syntaxType::none;
 	bool emptyLine = true;
 	int commandsCount;
 
 	// reference to script descriptor group
-	std::string familyId = "";
+	std::wstring familyId = L"";
 
 	// local ext reference
-	std::map<std::string, std::string> localExtReference;
+	std::map<std::wstring, std::wstring> localExtReference;
 
 	// marker table
-	std::map<std::string, int> markers;
+	std::map<std::wstring, int> markers;
 
 	// util variables
 	int parameterCount;
@@ -110,21 +110,21 @@ private:
 	void postProcessCommands();
 
 	// fragment parser
-	bool parseDirecive(std::string s);
-	bool parseCommand(std::string s);
-	bool parseMarker(std::string s);
+	bool parseDirecive(std::wstring s);
+	bool parseCommand(std::wstring s);
+	bool parseMarker(std::wstring s);
 
 	// command parsers
-	bool parsePut(std::string s);
-	bool parseText(std::string s);
-	bool parseTerminate(std::string s);
-	bool parseJump(std::string s);
-	bool parseChoose(std::string s);
-	bool parseAriphmetic(std::string s);
-	bool parseChangeScriptEntryPoint(std::string s);
-	bool parseSpendTime(std::string s);
+	bool parsePut(std::wstring s);
+	bool parseText(std::wstring s);
+	bool parseTerminate(std::wstring s);
+	bool parseJump(std::wstring s);
+	bool parseChoose(std::wstring s);
+	bool parseAriphmetic(std::wstring s);
+	bool parseChangeScriptEntryPoint(std::wstring s);
+	bool parseSpendTime(std::wstring s);
 
-	ComparatorElement parseCondition(std::string s);
+	ComparatorElement parseCondition(std::wstring s);
 
 	// post update
 	bool postUpdateChoose(BaseScript * ptr);
@@ -132,6 +132,6 @@ private:
 	bool postUpdateIfDoJump(BaseScript * ptr);
 	bool postUpdateChangeScriptEntryPoint(BaseScript * ptr);
 
-	int convertMarkerToLine(std::string marker);
+	int convertMarkerToLine(std::wstring marker);
 };
 
