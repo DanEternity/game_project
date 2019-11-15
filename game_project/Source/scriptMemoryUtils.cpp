@@ -306,12 +306,7 @@ RETURN_CODE convertConstToObject(std::wstring src, BaseObject ** dst)
 		float valFloat;
 		try
 		{
-			src = L"2.51";
-			float a = 0;
-			a = _wtof(src.c_str());
-			valFloat = _wtof(src.c_str());
-		//	std::wstring test = std::to_wstring(valFloat);
-		//	if (test == src)
+			valFloat = std::stof(src.c_str());
 			if (isUfloat(src.c_str()));
 				correct = true;
 		}

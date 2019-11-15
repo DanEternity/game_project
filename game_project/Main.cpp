@@ -8,8 +8,6 @@
 
 int main()
 {
-	setlocale(LC_ALL, "Russian");
-	//printf("дюсм/n ");
 	// Create game enviroment
 	initEnviroment();
 
