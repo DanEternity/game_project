@@ -114,8 +114,10 @@ RETURN_CODE convertToString(BaseObject * src, std::wstring & dst)
 
 RETURN_CODE getMemoryCellFromGameEnviroment(std::wstring variableName, BaseObject ** dst)
 {
-
-	return RETURN_CODE(memoryUtil::error);
+	auto code = accessGameEnviroment(variableName, dst);
+	if (code == memoryUtil::ok)
+		(*dst)->memoryControl = memoryControl::singleUse;
+	return RETURN_CODE(code);
 }
 
 RETURN_CODE putMemoryCellToGameEnviroment(std::wstring veriableName, BaseObject * src)
@@ -422,5 +424,27 @@ RETURN_CODE copyObject(BaseObject * src, BaseObject ** dst)
 	}
 
 	return RETURN_CODE(memoryUtil::undefined);
+}
+
+RETURN_CODE accessGameEnviroment(std::wstring targetId, BaseObject ** dst)
+{
+	try
+	{
+		uint32_t hash = getHash(targetId.c_str());
+
+		auto target = _getEnviromentVariable(hash);
+
+		if (target == NULL)
+			return RETURN_CODE(memoryUtil::notFound);
+
+		*dst = target;
+
+	}
+	catch (const std::exception&)
+	{
+		return RETURN_CODE(memoryUtil::error);
+	}
+
+	return RETURN_CODE(memoryUtil::ok);
 }
 

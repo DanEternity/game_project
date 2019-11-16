@@ -4,6 +4,9 @@
 #include "baseObject.h"
 #include "scriptDescriptor.h"
 #include "enviroment.h"
+#include "stringHashGenerator.h"
+#include "enviromentVariablesAccess.h"
+
 
 namespace memoryUtil
 {
@@ -60,3 +63,4 @@ RETURN_CODE checkSourceMemoryStatus(BaseObject * src);
 
 RETURN_CODE copyObject(BaseObject * src, BaseObject ** dst);
 
+RETURN_CODE accessGameEnviroment(std::wstring targetId, BaseObject ** dst);

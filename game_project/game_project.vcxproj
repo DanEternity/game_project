@@ -226,6 +226,7 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Source\enviroment.cpp" />
+    <ClCompile Include="Source\enviromentVariablesAccess.cpp" />
     <ClCompile Include="Source\envUtils.cpp" />
     <ClCompile Include="Source\game.cpp" />
     <ClCompile Include="Source\loader.cpp" />
@@ -245,6 +246,7 @@
     <ClInclude Include="Source\baseObject.h" />
     <ClInclude Include="Source\convertUtils.h" />
     <ClInclude Include="Source\enviroment.h" />
+    <ClInclude Include="Source\enviromentVariablesAccess.h" />
     <ClInclude Include="Source\envUtils.h" />
     <ClInclude Include="Source\game.h" />
     <ClInclude Include="Source\gamedata.h" />
@@ -265,6 +267,7 @@
     <ClInclude Include="Source\scriptTypes.h" />
     <ClInclude Include="Source\scriptUtilsUI.h" />
     <ClInclude Include="Source\ShipModulesUI.h" />
+    <ClInclude Include="Source\stringHashGenerator.h" />
     <ClInclude Include="Source\TableInventory.h" />
     <ClInclude Include="Source\uiEventHandlers.h" />
     <ClInclude Include="Source\valueObjects.h" />

@@ -296,7 +296,7 @@ std::wstring ScriptSystem::p_convertValueToString(std::wstring src)
 	// Game value or incorrect query
 
 	BaseObject * target;
-	auto code = getMemoryCellFromGameEnviroment(src.substr(1, src.size() - 2), &target);
+	auto code = getMemoryCellFromGameEnviroment(src.substr(1, src.size() - 1), &target);
 
 	if (code != memoryUtil::ok)
 		return L"NULL";
@@ -305,6 +305,9 @@ std::wstring ScriptSystem::p_convertValueToString(std::wstring src)
 
 	if (code != memoryUtil::ok)
 		return L"NULL";
+
+	if ((target->memoryControl | memoryControl::singleUse) != 0)
+		delete target;
 
 	return result;
 }
@@ -564,6 +567,7 @@ void ScriptSystem::p_processText(TextScript * command)
 		text = p_convertText(command->text);
 		p_textChache = text;
 		p_chached = true;
+		gEnv->scripts.buttonPressed = false;
 		gEnv->scripts.scriptGui.get<tgui::TextBox>(L"scriptTextMessage")->setVisible(true);
 		gEnv->scripts.scriptGui.get<tgui::TextBox>(L"scriptTextMessage")->setText(text);
 		gEnv->scripts.scriptGui.get<tgui::Button>(L"ScriptButtonNext")->setVisible(true);

@@ -12,7 +12,15 @@ public:
 	int value;
 	IntObject()
 	{
+		BaseObject();
 		this->objectType = objectType::integer;
+	}
+
+	IntObject(int value)
+	{
+		BaseObject();
+		this->objectType = objectType::integer;
+		this->value = value;
 	}
 };
 

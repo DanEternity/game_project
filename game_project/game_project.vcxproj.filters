@@ -75,6 +75,9 @@
     <ClCompile Include="Source\ShipModulesUI.cpp">
       <Filter>Заголовочные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Source\enviromentVariablesAccess.cpp">
+      <Filter>ScriptEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\game.h">
@@ -156,6 +159,12 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Source\convertUtils.h">
+      <Filter>ScriptEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\stringHashGenerator.h">
+      <Filter>ScriptEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\enviromentVariablesAccess.h">
       <Filter>ScriptEngine</Filter>
     </ClInclude>
   </ItemGroup>
