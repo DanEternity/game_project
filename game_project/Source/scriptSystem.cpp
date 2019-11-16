@@ -573,8 +573,8 @@ void ScriptSystem::p_processText(TextScript * command)
 		gEnv->scripts.scriptGui.get<tgui::Button>(L"ScriptButtonNext")->setVisible(true);
 		gEnv->scripts.scriptGui.get<tgui::Button>(L"ScriptButtonNext")->setEnabled(true);
 		//gEnv->scripts.scriptGui.get<tgui::Button>(L"ScriptButtonNext")->setText(text);
-		if (true)
-			printf("TEST: %s\n", text.c_str());
+		if (false)
+			wprintf(L"TEST: %ws \n", text.c_str());
 	}
 	else
 		text = p_textChache;
@@ -587,7 +587,7 @@ void ScriptSystem::p_processText(TextScript * command)
 
 	if (gEnv->scripts.buttonPressed)
 	{
-
+		p_chached = false;
 		p_blockGame_WaitForReaction(false);
 		p_s = p_sysStatus::processingScript;
 		gEnv->scripts.scriptGui.get<tgui::TextBox>(L"scriptTextMessage")->setVisible(false);

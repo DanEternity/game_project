@@ -75,7 +75,7 @@ bool loadTextureToModelDescriptor(std::wstring name)
 				// Loading successfull
 				p->status = modelStatus::loaded;
 				if (debugMode)
-					printf("Debug: Loaded texture -> %s \n", p->name.c_str());
+					printf("Debug: Loaded texture -> %ws \n", p->name.c_str());
 				return true;
 			}
 		}
