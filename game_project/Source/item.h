@@ -48,8 +48,8 @@ namespace equipmentType {
 namespace moduleSlot {
 	enum ModuleSlotType
 	{
-		null,
-		core,
+		null = -1,
+		core = 0,
 		hyperdrive,
 		engine,
 		system,
@@ -63,6 +63,10 @@ namespace moduleSlot {
 		medium,
 		large,
 		huge,
+	};
+	struct ModuleSlot {
+		ModuleSlotType type;
+		ModuleSlotSize size;
 	};
 }
 

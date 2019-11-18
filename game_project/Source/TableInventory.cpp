@@ -1,19 +1,19 @@
 #include "TableInventory.h"
 
-void TableInventory::addItem(std::wstring obj)
+void TableInventory::addItem(Item* obj)
 {
 	int findNext;
-	for (findNext = 0; findNext < item.size(); findNext++)
+	for (findNext = 0; findNext < vecInventoryItem.size(); findNext++)
 	{
-		if (*item[findNext]->content == L"")
+		if (vecInventoryItem[findNext]->cellItem == nullptr)
 		{
 			break;
 		}
 	}
-	*item[findNext]->content = obj;
+	vecInventoryItem[findNext]->cellItem = obj;
 	tgui::Button::Ptr wid;
-	wid = item[findNext]->panelButton;
-	wid->setText(obj);
+	wid = vecInventoryItem[findNext]->panelButton;
+	wid->setText(obj->name);
 }
 
 TableInventory::TableInventory()
@@ -21,16 +21,16 @@ TableInventory::TableInventory()
 	scrollablePanel = tgui::ScrollablePanel::create();
 	gEnv->globalGui.add(scrollablePanel, "inventoryPanel");
 	scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-	scrollablePanel->setPosition("10%", "80%");
-	scrollablePanel->setSize(550, 100);
+	scrollablePanel->setPosition("10%", "60%");
+	scrollablePanel->setSize(515, 155);
 	for (int i = 0; i < 30; i++)
 	{
-		InventoryItem * invitem = new InventoryItem(i, this, L"null");
-		item.push_back(invitem);
+		InventoryItem * invitem = new InventoryItem(i, this);
+		vecInventoryItem.push_back(invitem);
 	}
 }
 
-InventoryItem::InventoryItem(int position, TableInventory* inv, std::wstring content)
+InventoryItem::InventoryItem(int position, TableInventory* inv)
 {
 	positionX = position % cellsize;
 	positionY = position / cellsize;
@@ -42,28 +42,27 @@ InventoryItem::InventoryItem(int position, TableInventory* inv, std::wstring con
 	panelButton->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	panelButton->setText(L"");
 	panelButton->connect("MouseReleased", InventoryItemClicked, &(*inv), &(*this));
-	this->content = new std::wstring(panelButton->getText());
 }
 
 void InventoryItemClicked(TableInventory * inv, InventoryItem *item, tgui::Widget::Ptr widget, const std::string & signalName)
 {
 	if (!inv->itemTransfering)
 	{
-		if (*item->content != L"")
+		if (item->cellItem != nullptr)
 		{
-			inv->itemWhichTransfer = *item->content;
+			inv->itemWhichTransfer = item->cellItem;
 			widget->cast<tgui::Button>()->setText(L"");
-			*item->content = L"";
+			item->cellItem = nullptr;
 			inv->itemTransfering = true;
 		}
 	}
 	else
 	{
-		if (*item->content == L"")
+		if (item->cellItem == nullptr)
 		{
-			widget->cast<tgui::Button>()->setText(inv->itemWhichTransfer);
-			*item->content = inv->itemWhichTransfer;
-			inv->itemWhichTransfer = L"";
+			widget->cast<tgui::Button>()->setText(inv->itemWhichTransfer->name);
+			item->cellItem = inv->itemWhichTransfer;
+			inv->itemWhichTransfer = nullptr;
 			inv->itemTransfering = false;
 		}
 	}
