@@ -242,6 +242,7 @@
     <ClCompile Include="Source\uiEventHandlers.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\accountData.h" />
     <ClInclude Include="Source\adventureData.h" />
     <ClInclude Include="Source\baseObject.h" />
     <ClInclude Include="Source\convertUtils.h" />
@@ -257,6 +258,7 @@
     <ClInclude Include="Source\mainMenu.h" />
     <ClInclude Include="Source\menuData.h" />
     <ClInclude Include="Source\menuOverlay.h" />
+    <ClInclude Include="Source\playerData.h" />
     <ClInclude Include="Source\preload.h" />
     <ClInclude Include="Source\scriptCompiler.h" />
     <ClInclude Include="Source\scriptDescriptor.h" />

@@ -4,6 +4,8 @@
 #include <TGUI\TGUI.hpp>
 #include <vector>
 #include "adventureData.h"
+#include "accountData.h"
+#include "playerData.h"
 
 namespace menuState
 {
@@ -107,5 +109,11 @@ public:
 
 	//adventure section
 	AdnvetureData adventureData;
+
+	//account data / statistics
+	AccountData account;
+
+	//player data / inventory / common player data
+	PlayerData player;
 };
 
