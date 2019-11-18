@@ -336,11 +336,14 @@ void createMenuButtons()
 	/*endregion*/
 
 	TableInventory* tblinv = new TableInventory();
-	tblinv->addItem(L"Item 1");
-	tblinv->addItem(L"Item 2");
-	tblinv->addItem(L"Item 3");
+	Item* it1 = new Item();
+	it1->name = L"Item1";
+	tblinv->addItem(it1);
 	UIShipModules *uism = new UIShipModules(UIShipModules::shipType::eagle, 2);
-
+	Module* md1 = new Module();
+	md1->slot = moduleSlot::core;
+	md1->name = L"supercore";
+	uism->changeModule(md1, 0);
 }
 
 void startClick()
