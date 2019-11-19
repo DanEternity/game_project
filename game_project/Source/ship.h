@@ -13,6 +13,7 @@
 
 class Ship : BaseObject
 {
+public:
 
 	// links section
 

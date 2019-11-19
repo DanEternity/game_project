@@ -188,6 +188,9 @@
     <ClInclude Include="Source\shipManagement.h">
       <Filter>Adventure\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Source\uiData.h">
+      <Filter>Enviroment</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\Scripts\Test\Test.txt">

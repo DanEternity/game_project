@@ -2,7 +2,7 @@
 
 #include "enviroment.h"
 #include "Item.h"
-
+/*
 class InventoryItem;
 class TableInventory;
 
@@ -31,3 +31,10 @@ public:
 };
 
 void InventoryItemClicked(TableInventory* inv, InventoryItem *item, tgui::Widget::Ptr widget, const std::string& signalName);
+*/
+
+
+void BuildInventoryUI(int cellSize);
+void DeleteInventoryUI();
+
+void IntentoryResponseSignal(int cellId, std::string inventoryId, tgui::Widget::Ptr widget, const std::string& signalName);

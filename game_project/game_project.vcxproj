@@ -273,6 +273,7 @@
     <ClInclude Include="Source\shipModulesUI.h" />
     <ClInclude Include="Source\stringHashGenerator.h" />
     <ClInclude Include="Source\tableInventory.h" />
+    <ClInclude Include="Source\uiData.h" />
     <ClInclude Include="Source\uiEventHandlers.h" />
     <ClInclude Include="Source\valueObjects.h" />
   </ItemGroup>

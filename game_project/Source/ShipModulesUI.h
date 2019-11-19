@@ -2,7 +2,7 @@
 
 #include "enviroment.h"
 #include "item.h"
-
+/*
 class UIShipModules
 {
 public:
@@ -24,7 +24,9 @@ public:
 	int countBaseShipModules = 6;
 	std::vector<Module*> modulesItem;
 };
+*/
 
+void BuildShipSchemeUI(int moduleSizeUI = 45);
 
-void UIbuttonWasClicked(UIShipModules * ui, int id, tgui::Widget::Ptr widget, const std::string& signalName);
-void rmPanelClicked(UIShipModules * ui, int id, tgui::Widget::Ptr widget, const std::string& signalName);
+void UIbuttonWasClicked(int id, tgui::Widget::Ptr widget, const std::string& signalName);
+void rmPanelClicked(int id, tgui::Widget::Ptr widget, const std::string& signalName);

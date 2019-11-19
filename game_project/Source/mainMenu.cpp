@@ -334,7 +334,7 @@ void createMenuButtons()
 	testButton2->connect("MouseReleased", btnNextPressed);	
 	gEnv->scripts.scriptGui.add(testButton2, "ScriptButtonNext");
 	/*endregion*/
-
+	/*
 	TableInventory* tblinv = new TableInventory();
 	Item* it1 = new Item();
 	it1->name = L"Item1";
@@ -344,6 +344,28 @@ void createMenuButtons()
 	md1->slot = moduleSlot::core;
 	md1->name = L"supercore";
 	uism->changeModule(md1, 0);
+	*/
+
+	gEnv->game.player.inventory.resize(50, nullptr);
+	gEnv->game.player.inventory[2] = new Module();
+	gEnv->game.player.inventory[2]->name = L"roflanEbalo";
+	gEnv->game.player.inventory[3] = new Module();
+	gEnv->game.player.inventory[3]->name = L"roflanContent";
+	gEnv->game.player.inventory[5] = new Module();
+	gEnv->game.player.inventory[5]->name = L"roflanGorit";
+
+	BuildInventoryUI(10);
+
+	gEnv->game.player.ship = new Ship();
+
+	gEnv->game.player.ship->slots.resize(5, moduleSlot::ModuleSlot());
+	gEnv->game.player.ship->modules.resize(5, nullptr);
+	gEnv->game.player.ship->modules[1] = new Module();
+	gEnv->game.player.ship->modules[1]->name = L"roflanPomoika";
+
+	BuildShipSchemeUI();
+
+
 }
 
 void startClick()

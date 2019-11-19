@@ -1,5 +1,5 @@
 #include "tableInventory.h"
-
+/*
 void TableInventory::addItem(Item* obj)
 {
 	int findNext;
@@ -66,4 +66,76 @@ void InventoryItemClicked(TableInventory * inv, InventoryItem *item, tgui::Widge
 			inv->itemTransfering = false;
 		}
 	}
+}*/
+
+void BuildInventoryUI(int cellSize)
+{
+
+	tgui::ScrollablePanel::Ptr scrollablePanel = tgui::ScrollablePanel::create();
+	gEnv->globalGui.add(scrollablePanel, "inventoryPanel");
+	scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
+	scrollablePanel->setPosition("10%", "60%");
+	scrollablePanel->setSize(515, 155);
+	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
+	{
+
+		int positionX = i % cellSize;
+		int positionY = i / cellSize;
+		const int number = i;
+		tgui::Button::Ptr button = tgui::Button::create();
+
+		scrollablePanel->add(button, "InventoryCell"+ std::to_string(i));
+
+		button->setSize(45, 40);
+		button->setPosition(5 + positionX * 50, 10 + positionY * 50);
+		button->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+		if (gEnv->game.player.inventory[i] != NULL)
+			button->setText(gEnv->game.player.inventory[i]->name);
+		else
+			button->setText(L"");
+
+		button->connect("MouseReleased", IntentoryResponseSignal, number, std::string("ShipInventory"));
+
+	}
+
+}
+
+void DeleteInventoryUI()
+{
+}
+
+void IntentoryResponseSignal( int cellId, std::string inventoryId, tgui::Widget::Ptr widget, const std::string & signalName)
+{
+	
+	if (gEnv->game.ui.selected != -1)
+	{
+		// swap
+
+		std::swap(gEnv->game.player.inventory[cellId], gEnv->game.player.inventory[gEnv->game.ui.selected]);
+		
+
+		// update cell images
+		tgui::ScrollablePanel::Ptr panel = gEnv->globalGui.get<tgui::ScrollablePanel>("inventoryPanel");
+
+		if (gEnv->game.player.inventory[cellId] != NULL)
+			panel->get<tgui::Button>("InventoryCell" + std::to_string(cellId))->setText(gEnv->game.player.inventory[cellId]->name);
+		else
+			panel->get<tgui::Button>("InventoryCell" + std::to_string(cellId))->setText(L"");
+
+		if (gEnv->game.player.inventory[gEnv->game.ui.selected] != NULL)
+			panel->get<tgui::Button>("InventoryCell" + std::to_string(gEnv->game.ui.selected))->setText(gEnv->game.player.inventory[gEnv->game.ui.selected]->name);
+		else
+			panel->get<tgui::Button>("InventoryCell" + std::to_string(gEnv->game.ui.selected))->setText(L"");
+
+		gEnv->game.ui.selected = -1;
+	}
+	else
+	{
+
+		if (gEnv->game.player.inventory[cellId] != NULL)
+		{
+			gEnv->game.ui.selected = cellId;
+		}
+	}
+
 }

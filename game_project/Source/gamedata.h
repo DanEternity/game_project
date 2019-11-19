@@ -6,6 +6,7 @@
 #include "adventureData.h"
 #include "accountData.h"
 #include "playerData.h"
+#include "uiData.h"
 
 namespace menuState
 {
@@ -115,5 +116,8 @@ public:
 
 	//player data / inventory / common player data
 	PlayerData player;
+
+	// ui status / variables
+	UIData ui;
 };
 
