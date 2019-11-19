@@ -347,10 +347,14 @@ void createMenuButtons()
 	*/
 
 	gEnv->game.player.inventory.resize(50, nullptr);
+
 	gEnv->game.player.inventory[2] = new Module();
 	gEnv->game.player.inventory[2]->name = L"roflanEbalo";
-	gEnv->game.player.inventory[3] = new Module();
-	gEnv->game.player.inventory[3]->name = L"roflanContent";
+	gEnv->game.player.inventory[2]->itemType = itemType::module;
+	static_cast<Module*>(gEnv->game.player.inventory[2])->slot = moduleSlot::engine;
+
+	gEnv->game.player.inventory[7] = new Module();
+	gEnv->game.player.inventory[7]->name = L"roflanContent";
 	gEnv->game.player.inventory[5] = new Module();
 	gEnv->game.player.inventory[5]->name = L"roflanGorit";
 
@@ -358,10 +362,14 @@ void createMenuButtons()
 
 	gEnv->game.player.ship = new Ship();
 
-	gEnv->game.player.ship->slots.resize(5, moduleSlot::ModuleSlot());
+	//gEnv->game.player.ship->slots.resize(5, moduleSlot::ModuleSlot());
 	gEnv->game.player.ship->modules.resize(5, nullptr);
+
 	gEnv->game.player.ship->modules[1] = new Module();
 	gEnv->game.player.ship->modules[1]->name = L"roflanPomoika";
+	//gEnv->game.player.ship->slots[1].type = moduleSlot::engine;
+	gEnv->game.player.ship->modules[1]->slot = moduleSlot::engine;
+	gEnv->game.player.ship->modules[1]->itemType = itemType::module;
 
 	BuildShipSchemeUI();
 

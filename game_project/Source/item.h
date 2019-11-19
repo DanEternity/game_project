@@ -14,6 +14,7 @@ namespace itemType {
 	{
 
 		null,
+		module = 1,
 
 	};
 } // itemType

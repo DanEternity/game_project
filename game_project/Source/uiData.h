@@ -8,5 +8,5 @@ class UIData
 {
 public:
 	int selected = -1;
-	int rmWasClicked = false;
+	bool rmWasClicked = false, tempAddPanelClicked = false;
 };
