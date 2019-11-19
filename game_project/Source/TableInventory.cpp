@@ -1,4 +1,4 @@
-#include "TableInventory.h"
+#include "tableInventory.h"
 
 void TableInventory::addItem(Item* obj)
 {

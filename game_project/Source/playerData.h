@@ -4,8 +4,17 @@
 // Player data
 //
 
+#include <vector>
+#include "ship.h"
+
 class PlayerData
 {
 public:
-	// Inventory intventory;
+	
+	// inventory // storage
+	std::vector<Item *> inventory;
+
+	// player ship
+	Ship * ship;
+
 };

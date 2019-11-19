@@ -28,6 +28,15 @@
     <Filter Include="GameMenu">
       <UniqueIdentifier>{5d62da6b-1187-4a9d-bb91-7e4e56181c55}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Adventure">
+      <UniqueIdentifier>{d9b42055-73de-404a-a000-a92776962c59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Adventure\UI">
+      <UniqueIdentifier>{2a3ca394-ba26-4db3-9526-1cdeec9f3873}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Adventure\Core">
+      <UniqueIdentifier>{17c0416a-a010-4ef1-8249-ea2e7f2f9302}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -63,20 +72,20 @@
     <ClCompile Include="Source\uiEventHandlers.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Source\TableInventory.cpp">
-      <Filter>Заголовочные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="Source\scriptUtilsUI.cpp">
       <Filter>ScriptEngine</Filter>
     </ClCompile>
     <ClCompile Include="Source\scriptCompiler.cpp">
       <Filter>ScriptEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ShipModulesUI.cpp">
-      <Filter>Заголовочные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="Source\enviromentVariablesAccess.cpp">
       <Filter>ScriptEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\shipModulesUI.cpp">
+      <Filter>Adventure\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\tableInventory.cpp">
+      <Filter>Adventure\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -137,17 +146,11 @@
     <ClInclude Include="Source\uiEventHandlers.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Source\TableInventory.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="Source\scriptUtilsUI.h">
       <Filter>ScriptEngine</Filter>
     </ClInclude>
     <ClInclude Include="Source\scriptCompiler.h">
       <Filter>ScriptEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ShipModulesUI.h">
-      <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="Source\scriptDescriptorGroups.h">
       <Filter>ScriptEngine</Filter>
@@ -172,6 +175,18 @@
     </ClInclude>
     <ClInclude Include="Source\accountData.h">
       <Filter>Enviroment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ship.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\shipModulesUI.h">
+      <Filter>Adventure\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\tableInventory.h">
+      <Filter>Adventure\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\shipManagement.h">
+      <Filter>Adventure\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
