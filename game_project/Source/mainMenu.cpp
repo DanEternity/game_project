@@ -1,6 +1,7 @@
 #include "mainMenu.h"
 #include "ShipModulesUI.h"
 #include "tableInventory.h"
+#include "personEquipmentUI.h"
 #include "envUtils.h"
 #include "scriptCompiler.h"
 #include <fstream>
@@ -371,8 +372,15 @@ void createMenuButtons()
 	gEnv->game.player.ship->modules[1]->slot = moduleSlot::engine;
 	gEnv->game.player.ship->modules[1]->itemType = itemType::module;
 
-	BuildShipSchemeUI();
+	BuildShipSchemeUI(50);
 
+	gEnv->game.player.crew = new Crew();
+
+	gEnv->game.player.crew->shipCrew.resize(5, nullptr);
+	gEnv->game.player.crew->shipCrew[0] = new Person();
+	gEnv->game.player.crew->shipCrew[0]->personEquipment.resize(7, nullptr);
+	
+	BuildPersonSchemeUI(50, 0);
 
 }
 

@@ -87,6 +87,9 @@
     <ClCompile Include="Source\tableInventory.cpp">
       <Filter>Adventure\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\personEquipmentUI.cpp">
+      <Filter>Adventure\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\game.h">
@@ -190,6 +193,15 @@
     </ClInclude>
     <ClInclude Include="Source\uiData.h">
       <Filter>Enviroment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\personEquipmentUI.h">
+      <Filter>Adventure\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\crew.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\person.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

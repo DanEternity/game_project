@@ -93,6 +93,7 @@ void BuildShipSchemeUI(int moduleSizeUI)
 		mainShipPanel->add(btn, "ShipSchemeModule" + std::to_string(i));
 		const int id = i;
 		btn->connect("RightMouseReleased", UIbuttonWasClicked, id);
+		btn->connect("MouseReleased", UIbuttonWasClicked, id);
 	}
 
 
@@ -100,8 +101,33 @@ void BuildShipSchemeUI(int moduleSizeUI)
 
 void UIbuttonWasClicked(const int id, tgui::Widget::Ptr widget, const std::string& signalName)
 {
-	/*if (signalName == "MouseReleased")
-		gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->setText(gEnv->scripts.scriptGui.get<tgui::TextBox>("scriptTextMessage")->getText());*/
+	if (signalName == "MouseReleased")
+	{
+		if (gEnv->game.ui.selected != -1)
+		{
+			if (static_cast<Module*>(gEnv->game.player.inventory[gEnv->game.ui.selected])->slot == gEnv->game.player.ship->modules[id]->slot)
+			{
+				Module* temp = static_cast<Module*>(gEnv->game.player.inventory[gEnv->game.ui.selected]);
+
+				gEnv->game.player.inventory[gEnv->game.ui.selected] = gEnv->game.player.ship->modules[id];
+				gEnv->game.player.ship->modules[id] = temp;
+
+				tgui::Panel::Ptr panel = gEnv->globalGui.get<tgui::Panel>("inventoryPanel");
+				tgui::Panel::Ptr panel2 = gEnv->globalGui.get<tgui::Panel>("ShipSchemeModulesPanel");
+
+				if (gEnv->game.player.inventory[gEnv->game.ui.selected] != NULL)
+					panel->get<tgui::Button>("InventoryCell" + std::to_string(gEnv->game.ui.selected))->setText(gEnv->game.player.inventory[gEnv->game.ui.selected]->name);
+				else
+					panel->get<tgui::Button>("InventoryCell" + std::to_string(id))->setText(L"");
+
+				if (gEnv->game.player.ship->modules[id] != NULL)
+					panel2->get<tgui::Button>("ShipSchemeModule" + std::to_string(id))->setText(gEnv->game.player.ship->modules[id]->name);
+				else
+					panel2->get<tgui::Button>("ShipSchemeModule" + std::to_string(id))->setText(L"");
+				gEnv->game.ui.selected = -1;
+			}
+		}
+	}
 	if (signalName == "RightMouseReleased" && !gEnv->game.ui.rmWasClicked)
 	{
 		//ui->activermModule = widget->cast<tgui::Button>()->getText();
@@ -208,15 +234,13 @@ void rmPanelChoosenAdded(const int id, const int module_id, tgui::Widget::Ptr wi
 	gEnv->game.player.inventory[id] = gEnv->game.player.ship->modules[module_id];
 	gEnv->game.player.ship->modules[module_id] = temp;
 
-	int notconstid = id;
-
 	tgui::Panel::Ptr panel = gEnv->globalGui.get<tgui::Panel>("inventoryPanel");
 	tgui::Panel::Ptr panel2 = gEnv->globalGui.get<tgui::Panel>("ShipSchemeModulesPanel");
 
-	if (gEnv->game.player.inventory[notconstid] != NULL)
-		panel->get<tgui::Button>("InventoryCell" + std::to_string(notconstid))->setText(gEnv->game.player.inventory[notconstid]->name);
+	if (gEnv->game.player.inventory[id] != NULL)
+		panel->get<tgui::Button>("InventoryCell" + std::to_string(id))->setText(gEnv->game.player.inventory[id]->name);
 	else
-		panel->get<tgui::Button>("InventoryCell" + std::to_string(notconstid))->setText(L"");
+		panel->get<tgui::Button>("InventoryCell" + std::to_string(id))->setText(L"");
 
 	if (gEnv->game.player.ship->modules[module_id] != NULL)
 		panel2->get<tgui::Button>("ShipSchemeModule" + std::to_string(module_id))->setText(gEnv->game.player.ship->modules[module_id]->name);

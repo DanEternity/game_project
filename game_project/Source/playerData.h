@@ -6,6 +6,7 @@
 
 #include <vector>
 #include "ship.h"
+#include "crew.h"
 
 class PlayerData
 {
@@ -17,4 +18,5 @@ public:
 	// player ship
 	Ship * ship;
 
+	Crew * crew;
 };

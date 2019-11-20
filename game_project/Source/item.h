@@ -32,15 +32,28 @@ namespace itemModifier {
 	};
 }
 
-namespace moduleType {
-	enum ModuleType 
+
+
+namespace equipmentType {
+	enum EquipmentType
 	{
 		null,
 	};
 }
 
-namespace equipmentType {
-	enum EquipmentType
+namespace equipmentSlot {
+	enum EquipmentSlotType
+	{
+		null = -1,
+		head,
+		body,
+		arms,
+		legs,
+	};
+}
+
+namespace moduleType {
+	enum ModuleType
 	{
 		null,
 	};
@@ -111,6 +124,7 @@ class Equipment : public ItemEquipable
 {
 public:
 	equipmentType::EquipmentType equipmentType;
+	equipmentSlot::EquipmentSlotType equipmentSlotType;
 };
 
 class WeaponModule : public Module
