@@ -197,11 +197,11 @@
     <ClInclude Include="Source\personEquipmentUI.h">
       <Filter>Adventure\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\crew.h">
+    <ClInclude Include="Source\character.h">
       <Filter>Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Source\person.h">
-      <Filter>Objects</Filter>
+    <ClInclude Include="Source\crewData.h">
+      <Filter>Adventure\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

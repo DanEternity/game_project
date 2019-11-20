@@ -195,9 +195,9 @@ void rmPanelClicked(const int id, tgui::Widget::Ptr widget, const std::string& s
 			for (int i(0); i < gEnv->game.player.inventory.size(); i++)
 			{
 				if (gEnv->game.player.inventory[i] == nullptr) continue;
-				if (gEnv->game.player.inventory[i]->itemType == 1)
+				if (gEnv->game.player.inventory[i]->itemType == itemType::module)
 				{
-					if (static_cast<Module*>(gEnv->game.player.inventory[i])->slot == gEnv->game.player.ship->modules[id]->slot)
+					if (static_cast<Module*>(gEnv->game.player.inventory[i])->slot == gEnv->game.player.ship->slots[id].type)
 					{
 						btn = tgui::Button::create();
 						btn->setSize(107, 31);
@@ -221,6 +221,8 @@ void rmPanelClicked(const int id, tgui::Widget::Ptr widget, const std::string& s
 				panel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
 				gEnv->globalGui.add(panel, "tempAddPanel");
 			}
+			else
+				gEnv->game.ui.tempAddPanelClicked = false;
 		}
 	}
 }

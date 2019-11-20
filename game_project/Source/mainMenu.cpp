@@ -354,31 +354,40 @@ void createMenuButtons()
 	gEnv->game.player.inventory[2]->itemType = itemType::module;
 	static_cast<Module*>(gEnv->game.player.inventory[2])->slot = moduleSlot::engine;
 
-	gEnv->game.player.inventory[7] = new Module();
+	gEnv->game.player.inventory[7] = new Module(); 
+	static_cast<Module*>(gEnv->game.player.inventory[7])->slot = moduleSlot::core;
 	gEnv->game.player.inventory[7]->name = L"roflanContent";
 	gEnv->game.player.inventory[5] = new Module();
+	static_cast<Module*>(gEnv->game.player.inventory[5])->slot = moduleSlot::core;
 	gEnv->game.player.inventory[5]->name = L"roflanGorit";
 
 	BuildInventoryUI(10);
 
 	gEnv->game.player.ship = new Ship();
 
-	//gEnv->game.player.ship->slots.resize(5, moduleSlot::ModuleSlot());
+	gEnv->game.player.ship->slots.resize(5, moduleSlot::ModuleSlot());
 	gEnv->game.player.ship->modules.resize(5, nullptr);
 
 	gEnv->game.player.ship->modules[1] = new Module();
 	gEnv->game.player.ship->modules[1]->name = L"roflanPomoika";
-	//gEnv->game.player.ship->slots[1].type = moduleSlot::engine;
+	gEnv->game.player.ship->slots[1].type = moduleSlot::engine;
+	gEnv->game.player.ship->slots[2].type = moduleSlot::universal;
 	gEnv->game.player.ship->modules[1]->slot = moduleSlot::engine;
 	gEnv->game.player.ship->modules[1]->itemType = itemType::module;
 
 	BuildShipSchemeUI(50);
 
-	gEnv->game.player.crew = new Crew();
+	//gEnv->game.player.crew = new Crew();
 
-	gEnv->game.player.crew->shipCrew.resize(5, nullptr);
-	gEnv->game.player.crew->shipCrew[0] = new Person();
-	gEnv->game.player.crew->shipCrew[0]->personEquipment.resize(7, nullptr);
+	//gEnv->game.player.crew->shipCrew.resize(5, nullptr);
+	//gEnv->game.player.crew->shipCrew[0] = new Person();
+	//gEnv->game.player.crew->shipCrew[0]->personEquipment.resize(7, nullptr);
+
+	gEnv->game.player.crew.characters.push_back(new Character());
+	gEnv->game.player.crew.characters[0]->name = L"roflanDaun";
+	gEnv->game.player.crew.characters[0]->equipment.resize(7, nullptr);
+	gEnv->game.player.crew.characters[0]->equipment[0] = new Equipment();
+	gEnv->game.player.crew.characters[0]->equipment[0]->name = L"roflanZdarova";
 	
 	BuildPersonSchemeUI(50, 0);
 

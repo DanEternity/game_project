@@ -15,6 +15,7 @@ namespace itemType {
 
 		null,
 		module = 1,
+		equipment,
 
 	};
 } // itemType
@@ -110,6 +111,11 @@ public:
 class ItemEquipable : public ItemConstructable
 {
 public:
+	ItemEquipable()
+	{
+		ItemConstructable();
+		itemType = itemType::equipment;
+	}
 };
 
 class Module : public ItemEquipable
@@ -118,6 +124,11 @@ public:
 	moduleType::ModuleType moduleType;
 	moduleSlot::ModuleSlotType slot;
 	moduleSlot::ModuleSlotSize size;
+	Module()
+	{
+		ItemEquipable();
+		itemType = itemType::module;
+	}
 };
 
 class Equipment : public ItemEquipable
