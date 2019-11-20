@@ -10,9 +10,6 @@ public:
 
 	// selected cell id
 	int selected = -1;
-	
-	// context menu flag
-	int rmWasClicked = false;
-
-
+	bool rmWasClicked = false, tempAddPanelClicked = false;
+	int activeOpenPersonWindow = 0;
 };

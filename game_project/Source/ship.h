@@ -18,7 +18,7 @@ public:
 	// links section
 
 	std::vector<Module*> modules;
-	std::vector<moduleSlot::ModuleSlot> slots;
+	//std::vector<moduleSlot::ModuleSlot> slots;
 
 	// stats section
 

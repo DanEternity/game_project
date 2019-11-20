@@ -232,6 +232,7 @@
     <ClCompile Include="Source\loader.cpp" />
     <ClCompile Include="Source\mainMenu.cpp" />
     <ClCompile Include="Source\menuOverlay.cpp" />
+    <ClCompile Include="Source\personEquipmentUI.cpp" />
     <ClCompile Include="Source\preload.cpp" />
     <ClCompile Include="Source\scriptCompiler.cpp" />
     <ClCompile Include="Source\scriptMemoryUtils.cpp" />
@@ -246,6 +247,7 @@
     <ClInclude Include="Source\adventureData.h" />
     <ClInclude Include="Source\baseObject.h" />
     <ClInclude Include="Source\convertUtils.h" />
+    <ClInclude Include="Source\crew.h" />
     <ClInclude Include="Source\enviroment.h" />
     <ClInclude Include="Source\enviromentVariablesAccess.h" />
     <ClInclude Include="Source\envUtils.h" />
@@ -258,6 +260,8 @@
     <ClInclude Include="Source\mainMenu.h" />
     <ClInclude Include="Source\menuData.h" />
     <ClInclude Include="Source\menuOverlay.h" />
+    <ClInclude Include="Source\person.h" />
+    <ClInclude Include="Source\personEquipmentUI.h" />
     <ClInclude Include="Source\playerData.h" />
     <ClInclude Include="Source\preload.h" />
     <ClInclude Include="Source\scriptCompiler.h" />
