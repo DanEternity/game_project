@@ -7,6 +7,12 @@
 class UIData
 {
 public:
+
+	// selected cell id
 	int selected = -1;
+	
+	// context menu flag
 	int rmWasClicked = false;
+
+
 };
