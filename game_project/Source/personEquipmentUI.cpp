@@ -8,12 +8,19 @@ void BuildPersonSchemeUI(int equipSizeUI, int crewPersonNumber)
 	mainPersonPanel->setPosition("5%", "10%");
 	gEnv->globalGui.add(mainPersonPanel, "PersonSchemeEquipPanel");
 
+	tgui::Label::Ptr characterName = tgui::Label::create();
+	characterName->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	characterName->setText(gEnv->game.player.crew.characters[crewPersonNumber]->name);
+	characterName->setPosition("(&.size - size)/2", "2%");
+	characterName->setTextSize(18);
+	mainPersonPanel->add(characterName, "PersonSchemeName");
+
 	for (int i(0); i < gEnv->game.player.crew.characters[crewPersonNumber]->equipment.size(); i++)
 	{
 		tgui::Button::Ptr btn = tgui::Button::create();
 		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 		btn->setSize(equipSizeUI, equipSizeUI);
-		btn->setPosition(30,20+80*i);
+		btn->setPosition(30,40+80*i);
 		if (gEnv->game.player.crew.characters[crewPersonNumber]->equipment[i] != NULL)
 			btn->setText(gEnv->game.player.crew.characters[i]->equipment[i]->name);
 		mainPersonPanel->add(btn, "Person" + std::to_string(crewPersonNumber) + "Equip" + std::to_string(i));

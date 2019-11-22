@@ -75,7 +75,7 @@ void BuildInventoryUI(int cellSize)
 	gEnv->globalGui.add(scrollablePanel, "inventoryPanel");
 	scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
 	scrollablePanel->setPosition("10%", "70%");
-	scrollablePanel->setSize(515, 155);
+	scrollablePanel->setSize(520, 155);
 	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
 	{
 

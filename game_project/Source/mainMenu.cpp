@@ -389,7 +389,7 @@ void createMenuButtons()
 	gEnv->game.player.crew.characters[0]->equipment[0] = new Equipment();
 	gEnv->game.player.crew.characters[0]->equipment[0]->name = L"roflanZdarova";
 	
-	BuildPersonSchemeUI(50, 0);
+	BuildPersonSchemeUI(45, 0);
 
 }
 

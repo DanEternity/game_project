@@ -172,6 +172,11 @@ void rmPanelClicked(const int id, tgui::Widget::Ptr widget, const std::string& s
 	{
 		gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempRightPanel"));
 		gEnv->game.ui.rmWasClicked = false;
+		if (gEnv->game.ui.tempAddPanelClicked)
+		{
+			gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempAddPanel"));
+			gEnv->game.ui.tempAddPanelClicked = false;
+		}
 	}
 	else if (widget->cast<tgui::Button>()->getText() == L"Delete")
 	{
@@ -214,7 +219,7 @@ void rmPanelClicked(const int id, tgui::Widget::Ptr widget, const std::string& s
 			}
 			if (goodItemsCount != 0)
 			{
-				panel->setSize(150, 30 * goodItemsCount);
+				panel->setSize(100, 30 * goodItemsCount);
 				auto pos = gEnv->globalGui.get<tgui::Panel>("tempRightPanel")->getPosition();
 				pos.x += 100;
 				panel->setPosition(pos);
