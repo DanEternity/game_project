@@ -355,25 +355,50 @@ void createMenuButtons()
 	static_cast<Module*>(gEnv->game.player.inventory[2])->slot = moduleSlot::engine;
 
 	gEnv->game.player.inventory[7] = new Module(); 
-	static_cast<Module*>(gEnv->game.player.inventory[7])->slot = moduleSlot::core;
+	static_cast<Module*>(gEnv->game.player.inventory[7])->slot = moduleSlot::hyperdrive;
 	gEnv->game.player.inventory[7]->name = L"roflanContent";
 	gEnv->game.player.inventory[5] = new Module();
-	static_cast<Module*>(gEnv->game.player.inventory[5])->slot = moduleSlot::core;
+	static_cast<Module*>(gEnv->game.player.inventory[5])->slot = moduleSlot::engine;
 	gEnv->game.player.inventory[5]->name = L"roflanGorit";
 
 	BuildInventoryUI(10);
 
 	gEnv->game.player.ship = new Ship();
 
+	/* INITIALIZE SHIP SLOTS */
 	gEnv->game.player.ship->slots.resize(5, moduleSlot::ModuleSlot());
+	gEnv->game.player.ship->slots[0].type = moduleSlot::core;
+	gEnv->game.player.ship->slots[1].type = moduleSlot::hyperdrive;
+	gEnv->game.player.ship->slots[2].type = moduleSlot::engine;
+	gEnv->game.player.ship->slots[3].type = moduleSlot::system;
+	gEnv->game.player.ship->slots[4].type = moduleSlot::primaryWeapon;
+
+	
 	gEnv->game.player.ship->modules.resize(5, nullptr);
+	gEnv->game.player.ship->modules[0] = new Module();
+	gEnv->game.player.ship->modules[0]->name = L"roflanPomoika";
+	gEnv->game.player.ship->modules[0]->slot = moduleSlot::core;
+	gEnv->game.player.ship->modules[0]->itemType = itemType::module;
 
 	gEnv->game.player.ship->modules[1] = new Module();
-	gEnv->game.player.ship->modules[1]->name = L"roflanPomoika";
-	gEnv->game.player.ship->slots[1].type = moduleSlot::engine;
-	gEnv->game.player.ship->slots[2].type = moduleSlot::universal;
-	gEnv->game.player.ship->modules[1]->slot = moduleSlot::engine;
+	gEnv->game.player.ship->modules[1]->name = L"roflanVebenya";
+	gEnv->game.player.ship->modules[1]->slot = moduleSlot::hyperdrive;
 	gEnv->game.player.ship->modules[1]->itemType = itemType::module;
+
+	gEnv->game.player.ship->modules[2] = new Module();
+	gEnv->game.player.ship->modules[2]->name = L"roflanGorim";
+	gEnv->game.player.ship->modules[2]->slot = moduleSlot::engine;
+	gEnv->game.player.ship->modules[2]->itemType = itemType::module;
+
+	gEnv->game.player.ship->modules[3] = new Module();
+	gEnv->game.player.ship->modules[3]->name = L"roflanCompukter";
+	gEnv->game.player.ship->modules[3]->slot = moduleSlot::system;
+	gEnv->game.player.ship->modules[3]->itemType = itemType::module;
+
+	gEnv->game.player.ship->modules[4] = new Module();
+	gEnv->game.player.ship->modules[4]->name = L"roflanStrelyai";
+	gEnv->game.player.ship->modules[4]->slot = moduleSlot::primaryWeapon;
+	gEnv->game.player.ship->modules[4]->itemType = itemType::module;
 
 	BuildShipSchemeUI(50);
 

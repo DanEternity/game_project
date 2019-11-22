@@ -185,6 +185,11 @@ void rmPanelClickedInventory(const int id, tgui::Widget::Ptr widget, const std::
 	{
 		gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempRightPanel"));
 		gEnv->game.ui.rmWasClicked = false;
+		if (gEnv->game.ui.tempAddPanelClicked)
+		{
+			gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempAddPanel"));
+			gEnv->game.ui.tempAddPanelClicked = false;
+		}
 	}
 	else if (widget->cast<tgui::Button>()->getText() == L"Delete")
 	{
