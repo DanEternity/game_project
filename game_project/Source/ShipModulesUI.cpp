@@ -146,7 +146,7 @@ void UIbuttonWasClicked(const int id, tgui::Widget::Ptr widget, const std::strin
 		btn->setPosition(0, 0);
 		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 		btn->setText(L"Add");
-		btn->connect("MouseReleased", rmPanelClicked, id);
+		btn->connect("MouseReleased", rmPanelClickedShip, id);
 		
 		btn = tgui::Button::create();
 		temp->add(btn);
@@ -154,7 +154,7 @@ void UIbuttonWasClicked(const int id, tgui::Widget::Ptr widget, const std::strin
 		btn->setPosition(0, 30);
 		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 		btn->setText(L"Delete");
-		btn->connect("MouseReleased", rmPanelClicked, id);
+		btn->connect("MouseReleased", rmPanelClickedShip, id);
 
 		btn = tgui::Button::create();
 		temp->add(btn);
@@ -162,11 +162,11 @@ void UIbuttonWasClicked(const int id, tgui::Widget::Ptr widget, const std::strin
 		btn->setPosition(0, 60);
 		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 		btn->setText(L"Cancel");
-		btn->connect("MouseReleased", rmPanelClicked, id);
+		btn->connect("MouseReleased", rmPanelClickedShip, id);
 	}
 }
 
-void rmPanelClicked(const int id, tgui::Widget::Ptr widget, const std::string& signalName)
+void rmPanelClickedShip(const int id, tgui::Widget::Ptr widget, const std::string& signalName)
 {
 	if (widget->cast<tgui::Button>()->getText() == L"Cancel")
 	{

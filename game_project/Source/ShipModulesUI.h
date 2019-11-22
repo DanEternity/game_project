@@ -29,5 +29,5 @@ public:
 void BuildShipSchemeUI(int moduleSizeUI = 45);
 
 void UIbuttonWasClicked(int id, tgui::Widget::Ptr widget, const std::string& signalName);
-void rmPanelClicked(int id, tgui::Widget::Ptr widget, const std::string& signalName);
+void rmPanelClickedShip(const int id, tgui::Widget::Ptr widget, const std::string& signalName);
 void rmPanelChoosenAdded(const int id, const int module_id, tgui::Widget::Ptr widget, const std::string& signalName);
