@@ -38,4 +38,4 @@ void BuildInventoryUI(int cellSize);
 void DeleteInventoryUI();
 void IntentoryResponseSignal(int cellId, std::string inventoryId, tgui::Widget::Ptr widget, const std::string & signalName);
 void rmPanelClickedInventory(const int id, tgui::Widget::Ptr widget, const std::string& signalName);
-void rmPanelChoosenInsert(const int id, const int module_id, tgui::Widget::Ptr widget, const std::string& signalName);
+void rmPanelChoosenInsert(const int id, const int item_id, int inventory, tgui::Widget::Ptr widget, const std::string& signalName);

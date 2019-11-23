@@ -50,6 +50,7 @@ namespace equipmentSlot {
 		body,
 		arms,
 		legs,
+		universal
 	};
 }
 
@@ -136,6 +137,11 @@ class Equipment : public ItemEquipable
 public:
 	equipmentType::EquipmentType equipmentType;
 	equipmentSlot::EquipmentSlotType equipmentSlotType;
+	Equipment()
+	{
+		ItemEquipable();
+		itemType = itemType::equipment;
+	}
 };
 
 class WeaponModule : public Module

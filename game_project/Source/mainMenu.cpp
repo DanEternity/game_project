@@ -361,6 +361,14 @@ void createMenuButtons()
 	static_cast<Module*>(gEnv->game.player.inventory[5])->slot = moduleSlot::engine;
 	gEnv->game.player.inventory[5]->name = L"roflanGorit";
 
+	gEnv->game.player.inventory[0] = new Equipment();
+	gEnv->game.player.inventory[0]->name = L"roflanTelo";
+	static_cast<Equipment*>(gEnv->game.player.inventory[0])->equipmentSlotType = equipmentSlot::body;
+
+	gEnv->game.player.inventory[11] = new Equipment();
+	gEnv->game.player.inventory[11]->name = L"roflanBody";
+	static_cast<Equipment*>(gEnv->game.player.inventory[11])->equipmentSlotType = equipmentSlot::body;
+
 	BuildInventoryUI(10);
 
 	gEnv->game.player.ship = new Ship();
@@ -373,7 +381,7 @@ void createMenuButtons()
 	gEnv->game.player.ship->slots[3].type = moduleSlot::system;
 	gEnv->game.player.ship->slots[4].type = moduleSlot::primaryWeapon;
 
-	
+	/* INITIALIZE SHIP BASE MODULES */
 	gEnv->game.player.ship->modules.resize(5, nullptr);
 	gEnv->game.player.ship->modules[0] = new Module();
 	gEnv->game.player.ship->modules[0]->name = L"roflanPomoika";
@@ -410,11 +418,20 @@ void createMenuButtons()
 
 	gEnv->game.player.crew.characters.push_back(new Character());
 	gEnv->game.player.crew.characters[0]->name = L"roflanDaun";
+	gEnv->game.player.crew.characters[0]->slot.resize(7, equipmentSlot::head);
+	gEnv->game.player.crew.characters[0]->slot[0] = equipmentSlot::head;
+	gEnv->game.player.crew.characters[0]->slot[1] = equipmentSlot::body;
+	gEnv->game.player.crew.characters[0]->slot[2] = equipmentSlot::arms;
+	gEnv->game.player.crew.characters[0]->slot[3] = equipmentSlot::legs;
+	gEnv->game.player.crew.characters[0]->slot[4] = equipmentSlot::universal;
+	gEnv->game.player.crew.characters[0]->slot[5] = equipmentSlot::universal;
+	gEnv->game.player.crew.characters[0]->slot[6] = equipmentSlot::universal;
 	gEnv->game.player.crew.characters[0]->equipment.resize(7, nullptr);
 	gEnv->game.player.crew.characters[0]->equipment[0] = new Equipment();
-	gEnv->game.player.crew.characters[0]->equipment[0]->name = L"roflanZdarova";
-	
-	BuildPersonSchemeUI(45, 0);
+	gEnv->game.player.crew.characters[0]->equipment[0]->name = L"roflanBoshka";
+	gEnv->game.player.crew.characters[0]->equipment[0]->equipmentSlotType = equipmentSlot::head;
+
+	BuildPersonSchemeUI(50, 0);
 
 }
 

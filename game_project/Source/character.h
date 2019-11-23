@@ -15,6 +15,7 @@ public:
 	// links
 
 	std::vector<Equipment*> equipment;
+	std::vector<equipmentSlot::EquipmentSlotType> slot;
 
 	// stats
 
