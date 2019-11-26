@@ -25,6 +25,13 @@ void updateAdventureGameMode()
 		gEnv->game.adventureData.sectors["TEST"]->objects[0]->pos = { 300, 300 };
 		buildDecoration(gEnv->game.adventureData.sectors["TEST"]->objects[0]);
 
+		gEnv->game.adventureData.sectors["TEST"]->objects.push_back(new MapDecoration());
+		gEnv->game.adventureData.sectors["TEST"]->objects[1]->model = L"blankTexture2";
+		gEnv->game.adventureData.sectors["TEST"]->objects[1]->scale = { 1,1 };
+		gEnv->game.adventureData.sectors["TEST"]->objects[1]->rotation = 70;
+		gEnv->game.adventureData.sectors["TEST"]->objects[1]->pos = { 2700, 300 };
+		buildDecoration(gEnv->game.adventureData.sectors["TEST"]->objects[1]);
+
 	}
 
 	auto trg = gEnv->game.adventureData.sectors[gEnv->game.adventureData.currentSectorId];
