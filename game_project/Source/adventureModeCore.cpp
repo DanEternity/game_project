@@ -32,6 +32,13 @@ void updateAdventureGameMode()
 		gEnv->game.adventureData.sectors["TEST"]->objects[1]->pos = { 2700, 300 };
 		buildDecoration(gEnv->game.adventureData.sectors["TEST"]->objects[1]);
 
+		gEnv->game.adventureData.sectors["TEST"]->objects.push_back(new MapDecoration());
+		gEnv->game.adventureData.sectors["TEST"]->objects[2]->model = L"asteroidsSample";
+		gEnv->game.adventureData.sectors["TEST"]->objects[2]->scale = { 2,2 };
+		gEnv->game.adventureData.sectors["TEST"]->objects[2]->rotation = 70;
+		gEnv->game.adventureData.sectors["TEST"]->objects[2]->pos = { 1700, 300 };
+		buildDecoration(gEnv->game.adventureData.sectors["TEST"]->objects[2]);
+
 	}
 
 	auto trg = gEnv->game.adventureData.sectors[gEnv->game.adventureData.currentSectorId];

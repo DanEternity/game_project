@@ -22,6 +22,7 @@ void preloadModels()
 
 	createModelDescriptor(L"blankTexture", "\\resources\\textures\\blankTexture.png");
 	createModelDescriptor(L"blankTexture2", "\\resources\\textures\\blankTexture.png");
+	createModelDescriptor(L"asteroidsSample", "\\resources\\textures\\world_decorations\\asteroids_sample.png");
 	//createModelDescriptor(L"fsfa", "fsaf", true);
 }
 
