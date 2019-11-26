@@ -90,6 +90,12 @@
     <ClCompile Include="Source\personEquipmentUI.cpp">
       <Filter>Adventure\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\adventureModeCore.cpp">
+      <Filter>Adventure\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\sectorDrawUtility.cpp">
+      <Filter>Adventure\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\game.h">
@@ -201,6 +207,15 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Source\crewData.h">
+      <Filter>Adventure\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\adventureModeCore.h">
+      <Filter>Adventure\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\mapObjectsData.h">
+      <Filter>Adventure\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\sectorDrawUtility.h">
       <Filter>Adventure\Core</Filter>
     </ClInclude>
   </ItemGroup>

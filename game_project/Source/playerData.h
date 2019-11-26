@@ -21,5 +21,8 @@ public:
 
 	CrewData crew;
 	
-
+	// Adventure ship position on sector (world coord)
+	sf::Vector2f shipPosition = { 0, 0 };
+	// camera position (world coord) // adventure ONLY
+	sf::Vector2f cameraPosition = { 0, -600 };
 };

@@ -24,9 +24,12 @@ int main()
 	// Bind gui descriptor to main window
 	gEnv->globalGui.setTarget(gEnv->globalWindow);
 	gEnv->scripts.scriptGui.setTarget(gEnv->globalWindow);
+	gEnv->game.adventureGUI.setTarget(gEnv->globalWindow);
 	tgui::Font fontArial("C:\\Windows\\Fonts\\Arial.ttf");
 	gEnv->globalGui.setFont(fontArial);
 	gEnv->scripts.scriptGui.setFont(fontArial);
+	gEnv->game.adventureGUI.setFont(fontArial);
+
 	// Clock to calculate time from previous frame
 	sf::Clock deltaClock;
 

@@ -225,6 +225,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Source\adventureModeCore.cpp" />
     <ClCompile Include="Source\enviroment.cpp" />
     <ClCompile Include="Source\enviromentVariablesAccess.cpp" />
     <ClCompile Include="Source\envUtils.cpp" />
@@ -238,6 +239,7 @@
     <ClCompile Include="Source\scriptMemoryUtils.cpp" />
     <ClCompile Include="Source\scriptSystem.cpp" />
     <ClCompile Include="Source\scriptUtilsUI.cpp" />
+    <ClCompile Include="Source\sectorDrawUtility.cpp" />
     <ClCompile Include="Source\shipModulesUI.cpp" />
     <ClCompile Include="Source\tableInventory.cpp" />
     <ClCompile Include="Source\uiEventHandlers.cpp" />
@@ -245,6 +247,7 @@
   <ItemGroup>
     <ClInclude Include="Source\accountData.h" />
     <ClInclude Include="Source\adventureData.h" />
+    <ClInclude Include="Source\adventureModeCore.h" />
     <ClInclude Include="Source\baseObject.h" />
     <ClInclude Include="Source\convertUtils.h" />
     <ClInclude Include="Source\crewData.h" />
@@ -258,6 +261,7 @@
     <ClInclude Include="Source\item.h" />
     <ClInclude Include="Source\loader.h" />
     <ClInclude Include="Source\mainMenu.h" />
+    <ClInclude Include="Source\mapObjectsData.h" />
     <ClInclude Include="Source\menuData.h" />
     <ClInclude Include="Source\menuOverlay.h" />
     <ClInclude Include="Source\character.h" />
@@ -272,6 +276,7 @@
     <ClInclude Include="Source\scriptSystemData.h" />
     <ClInclude Include="Source\scriptTypes.h" />
     <ClInclude Include="Source\scriptUtilsUI.h" />
+    <ClInclude Include="Source\sectorDrawUtility.h" />
     <ClInclude Include="Source\ship.h" />
     <ClInclude Include="Source\shipManagement.h" />
     <ClInclude Include="Source\shipModulesUI.h" />
