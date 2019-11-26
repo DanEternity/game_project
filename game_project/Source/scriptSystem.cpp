@@ -278,7 +278,17 @@ std::wstring ScriptSystem::p_convertValueToString(std::wstring src)
 		// external table
 
 		BaseObject * target;
-		auto code = getMemoryCellFromExternalTable(src.substr(5, 4), src.substr(10, src.size() - 11), &target);
+		int posLeft, posRight;
+		try
+		{
+			posLeft = src.find(L':', 0);
+			posRight = src.find(L':', posLeft + 1);
+		}
+		catch (const std::exception&)
+		{
+			return L"NULL";
+		}
+		auto code = getMemoryCellFromExternalTable(src.substr(5, posRight-posLeft-1), src.substr(posRight+1, src.size() - posRight), &target);
 
 		if (code != memoryUtil::ok)
 			return L"NULL";
