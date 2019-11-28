@@ -13,6 +13,9 @@ namespace objectType {
 		real,
 		boolean,
 		externalTable,
+		mapMarker,
+		mapDecoration,
+		mapSector,
 	};
 
 } // namespace objectType

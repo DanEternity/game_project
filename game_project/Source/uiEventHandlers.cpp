@@ -13,4 +13,8 @@ void handleUIEvents(sf::Event & event)
 		gEnv->scripts.scriptGui.handleEvent(event);
 	}
 
+	if (gEnv->game.gameAdventureGUIRequiresUpdate)
+	{
+		gEnv->game.adventureGUI.handleEvent(event);
+	}
 }

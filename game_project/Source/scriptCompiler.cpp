@@ -51,8 +51,9 @@ bool ScriptCompiler::compileScriptText(std::vector<std::wstring> src)
 				{
 					// directive
 					emptyLine = false;
-					//selection += src[line][idx];
+					
 					directiveHasOpenBracket = false;
+					tp = syntaxType::directive;
 				}
 
 				if ((src[line][idx] >= 'a' && src[line][idx] <= 'z') || (src[line][idx] >= 'A' && src[line][idx] <= 'Z'))
@@ -125,7 +126,7 @@ bool ScriptCompiler::compileScriptText(std::vector<std::wstring> src)
 				{
 					// invalid symbol
 					printf("Error while script parsing! Expected [#directive ""value""] found (%ws <-)\n", selection.c_str());
-					printf("Hint: You probably forgot "" "". Directive comments should be inside brackets.\n");
+					printf("Hint: You probably forgot \" \". Directive comments should be inside brackets.\n");
 				}
 
 			}
@@ -519,7 +520,16 @@ bool ScriptCompiler::parseDirecive(std::wstring s)
 	pos3 = f1.find(' ', 0);
 	f1 = f1.substr(0, pos3);
 
-	if (f1 == L"#ext")
+	if (f1 == L"#extLocal")
+	{
+
+		// creating ext
+		localExtReference[f2] = createExternalTable();
+		return true;
+
+	}
+
+	if (f1 == L"#ext" || f1 == L"#EXT")
 	{
 		if (familyId == L"")
 		{
@@ -527,8 +537,19 @@ bool ScriptCompiler::parseDirecive(std::wstring s)
 			localExtReference[f2] = createExternalTable();
 			return true;
 		}
+		else
+		{
+			if (gEnv->scripts.scriptGroups[familyId].extReference.find(f2) == gEnv->scripts.scriptGroups[familyId].extReference.end())
+			{ // create new
+				gEnv->scripts.scriptGroups[familyId].extReference[f2] = createExternalTable();
+				localExtReference[f2] = gEnv->scripts.scriptGroups[familyId].extReference[f2];
+			}
+			else
+			{ // use existing
+				localExtReference[f2] = gEnv->scripts.scriptGroups[familyId].extReference[f2];
+			}
+		}
 	}
-
 	
 
 	return false;
@@ -711,6 +732,9 @@ bool ScriptCompiler::parsePut(std::wstring s)
 
 	PutScript * ptr = static_cast<PutScript*>(createScriptCommand(scriptType::put));
 
+	f1 = convertExtReferences(f1);
+	f2 = convertExtReferences(f2);
+
 	ptr->scr = f1;
 	ptr->dest = f2;
 
@@ -740,6 +764,8 @@ bool ScriptCompiler::parseText(std::wstring s)
 	f1 = s.substr(0, posf1);
 
 	TextScript * ptr = static_cast<TextScript*>(createScriptCommand(scriptType::text));
+
+	f1 = convertExtReferences(f1);
 
 	ptr->text = f1;
 
@@ -816,6 +842,8 @@ bool ScriptCompiler::parseChoose(std::wstring s)
 	int p = posf2+1;
 
 	ChooseScript * ptr = static_cast<ChooseScript*>(createScriptCommand(scriptType::choose));
+
+	f1 = convertExtReferences(f1);
 
 	ptr->text = f1;
 
@@ -1316,4 +1344,64 @@ int ScriptCompiler::convertMarkerToLine(std::wstring marker)
 	}
 
 	return markers[marker];
+}
+
+std::wstring ScriptCompiler::convertExtReferences(std::wstring line)
+{
+
+	std::wstring res = L"";
+
+	int lastIdx = 0;
+	int idx = 0;
+
+	// seek all "$ext:" transform to "$EXT:
+
+	while (1)
+	{
+		idx = line.find(L"$ext:", idx + 1);
+		if (idx == std::wstring::npos)
+			break;
+		line[idx + 1] = 'E';
+		line[idx + 2] = 'X';
+		line[idx + 3] = 'T';
+	}
+
+	idx = 0;
+
+	while (1)
+	{
+		lastIdx = idx;
+		
+		if (idx == 0)
+			idx = line.find(L"$EXT:", idx);
+		else
+			idx = line.find(L"$EXT:", idx + 1);
+		if (idx == std::wstring::npos)
+			break;
+		int tmp = idx - lastIdx;
+		res += line.substr(lastIdx, idx - lastIdx);
+		
+		// "$EXT:XXXX:VALUE"
+		//  012345678901234
+
+		int v = line.find(':', idx + 5);
+
+		std::wstring tableId = line.substr(idx + 5, v - idx - 5);
+
+		if (localExtReference.find(tableId) == localExtReference.end())
+		{
+			wprintf(L"Error! External table %s does not exist or not initialized", tableId.c_str());
+			error = true;
+			return std::wstring();
+		}
+		std::wstring newTableId = localExtReference[tableId];
+
+		res += line.substr(lastIdx + tmp, idx - lastIdx - tmp + 5);
+
+		res += newTableId;
+
+		idx = v;
+	}
+	res += line.substr(lastIdx, line.size() - lastIdx);
+	return res;
 }

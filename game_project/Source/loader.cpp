@@ -63,5 +63,7 @@ void updateLoadingMode()
 		gEnv->game.gameModesRequiredUpdate = true;
 		//gEnv->game.mainMenu.widgetDisable = true;
 
+		//gEnv->game.activeGameMode = gameMode::adventureMode;
+
 	}
 }

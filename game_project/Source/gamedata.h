@@ -94,6 +94,9 @@ public:
 	bool worldGeneratorRequiresUpdate = false;
 	// Does game should handle globalGui events
 	bool globalGUIeventsRequiresUpdate = false;
+	// Does game should display adventure
+	bool gameAdventureGUIRequiresUpdate = false;
+	
 
 	// Active game mode
 	gameMode::GameMode activeGameMode = gameMode::blankMode;
@@ -119,5 +122,11 @@ public:
 
 	// ui status / variables
 	UIData ui;
+
+	// adventureUI
+	tgui::Gui adventureGUI;
+
+
+
 };
 

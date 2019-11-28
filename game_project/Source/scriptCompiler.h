@@ -135,5 +135,6 @@ private:
 	bool postUpdateChangeScriptEntryPoint(BaseScript * ptr);
 
 	int convertMarkerToLine(std::wstring marker);
+	std::wstring convertExtReferences(std::wstring line);
 };
 
