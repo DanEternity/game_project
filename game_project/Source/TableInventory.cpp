@@ -96,6 +96,17 @@ void BuildInventoryUI(int cellSize)
 
 		button->connect("MouseReleased", IntentoryResponseSignal, number, std::string("ShipInventory"));
 		button->connect("RightMouseReleased", IntentoryResponseSignal, number, std::string("ShipInventory"));
+
+		auto tooltop = tgui::Panel::create();
+		tooltop->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
+		tooltop->setSize(500, 100);
+		tgui::Button::Ptr but = tgui::Button::create();
+		but->setSize(9, 50);
+		but->setPosition(50, 50);
+		but->setText("O");
+		but->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+		tooltop->add(but);
+		button->setToolTip(tooltop);
 	}
 }
 
