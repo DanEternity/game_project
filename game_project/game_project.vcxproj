@@ -226,6 +226,7 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Source\adventureModeCore.cpp" />
+    <ClCompile Include="Source\adventureUI.cpp" />
     <ClCompile Include="Source\enviroment.cpp" />
     <ClCompile Include="Source\enviromentVariablesAccess.cpp" />
     <ClCompile Include="Source\envUtils.cpp" />
@@ -248,6 +249,7 @@
     <ClInclude Include="Source\accountData.h" />
     <ClInclude Include="Source\adventureData.h" />
     <ClInclude Include="Source\adventureModeCore.h" />
+    <ClInclude Include="Source\adventureUI.h" />
     <ClInclude Include="Source\baseObject.h" />
     <ClInclude Include="Source\convertUtils.h" />
     <ClInclude Include="Source\crewData.h" />

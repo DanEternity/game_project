@@ -1,6 +1,7 @@
 #include "loader.h"
 #include "enviroment.h"
 #include "mainMenu.h"
+#include "adventureUI.h"
 
 void updateLoadingMode()
 {
@@ -55,6 +56,7 @@ void updateLoadingMode()
 		// Change active gamemode and variables
 
 		createMenuButtons();
+		createAdventureUIButtons();
 
 		gEnv->game.activeGameMode = gameMode::mainMenuMode;
 		gEnv->game.mainMenu.menuDrawRequired = true;

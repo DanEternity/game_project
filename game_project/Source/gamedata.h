@@ -30,6 +30,28 @@ public:
 	menuState::MenuState active = menuState::mainMenu;
 };
 
+namespace adventureUIState
+{
+	enum AdventrueUIState{
+		noSpecialInventoryOpen,
+		shipInventoryOpen,
+		personInventoryOpen,
+	};
+}
+
+class AdventureUI
+{
+public:
+	bool isInventoryOpen = false;
+	bool adventureUIUpdateRequired;
+	bool adventureUIDrawRequired;
+	bool widgetDisable;
+
+	std::vector<tgui::Widget::Ptr> adventureUIWidgets;
+
+	adventureUIState::AdventrueUIState activeInventory = adventureUIState::noSpecialInventoryOpen;
+};
+
 // Loader variables
 class ResourseLoader
 {
@@ -110,6 +132,9 @@ public:
 
 	//mainmenu section
 	MainMenu mainMenu;
+
+	//adventure UI things(inventories)
+	AdventureUI adventureUI;
 
 	//adventure section
 	AdnvetureData adventureData;

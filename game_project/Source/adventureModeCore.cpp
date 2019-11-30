@@ -36,7 +36,7 @@ void updateAdventureGameMode()
 		gEnv->game.adventureData.sectors["TEST"]->objects[2]->model = L"asteroidsSample";
 		gEnv->game.adventureData.sectors["TEST"]->objects[2]->scale = { 2,2 };
 		gEnv->game.adventureData.sectors["TEST"]->objects[2]->rotation = 70;
-		gEnv->game.adventureData.sectors["TEST"]->objects[2]->pos = { 1700, 300 };
+		gEnv->game.adventureData.sectors["TEST"]->objects[2]->pos = { 1700, 0 };
 		buildDecoration(gEnv->game.adventureData.sectors["TEST"]->objects[2]);
 
 	}
@@ -49,7 +49,6 @@ void updateAdventureGameMode()
 		gEnv->globalWindow.draw(*(trg->objects[i]->sprite));
 	}
 
+	
 	// update
-
-
 }

@@ -5,6 +5,7 @@
 #include "loader.h"
 #include "mainMenu.h"
 #include "adventureModeCore.h"
+#include "adventureUI.h"
 
 void updateGameCycle(double deltaTime)
 {
@@ -41,6 +42,7 @@ void updateGameCycle(double deltaTime)
 			break;
 		case gameMode::adventureMode:
 			updateAdventureGameMode();
+			updateAdventureUI();
 			break;
 		default:
 			// invalid game mode

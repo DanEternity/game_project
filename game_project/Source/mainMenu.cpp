@@ -1,12 +1,5 @@
 #include "mainMenu.h"
-#include "ShipModulesUI.h"
-#include "tableInventory.h"
-#include "personEquipmentUI.h"
-#include "envUtils.h"
-#include "scriptCompiler.h"
-#include <fstream>
-#include <sstream>
-#include <codecvt>
+
 
 void optionsClick();
 void optionsBackButton();
@@ -78,7 +71,6 @@ void mainMenuChangeState()
 		default:
 			break;
 	}
-	
 }
 
 void createMenuButtons()
@@ -437,7 +429,10 @@ void createMenuButtons()
 
 void startClick()
 {
-	
+	gEnv->game.gameAdventureGUIRequiresUpdate = true;
+	gEnv->game.adventureUI.adventureUIDrawRequired = true;
+	disableAllMainMenuWidgets();
+	gEnv->game.activeGameMode = gameMode::adventureMode;
 }
 
 void exitClick()
