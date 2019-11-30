@@ -230,6 +230,7 @@
     <ClCompile Include="Source\enviromentVariablesAccess.cpp" />
     <ClCompile Include="Source\envUtils.cpp" />
     <ClCompile Include="Source\game.cpp" />
+    <ClCompile Include="Source\generationUtility.cpp" />
     <ClCompile Include="Source\loader.cpp" />
     <ClCompile Include="Source\mainMenu.cpp" />
     <ClCompile Include="Source\menuOverlay.cpp" />
@@ -243,6 +244,7 @@
     <ClCompile Include="Source\shipModulesUI.cpp" />
     <ClCompile Include="Source\tableInventory.cpp" />
     <ClCompile Include="Source\uiEventHandlers.cpp" />
+    <ClCompile Include="Source\worldGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\accountData.h" />
@@ -256,6 +258,7 @@
     <ClInclude Include="Source\envUtils.h" />
     <ClInclude Include="Source\game.h" />
     <ClInclude Include="Source\gamedata.h" />
+    <ClInclude Include="Source\generationUtility.h" />
     <ClInclude Include="Source\graphics.h" />
     <ClInclude Include="Source\graphicsModel.h" />
     <ClInclude Include="Source\item.h" />
@@ -285,6 +288,7 @@
     <ClInclude Include="Source\uiData.h" />
     <ClInclude Include="Source\uiEventHandlers.h" />
     <ClInclude Include="Source\valueObjects.h" />
+    <ClInclude Include="Source\worldGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\Scripts\Test\Test.txt" />

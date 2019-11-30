@@ -126,7 +126,10 @@ public:
 	// adventureUI
 	tgui::Gui adventureGUI;
 
+	// generation utility
 
+	uint64_t worldSeed = 0;
 
+	uint64_t randTmp = 0;
 };
 

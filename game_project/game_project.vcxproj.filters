@@ -37,6 +37,9 @@
     <Filter Include="Adventure\Core">
       <UniqueIdentifier>{17c0416a-a010-4ef1-8249-ea2e7f2f9302}</UniqueIdentifier>
     </Filter>
+    <Filter Include="WorldGenerator">
+      <UniqueIdentifier>{c43bce3a-baf0-4582-9d85-c73b1cf75ea8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -95,6 +98,12 @@
     </ClCompile>
     <ClCompile Include="Source\sectorDrawUtility.cpp">
       <Filter>Adventure\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\worldGenerator.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\generationUtility.cpp">
+      <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -217,6 +226,12 @@
     </ClInclude>
     <ClInclude Include="Source\sectorDrawUtility.h">
       <Filter>Adventure\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\worldGenerator.h">
+      <Filter>WorldGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\generationUtility.h">
+      <Filter>WorldGenerator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
