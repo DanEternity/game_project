@@ -9,7 +9,8 @@
 #include <map>
 #include <vector>
 #include <string>
-#include "mapObjectsData.h"
+#include "sectorData.h"
+#include "worldGeneratorData.h"
 
 class AdnvetureData
 {
@@ -27,5 +28,7 @@ public:
 
 	// world to pixel coordinate conversion
 	float settingMapScale = 2;
+
+	WorldGenerationData worldGeneratorData;
 
 };
