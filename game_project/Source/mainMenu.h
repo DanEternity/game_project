@@ -6,6 +6,7 @@
 #include "personEquipmentUI.h"
 #include "envUtils.h"
 #include "scriptCompiler.h"
+#include "worldGenerator.h"
 #include <fstream>
 #include <sstream>
 #include <codecvt>

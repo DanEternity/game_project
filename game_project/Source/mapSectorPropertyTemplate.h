@@ -35,4 +35,21 @@ public:
 	// Does not have special format yet
 	// Probably region name
 
+	float getLocalProbability(float value)
+	{
+		if (distributionType == 0)
+		{
+			if (value >= baseValue - valueDistribution && value <= baseValue + valueDistribution)
+			{
+				return valueWeight;
+			}
+			// not in range
+			return 0;
+		}
+
+		// incorrect // impossible
+		return 0;
+	}
+
+
 };

@@ -16,7 +16,7 @@ public:
 	std::vector<MapDecoration*> objects;
 
 	// generation property
-	std::vector<MapSectorPropertyTemplate*> vProperty;
+	std::map<std::string, MapSectorPropertyTemplate*> vProperty;
 
 	// region name
 	std::string regionName;

@@ -2,6 +2,9 @@
 
 #include <cstdint>
 
+#define MAX_RAND_32 2147483647
+#define MAX_RAND_64 MAX_RAND_32*MAX_RAND_32
+
 // 32-bit random generator
 unsigned int getRand();
 

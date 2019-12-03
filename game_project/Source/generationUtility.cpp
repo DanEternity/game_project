@@ -1,7 +1,6 @@
 #include "generationUtility.h"
 #include "enviroment.h"
 
-
 unsigned int getRand()
 {	
 	const int a = 1664525;
@@ -12,7 +11,10 @@ unsigned int getRand()
 
 std::uint64_t getRand64()
 {
-	return std::uint64_t(getRand()*getRand());
+	std::uint64_t high = getRand();
+	std::uint64_t low = getRand();
+	high = high << 32;
+	return high + low;
 }
 
 uint64_t procRandom(uint64_t a, uint64_t b, uint64_t c, uint64_t d)
