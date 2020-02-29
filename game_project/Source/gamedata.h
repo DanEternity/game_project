@@ -30,17 +30,21 @@ public:
 	menuState::MenuState active = menuState::mainMenu;
 };
 
-namespace adventureUIState
+
+namespace AdventureUIInventoryStateNamespace
 {
-	enum AdventrueUIState{
-		inventoryOpen,
-		inventoryClose,
-	};
 	enum AdventureUIInventoryState {
 		shipInventory,
 		characterInventory,
 	};
 }
+
+class AdventureUIState
+{
+public:
+	bool inventoryOpen = false;
+	//AdventureUIInventoryStateNamespace::AdventureUIInventoryState advUIState = AdventureUIInventoryStateNamespace::AdventureUIInventoryState::shipInventory;
+};
 
 class AdventureUI
 {
@@ -52,7 +56,7 @@ public:
 
 	std::vector<tgui::Widget::Ptr> adventureUIWidgets;
 
-	adventureUIState::AdventrueUIState activeInventory = adventureUIState::inventoryClose;
+	AdventureUIState adventureUIState;
 };
 
 // Loader variables

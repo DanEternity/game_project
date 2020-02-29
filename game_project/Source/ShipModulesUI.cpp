@@ -8,7 +8,7 @@ void BuildShipSchemeUI(int moduleSizeUI)
 	mainShipPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
 	mainShipPanel->setSize(600, 400);
 	mainShipPanel->setPosition("65%", "50%");
-	gEnv->game.adventureGUI.add(mainShipPanel, "ShipSchemeModulesPanel");
+	gEnv->game.adventureGUI.get<tgui::Panel>("adventuryUIInventoryMainPanel")->add(mainShipPanel, "ShipSchemeModulesPanel");
 
 	for (int i(0); i < gEnv->game.player.ship->modules.size(); i++)
 	{
@@ -23,6 +23,9 @@ void BuildShipSchemeUI(int moduleSizeUI)
 		btn->connect("RightMouseReleased", UIbuttonWasClicked, id);
 		btn->connect("MouseReleased", UIbuttonWasClicked, id);
 	}
+
+	mainShipPanel->setVisible(false);
+	mainShipPanel->setEnabled(false);
 }
 
 void UIbuttonWasClicked(const int id, tgui::Widget::Ptr widget, const std::string& signalName)

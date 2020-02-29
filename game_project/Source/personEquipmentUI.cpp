@@ -6,7 +6,7 @@ void BuildPersonSchemeUI(int equipSizeUI, int crewPersonNumber)
 	mainPersonPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
 	mainPersonPanel->setSize(350, 600);
 	mainPersonPanel->setPosition("5%", "10%");
-	gEnv->game.adventureGUI.add(mainPersonPanel, "PersonSchemeEquipPanel");
+	gEnv->game.adventureGUI.get<tgui::Panel>("adventuryUIInventoryMainPanel")->add(mainPersonPanel, "PersonSchemeEquipPanel");
 
 	tgui::Label::Ptr characterName = tgui::Label::create();
 	characterName->setRenderer(gEnv->globalTheme.getRenderer("Label"));
@@ -28,6 +28,9 @@ void BuildPersonSchemeUI(int equipSizeUI, int crewPersonNumber)
 		btn->connect("RightMouseReleased", personUIElementWasClicked, id);
 		btn->connect("MouseReleased", personUIElementWasClicked, id);
 	}
+
+	mainPersonPanel->setEnabled(false);
+	mainPersonPanel->setVisible(false);
 }
 
 void personUIElementWasClicked(const int id, tgui::Widget::Ptr widget, const std::string& signalName)
