@@ -47,6 +47,7 @@ void createAdventureUIButtons()
 	btn->setText("Characters");
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	btn->connect("MouseReleased", adventureUIChangeState, adventureUIState::AdventureUIInventoryState::characterInventory);
 	gEnv->game.adventureGUI.add(btn);
 
 	btn = tgui::Button::create();
@@ -55,6 +56,7 @@ void createAdventureUIButtons()
 	btn->setText("Ship");
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	btn->connect("MouseReleased", adventureUIChangeState, adventureUIState::AdventureUIInventoryState::shipInventory);
 	gEnv->game.adventureGUI.add(btn);
 
 	btn = tgui::Button::create();
@@ -64,6 +66,7 @@ void createAdventureUIButtons()
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	gEnv->game.adventureGUI.add(btn);
+	btn->connect("MouseReleased", createPauseMenu);
 
 	tgui::ProgressBar::Ptr bar = tgui::ProgressBar::create();
 	bar->setPosition(1480, 960);
@@ -96,7 +99,7 @@ void createAdventureUIButtons()
 	gEnv->game.adventureGUI.add(bar);
 }
 
-void adventureUIChangeState()
+void adventureUIChangeState(adventureUIState::AdventureUIInventoryState state)
 {
 	
 }
@@ -109,6 +112,5 @@ void createPauseMenu()
 	btn->setText("Hello");
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	gEnv->globalGui.add(btn);
-	gEnv->globalGui.draw();
+	gEnv->game.adventureGUI.add(btn);
 }

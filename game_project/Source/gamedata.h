@@ -33,9 +33,12 @@ public:
 namespace adventureUIState
 {
 	enum AdventrueUIState{
-		noSpecialInventoryOpen,
-		shipInventoryOpen,
-		personInventoryOpen,
+		inventoryOpen,
+		inventoryClose,
+	};
+	enum AdventureUIInventoryState {
+		shipInventory,
+		characterInventory,
 	};
 }
 
@@ -49,7 +52,7 @@ public:
 
 	std::vector<tgui::Widget::Ptr> adventureUIWidgets;
 
-	adventureUIState::AdventrueUIState activeInventory = adventureUIState::noSpecialInventoryOpen;
+	adventureUIState::AdventrueUIState activeInventory = adventureUIState::inventoryClose;
 };
 
 // Loader variables

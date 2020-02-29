@@ -19,7 +19,7 @@ void TableInventory::addItem(Item* obj)
 TableInventory::TableInventory()
 {
 	scrollablePanel = tgui::ScrollablePanel::create();
-	gEnv->globalGui.add(scrollablePanel, "inventoryPanel");
+	gEnv->game.adventureGUI.add(scrollablePanel, "inventoryPanel");
 	scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
 	scrollablePanel->setPosition("10%", "60%");
 	scrollablePanel->setSize(515, 155);
@@ -72,7 +72,7 @@ void BuildInventoryUI(int cellSize)
 {
 
 	tgui::ScrollablePanel::Ptr scrollablePanel = tgui::ScrollablePanel::create();
-	gEnv->globalGui.add(scrollablePanel, "inventoryPanel");
+	gEnv->game.adventureGUI.add(scrollablePanel, "inventoryPanel");
 	scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
 	scrollablePanel->setPosition("10%", "70%");
 	scrollablePanel->setSize(520, 155);
@@ -97,16 +97,16 @@ void BuildInventoryUI(int cellSize)
 		button->connect("MouseReleased", IntentoryResponseSignal, number, std::string("ShipInventory"));
 		button->connect("RightMouseReleased", IntentoryResponseSignal, number, std::string("ShipInventory"));
 
-		auto tooltop = tgui::Panel::create();
-		tooltop->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-		tooltop->setSize(500, 100);
-		tgui::Button::Ptr but = tgui::Button::create();
-		but->setSize(9, 50);
-		but->setPosition(50, 50);
-		but->setText("O");
-		but->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-		tooltop->add(but);
-		button->setToolTip(tooltop);
+		//auto tooltop = tgui::Panel::create();
+		//tooltop->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
+		//tooltop->setSize(500, 100);
+		//tgui::Button::Ptr but = tgui::Button::create();
+		//but->setSize(9, 50);
+		//but->setPosition(50, 50);
+		//but->setText("O");
+		//but->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+		//tooltop->add(but);
+		//button->setToolTip(tooltop);
 	}
 }
 
@@ -126,7 +126,7 @@ void IntentoryResponseSignal( int cellId, std::string inventoryId, tgui::Widget:
 
 
 			// update cell images
-			tgui::ScrollablePanel::Ptr panel = gEnv->globalGui.get<tgui::ScrollablePanel>("inventoryPanel");
+			tgui::ScrollablePanel::Ptr panel = gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("inventoryPanel");
 
 			if (gEnv->game.player.inventory[cellId] != NULL)
 				panel->get<tgui::Button>("InventoryCell" + std::to_string(cellId))->setText(gEnv->game.player.inventory[cellId]->name);
@@ -157,7 +157,7 @@ void IntentoryResponseSignal( int cellId, std::string inventoryId, tgui::Widget:
 		int y = sf::Mouse::getPosition(gEnv->globalWindow).y - 5;
 		temp->setPosition(x, y);
 		temp->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-		gEnv->globalGui.add(temp, "tempRightPanel");
+		gEnv->game.adventureGUI.add(temp, "tempRightPanel");
 		gEnv->game.ui.rmWasClicked = true;
 
 		const int id = cellId;
@@ -194,11 +194,11 @@ void rmPanelClickedInventory(const int id, tgui::Widget::Ptr widget, const std::
 {
 	if (widget->cast<tgui::Button>()->getText() == L"Cancel")
 	{
-		gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempRightPanel"));
+		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
 		gEnv->game.ui.rmWasClicked = false;
 		if (gEnv->game.ui.tempAddPanelClicked)
 		{
-			gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempAddPanel"));
+			gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempAddPanel"));
 			gEnv->game.ui.tempAddPanelClicked = false;
 		}
 	}
@@ -232,11 +232,11 @@ void rmPanelClickedInventory(const int id, tgui::Widget::Ptr widget, const std::
 			if (goodItemsCount != 0)
 			{
 				panel->setSize(180, 30 * goodItemsCount);
-				auto pos = gEnv->globalGui.get<tgui::Panel>("tempRightPanel")->getPosition();
+				auto pos = gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->getPosition();
 				pos.x += 100;
 				panel->setPosition(pos);
 				panel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-				gEnv->globalGui.add(panel, "tempAddPanel");
+				gEnv->game.adventureGUI.add(panel, "tempAddPanel");
 			}
 			else
 				gEnv->game.ui.tempAddPanelClicked = false;
@@ -267,11 +267,11 @@ void rmPanelClickedInventory(const int id, tgui::Widget::Ptr widget, const std::
 			if (goodItemsCount != 0)
 			{
 				panel->setSize(180, 30 * goodItemsCount);
-				auto pos = gEnv->globalGui.get<tgui::Panel>("tempRightPanel")->getPosition();
+				auto pos = gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->getPosition();
 				pos.x += 100;
 				panel->setPosition(pos);
 				panel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-				gEnv->globalGui.add(panel, "tempAddPanel");
+				gEnv->game.adventureGUI.add(panel, "tempAddPanel");
 			}
 			else
 				gEnv->game.ui.tempAddPanelClicked = false;
@@ -289,8 +289,8 @@ void rmPanelChoosenInsert(const int id, const int item_id, int inventory, tgui::
 		gEnv->game.player.inventory[id] = gEnv->game.player.ship->modules[item_id];
 		gEnv->game.player.ship->modules[item_id] = temp;
 
-		tgui::Panel::Ptr panel = gEnv->globalGui.get<tgui::Panel>("inventoryPanel");
-		tgui::Panel::Ptr panel2 = gEnv->globalGui.get<tgui::Panel>("ShipSchemeModulesPanel");
+		tgui::Panel::Ptr panel = gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel");
+		tgui::Panel::Ptr panel2 = gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel");
 
 		if (gEnv->game.player.inventory[id] != NULL)
 			panel->get<tgui::Button>("InventoryCell" + std::to_string(id))->setText(gEnv->game.player.inventory[id]->name);
@@ -302,8 +302,8 @@ void rmPanelChoosenInsert(const int id, const int item_id, int inventory, tgui::
 		else
 			panel2->get<tgui::Button>("ShipSchemeModule" + std::to_string(item_id))->setText(L"");
 
-		gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempRightPanel"));
-		gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempAddPanel"));
+		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
+		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempAddPanel"));
 		gEnv->game.ui.rmWasClicked = false;
 		gEnv->game.ui.tempAddPanelClicked = false;
 	}
@@ -315,8 +315,8 @@ void rmPanelChoosenInsert(const int id, const int item_id, int inventory, tgui::
 		gEnv->game.player.inventory[id] = gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[item_id];
 		gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[item_id] = temp;
 
-		tgui::Panel::Ptr panel = gEnv->globalGui.get<tgui::Panel>("inventoryPanel");
-		tgui::Panel::Ptr panel2 = gEnv->globalGui.get<tgui::Panel>("PersonSchemeEquipPanel");
+		tgui::Panel::Ptr panel = gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel");
+		tgui::Panel::Ptr panel2 = gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel");
 
 		if (gEnv->game.player.inventory[id] != NULL)
 			panel->get<tgui::Button>("InventoryCell" + std::to_string(id))->setText(gEnv->game.player.inventory[id]->name);
@@ -328,8 +328,8 @@ void rmPanelChoosenInsert(const int id, const int item_id, int inventory, tgui::
 		else
 			panel2->get<tgui::Button>("Person" + std::to_string(gEnv->game.ui.activeOpenPersonWindow) + "Equip" + std::to_string(item_id))->setText(L"");
 
-		gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempRightPanel"));
-		gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempAddPanel"));
+		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
+		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempAddPanel"));
 		gEnv->game.ui.rmWasClicked = false;
 		gEnv->game.ui.tempAddPanelClicked = false;
 	}

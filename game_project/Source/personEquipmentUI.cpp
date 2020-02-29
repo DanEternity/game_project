@@ -6,7 +6,7 @@ void BuildPersonSchemeUI(int equipSizeUI, int crewPersonNumber)
 	mainPersonPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
 	mainPersonPanel->setSize(350, 600);
 	mainPersonPanel->setPosition("5%", "10%");
-	gEnv->globalGui.add(mainPersonPanel, "PersonSchemeEquipPanel");
+	gEnv->game.adventureGUI.add(mainPersonPanel, "PersonSchemeEquipPanel");
 
 	tgui::Label::Ptr characterName = tgui::Label::create();
 	characterName->setRenderer(gEnv->globalTheme.getRenderer("Label"));
@@ -43,8 +43,8 @@ void personUIElementWasClicked(const int id, tgui::Widget::Ptr widget, const std
 				gEnv->game.player.inventory[gEnv->game.ui.selected] = gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id];
 				gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id] = temp;
 
-				tgui::Panel::Ptr panel = gEnv->globalGui.get<tgui::Panel>("inventoryPanel");
-				tgui::Panel::Ptr panel2 = gEnv->globalGui.get<tgui::Panel>("PersonSchemeEquipPanel");
+				tgui::Panel::Ptr panel = gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel");
+				tgui::Panel::Ptr panel2 = gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel");
 
 				if (gEnv->game.player.inventory[gEnv->game.ui.selected] != NULL)
 					panel->get<tgui::Button>("InventoryCell" + std::to_string(gEnv->game.ui.selected))->setText(gEnv->game.player.inventory[gEnv->game.ui.selected]->name);
@@ -68,7 +68,7 @@ void personUIElementWasClicked(const int id, tgui::Widget::Ptr widget, const std
 		int y = sf::Mouse::getPosition(gEnv->globalWindow).y - 5;
 		temp->setPosition(x, y);
 		temp->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-		gEnv->globalGui.add(temp, "tempRightPanel");
+		gEnv->game.adventureGUI.add(temp, "tempRightPanel");
 		gEnv->game.ui.rmWasClicked = true;
 
 		tgui::Button::Ptr btn = tgui::Button::create();
@@ -101,22 +101,22 @@ void rmPanelClickedPerson(const int id, tgui::Widget::Ptr widget, const std::str
 {
 	if (widget->cast<tgui::Button>()->getText() == L"Cancel")
 	{
-		gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempRightPanel"));
+		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
 		gEnv->game.ui.rmWasClicked = false;
 		if (gEnv->game.ui.tempAddPanelClicked)
 		{
-			gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempAddPanel"));
+			gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempAddPanel"));
 			gEnv->game.ui.tempAddPanelClicked = false;
 		}
 	}
 	else if (widget->cast<tgui::Button>()->getText() == L"Delete")
 	{
-		gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempRightPanel"));
+		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
 
 		// need to delete module correctly
 		gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id] = nullptr;
 
-		tgui::Panel::Ptr panel = gEnv->globalGui.get<tgui::Panel>("PersonSchemeEquipPanel");
+		tgui::Panel::Ptr panel = gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel");
 		panel->get<tgui::Button>("Person" + std::to_string(gEnv->game.ui.activeOpenPersonWindow) + "Equip" + std::to_string(id))->setText("");
 		gEnv->game.ui.rmWasClicked = false;
 	}
@@ -151,11 +151,11 @@ void rmPanelClickedPerson(const int id, tgui::Widget::Ptr widget, const std::str
 			if (goodItemsCount != 0)
 			{
 				panel->setSize(100, 30 * goodItemsCount);
-				auto pos = gEnv->globalGui.get<tgui::Panel>("tempRightPanel")->getPosition();
+				auto pos = gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->getPosition();
 				pos.x += 100;
 				panel->setPosition(pos);
 				panel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-				gEnv->globalGui.add(panel, "tempAddPanel");
+				gEnv->game.adventureGUI.add(panel, "tempAddPanel");
 			}
 			else
 				gEnv->game.ui.tempAddPanelClicked = false;
@@ -171,8 +171,8 @@ void rmPanelChoosenAddedPerson(const int id, const int equip_id, tgui::Widget::P
 	gEnv->game.player.inventory[id] = gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[equip_id];
 	gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[equip_id] = temp;
 
-	tgui::Panel::Ptr panel = gEnv->globalGui.get<tgui::Panel>("inventoryPanel");
-	tgui::Panel::Ptr panel2 = gEnv->globalGui.get<tgui::Panel>("PersonSchemeEquipPanel");
+	tgui::Panel::Ptr panel = gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel");
+	tgui::Panel::Ptr panel2 = gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel");
 
 	if (gEnv->game.player.inventory[id] != NULL)
 		panel->get<tgui::Button>("InventoryCell" + std::to_string(id))->setText(gEnv->game.player.inventory[id]->name);
@@ -184,8 +184,8 @@ void rmPanelChoosenAddedPerson(const int id, const int equip_id, tgui::Widget::P
 	else
 		panel2->get<tgui::Button>("Person" + std::to_string(gEnv->game.ui.activeOpenPersonWindow) + "Equip" + std::to_string(equip_id))->setText(L"");
 
-	gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempRightPanel"));
-	gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempAddPanel"));
+	gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
+	gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempAddPanel"));
 	gEnv->game.ui.rmWasClicked = false;
 	gEnv->game.ui.tempAddPanelClicked = false;
 }

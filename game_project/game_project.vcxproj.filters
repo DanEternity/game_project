@@ -230,6 +230,15 @@
     <ClInclude Include="Source\sectorDrawUtility.h">
       <Filter>Adventure\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Source\generationUtility.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\worldGenerator.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\adventureUI.h">
+      <Filter>Adventure\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\Scripts\Test\Test.txt">

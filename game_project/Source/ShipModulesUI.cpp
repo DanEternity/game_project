@@ -1,78 +1,6 @@
 #include "shipModulesUI.h"
 
 
-/*
-UIShipModules::UIShipModules(shipType st, int subModulesCount)
-{
-	for (int i(0); i < countBaseShipModules + subModulesCount; i++) modulesItem.push_back(nullptr);
-	mainShipPanel = tgui::Panel::create();
-	mainShipPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-	mainShipPanel->setSize(600, 400);
-	mainShipPanel->setPosition("65%", "50%");
-	reactor = tgui::Button::create();
-	engine = tgui::Button::create();
-	compCore = tgui::Button::create();
-	hyperDrive = tgui::Button::create();
-	primWeap = tgui::Button::create();
-	secWeap = tgui::Button::create();
-	gEnv->globalGui.add(mainShipPanel, "mainShipPanel");
-	mainShipPanel->add(reactor, "0");
-	mainShipPanel->add(engine, "1");
-	mainShipPanel->add(compCore, "2");
-	mainShipPanel->add(hyperDrive, "3");
-	mainShipPanel->add(primWeap, "4");
-	mainShipPanel->add(secWeap, "5");
-	reactor->setSize(moduleSizeUI, moduleSizeUI);
-	engine->setSize(moduleSizeUI, moduleSizeUI);
-	compCore->setSize(moduleSizeUI, moduleSizeUI);
-	hyperDrive->setSize(moduleSizeUI, moduleSizeUI);
-	primWeap->setSize(moduleSizeUI, moduleSizeUI);
-	secWeap->setSize(moduleSizeUI, moduleSizeUI);
-	reactor->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	engine->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	compCore->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	hyperDrive->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	primWeap->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	secWeap->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	rmWasClicked = false;
-
-	for (int i = 0; i < subModulesCount; i++)
-	{
-		tgui::Button::Ptr temp = tgui::Button::create();
-		subModules.push_back(temp);
-		mainShipPanel->add(temp, std::to_wstring(i+6));
-		temp->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-		temp->setSize(moduleSizeUI, moduleSizeUI);
-		temp->connect("RightMouseReleased", UIbuttonWasClicked, this, i+6);
-	}
-
-	reactor->connect("RightMouseReleased", UIbuttonWasClicked, this, 0);
-	engine->connect("RightMouseReleased", UIbuttonWasClicked, this, 2);
-	compCore->connect("RightMouseReleased", UIbuttonWasClicked, this, 3);
-	hyperDrive->connect("RightMouseReleased", UIbuttonWasClicked, this, 1);
-	primWeap->connect("RightMouseReleased", UIbuttonWasClicked, this, 4);
-	secWeap->connect("RightMouseReleased", UIbuttonWasClicked, this, 5);
-	
-	switch (st)
-	{
-		case shipType::eagle:
-			reactor->setPosition(300, "(&.height - height) / 2");
-			engine->setPosition(50, "(&.height - height) / 2");
-			compCore->setPosition(500, "(&.height - height) / 2");
-			hyperDrive->setPosition(150, "(&.height - height) / 2");
-			primWeap->setPosition("(&.width - width) / 2", "15%");
-			secWeap->setPosition("(&.width - width) / 2", "65% + 30");
-
-			for (int i = 0; i < subModulesCount; i++)
-			{
-				subModules[i]->setPosition(50 + 100 * i, "80%");
-			}
-
-			break;
-	}
-}
-
-*/
 void BuildShipSchemeUI(int moduleSizeUI)
 {
 
@@ -80,7 +8,7 @@ void BuildShipSchemeUI(int moduleSizeUI)
 	mainShipPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
 	mainShipPanel->setSize(600, 400);
 	mainShipPanel->setPosition("65%", "50%");
-	gEnv->globalGui.add(mainShipPanel, "ShipSchemeModulesPanel");
+	gEnv->game.adventureGUI.add(mainShipPanel, "ShipSchemeModulesPanel");
 
 	for (int i(0); i < gEnv->game.player.ship->modules.size(); i++)
 	{
@@ -95,8 +23,6 @@ void BuildShipSchemeUI(int moduleSizeUI)
 		btn->connect("RightMouseReleased", UIbuttonWasClicked, id);
 		btn->connect("MouseReleased", UIbuttonWasClicked, id);
 	}
-
-
 }
 
 void UIbuttonWasClicked(const int id, tgui::Widget::Ptr widget, const std::string& signalName)
@@ -112,8 +38,8 @@ void UIbuttonWasClicked(const int id, tgui::Widget::Ptr widget, const std::strin
 				gEnv->game.player.inventory[gEnv->game.ui.selected] = gEnv->game.player.ship->modules[id];
 				gEnv->game.player.ship->modules[id] = temp;
 
-				tgui::Panel::Ptr panel = gEnv->globalGui.get<tgui::Panel>("inventoryPanel");
-				tgui::Panel::Ptr panel2 = gEnv->globalGui.get<tgui::Panel>("ShipSchemeModulesPanel");
+				tgui::Panel::Ptr panel = gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel");
+				tgui::Panel::Ptr panel2 = gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel");
 
 				if (gEnv->game.player.inventory[gEnv->game.ui.selected] != NULL)
 					panel->get<tgui::Button>("InventoryCell" + std::to_string(gEnv->game.ui.selected))->setText(gEnv->game.player.inventory[gEnv->game.ui.selected]->name);
@@ -137,7 +63,7 @@ void UIbuttonWasClicked(const int id, tgui::Widget::Ptr widget, const std::strin
 		int y = sf::Mouse::getPosition(gEnv->globalWindow).y - 5;
 		temp->setPosition(x, y);
 		temp->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-		gEnv->globalGui.add(temp, "tempRightPanel");
+		gEnv->game.adventureGUI.add(temp, "tempRightPanel");
 		gEnv->game.ui.rmWasClicked = true;
 
 		tgui::Button::Ptr btn = tgui::Button::create();
@@ -170,22 +96,22 @@ void rmPanelClickedShip(const int id, tgui::Widget::Ptr widget, const std::strin
 {
 	if (widget->cast<tgui::Button>()->getText() == L"Cancel")
 	{
-		gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempRightPanel"));
+		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
 		gEnv->game.ui.rmWasClicked = false;
 		if (gEnv->game.ui.tempAddPanelClicked)
 		{
-			gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempAddPanel"));
+			gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempAddPanel"));
 			gEnv->game.ui.tempAddPanelClicked = false;
 		}
 	}
 	else if (widget->cast<tgui::Button>()->getText() == L"Delete")
 	{
-		gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempRightPanel"));
+		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
 
 		// need to delete module correctly
 		gEnv->game.player.ship->modules[id] = nullptr;
 		
-		tgui::Panel::Ptr panel = gEnv->globalGui.get<tgui::Panel>("ShipSchemeModulesPanel");
+		tgui::Panel::Ptr panel = gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel");
 		panel->get<tgui::Button>("ShipSchemeModule" + std::to_string(id))->setText("");
 		gEnv->game.ui.rmWasClicked = false;
 	}
@@ -220,11 +146,11 @@ void rmPanelClickedShip(const int id, tgui::Widget::Ptr widget, const std::strin
 			if (goodItemsCount != 0)
 			{
 				panel->setSize(100, 30 * goodItemsCount);
-				auto pos = gEnv->globalGui.get<tgui::Panel>("tempRightPanel")->getPosition();
+				auto pos = gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->getPosition();
 				pos.x += 100;
 				panel->setPosition(pos);
 				panel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-				gEnv->globalGui.add(panel, "tempAddPanel");
+				gEnv->game.adventureGUI.add(panel, "tempAddPanel");
 			}
 			else
 				gEnv->game.ui.tempAddPanelClicked = false;
@@ -241,8 +167,8 @@ void rmPanelChoosenAdded(const int id, const int module_id, tgui::Widget::Ptr wi
 	gEnv->game.player.inventory[id] = gEnv->game.player.ship->modules[module_id];
 	gEnv->game.player.ship->modules[module_id] = temp;
 
-	tgui::Panel::Ptr panel = gEnv->globalGui.get<tgui::Panel>("inventoryPanel");
-	tgui::Panel::Ptr panel2 = gEnv->globalGui.get<tgui::Panel>("ShipSchemeModulesPanel");
+	tgui::Panel::Ptr panel = gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel");
+	tgui::Panel::Ptr panel2 = gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel");
 
 	if (gEnv->game.player.inventory[id] != NULL)
 		panel->get<tgui::Button>("InventoryCell" + std::to_string(id))->setText(gEnv->game.player.inventory[id]->name);
@@ -254,8 +180,8 @@ void rmPanelChoosenAdded(const int id, const int module_id, tgui::Widget::Ptr wi
 	else
 		panel2->get<tgui::Button>("ShipSchemeModule" + std::to_string(module_id))->setText(L"");
 
-	gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempRightPanel"));
-	gEnv->globalGui.remove(gEnv->globalGui.get<tgui::Panel>("tempAddPanel"));
+	gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
+	gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempAddPanel"));
 	gEnv->game.ui.rmWasClicked = false;
 	gEnv->game.ui.tempAddPanelClicked = false;
 

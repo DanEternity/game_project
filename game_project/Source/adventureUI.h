@@ -6,6 +6,6 @@
 void updateAdventureUI();
 void disableAllAdventureUIWidgets();
 void createAdventureUIButtons();
-void adventureUIChangeState();
+void adventureUIChangeState(adventureUIState::AdventureUIInventoryState state);
 
 void createPauseMenu();
