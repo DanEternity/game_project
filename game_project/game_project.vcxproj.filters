@@ -99,14 +99,14 @@
     <ClCompile Include="Source\sectorDrawUtility.cpp">
       <Filter>Adventure\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\worldGenerator.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\generationUtility.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
     <ClCompile Include="Source\adventureUI.cpp">
       <Filter>Adventure\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\generationUtility.cpp">
+      <Filter>WorldGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\worldGenerator.cpp">
+      <Filter>WorldGenerator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -229,6 +229,24 @@
     </ClInclude>
     <ClInclude Include="Source\sectorDrawUtility.h">
       <Filter>Adventure\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\worldGenerator.h">
+      <Filter>WorldGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\generationUtility.h">
+      <Filter>WorldGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\adventureUI.h">
+      <Filter>Adventure\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\sectorData.h">
+      <Filter>WorldGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\mapSectorPropertyTemplate.h">
+      <Filter>WorldGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\worldGeneratorData.h">
+      <Filter>WorldGenerator</Filter>
     </ClInclude>
     <ClInclude Include="Source\generationUtility.h">
       <Filter>Заголовочные файлы</Filter>

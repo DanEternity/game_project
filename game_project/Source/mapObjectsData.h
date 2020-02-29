@@ -37,17 +37,3 @@ public:
 	}
 };
 
-class MapSector : public BaseObject
-{
-public:
-	std::vector<MapMarker*> markers;
-	std::vector<MapDecoration*> objects;
-	
-	int x;
-	int y;
-
-	MapSector()
-	{
-		this->objectType = objectType::mapSector;
-	}
-};

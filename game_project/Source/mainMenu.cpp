@@ -433,6 +433,9 @@ void startClick()
 	gEnv->game.adventureUI.adventureUIDrawRequired = true;
 	disableAllMainMenuWidgets();
 	gEnv->game.activeGameMode = gameMode::adventureMode;
+
+	startWorldGeneration();
+
 }
 
 void exitClick()

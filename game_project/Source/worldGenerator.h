@@ -10,3 +10,5 @@
 #include "enviroment.h"
 
 void startWorldGeneration();
+
+void loadSectorPropertiesDB();
