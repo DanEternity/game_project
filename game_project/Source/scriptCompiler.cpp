@@ -1405,3 +1405,37 @@ std::wstring ScriptCompiler::convertExtReferences(std::wstring line)
 	res += line.substr(lastIdx, line.size() - lastIdx);
 	return res;
 }
+
+void ScriptCompiler::parseCommandByTemplate()
+{
+
+
+
+}
+
+void ScriptCompiler::registerCommands()
+{
+	// Replace rule:
+	// ^ -> "
+	
+	// Put "" to ""
+	//addCommand(L"Put", L"\"A\" \"A\"", parsePut);
+	//addCommand(L"Put", L"^A^ ^A^", parsePut);
+	//addCommand(L"Choose", L"^A^ *[A],^A^,[A]*;", parseChoose);
+}
+
+void ScriptCompiler::addCommand(std::wstring command, std::wstring str_template, bool(ScriptCompiler::* handler)(std::wstring s))
+{
+	commandTemplate::CommandTemplate w;
+	w.handler = handler;
+	for (int i(0); i < str_template.size(); i++)
+	{
+		if (str_template[i] == '^')
+			str_template[i] = '\"';
+	}
+	w.str_template = str_template;
+	scriptTemplates[command] = w;
+}
+
+
+

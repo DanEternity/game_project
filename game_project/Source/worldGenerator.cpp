@@ -7,6 +7,17 @@ void startWorldGeneration()
 
 	const int maxGeneratedPoints = 1200;
 	const int maxGalaxyRadius = 5000;
+	const int sectorPropertiesCountWeightRaw[12] = { 0, 10, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+
+	std::map<int, int> sectorPropertiesCountWeight;
+
+	int wParam = 0;
+	for (int i(0); i < 12; i++)
+	{
+		wParam += sectorPropertiesCountWeightRaw[12];
+		sectorPropertiesCountWeight[wParam] = i;
+	}
 
 	gEnv->game.randTmp = gEnv->game.worldSeed;
 

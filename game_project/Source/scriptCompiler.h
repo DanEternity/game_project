@@ -65,6 +65,24 @@ namespace syntaxType {
 
 }
 
+class ScriptCompiler;
+
+namespace commandTemplate {
+	enum tStatus
+	{
+		init,
+		seeking,
+		capturing,
+		completed,
+		undefined,
+	};
+	struct CommandTemplate
+	{
+		std::wstring str_template;
+		bool(ScriptCompiler::*handler)(std::wstring s);
+	};
+}
+
 class ScriptCompiler
 {
 public:
@@ -136,5 +154,21 @@ private:
 
 	int convertMarkerToLine(std::wstring marker);
 	std::wstring convertExtReferences(std::wstring line);
+
+	// new parser version (by templates)
+
+	std::map<std::wstring, commandTemplate::CommandTemplate> scriptTemplates;
+	std::wstring parsedCommand = L"";
+	std::vector<std::wstring> aElements;
+	int templateIdx = 0;
+	std::wstring collectedBuff;
+	commandTemplate::tStatus tStatus = commandTemplate::init; // init
+
+	void parseCommandByTemplate();
+
+	void registerCommands();
+	
+	void addCommand(std::wstring command, std::wstring str_template, bool(ScriptCompiler::*handler)(std::wstring s));
 };
+
 
