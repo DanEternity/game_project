@@ -25,6 +25,8 @@ void disableAllAdventureUIWidgets()
 
 void createAdventureUIButtons()
 {
+	//create main interface panel
+
 	tgui::Panel::Ptr adventureUIPanel = tgui::Panel::create();
 	adventureUIPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
 	adventureUIPanel->setSize(1200, 675);
@@ -32,6 +34,8 @@ void createAdventureUIButtons()
 	gEnv->game.adventureGUI.add(adventureUIPanel, "adventuryUIInventoryMainPanel");
 	adventureUIPanel->setEnabled(false);
 	adventureUIPanel->setVisible(false);
+
+	// create buttons on main interface panel
 
 	tgui::Button::Ptr btn = tgui::Button::create();
 	btn->setPosition("7,5%", "90%");
@@ -82,6 +86,8 @@ void createAdventureUIButtons()
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	adventureUIPanel->add(btn, "inventoryButtonSocial");
+
+	//create buttons and some other stuff on main adventure interface
 
 	btn = tgui::Button::create();
 	btn->setPosition(1800, 600);
@@ -156,6 +162,7 @@ void createAdventureUIButtons()
 	bar->setRenderer(gEnv->globalTheme.getRenderer("ProgressBar"));
 	gEnv->game.adventureGUI.add(bar);
 
+	// create and fill inventories
 	gEnv->game.player.inventory.resize(50, nullptr);
 
 	gEnv->game.player.inventory[2] = new Module();
@@ -244,6 +251,8 @@ void createAdventureUIButtons()
 
 }
 
+
+//this function called when we open inventory
 void adventureUIChangeState(AdventureUIInventoryStateNamespace::AdventureUIInventoryState state)
 {
 	gEnv->game.adventureGUI.get<tgui::Panel>("adventuryUIInventoryMainPanel")->setEnabled(true);
@@ -281,6 +290,8 @@ void adventureUIChangeState(AdventureUIInventoryStateNamespace::AdventureUIInven
 	}
 }
 
+
+//this function called when we click  button on main interface panel 
 void adventureUIInventorySpecialButtons(AdventureUIInventoryStateNamespace::AdventureUIInventoryState newState)
 {
 	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(false);
@@ -300,6 +311,7 @@ void adventureUIInventorySpecialButtons(AdventureUIInventoryStateNamespace::Adve
 	}
 }
 
+//this not works yet :) 
 void createPauseMenu()
 {
 	tgui::Button::Ptr btn = tgui::Button::create();
