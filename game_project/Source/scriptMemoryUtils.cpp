@@ -309,7 +309,7 @@ RETURN_CODE convertConstToObject(std::wstring src, BaseObject ** dst)
 		try
 		{
 			valFloat = std::stof(src.c_str());
-			if (isUfloat(src.c_str()));
+			if (isUfloat(src.c_str()))
 				correct = true;
 		}
 		catch (const std::exception&)
