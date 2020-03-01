@@ -34,6 +34,56 @@ void createAdventureUIButtons()
 	adventureUIPanel->setVisible(false);
 
 	tgui::Button::Ptr btn = tgui::Button::create();
+	btn->setPosition("7,5%", "90%");
+	btn->setSize(120, 50);
+	btn->setText("Ship");
+	btn->setTextSize(22);
+	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	adventureUIPanel->add(btn, "inventoryButtonShip");
+	btn->connect("MouseReleased", adventureUIInventorySpecialButtons, AdventureUIInventoryStateNamespace::AdventureUIInventoryState::shipInventory);
+
+	btn = tgui::Button::create();
+	btn->setPosition("22,5%", "90%");
+	btn->setSize(120, 50);
+	btn->setText("Characters");
+	btn->setTextSize(22);
+	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	adventureUIPanel->add(btn, "inventoryButtonCharacters");
+	btn->connect("MouseReleased", adventureUIInventorySpecialButtons, AdventureUIInventoryStateNamespace::AdventureUIInventoryState::characterInventory);
+
+	btn = tgui::Button::create();
+	btn->setPosition("37,5%", "90%");
+	btn->setSize(120, 50);
+	btn->setText("Hangar");
+	btn->setTextSize(22);
+	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	adventureUIPanel->add(btn, "inventoryButtonHangar");
+
+	btn = tgui::Button::create();
+	btn->setPosition("52,5%", "90%");
+	btn->setSize(120, 50);
+	btn->setText("Lab");
+	btn->setTextSize(22);
+	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	adventureUIPanel->add(btn, "inventoryButtonLab");
+
+	btn = tgui::Button::create();
+	btn->setPosition("67,5%", "90%");
+	btn->setSize(120, 50);
+	btn->setText("Craft");
+	btn->setTextSize(22);
+	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	adventureUIPanel->add(btn, "inventoryButtonCraft");
+
+	btn = tgui::Button::create();
+	btn->setPosition("82,5%", "90%");
+	btn->setSize(120, 50);
+	btn->setText("Social");
+	btn->setTextSize(22);
+	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	adventureUIPanel->add(btn, "inventoryButtonSocial");
+
+	btn = tgui::Button::create();
 	btn->setPosition(1800, 600);
 	btn->setSize(120, 120);
 	btn->setText("Logs");
@@ -228,6 +278,25 @@ void adventureUIChangeState(AdventureUIInventoryStateNamespace::AdventureUIInven
 		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(false);
 		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setEnabled(false);
 		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setVisible(false);
+	}
+}
+
+void adventureUIInventorySpecialButtons(AdventureUIInventoryStateNamespace::AdventureUIInventoryState newState)
+{
+	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setEnabled(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setVisible(false);
+	switch (newState)
+	{
+	case AdventureUIInventoryStateNamespace::AdventureUIInventoryState::characterInventory:
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setVisible(true);
+		break;
+	case AdventureUIInventoryStateNamespace::AdventureUIInventoryState::shipInventory:
+		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(true);
+		break;
 	}
 }
 

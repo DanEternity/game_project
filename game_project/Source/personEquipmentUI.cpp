@@ -4,8 +4,8 @@ void BuildPersonSchemeUI(int equipSizeUI, int crewPersonNumber)
 {
 	tgui::Panel::Ptr mainPersonPanel = tgui::Panel::create();
 	mainPersonPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-	mainPersonPanel->setSize(350, 600);
-	mainPersonPanel->setPosition("5%", "10%");
+	mainPersonPanel->setSize(350, 550);
+	mainPersonPanel->setPosition("67%", "5%");
 	gEnv->game.adventureGUI.get<tgui::Panel>("adventuryUIInventoryMainPanel")->add(mainPersonPanel, "PersonSchemeEquipPanel");
 
 	tgui::Label::Ptr characterName = tgui::Label::create();
@@ -20,7 +20,7 @@ void BuildPersonSchemeUI(int equipSizeUI, int crewPersonNumber)
 		tgui::Button::Ptr btn = tgui::Button::create();
 		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 		btn->setSize(equipSizeUI, equipSizeUI);
-		btn->setPosition(30,40+80*i);
+		btn->setPosition(30,40+75*i);
 		if (gEnv->game.player.crew.characters[crewPersonNumber]->equipment[i] != NULL)
 			btn->setText(gEnv->game.player.crew.characters[i]->equipment[i]->name);
 		mainPersonPanel->add(btn, "Person" + std::to_string(crewPersonNumber) + "Equip" + std::to_string(i));
