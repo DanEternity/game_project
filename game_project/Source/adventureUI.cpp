@@ -38,54 +38,62 @@ void createAdventureUIButtons()
 	// create buttons on main interface panel
 
 	tgui::Button::Ptr btn = tgui::Button::create();
-	btn->setPosition("7,5%", "90%");
-	btn->setSize(120, 50);
+	btn->setPosition(35, "90%");
+	btn->setSize(140, 50);
 	btn->setText("Ship");
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	adventureUIPanel->add(btn, "inventoryButtonShip");
+	adventureUIPanel->add(btn, "playerUIship");
 	btn->connect("MouseReleased", adventureUIInventorySpecialButtons, AdventureUIInventoryStateNamespace::AdventureUIInventoryState::shipInventory);
 
 	btn = tgui::Button::create();
-	btn->setPosition("22,5%", "90%");
-	btn->setSize(120, 50);
-	btn->setText("Characters");
-	btn->setTextSize(22);
-	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	adventureUIPanel->add(btn, "inventoryButtonCharacters");
-	btn->connect("MouseReleased", adventureUIInventorySpecialButtons, AdventureUIInventoryStateNamespace::AdventureUIInventoryState::characterInventory);
-
-	btn = tgui::Button::create();
-	btn->setPosition("37,5%", "90%");
-	btn->setSize(120, 50);
-	btn->setText("Hangar");
-	btn->setTextSize(22);
-	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	adventureUIPanel->add(btn, "inventoryButtonHangar");
-
-	btn = tgui::Button::create();
-	btn->setPosition("52,5%", "90%");
-	btn->setSize(120, 50);
+	btn->setPosition(198, "90%");
+	btn->setSize(140, 50);
 	btn->setText("Lab");
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	adventureUIPanel->add(btn, "inventoryButtonLab");
+	adventureUIPanel->add(btn, "playerUIlab");
 
 	btn = tgui::Button::create();
-	btn->setPosition("67,5%", "90%");
-	btn->setSize(120, 50);
+	btn->setPosition(361, "90%");
+	btn->setSize(140, 50);
+	btn->setText("Crew");
+	btn->setTextSize(22);
+	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	adventureUIPanel->add(btn, "playerUIcrew");
+	btn->connect("MouseReleased", adventureUIInventorySpecialButtons, AdventureUIInventoryStateNamespace::AdventureUIInventoryState::characterInventory);
+
+	btn = tgui::Button::create();
+	btn->setPosition(524, "90%");
+	btn->setSize(140, 50);
 	btn->setText("Craft");
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	adventureUIPanel->add(btn, "inventoryButtonCraft");
+	adventureUIPanel->add(btn, "playerUIcraft");
 
 	btn = tgui::Button::create();
-	btn->setPosition("82,5%", "90%");
-	btn->setSize(120, 50);
-	btn->setText("Social");
+	btn->setPosition(687, "90%");
+	btn->setSize(140, 50);
+	btn->setText("Storage");
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	adventureUIPanel->add(btn, "inventoryButtonSocial");
+	adventureUIPanel->add(btn, "playerUIstorage");
+
+	btn = tgui::Button::create();
+	btn->setPosition(850, "90%");
+	btn->setSize(140, 50);
+	btn->setText("Stats");
+	btn->setTextSize(22);
+	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	adventureUIPanel->add(btn, "playerUImainStats");
+
+	btn = tgui::Button::create();
+	btn->setPosition(1013, "90%");
+	btn->setSize(140, 50);
+	btn->setText("Hangar");
+	btn->setTextSize(22);
+	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	adventureUIPanel->add(btn, "playerUIhangar");
 
 	//create buttons and some other stuff on main adventure interface
 
