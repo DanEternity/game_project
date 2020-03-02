@@ -5,6 +5,7 @@
 #include "personEquipmentUI.h"
 #include "shipModulesUI.h"
 #include "tableInventory.h"
+#include "storageStuff.h"
 
 void updateAdventureUI();
 void disableAllAdventureUIWidgets();

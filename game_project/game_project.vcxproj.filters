@@ -108,6 +108,9 @@
     <ClCompile Include="Source\worldGenerator.cpp">
       <Filter>WorldGenerator</Filter>
     </ClCompile>
+    <ClCompile Include="Source\storageStuff.cpp">
+      <Filter>Adventure\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\game.h">
@@ -255,6 +258,9 @@
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="Source\adventureUI.h">
+      <Filter>Adventure\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\storageStuff.h">
       <Filter>Adventure\UI</Filter>
     </ClInclude>
   </ItemGroup>

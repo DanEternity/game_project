@@ -72,7 +72,7 @@ void BuildInventoryUI(int cellSize)
 {
 
 	tgui::ScrollablePanel::Ptr scrollablePanel = tgui::ScrollablePanel::create();
-	gEnv->game.adventureGUI.get<tgui::Panel>("adventuryUIInventoryMainPanel")->add(scrollablePanel, "inventoryPanel");
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(scrollablePanel, "inventoryPanel");
 	scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
 	scrollablePanel->setPosition("5%", "25%");
 	scrollablePanel->setSize(520, 400);

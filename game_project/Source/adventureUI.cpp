@@ -31,9 +31,17 @@ void createAdventureUIButtons()
 	adventureUIPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
 	adventureUIPanel->setSize(1200, 675);
 	adventureUIPanel->setPosition("20%", "15%");
-	gEnv->game.adventureGUI.add(adventureUIPanel, "adventuryUIInventoryMainPanel");
+	gEnv->game.adventureGUI.add(adventureUIPanel, "playerUIMainPanel");
 	adventureUIPanel->setEnabled(false);
 	adventureUIPanel->setVisible(false);
+
+	tgui::Panel::Ptr adventureUISubPanel = tgui::Panel::create();
+	adventureUISubPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
+	adventureUISubPanel->setSize(1176, 590);
+	adventureUISubPanel->setPosition("1%", "1%");
+	adventureUIPanel->add(adventureUISubPanel, "playerUISubPanel");
+	adventureUISubPanel->setEnabled(false);
+	adventureUISubPanel->setVisible(false);
 
 	// create buttons on main interface panel
 
@@ -78,6 +86,7 @@ void createAdventureUIButtons()
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	adventureUIPanel->add(btn, "playerUIstorage");
+	btn->connect("MouseReleased", adventureUIInventorySpecialButtons, AdventureUIInventoryStateNamespace::AdventureUIInventoryState::storageInventory);
 
 	btn = tgui::Button::create();
 	btn->setPosition(850, "90%");
@@ -169,6 +178,21 @@ void createAdventureUIButtons()
 	bar->setText("Fuel: 20/80");
 	bar->setRenderer(gEnv->globalTheme.getRenderer("ProgressBar"));
 	gEnv->game.adventureGUI.add(bar);
+	
+	// create some stuff in subPanel inventories
+
+	tgui::ComboBox::Ptr comboBox = tgui::ComboBox::create();
+	adventureUISubPanel->add(comboBox, "storageFilter");
+	comboBox->setRenderer(gEnv->globalTheme.getRenderer("ComboBox"));
+	comboBox->setSize(150, 30);
+	comboBox->setPosition("70%", "10%");
+	comboBox->addItem(L"No filter");
+	comboBox->addItem(L"Modules");
+	comboBox->addItem(L"Equipment");
+	comboBox->setSelectedItem(L"No filter");
+	comboBox->setEnabled(false);
+	comboBox->setVisible(false);
+	comboBox->connect("ItemSelected", changeFilterState);
 
 	// create and fill inventories
 	gEnv->game.player.inventory.resize(50, nullptr);
@@ -263,8 +287,10 @@ void createAdventureUIButtons()
 //this function called when we open inventory
 void adventureUIChangeState(AdventureUIInventoryStateNamespace::AdventureUIInventoryState state)
 {
-	gEnv->game.adventureGUI.get<tgui::Panel>("adventuryUIInventoryMainPanel")->setEnabled(true);
-	gEnv->game.adventureGUI.get<tgui::Panel>("adventuryUIInventoryMainPanel")->setVisible(true);
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setEnabled(true);
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setVisible(true);
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setEnabled(true);
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setVisible(true);
 	gEnv->game.adventureUI.isInventoryOpen = !gEnv->game.adventureUI.isInventoryOpen;
 	if (gEnv->game.adventureUI.isInventoryOpen)
 	{
@@ -287,14 +313,16 @@ void adventureUIChangeState(AdventureUIInventoryStateNamespace::AdventureUIInven
 	}
 	else
 	{
-		gEnv->game.adventureGUI.get<tgui::Panel>("adventuryUIInventoryMainPanel")->setEnabled(false);
-		gEnv->game.adventureGUI.get<tgui::Panel>("adventuryUIInventoryMainPanel")->setVisible(false);
+		gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setEnabled(false);
+		gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setVisible(false);
 		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setEnabled(false);
 		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setVisible(false);
 		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(false);
 		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(false);
 		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setEnabled(false);
 		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setVisible(false);
+		gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setEnabled(false);
+		gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setVisible(false);
 	}
 }
 
@@ -315,6 +343,10 @@ void adventureUIInventorySpecialButtons(AdventureUIInventoryStateNamespace::Adve
 	case AdventureUIInventoryStateNamespace::AdventureUIInventoryState::shipInventory:
 		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(true);
 		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(true);
+		break;
+	case AdventureUIInventoryStateNamespace::AdventureUIInventoryState::storageInventory:
+		gEnv->game.adventureGUI.get<tgui::ComboBox>("storageFilter")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::ComboBox>("storageFilter")->setVisible(true);
 		break;
 	}
 }

@@ -36,6 +36,7 @@ namespace AdventureUIInventoryStateNamespace
 	enum AdventureUIInventoryState {
 		shipInventory,
 		characterInventory,
+		storageInventory,
 	};
 }
 

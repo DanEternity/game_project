@@ -6,7 +6,7 @@ void BuildPersonSchemeUI(int equipSizeUI, int crewPersonNumber)
 	mainPersonPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
 	mainPersonPanel->setSize(350, 550);
 	mainPersonPanel->setPosition("67%", "5%");
-	gEnv->game.adventureGUI.get<tgui::Panel>("adventuryUIInventoryMainPanel")->add(mainPersonPanel, "PersonSchemeEquipPanel");
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(mainPersonPanel, "PersonSchemeEquipPanel");
 
 	tgui::Label::Ptr characterName = tgui::Label::create();
 	characterName->setRenderer(gEnv->globalTheme.getRenderer("Label"));
