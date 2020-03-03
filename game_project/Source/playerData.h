@@ -5,9 +5,18 @@
 //
 
 #include <vector>
+#include <string>
 #include "ship.h"
 #include "character.h"
 #include "crewData.h"
+
+class IntventoryFilter
+{
+public:
+	std::wstring searchString;
+	std::set<itemType::ItemType> itemType;
+	// add other filters if needed
+};
 
 class PlayerData
 {
@@ -15,6 +24,12 @@ public:
 	
 	// inventory // storage
 	std::vector<Item *> inventory;
+
+	// temp inventory // view
+	std::vector<int> localInventory;
+
+	// filter condition
+	IntventoryFilter inventoryFilter;
 
 	// player ship
 	Ship * ship;

@@ -280,7 +280,7 @@ void createAdventureUIButtons()
 	gEnv->game.player.crew.characters[0]->equipment[0]->equipmentSlotType = equipmentSlot::head;
 
 	BuildPersonSchemeUI(50, 0);
-
+	CreateInventoryGridPanel(10);
 }
 
 
@@ -292,6 +292,7 @@ void adventureUIChangeState(AdventureUIInventoryStateNamespace::AdventureUIInven
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setEnabled(true);
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setVisible(true);
 	gEnv->game.adventureUI.isInventoryOpen = !gEnv->game.adventureUI.isInventoryOpen;
+	RebuildInventoryGridPanel();
 	if (gEnv->game.adventureUI.isInventoryOpen)
 	{
 		switch (state)

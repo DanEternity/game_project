@@ -74,8 +74,8 @@ void BuildInventoryUI(int cellSize)
 	tgui::ScrollablePanel::Ptr scrollablePanel = tgui::ScrollablePanel::create();
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(scrollablePanel, "inventoryPanel");
 	scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
-	scrollablePanel->setPosition("5%", "25%");
-	scrollablePanel->setSize(520, 400);
+	scrollablePanel->setPosition("5%", "15%");
+	scrollablePanel->setSize(520, 200);
 	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
 	{
 
@@ -89,6 +89,7 @@ void BuildInventoryUI(int cellSize)
 		button->setSize(45, 40);
 		button->setPosition(5 + positionX * 50, 10 + positionY * 50);
 		button->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+		
 		if (gEnv->game.player.inventory[i] != NULL)
 			button->setText(gEnv->game.player.inventory[i]->name);
 		else
@@ -335,4 +336,113 @@ void rmPanelChoosenInsert(const int id, const int item_id, int inventory, tgui::
 		gEnv->game.ui.rmWasClicked = false;
 		gEnv->game.ui.tempAddPanelClicked = false;
 	}
+}
+
+void CreateInventoryGridPanel(int length)
+{
+
+	tgui::ScrollablePanel::Ptr scrollablePanel = tgui::ScrollablePanel::create();
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(scrollablePanel, "inventoryGridPanel");
+	scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
+	scrollablePanel->setPosition("5%", "65%");
+	scrollablePanel->setSize(520, 200);
+
+
+	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
+	{
+
+		int positionX = i % length;
+		int positionY = i / length;
+		const int number = i;
+		tgui::Button::Ptr button = tgui::Button::create();
+
+		scrollablePanel->add(button, "InventoryItem" + std::to_string(i));
+
+		button->setSize(45, 40);
+		button->setPosition(5 + positionX * 50, 10 + positionY * 50);
+		button->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+
+		button->setText(L"");
+
+		button->connect("MouseReleased", InventoryGridPanelEventHandler, number);
+		button->connect("RightMouseReleased", InventoryGridPanelEventHandler, number);
+
+	}
+
+}
+
+void RebuildInventoryGridPanel()
+{
+
+	gEnv->game.player.localInventory.clear();
+
+	// apply category filter
+	//gEnv->game.player.inventoryFilter.searchString = L"Ebalo";
+	//
+	for (int id(0); id < gEnv->game.player.inventory.size(); id++)
+	{
+		if (gEnv->game.player.inventory[id] != NULL)
+		{
+
+			// compare to filter
+			//
+
+			auto p = gEnv->game.player.inventory[id];
+
+			//if (p->itemType in filter.itemTypes && p->name in filter.nameSeacrh)
+
+			bool filter_ok = true;
+			IntventoryFilter* filter = &gEnv->game.player.inventoryFilter;
+			
+			if (filter->searchString != L"")
+			{
+				if (p->name.find(filter->searchString) == std::wstring::npos)
+				{
+					filter_ok = false;
+				}
+			}
+
+			if (filter->itemType.size() > 0)
+			{
+				if (filter->itemType.find(p->itemType) == filter->itemType.end())
+				{
+					filter_ok = false;
+				}
+			}
+
+			if (!filter_ok)
+				continue;
+			gEnv->game.player.localInventory.push_back(id);
+
+		}
+	}
+
+	for (int id(0); id < gEnv->game.player.inventory.size(); id++)
+	{	
+		if (id < gEnv->game.player.localInventory.size() && gEnv->game.player.localInventory[id] != -1)
+			gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->
+			setText(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]->name);
+		else
+			gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->
+			setText(L"");
+	}
+
+
+}
+
+void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, const std::string & signalName)
+{
+
+	if (signalName == "MouseReleased")
+	{
+		// handle left click
+		
+	}
+
+	if (signalName == "RightMouseReleased")
+	{
+		// handle right click
+		
+	}
+
 }
