@@ -278,6 +278,7 @@ void createAdventureUIButtons()
 	comboBox->addItem(L"Modules");
 	comboBox->addItem(L"Equipment");
 	comboBox->setSelectedItem(L"No filter");
+	//comboBox->connect("ItemSelected", твоя_функция, твои_аргументы);
 
 	tgui::EditBox::Ptr editBox = tgui::EditBox::create();
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(editBox, "editBoxFilter");
@@ -286,6 +287,7 @@ void createAdventureUIButtons()
 	editBox->setTextSize(18);
 	editBox->setPosition("50%", "75%");
 	editBox->setDefaultText("Search");
+	//editBox->connect("TextChanged", твоя_функция, твои_аргументы);
 }
 
 
