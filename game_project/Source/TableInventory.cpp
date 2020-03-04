@@ -430,6 +430,55 @@ void RebuildInventoryGridPanel()
 
 }
 
+void ApplyDefaultFilterToInventoryPanel()
+{
+
+	// current menu
+	auto q = gEnv->game.player.shipMenu;
+	
+
+
+}
+
+void filterSearchFieldChanged(tgui::Widget::Ptr widget, const std::string & signalName)
+{
+
+	gEnv->game.player.inventoryFilter.searchString = widget->cast<tgui::EditBox>()->getText();
+
+	RebuildInventoryGridPanel();
+
+}
+
+void filterCategoryFieldChanged(tgui::Widget::Ptr widget, const std::string & signalName)
+{
+
+	auto p = widget->cast<tgui::ComboBox>();
+	std::wstring s = p->getSelectedItem();
+	wprintf(L"Filter set: %s \n", s.c_str());
+
+	gEnv->game.player.inventoryFilter.itemType.clear();
+
+	if (s == L"Equipment")
+	{
+		gEnv->game.player.inventoryFilter.itemType.insert(itemType::equipment);
+	}
+
+	if (s == L"Modules")
+	{
+		gEnv->game.player.inventoryFilter.itemType.insert(itemType::module);
+	}
+
+	if (s == L"No filter")
+	{
+
+	}
+	// currently do nothing because not all windows are completed
+	ApplyDefaultFilterToInventoryPanel();
+
+	RebuildInventoryGridPanel();
+
+}
+
 void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, const std::string & signalName)
 {
 

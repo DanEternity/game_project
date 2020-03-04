@@ -18,6 +18,22 @@ public:
 	// add other filters if needed
 };
 
+namespace shipMenu {
+
+	enum ShipMenu
+	{
+		null, // window closed
+		ship,
+		lab,
+		crew,
+		craft,
+		storage,
+		stats,
+		hangar,
+	};
+
+}
+
 class PlayerData
 {
 public:
@@ -40,4 +56,9 @@ public:
 	sf::Vector2f shipPosition = { 0, 0 };
 	// camera position (world coord) // adventure ONLY
 	sf::Vector2f cameraPosition = { 0, -600 };
+	
+	// UI section
+	// current ship menu
+	shipMenu::ShipMenu shipMenu = shipMenu::null;
+
 };

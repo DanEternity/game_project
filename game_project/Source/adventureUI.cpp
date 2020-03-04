@@ -269,6 +269,7 @@ void createAdventureUIButtons()
 	BuildPersonSchemeUI(50, 0);
 	CreateInventoryGridPanel(10);
 
+	// filter components
 	tgui::ComboBox::Ptr comboBox = tgui::ComboBox::create();
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(comboBox, "comboBoxFilter");
 	comboBox->setRenderer(gEnv->globalTheme.getRenderer("ComboBox"));
@@ -278,7 +279,7 @@ void createAdventureUIButtons()
 	comboBox->addItem(L"Modules");
 	comboBox->addItem(L"Equipment");
 	comboBox->setSelectedItem(L"No filter");
-	//comboBox->connect("ItemSelected", твоя_функция, твои_аргументы);
+	comboBox->connect("ItemSelected", filterCategoryFieldChanged);
 
 	tgui::EditBox::Ptr editBox = tgui::EditBox::create();
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(editBox, "editBoxFilter");
@@ -287,7 +288,7 @@ void createAdventureUIButtons()
 	editBox->setTextSize(18);
 	editBox->setPosition("50%", "75%");
 	editBox->setDefaultText("Search");
-	//editBox->connect("TextChanged", твоя_функция, твои_аргументы);
+	editBox->connect("TextChanged", filterSearchFieldChanged);
 }
 
 
@@ -299,7 +300,7 @@ void adventureUIChangeState(AdventureUIInventoryStateNamespace::AdventureUIInven
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setEnabled(true);
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setVisible(true);
 	gEnv->game.adventureUI.isInventoryOpen = !gEnv->game.adventureUI.isInventoryOpen;
-	RebuildInventoryGridPanel();
+
 	if (gEnv->game.adventureUI.isInventoryOpen)
 	{
 		switch (state)
@@ -309,12 +310,16 @@ void adventureUIChangeState(AdventureUIInventoryStateNamespace::AdventureUIInven
 			gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setVisible(true);
 			gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(true);
 			gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(true);
+			gEnv->game.player.shipMenu = shipMenu::ship;
+			printf("Ship menu opened\n");
 			break;
 		case AdventureUIInventoryStateNamespace::AdventureUIInventoryState::characterInventory:
 			gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setEnabled(true);
 			gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setVisible(true);
 			gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setEnabled(true);
 			gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setVisible(true);
+			gEnv->game.player.shipMenu = shipMenu::crew;
+			printf("Crew menu opened\n");
 			break;
 		}
 		
@@ -332,6 +337,9 @@ void adventureUIChangeState(AdventureUIInventoryStateNamespace::AdventureUIInven
 		gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setEnabled(false);
 		gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setVisible(false);
 	}
+
+	RebuildInventoryGridPanel();
+
 }
 
 
@@ -342,19 +350,29 @@ void adventureUIInventorySpecialButtons(AdventureUIInventoryStateNamespace::Adve
 	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setEnabled(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setVisible(false);
+
 	switch (newState)
 	{
 	case AdventureUIInventoryStateNamespace::AdventureUIInventoryState::characterInventory:
 		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setEnabled(true);
 		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setVisible(true);
+		gEnv->game.player.shipMenu = shipMenu::crew;
+		printf("Crew menu opened\n");
+
 		break;
 	case AdventureUIInventoryStateNamespace::AdventureUIInventoryState::shipInventory:
 		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(true);
 		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(true);
+		gEnv->game.player.shipMenu = shipMenu::ship;
+		printf("Ship menu opened\n");
 		break;
 	case AdventureUIInventoryStateNamespace::AdventureUIInventoryState::storageInventory:
+		gEnv->game.player.shipMenu = shipMenu::storage;
+		printf("Storage menu opened\n");
 		break;
 	}
+
+	RebuildInventoryGridPanel();
 }
 
 //this not works yet :) 

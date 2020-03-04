@@ -45,10 +45,13 @@ void rmPanelChoosenInsert(const int id, const int item_id, int inventory, tgui::
 
 void CreateInventoryGridPanel(int length);
 void RebuildInventoryGridPanel();
-void ApplyFilterToInventoryPanel();
+
+// applies filter default for current inventory window or gamemode
+void ApplyDefaultFilterToInventoryPanel();
 
 
-
+void filterSearchFieldChanged(tgui::Widget::Ptr widget, const std::string& signalName);
+void filterCategoryFieldChanged(tgui::Widget::Ptr widget, const std::string& signalName);
 
 void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, const std::string& signalName);
 
