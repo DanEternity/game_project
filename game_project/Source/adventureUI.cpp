@@ -181,19 +181,6 @@ void createAdventureUIButtons()
 	
 	// create some stuff in subPanel inventories
 
-	tgui::ComboBox::Ptr comboBox = tgui::ComboBox::create();
-	adventureUISubPanel->add(comboBox, "storageFilter");
-	comboBox->setRenderer(gEnv->globalTheme.getRenderer("ComboBox"));
-	comboBox->setSize(150, 30);
-	comboBox->setPosition("70%", "10%");
-	comboBox->addItem(L"No filter");
-	comboBox->addItem(L"Modules");
-	comboBox->addItem(L"Equipment");
-	comboBox->setSelectedItem(L"No filter");
-	comboBox->setEnabled(false);
-	comboBox->setVisible(false);
-	comboBox->connect("ItemSelected", changeFilterState);
-
 	// create and fill inventories
 	gEnv->game.player.inventory.resize(50, nullptr);
 
@@ -281,6 +268,24 @@ void createAdventureUIButtons()
 
 	BuildPersonSchemeUI(50, 0);
 	CreateInventoryGridPanel(10);
+
+	tgui::ComboBox::Ptr comboBox = tgui::ComboBox::create();
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(comboBox, "comboBoxFilter");
+	comboBox->setRenderer(gEnv->globalTheme.getRenderer("ComboBox"));
+	comboBox->setSize(150, 30);
+	comboBox->setPosition("50%", "65%");
+	comboBox->addItem(L"No filter");
+	comboBox->addItem(L"Modules");
+	comboBox->addItem(L"Equipment");
+	comboBox->setSelectedItem(L"No filter");
+
+	tgui::EditBox::Ptr editBox = tgui::EditBox::create();
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(editBox, "editBoxFilter");
+	editBox->setRenderer(gEnv->globalTheme.getRenderer("EditBox"));
+	editBox->setSize(150, 30);
+	editBox->setTextSize(18);
+	editBox->setPosition("50%", "75%");
+	editBox->setDefaultText("Search");
 }
 
 
@@ -346,8 +351,6 @@ void adventureUIInventorySpecialButtons(AdventureUIInventoryStateNamespace::Adve
 		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(true);
 		break;
 	case AdventureUIInventoryStateNamespace::AdventureUIInventoryState::storageInventory:
-		gEnv->game.adventureGUI.get<tgui::ComboBox>("storageFilter")->setEnabled(true);
-		gEnv->game.adventureGUI.get<tgui::ComboBox>("storageFilter")->setVisible(true);
 		break;
 	}
 }
