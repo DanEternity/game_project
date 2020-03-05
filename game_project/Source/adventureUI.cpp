@@ -292,6 +292,32 @@ void createAdventureUIButtons()
 }
 
 
+
+void updateShipMenuUIVisibility()
+{
+	switch (gEnv->game.player.shipMenu)
+	{
+	case shipMenu::ship:
+		break;
+	case shipMenu::craft:
+		break;
+	case shipMenu::crew:
+		break;
+	case shipMenu::hangar:
+		break;
+	case shipMenu::lab:
+		break;
+	case shipMenu::stats:
+		break;
+	case shipMenu::storage:
+		break;
+	case shipMenu::null:
+		break;
+	default:
+		break;
+	}
+}
+
 //this function called when we open inventory
 void adventureUIChangeState(AdventureUIInventoryStateNamespace::AdventureUIInventoryState state)
 {
