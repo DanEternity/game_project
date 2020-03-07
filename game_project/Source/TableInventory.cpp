@@ -260,7 +260,7 @@ void rmPanelClickedInventory(const int id, tgui::Widget::Ptr widget, const std::
 					btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 					if (gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[i] != NULL)
 						btn->setText(L"Insert instead: " + gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[i]->name);
-					else btn->setText(L"Insert");
+					else btn->setText(L"Insert instead: Empty");
 					const int num = i;
 					btn->connect("MouseReleased", rmPanelChoosenInsert, id, num, 1);
 					panel->add(btn);
@@ -342,10 +342,10 @@ void CreateInventoryGridPanel(int length)
 {
 
 	tgui::ScrollablePanel::Ptr scrollablePanel = tgui::ScrollablePanel::create();
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(scrollablePanel, "inventoryGridPanel");
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->add(scrollablePanel, "inventoryGridPanel");
 	scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
-	scrollablePanel->setPosition("5%", "65%");
-	scrollablePanel->setSize(520, 200);
+	scrollablePanel->setPosition("5%", "15%");
+	scrollablePanel->setSize(520, 260);
 
 
 	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
