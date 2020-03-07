@@ -45,8 +45,8 @@ void createAdventureUIButtons()
 
 	tgui::Panel::Ptr adventureUIGridSubPanel = tgui::Panel::create();
 	adventureUIGridSubPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel3"));
-	adventureUIGridSubPanel->setSize(600, 350);
-	adventureUIGridSubPanel->setPosition(1, "40%");
+	adventureUIGridSubPanel->setSize(600, 200);
+	adventureUIGridSubPanel->setPosition(1, "65%");
 	adventureUISubPanel->add(adventureUIGridSubPanel, "playerUIGridSubPanel");
 	adventureUIGridSubPanel->setEnabled(false);
 	adventureUIGridSubPanel->setVisible(false);

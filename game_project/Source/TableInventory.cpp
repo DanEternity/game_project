@@ -344,8 +344,8 @@ void CreateInventoryGridPanel(int length)
 	tgui::ScrollablePanel::Ptr scrollablePanel = tgui::ScrollablePanel::create();
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->add(scrollablePanel, "inventoryGridPanel");
 	scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
-	scrollablePanel->setPosition("5%", "15%");
-	scrollablePanel->setSize(520, 260);
+	scrollablePanel->setPosition("5%", "25%");
+	scrollablePanel->setSize(520, 140);
 
 
 	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
