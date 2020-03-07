@@ -43,6 +43,14 @@ void createAdventureUIButtons()
 	adventureUISubPanel->setEnabled(false);
 	adventureUISubPanel->setVisible(false);
 
+	tgui::Panel::Ptr adventureUIGridSubPanel = tgui::Panel::create();
+	adventureUIGridSubPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel3"));
+	adventureUIGridSubPanel->setSize(600, 350);
+	adventureUIGridSubPanel->setPosition(1, "40%");
+	adventureUISubPanel->add(adventureUIGridSubPanel, "playerUIGridSubPanel");
+	adventureUIGridSubPanel->setEnabled(false);
+	adventureUIGridSubPanel->setVisible(false);
+
 	// create buttons on main interface panel
 
 	tgui::Button::Ptr btn = tgui::Button::create();
@@ -52,7 +60,7 @@ void createAdventureUIButtons()
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	adventureUIPanel->add(btn, "playerUIship");
-	btn->connect("MouseReleased", adventureUIInventorySpecialButtons, AdventureUIInventoryStateNamespace::AdventureUIInventoryState::shipInventory);
+	btn->connect("MouseReleased", updateShipMenuUIVisibility, shipMenu::ship, 1);
 
 	btn = tgui::Button::create();
 	btn->setPosition(198, "90%");
@@ -61,6 +69,7 @@ void createAdventureUIButtons()
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	adventureUIPanel->add(btn, "playerUIlab");
+	btn->connect("MouseReleased", updateShipMenuUIVisibility, shipMenu::lab, 1);
 
 	btn = tgui::Button::create();
 	btn->setPosition(361, "90%");
@@ -69,7 +78,7 @@ void createAdventureUIButtons()
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	adventureUIPanel->add(btn, "playerUIcrew");
-	btn->connect("MouseReleased", adventureUIInventorySpecialButtons, AdventureUIInventoryStateNamespace::AdventureUIInventoryState::characterInventory);
+	btn->connect("MouseReleased", updateShipMenuUIVisibility, shipMenu::crew, 1);
 
 	btn = tgui::Button::create();
 	btn->setPosition(524, "90%");
@@ -78,6 +87,7 @@ void createAdventureUIButtons()
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	adventureUIPanel->add(btn, "playerUIcraft");
+	btn->connect("MouseReleased", updateShipMenuUIVisibility, shipMenu::craft, 1);
 
 	btn = tgui::Button::create();
 	btn->setPosition(687, "90%");
@@ -86,7 +96,7 @@ void createAdventureUIButtons()
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	adventureUIPanel->add(btn, "playerUIstorage");
-	btn->connect("MouseReleased", adventureUIInventorySpecialButtons, AdventureUIInventoryStateNamespace::AdventureUIInventoryState::storageInventory);
+	btn->connect("MouseReleased", updateShipMenuUIVisibility, shipMenu::storage, 1);
 
 	btn = tgui::Button::create();
 	btn->setPosition(850, "90%");
@@ -95,6 +105,7 @@ void createAdventureUIButtons()
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	adventureUIPanel->add(btn, "playerUImainStats");
+	btn->connect("MouseReleased", updateShipMenuUIVisibility, shipMenu::stats, 1);
 
 	btn = tgui::Button::create();
 	btn->setPosition(1013, "90%");
@@ -103,6 +114,7 @@ void createAdventureUIButtons()
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	adventureUIPanel->add(btn, "playerUIhangar");
+	btn->connect("MouseReleased", updateShipMenuUIVisibility, shipMenu::hangar, 1);
 
 	//create buttons and some other stuff on main adventure interface
 
@@ -128,7 +140,7 @@ void createAdventureUIButtons()
 	btn->setText("Characters");
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	btn->connect("MouseReleased", adventureUIChangeState, AdventureUIInventoryStateNamespace::AdventureUIInventoryState::characterInventory);
+	btn->connect("MouseReleased", updateShipMenuUIVisibility, shipMenu::crew, 0);
 	gEnv->game.adventureGUI.add(btn);
 
 	btn = tgui::Button::create();
@@ -137,7 +149,7 @@ void createAdventureUIButtons()
 	btn->setText("Ship");
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	btn->connect("MouseReleased", adventureUIChangeState, AdventureUIInventoryStateNamespace::AdventureUIInventoryState::shipInventory);
+	btn->connect("MouseReleased", updateShipMenuUIVisibility, shipMenu::ship, 0);
 	gEnv->game.adventureGUI.add(btn);
 
 	btn = tgui::Button::create();
@@ -271,10 +283,10 @@ void createAdventureUIButtons()
 
 	// filter components
 	tgui::ComboBox::Ptr comboBox = tgui::ComboBox::create();
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(comboBox, "comboBoxFilter");
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->add(comboBox, "comboBoxFilter");
 	comboBox->setRenderer(gEnv->globalTheme.getRenderer("ComboBox"));
 	comboBox->setSize(150, 30);
-	comboBox->setPosition("50%", "65%");
+	comboBox->setPosition("5%", "5%");
 	comboBox->addItem(L"No filter");
 	comboBox->addItem(L"Modules");
 	comboBox->addItem(L"Equipment");
@@ -282,26 +294,48 @@ void createAdventureUIButtons()
 	comboBox->connect("ItemSelected", filterCategoryFieldChanged);
 
 	tgui::EditBox::Ptr editBox = tgui::EditBox::create();
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(editBox, "editBoxFilter");
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->add(editBox, "editBoxFilter");
 	editBox->setRenderer(gEnv->globalTheme.getRenderer("EditBox"));
 	editBox->setSize(150, 30);
 	editBox->setTextSize(18);
-	editBox->setPosition("50%", "75%");
+	editBox->setPosition("40%", "5%");
 	editBox->setDefaultText("Search");
 	editBox->connect("TextChanged", filterSearchFieldChanged);
 }
 
 
 
-void updateShipMenuUIVisibility()
+void updateShipMenuUIVisibility(shipMenu::ShipMenu state, int whereCalled) // whereCalled - 0 для кнопок в нижнем левом углу экрана, 1 для кнопок на панели интерфейса
 {
+	disableAllAdventureUI();
+	if (whereCalled == 0)
+		gEnv->game.adventureUI.isInventoryOpen = !gEnv->game.adventureUI.isInventoryOpen;
+	if (!gEnv->game.adventureUI.isInventoryOpen)
+		return;
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setEnabled(true);
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setVisible(true);
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setEnabled(true);
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setVisible(true); 
+	gEnv->game.player.shipMenu = state;
 	switch (gEnv->game.player.shipMenu)
 	{
 	case shipMenu::ship:
+		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setVisible(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setVisible(true);
 		break;
 	case shipMenu::craft:
 		break;
 	case shipMenu::crew:
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setVisible(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setVisible(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setVisible(true);
 		break;
 	case shipMenu::hangar:
 		break;
@@ -310,96 +344,118 @@ void updateShipMenuUIVisibility()
 	case shipMenu::stats:
 		break;
 	case shipMenu::storage:
+		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setVisible(true);
 		break;
 	case shipMenu::null:
 		break;
 	default:
 		break;
 	}
-}
-
-//this function called when we open inventory
-void adventureUIChangeState(AdventureUIInventoryStateNamespace::AdventureUIInventoryState state)
-{
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setEnabled(true);
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setVisible(true);
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setEnabled(true);
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setVisible(true);
-	gEnv->game.adventureUI.isInventoryOpen = !gEnv->game.adventureUI.isInventoryOpen;
-
-	if (gEnv->game.adventureUI.isInventoryOpen)
-	{
-		switch (state)
-		{
-		case AdventureUIInventoryStateNamespace::AdventureUIInventoryState::shipInventory:
-			gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setEnabled(true);
-			gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setVisible(true);
-			gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(true);
-			gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(true);
-			gEnv->game.player.shipMenu = shipMenu::ship;
-			printf("Ship menu opened\n");
-			break;
-		case AdventureUIInventoryStateNamespace::AdventureUIInventoryState::characterInventory:
-			gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setEnabled(true);
-			gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setVisible(true);
-			gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setEnabled(true);
-			gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setVisible(true);
-			gEnv->game.player.shipMenu = shipMenu::crew;
-			printf("Crew menu opened\n");
-			break;
-		}
-		
-	}
-	else
-	{
-		gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setEnabled(false);
-		gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setVisible(false);
-		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setEnabled(false);
-		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setVisible(false);
-		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(false);
-		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(false);
-		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setEnabled(false);
-		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setVisible(false);
-		gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setEnabled(false);
-		gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setVisible(false);
-	}
 
 	RebuildInventoryGridPanel();
-
 }
 
-
-//this function called when we click  button on main interface panel 
-void adventureUIInventorySpecialButtons(AdventureUIInventoryStateNamespace::AdventureUIInventoryState newState)
+void disableAllAdventureUI()
 {
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setEnabled(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setVisible(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setEnabled(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setVisible(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setEnabled(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setVisible(false);
-
-	switch (newState)
-	{
-	case AdventureUIInventoryStateNamespace::AdventureUIInventoryState::characterInventory:
-		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setEnabled(true);
-		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setVisible(true);
-		gEnv->game.player.shipMenu = shipMenu::crew;
-		printf("Crew menu opened\n");
-
-		break;
-	case AdventureUIInventoryStateNamespace::AdventureUIInventoryState::shipInventory:
-		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(true);
-		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(true);
-		gEnv->game.player.shipMenu = shipMenu::ship;
-		printf("Ship menu opened\n");
-		break;
-	case AdventureUIInventoryStateNamespace::AdventureUIInventoryState::storageInventory:
-		gEnv->game.player.shipMenu = shipMenu::storage;
-		printf("Storage menu opened\n");
-		break;
-	}
-
-	RebuildInventoryGridPanel();
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setEnabled(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setVisible(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setEnabled(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setVisible(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setEnabled(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setVisible(false);
 }
+
+//this function called when we open inventory
+//void adventureUIChangeState(AdventureUIInventoryStateNamespace::AdventureUIInventoryState state)
+//{
+//	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setEnabled(true);
+//	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setVisible(true);
+//	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setEnabled(true);
+//	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setVisible(true);
+//	gEnv->game.adventureUI.isInventoryOpen = !gEnv->game.adventureUI.isInventoryOpen;
+//
+//	if (gEnv->game.adventureUI.isInventoryOpen)
+//	{
+//		switch (state)
+//		{
+//		case AdventureUIInventoryStateNamespace::AdventureUIInventoryState::shipInventory:
+//			gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setEnabled(true);
+//			gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setVisible(true);
+//			gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(true);
+//			gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(true);
+//			gEnv->game.player.shipMenu = shipMenu::ship;
+//			printf("Ship menu opened\n");
+//			break;
+//		case AdventureUIInventoryStateNamespace::AdventureUIInventoryState::characterInventory:
+//			gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setEnabled(true);
+//			gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setVisible(true);
+//			gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setEnabled(true);
+//			gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setVisible(true);
+//			gEnv->game.player.shipMenu = shipMenu::crew;
+//			printf("Crew menu opened\n");
+//			break;
+//		}
+//		
+//	}
+//	else
+//	{
+//		gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setEnabled(false);
+//		gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setVisible(false);
+//		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setEnabled(false);
+//		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setVisible(false);
+//		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(false);
+//		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(false);
+//		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setEnabled(false);
+//		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setVisible(false);
+//		gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setEnabled(false);
+//		gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setVisible(false);
+//	}
+//
+//	RebuildInventoryGridPanel();
+//
+//}
+//
+//
+////this function called when we click  button on main interface panel 
+//void adventureUIInventorySpecialButtons(AdventureUIInventoryStateNamespace::AdventureUIInventoryState newState)
+//{
+//	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(false);
+//	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(false);
+//	gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setEnabled(false);
+//	gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setVisible(false);
+//
+//	switch (newState)
+//	{
+//	case AdventureUIInventoryStateNamespace::AdventureUIInventoryState::characterInventory:
+//		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setEnabled(true);
+//		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setVisible(true);
+//		gEnv->game.player.shipMenu = shipMenu::crew;
+//		printf("Crew menu opened\n");
+//
+//		break;
+//	case AdventureUIInventoryStateNamespace::AdventureUIInventoryState::shipInventory:
+//		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(true);
+//		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(true);
+//		gEnv->game.player.shipMenu = shipMenu::ship;
+//		printf("Ship menu opened\n");
+//		break;
+//	case AdventureUIInventoryStateNamespace::AdventureUIInventoryState::storageInventory:
+//		gEnv->game.player.shipMenu = shipMenu::storage;
+//		printf("Storage menu opened\n");
+//		break;
+//	}
+//
+//	RebuildInventoryGridPanel();
+//}
 
 //this not works yet :) 
 void createPauseMenu()
