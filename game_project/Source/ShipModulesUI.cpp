@@ -1,5 +1,5 @@
 #include "shipModulesUI.h"
-
+#include "enviroment.h"
 
 void BuildShipSchemeUI(int moduleSizeUI)
 {
@@ -20,8 +20,12 @@ void BuildShipSchemeUI(int moduleSizeUI)
 			btn->setText(gEnv->game.player.ship->modules[i]->name);
 		mainShipPanel->add(btn, "ShipSchemeModule" + std::to_string(i));
 		const int id = i;
-		btn->connect("RightMouseReleased", UIbuttonWasClicked, id);
-		btn->connect("MouseReleased", UIbuttonWasClicked, id);
+
+	//	btn->connect("RightMouseReleased", UIbuttonWasClicked, id);
+	//	btn->connect("MouseReleased", UIbuttonWasClicked, id);
+
+		btn->connect("MouseReleased", handleShipModulesPanelEvent, id);
+		btn->connect("RightMouseReleased", handleShipModulesPanelEvent, id);
 	}
 
 	mainShipPanel->setVisible(false);
@@ -187,5 +191,47 @@ void rmPanelChoosenAdded(const int id, const int module_id, tgui::Widget::Ptr wi
 	gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempAddPanel"));
 	gEnv->game.ui.rmWasClicked = false;
 	gEnv->game.ui.tempAddPanelClicked = false;
+
+}
+
+void handleShipModulesPanelEvent(const int id, tgui::Widget::Ptr widget, const std::string & signalName)
+{
+
+	if (signalName == "MouseReleased")
+	{
+		if (gEnv->game.player.pickedItem != NULL)
+		{
+			auto p_module = static_cast<Module*>(gEnv->game.player.pickedItem);
+			auto type = p_module->slot;
+
+			auto s_slot = gEnv->game.player.ship->slots[id];
+
+			// compare to compability
+
+			if (s_slot.type == type)
+			{
+				auto tmp = gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId];
+				
+				gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.ship->modules[id];
+				gEnv->game.player.ship->modules[id] = static_cast<Module*>(tmp);
+					
+				widget->cast<tgui::Button>()->setText(gEnv->game.player.ship->modules[id]->name);
+
+				gEnv->game.player.pickedItemInvId = -1;
+				gEnv->game.player.pickedItem = NULL;
+				gEnv->game.player.pickedLocalInventory = -1;
+
+				RebuildInventoryGridPanel();
+
+			}
+			else
+			{
+				// nothing
+				return;
+			}
+
+
+		}
+	}
 
 }

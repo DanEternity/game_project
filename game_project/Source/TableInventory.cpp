@@ -481,11 +481,38 @@ void filterCategoryFieldChanged(tgui::Widget::Ptr widget, const std::string & si
 
 void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, const std::string & signalName)
 {
-
 	if (signalName == "MouseReleased")
 	{
 		// handle left click
-		
+		if (gEnv->game.player.pickedItem == NULL)
+		{
+			if ( id < gEnv->game.player.localInventory.size() && gEnv->game.player.localInventory[id] != -1)
+				if (gEnv->game.player.inventory[gEnv->game.player.localInventory[id]] != NULL)
+				{
+					gEnv->game.player.pickedItem = gEnv->game.player.inventory[gEnv->game.player.localInventory[id]];
+					gEnv->game.player.pickedLocalInventory = id;
+					gEnv->game.player.pickedItemInvId = gEnv->game.player.localInventory[id];
+					return;
+				}
+		}
+		else
+		{
+			// swap items if can
+			if (id < gEnv->game.player.localInventory.size() && gEnv->game.player.localInventory[id] != -1)
+				if (gEnv->game.player.inventory[gEnv->game.player.localInventory[id]] != NULL)
+				{
+
+					std::swap(
+						gEnv->game.player.inventory[gEnv->game.player.localInventory[id]], 
+						gEnv->game.player.inventory[gEnv->game.player.localInventory[gEnv->game.player.pickedLocalInventory]]);
+
+					gEnv->game.player.pickedLocalInventory = -1;
+					gEnv->game.player.pickedItem = NULL;
+					RebuildInventoryGridPanel();
+					return;
+
+				}
+		}
 	}
 
 	if (signalName == "RightMouseReleased")

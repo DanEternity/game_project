@@ -61,4 +61,9 @@ public:
 	// current ship menu
 	shipMenu::ShipMenu shipMenu = shipMenu::null;
 
+	// Item picked by item selection
+	Item * pickedItem = NULL;
+	int pickedLocalInventory = -1; // NULL
+	int pickedItemInvId = -1; // NULL
+
 };
