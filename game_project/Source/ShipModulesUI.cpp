@@ -5,9 +5,9 @@ void BuildShipSchemeUI(int moduleSizeUI)
 {
 
 	tgui::Panel::Ptr mainShipPanel = tgui::Panel::create();
-	mainShipPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
+	mainShipPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel3"));
 	mainShipPanel->setSize(600, 400);
-	mainShipPanel->setPosition("50%", "20%");
+	mainShipPanel->setPosition("5%", "2%");
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(mainShipPanel, "ShipSchemeModulesPanel");
 
 	for (int i(0); i < gEnv->game.player.ship->modules.size(); i++)
