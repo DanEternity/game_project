@@ -11,7 +11,9 @@ void updateAdventureUI();
 void disableAllAdventureUIWidgets();
 void createAdventureUIButtons();
 
-void updateShipMenuUIVisibility(shipMenu::ShipMenu state, int whereCalled);
+void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled);
+void updateCategoryFilters();
+
 void disableAllAdventureUI();
 
 // ui event handlers
