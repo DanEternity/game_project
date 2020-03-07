@@ -2,6 +2,7 @@
 
 #include "enviroment.h"
 #include "envUtils.h"
+#include "LocaleLoader.h"
 
 //
 // This file contain logic for game loading

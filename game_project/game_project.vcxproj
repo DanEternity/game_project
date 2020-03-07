@@ -166,7 +166,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <BrowseInformation>true</BrowseInformation>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;tgui-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -234,6 +234,7 @@
     <ClCompile Include="Source\game.cpp" />
     <ClCompile Include="Source\generationUtility.cpp" />
     <ClCompile Include="Source\loader.cpp" />
+    <ClCompile Include="Source\LocaleLoader.cpp" />
     <ClCompile Include="Source\mainMenu.cpp" />
     <ClCompile Include="Source\menuOverlay.cpp" />
     <ClCompile Include="Source\personEquipmentUI.cpp" />
@@ -267,6 +268,8 @@
     <ClInclude Include="Source\graphicsModel.h" />
     <ClInclude Include="Source\item.h" />
     <ClInclude Include="Source\loader.h" />
+    <ClInclude Include="Source\LocaleLoader.h" />
+    <ClInclude Include="Source\localization.h" />
     <ClInclude Include="Source\mainMenu.h" />
     <ClInclude Include="Source\mapObjectsData.h" />
     <ClInclude Include="Source\mapSectorPropertyTemplate.h" />

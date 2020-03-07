@@ -111,6 +111,9 @@
     <ClCompile Include="Source\storageStuff.cpp">
       <Filter>Adventure\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\LocaleLoader.cpp">
+      <Filter>Enviroment</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\game.h">
@@ -262,6 +265,12 @@
     </ClInclude>
     <ClInclude Include="Source\storageStuff.h">
       <Filter>Adventure\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\localization.h">
+      <Filter>Enviroment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LocaleLoader.h">
+      <Filter>Enviroment</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

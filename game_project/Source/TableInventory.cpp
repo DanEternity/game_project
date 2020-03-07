@@ -483,37 +483,45 @@ void filterCategoryFieldChanged(tgui::Widget::Ptr widget, const std::string & si
 {
 
 	auto p = widget->cast<tgui::ComboBox>();
-	std::wstring s = p->getSelectedItem();
-	wprintf(L"Filter set: %s \n", s.c_str());
+	std::string s = p->getSelectedItemId();
+
+	printf("Filter set: %s \n", s.c_str());
 
 	gEnv->game.player.inventoryFilter.itemType.clear();
 	gEnv->game.player.inventoryFilter.equipmentType.clear();
 	gEnv->game.player.inventoryFilter.moduleSlotType.clear();
 
-	//if (s == L"Equipment")
-	//{
-	//	gEnv->game.player.inventoryFilter.itemType.insert(itemType::equipment);
-	//}
-
-	//if (s == L"Modules")
-	//{
-	//	gEnv->game.player.inventoryFilter.itemType.insert(itemType::module);
-	//}
-
-	if (s == L"Engine")
+	if (s == "Primary weapon")
+	{
+		gEnv->game.player.inventoryFilter.moduleSlotType.insert(moduleSlot::primaryWeapon);
+	}
+	if (s == "Secondary weapon")
+	{
+		gEnv->game.player.inventoryFilter.moduleSlotType.insert(moduleSlot::secondaryWeapon);
+	}
+	if (s == "Engine")
 	{
 		gEnv->game.player.inventoryFilter.moduleSlotType.insert(moduleSlot::engine);
 	}
-
-	if (s == L"Hyperdrive")
+	if (s == "Hyperdrive")
 	{
 		gEnv->game.player.inventoryFilter.moduleSlotType.insert(moduleSlot::hyperdrive);
 	}
-
-	if (s == L"No filter")
+	if (s == "Core")
 	{
-		// no filter
+		gEnv->game.player.inventoryFilter.moduleSlotType.insert(moduleSlot::core);
 	}
+	if (s == "System")
+	{
+		gEnv->game.player.inventoryFilter.moduleSlotType.insert(moduleSlot::system);
+	}
+	if (s == "Universal")
+	{
+		gEnv->game.player.inventoryFilter.moduleSlotType.insert(moduleSlot::universal);
+	}
+
+	
+
 
 	// currently do nothing because not all windows are completed
 	ApplyDefaultFilterToInventoryPanel();

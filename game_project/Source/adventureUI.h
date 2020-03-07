@@ -6,6 +6,7 @@
 #include "shipModulesUI.h"
 #include "tableInventory.h"
 #include "storageStuff.h"
+#include "LocaleLoader.h"
 
 void updateAdventureUI();
 void disableAllAdventureUIWidgets();

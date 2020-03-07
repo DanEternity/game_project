@@ -1,5 +1,6 @@
 #include "adventureUI.h"
 
+
 void updateAdventureUI()
 {
 	if (gEnv->game.adventureUI.adventureUIDrawRequired)
@@ -369,18 +370,21 @@ void updateCategoryFilters()
 
 	auto t = gEnv->game.player.shipMenu;
 
-	p->addItem(L"No filter");
-	p->setSelectedItem(L"No filter");
+	p->addItem(GetString("No filter"), "No filter");
+	p->setSelectedItem(GetString("No filter"));
 
 	switch (t)
 	{
 	case shipMenu::null:
 		break;
 	case shipMenu::ship:
-		p->addItem(L"Engine");
-		p->addItem(L"Hyperdrive");
-		p->addItem(L"aaaaaaaaa");
-		p->addItem(L"bbbbb");
+		p->addItem(GetString("Primary weapon"), "Primary weapon");
+		p->addItem(GetString("Secondary weapon"), "Secondary weapon");
+		p->addItem(GetString("Engine"), "Engine");
+		p->addItem(GetString("Hyperdrive"), "Hyperdrive");
+		p->addItem(GetString("Core"), "Core");
+		p->addItem(GetString("System"), "System");
+		p->addItem(GetString("Universal"), "Universal");
 		break;
 	case shipMenu::lab:
 		break;
