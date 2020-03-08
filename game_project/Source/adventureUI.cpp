@@ -286,8 +286,8 @@ void createAdventureUIButtons()
 	tgui::ComboBox::Ptr comboBox = tgui::ComboBox::create();
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->add(comboBox, "comboBoxFilter");
 	comboBox->setRenderer(gEnv->globalTheme.getRenderer("ComboBox"));
-	comboBox->setSize(150, 30);
-	comboBox->setPosition("5%", "5%");
+	comboBox->setSize(250, 30);
+	comboBox->setPosition("50%", "5%");
 	comboBox->addItem(L"No filter");
 	comboBox->addItem(L"Modules");
 	comboBox->addItem(L"Equipment");
@@ -299,9 +299,9 @@ void createAdventureUIButtons()
 	tgui::EditBox::Ptr editBox = tgui::EditBox::create();
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->add(editBox, "editBoxFilter");
 	editBox->setRenderer(gEnv->globalTheme.getRenderer("EditBox"));
-	editBox->setSize(150, 30);
+	editBox->setSize(250, 30);
 	editBox->setTextSize(18);
-	editBox->setPosition("40%", "5%");
+	editBox->setPosition("5%", "5%");
 	editBox->setDefaultText("Search");
 	editBox->connect("TextChanged", filterSearchFieldChanged);
 }
