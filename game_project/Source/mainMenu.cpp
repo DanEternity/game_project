@@ -3,6 +3,7 @@
 
 void optionsClick();
 void optionsBackButton();
+void changeLanguage(tgui::Widget::Ptr widget, const std::string& signalName);
 
 void updateMainMenu()
 {
