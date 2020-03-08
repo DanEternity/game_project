@@ -168,6 +168,18 @@ void createMenuButtons()
 	videoComboBox->setEnabled(false);
 	videoComboBox->setVisible(false);
 
+	tgui::ComboBox::Ptr languageComboBox = tgui::ComboBox::create();
+	gEnv->globalGui.add(languageComboBox, "languageComboBox");
+	gEnv->game.mainMenu.mainMenuWidgets.push_back(languageComboBox);
+	languageComboBox->setRenderer(gEnv->globalTheme.getRenderer("ComboBox"));
+	languageComboBox->setSize(100, 30);
+	languageComboBox->setPosition("70%", "32%");
+	languageComboBox->addItem(L"English");
+	languageComboBox->addItem(L"Russian");
+	languageComboBox->setEnabled(false);
+	languageComboBox->setVisible(false);
+	languageComboBox->connect("ItemSelected", changeLanguage);
+
 	tgui::Button::Ptr optionsBack = tgui::Button::create();
 	gEnv->globalGui.add(optionsBack, "optionsBack");
 	gEnv->game.mainMenu.mainMenuWidgets.push_back(optionsBack);
@@ -179,123 +191,6 @@ void createMenuButtons()
 	optionsBack->setVisible(false);
 	optionsBack->connect("MouseReleased", optionsBackButton);
 
-
-	//TESTS TESTS TESTS
-
-	/*tgui::EditBox::Ptr edb = tgui::EditBox::create();
-	gEnv->globalGui.add(edb, "editBox");
-	edb->setRenderer(gEnv->globalTheme.getRenderer("EditBox"));
-	edb->setSize(200, 50);
-	edb->setTextSize(18);
-	edb->setPosition(10, 270);
-	edb->setDefaultText(L"Click to edit text...");
-
-	tgui::Label::Ptr label0 = tgui::Label::create();
-	gEnv->globalGui.add(label0, "label");
-	label0->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label0->setText(L"This is a label.");
-	label0->setPosition(10, 90);
-	label0->setTextSize(18);
-
-	tgui::ListBox::Ptr lb = tgui::ListBox::create();
-	gEnv->globalGui.add(lb);
-	lb->setRenderer(gEnv->globalTheme.getRenderer("ListBox"));
-	lb->setSize(250, 120);
-	lb->setItemHeight(24);
-	lb->setPosition(10, 340);
-	lb->addItem(L"Item 1");
-	lb->addItem(L"Item 2");
-	lb->addItem(L"Item 3");
-
-	tgui::ProgressBar::Ptr pb = tgui::ProgressBar::create();
-	gEnv->globalGui.add(pb);
-	pb->setRenderer(gEnv->globalTheme.getRenderer("ProgressBar"));
-	pb->setPosition(10, 500);
-	pb->setSize(200, 20);
-	pb->setValue(50);
-
-	tgui::Slider::Ptr sl = tgui::Slider::create();
-	gEnv->globalGui.add(sl);
-	sl->setRenderer(gEnv->globalTheme.getRenderer("Slider"));
-	sl->setPosition(10, 560);
-	sl->setSize(200, 18);
-	sl->setValue(4);
-
-	auto scrollbar = tgui::Scrollbar::create();
-	scrollbar->setRenderer(gEnv->globalTheme.getRenderer("Scrollbar"));
-	scrollbar->setPosition(380, 40);
-	scrollbar->setSize(18, 540);
-	scrollbar->setMaximum(100);
-	scrollbar->setViewportSize(70);
-	gEnv->globalGui.add(scrollbar);
-
-	auto comboBox = tgui::ComboBox::create();
-	comboBox->setRenderer(gEnv->globalTheme.getRenderer("ComboBox"));
-	comboBox->setSize(120, 21);
-	comboBox->setPosition(420, 40);
-	comboBox->addItem(L"Item 1");
-	comboBox->addItem(L"Item 2");
-	comboBox->addItem(L"Item 3");
-	comboBox->setSelectedItem(L"Item 2");
-	gEnv->globalGui.add(comboBox);
-
-	auto child = tgui::ChildWindow::create();
-	child->setRenderer(gEnv->globalTheme.getRenderer("ChildWindow"));
-	child->setSize(250, 120);
-	child->setPosition(420, 80);
-	child->setTitle(L"Child window");
-	gEnv->globalGui.add(child);
-
-	auto label = tgui::Label::create();
-	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label->setText(L"Hi! I'm a child window.");
-	label->setPosition(30, 30);
-	label->setTextSize(15);
-	child->add(label);
-
-	auto button = tgui::Button::create();
-	button->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	button->setPosition(75, 70);
-	button->setText(L"OK");
-	button->setSize(100, 30);
-	button->connect("pressed", [=]() { child->setVisible(false); });
-	child->add(button);
-
-	auto checkbox = tgui::CheckBox::create();
-	checkbox->setRenderer(gEnv->globalTheme.getRenderer("CheckBox"));
-	checkbox->setPosition(420, 240);
-	checkbox->setText(L"Ok, I got it");
-	checkbox->setSize(25, 25);
-	gEnv->globalGui.add(checkbox);
-
-	auto chatbox = tgui::ChatBox::create();
-	chatbox->setRenderer(gEnv->globalTheme.getRenderer("ChatBox"));
-	chatbox->setSize(300, 100);
-	chatbox->setTextSize(18);
-	chatbox->setPosition(420, 310);
-	chatbox->setLinesStartFromTop();
-	chatbox->addLine(L"texus: Hey, this is TGUI!", sf::Color::Green);
-	chatbox->addLine(L"Me: Looks awesome! ;)", sf::Color::Yellow);
-	chatbox->addLine(L"texus: Thanks! :)", sf::Color::Green);
-	chatbox->addLine(L"Me: The widgets rock ^^", sf::Color::Yellow);
-	gEnv->globalGui.add(chatbox);
-	
-	sf::Sprite sprite;
-
-	sprite.setTexture(getModelDescriptor(L"blankTexture")->tex);
-	sprite.setScale(200.f / getModelDescriptor(L"blankTexture")->tex.getSize().x, 140.f / getModelDescriptor(L"blankTexture")->tex.getSize().y);
-
-	sf::Text text{ "SFML Canvas", *gEnv->globalGui.getFont(), 24 };
-	text.setPosition(200, 200);
-	text.setFillColor({ 255, 0, 0 });
-
-	auto canvas = tgui::Canvas::create({ 200, 140 });
-	canvas->setPosition(10, 10);
-	canvas->clear();
-	canvas->draw(sprite);
-	canvas->draw(text);
-	canvas->display();
-	gEnv->globalGui.add(canvas);*/
 
 	auto testbox = tgui::TextBox::create();
 	testbox->setRenderer(gEnv->globalTheme.getRenderer("TextBox"));
@@ -434,4 +329,9 @@ void testFunctionExecScript()
 void btnNextPressed()
 {
 	gEnv->scripts.buttonPressed = true;
+}
+
+void changeLanguage(tgui::Widget::Ptr widget, const std::string& signalName)
+{
+	gEnv->game.locale.gameLanguage = widget->cast<tgui::ComboBox>()->getSelectedItem();
 }

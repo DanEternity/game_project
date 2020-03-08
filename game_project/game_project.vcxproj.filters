@@ -272,6 +272,9 @@
     <ClInclude Include="Source\LocaleLoader.h">
       <Filter>Enviroment</Filter>
     </ClInclude>
+    <ClInclude Include="Source\stat.h">
+      <Filter>Enviroment</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\Scripts\Test\Test.txt">

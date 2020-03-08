@@ -11,6 +11,8 @@
 #include "baseObject.h"
 #include "item.h"
 #include "character.h"
+#include "stat.h"
+#include <map>
 
 class Ship : public BaseObject
 {
@@ -30,4 +32,13 @@ public:
 
 	/* here goes various stats of the ship. Example energy, defenses, hull etc... */
 
+	std::map<std::string, Stat> shipStats;
+
+	Stat powerSupply, highPowerSupply, actionPoints, evasion, mobility, 
+			stealth, stealthTier, sensorPower, sensorTier, hyperDrivePower, 
+			hyperDriveTier, hyperDriveFuelEfficiency, hull, hullResist,
+			hullReg, hullStructureStability, shield, shieldResist, shieldReg,
+			shieldStructureStability, missileDefense, missileDefenseTier,
+			fuel, additionalWeaponAccuracy, totalDamageMultiplier, 
+			misiileDefencePenalty, actionPointsPenalty;
 };

@@ -26,6 +26,13 @@ void disableAllAdventureUIWidgets()
 
 void createAdventureUIButtons()
 {
+
+	gEnv->game.player.ship = new Ship();
+
+	gEnv->game.player.ship->hull.baseValue = 500;
+	gEnv->game.player.ship->hull.total = 500;
+	gEnv->game.player.ship->hull.current = 200;
+
 	//create main interface panel
 
 	tgui::Panel::Ptr adventureUIPanel = tgui::Panel::create();
@@ -166,9 +173,12 @@ void createAdventureUIButtons()
 	bar->setPosition(1480, 960);
 	bar->setSize(300, 30);
 	bar->setMinimum(0);
-	bar->setMaximum(100);
-	bar->setValue(60);
-	bar->setText("Hull: 600/1000");
+	bar->setMaximum(gEnv->game.player.ship->hull.total);
+	bar->setValue(gEnv->game.player.ship->hull.current);
+	bar->setText("Hull: " 
+					+ std::to_string((int)gEnv->game.player.ship->hull.current)
+					+ "/"
+					+ std::to_string((int)gEnv->game.player.ship->hull.total));
 	bar->setRenderer(gEnv->globalTheme.getRenderer("ProgressBar"));
 	gEnv->game.adventureGUI.add(bar);
 
@@ -219,7 +229,6 @@ void createAdventureUIButtons()
 
 	BuildInventoryUI(10);
 
-	gEnv->game.player.ship = new Ship();
 
 	/* INITIALIZE SHIP SLOTS */
 	gEnv->game.player.ship->slots.resize(5, moduleSlot::ModuleSlot());
