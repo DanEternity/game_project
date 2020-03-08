@@ -57,7 +57,9 @@ void updateLoadingMode()
 
 		createMenuButtons();
 		createAdventureUIButtons();
+		
 		LoadEnglishLocale();
+		LoadRussianLocale(); // only for testing
 
 		gEnv->game.activeGameMode = gameMode::mainMenuMode;
 		gEnv->game.mainMenu.menuDrawRequired = true;

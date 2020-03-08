@@ -40,6 +40,9 @@
     <Filter Include="WorldGenerator">
       <UniqueIdentifier>{c43bce3a-baf0-4582-9d85-c73b1cf75ea8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы ресурсов\Locales">
+      <UniqueIdentifier>{db6b2cdc-b9a0-4314-a777-3bb91f773b5e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -276,6 +279,9 @@
   <ItemGroup>
     <Text Include="Resources\Scripts\Test\Test.txt">
       <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="Resources\Localization\ru_ru.txt">
+      <Filter>Файлы ресурсов\Locales</Filter>
     </Text>
   </ItemGroup>
 </Project>
