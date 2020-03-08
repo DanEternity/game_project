@@ -7,6 +7,7 @@
 #include "accountData.h"
 #include "playerData.h"
 #include "uiData.h"
+#include "localization.h"
 
 namespace menuState
 {
@@ -158,6 +159,9 @@ public:
 
 	// adventureUI
 	tgui::Gui adventureGUI;
+
+	// localization
+	LocaleData locale;
 
 	// generation utility
 

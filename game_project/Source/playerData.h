@@ -14,7 +14,11 @@ class IntventoryFilter
 {
 public:
 	std::wstring searchString;
+	
 	std::set<itemType::ItemType> itemType;
+	std::set<moduleSlot::ModuleSlotType> moduleSlotType;
+	std::set<equipmentType::EquipmentType> equipmentType;
+
 	// add other filters if needed
 };
 

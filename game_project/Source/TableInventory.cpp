@@ -344,7 +344,7 @@ void CreateInventoryGridPanel(int length)
 	tgui::ScrollablePanel::Ptr scrollablePanel = tgui::ScrollablePanel::create();
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->add(scrollablePanel, "inventoryGridPanel");
 	scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
-	scrollablePanel->setPosition("5%", "25%");
+	scrollablePanel->setPosition("3%", "25%");
 	scrollablePanel->setSize(520, 140);
 
 
@@ -410,6 +410,28 @@ void RebuildInventoryGridPanel()
 				}
 			}
 
+			if (p->itemType == itemType::module)
+			{
+				if (filter->moduleSlotType.size() > 0)
+				{
+					if (filter->moduleSlotType.find(static_cast<Module*>(p)->slot) == filter->moduleSlotType.end())
+					{
+						filter_ok = false;
+					}
+				}
+			}
+
+			if (p->itemType == itemType::equipment)
+			{
+				if (filter->equipmentType.size() > 0)
+				{
+					if (filter->equipmentType.find(static_cast<Equipment*>(p)->equipmentType) == filter->equipmentType.end())
+					{
+						filter_ok = false;
+					}
+				}
+			}
+
 			if (!filter_ok)
 				continue;
 			gEnv->game.player.localInventory.push_back(id);
@@ -436,7 +458,15 @@ void ApplyDefaultFilterToInventoryPanel()
 	// current menu
 	auto q = gEnv->game.player.shipMenu;
 	
+	if (q == shipMenu::ship)
+	{
+		gEnv->game.player.inventoryFilter.itemType.insert(itemType::module);
+	}
 
+	if (q == shipMenu::crew)
+	{
+		gEnv->game.player.inventoryFilter.itemType.insert(itemType::equipment);
+	}
 
 }
 
@@ -453,25 +483,46 @@ void filterCategoryFieldChanged(tgui::Widget::Ptr widget, const std::string & si
 {
 
 	auto p = widget->cast<tgui::ComboBox>();
-	std::wstring s = p->getSelectedItem();
-	wprintf(L"Filter set: %s \n", s.c_str());
+	std::string s = p->getSelectedItemId();
+
+	printf("Filter set: %s \n", s.c_str());
 
 	gEnv->game.player.inventoryFilter.itemType.clear();
+	gEnv->game.player.inventoryFilter.equipmentType.clear();
+	gEnv->game.player.inventoryFilter.moduleSlotType.clear();
 
-	if (s == L"Equipment")
+	if (s == "Primary weapon")
 	{
-		gEnv->game.player.inventoryFilter.itemType.insert(itemType::equipment);
+		gEnv->game.player.inventoryFilter.moduleSlotType.insert(moduleSlot::primaryWeapon);
+	}
+	if (s == "Secondary weapon")
+	{
+		gEnv->game.player.inventoryFilter.moduleSlotType.insert(moduleSlot::secondaryWeapon);
+	}
+	if (s == "Engine")
+	{
+		gEnv->game.player.inventoryFilter.moduleSlotType.insert(moduleSlot::engine);
+	}
+	if (s == "Hyperdrive")
+	{
+		gEnv->game.player.inventoryFilter.moduleSlotType.insert(moduleSlot::hyperdrive);
+	}
+	if (s == "Core")
+	{
+		gEnv->game.player.inventoryFilter.moduleSlotType.insert(moduleSlot::core);
+	}
+	if (s == "System")
+	{
+		gEnv->game.player.inventoryFilter.moduleSlotType.insert(moduleSlot::system);
+	}
+	if (s == "Universal")
+	{
+		gEnv->game.player.inventoryFilter.moduleSlotType.insert(moduleSlot::universal);
 	}
 
-	if (s == L"Modules")
-	{
-		gEnv->game.player.inventoryFilter.itemType.insert(itemType::module);
-	}
+	
 
-	if (s == L"No filter")
-	{
 
-	}
 	// currently do nothing because not all windows are completed
 	ApplyDefaultFilterToInventoryPanel();
 

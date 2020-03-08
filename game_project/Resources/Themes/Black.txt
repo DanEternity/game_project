@@ -132,11 +132,11 @@ Panel {
 }
 
 Panel2 {
-    BackgroundColor = rgb(150, 80, 150);
+    BackgroundColor = rgb(100, 100, 100);
 }
 
 Panel3 {
-    BackgroundColor = rgb(100, 200, 100);
+    BackgroundColor = rgb(59, 29, 81);
 }
 
 ProgressBar {
