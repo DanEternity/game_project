@@ -103,5 +103,13 @@ void LoadLocaleFromFile(std::string filename, std::string locale)
 
 std::wstring GetString(std::string x)
 {
-	return gEnv->game.locale.localeDB[gEnv->game.locale.gameLanguage][x];
+	if (gEnv->game.locale.localeDB[gEnv->game.locale.gameLanguage][x] != L"")
+		return gEnv->game.locale.localeDB[gEnv->game.locale.gameLanguage][x];
+	else
+	{
+		std::wstring l_base = L"";
+		for (char c : x)
+			l_base += c;
+		return l_base;
+	}
 }
