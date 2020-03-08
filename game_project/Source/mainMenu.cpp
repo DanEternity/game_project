@@ -56,6 +56,8 @@ void mainMenuChangeState()
 			gEnv->globalGui.get<tgui::ComboBox>(L"videoComboBox")->setVisible(true);
 			gEnv->globalGui.get<tgui::Button>(L"optionsBack")->setEnabled(true);
 			gEnv->globalGui.get<tgui::Button>(L"optionsBack")->setVisible(true);
+			gEnv->globalGui.get<tgui::ComboBox>(L"languageComboBox")->setEnabled(true);
+			gEnv->globalGui.get<tgui::ComboBox>(L"languageComboBox")->setVisible(true);
 			break;
 		case menuState::exitActive:
 			gEnv->globalGui.get<tgui::Button>(L"startButton")->setEnabled(true);
