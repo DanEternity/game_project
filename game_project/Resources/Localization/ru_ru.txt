@@ -1,3 +1,9 @@
 ﻿Hello world####Привет мир
 Engine####Двигатель
 Hyperdrive####Гипердвигатель
+No filter####Без фильтра
+Primary weapon####Основное оружие
+Secondary weapon####Дополнительное оружие
+Core####Ядро
+System####Система
+Universal####Универсальный

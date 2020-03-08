@@ -6,6 +6,7 @@ void LoadEnglishLocale()
 	auto db = &gEnv->game.locale.localeDB;
 
 	(*db)["English"] = std::map<std::string, std::wstring>();
+	(*db)["Russian"] = std::map<std::string, std::wstring>();
 
 	// example
 	LoadLine("English", "Hello world", L"Hello world");
@@ -27,7 +28,7 @@ void LoadRussianLocale()
 
 	auto db = &gEnv->game.locale.localeDB;
 
-	(*db)["English"] = std::map<std::string, std::wstring>();
+	
 
 	LoadLocaleFromFile("\\resources\\localization\\ru_ru.txt", "Russian");
 
