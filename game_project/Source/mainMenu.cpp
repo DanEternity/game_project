@@ -179,6 +179,7 @@ void createMenuButtons()
 	languageComboBox->setPosition("70%", "32%");
 	languageComboBox->addItem(L"English");
 	languageComboBox->addItem(L"Russian");
+	languageComboBox->setSelectedItem("English");
 	languageComboBox->setEnabled(false);
 	languageComboBox->setVisible(false);
 	languageComboBox->connect("ItemSelected", changeLanguage);
