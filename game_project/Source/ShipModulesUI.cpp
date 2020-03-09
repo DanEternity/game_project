@@ -1,5 +1,6 @@
 #include "shipModulesUI.h"
 #include "enviroment.h"
+#include "LocaleLoader.h"
 
 void BuildShipSchemeUI(int moduleSizeUI)
 {
@@ -234,4 +235,59 @@ void handleShipModulesPanelEvent(const int id, tgui::Widget::Ptr widget, const s
 		}
 	}
 
+}
+
+void buildShipStats()
+{
+	tgui::Label::Ptr label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setText(GetString("Hull") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->hull.current)
+		+ L"/"
+		+ std::to_wstring((int)gEnv->game.player.ship->hull.total));
+	label->setPosition(5, 5);
+	label->setTextSize(18);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label);
+
+	label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setText(GetString("Power") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->powerSupply.current)
+		+ L"/"
+		+ std::to_wstring((int)gEnv->game.player.ship->powerSupply.total));
+	label->setPosition(5, 25);
+	label->setTextSize(18);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label);
+
+	label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setText(GetString("Maximum power") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->highPowerSupply.total));
+	label->setPosition(5, 45);
+	label->setTextSize(18);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label);
+
+	label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setText(GetString("Action points in battle") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->actionPoints.total));
+	label->setPosition(5, 65);
+	label->setTextSize(18);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label);
+
+	label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setText(GetString("Evasion rating") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->evasion.total) + L"%");
+	label->setPosition(5, 85);
+	label->setTextSize(18);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label);
+
+	label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setText(GetString("Mobility") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->mobility.total));
+	label->setPosition(5, 105);
+	label->setTextSize(18);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label);
 }

@@ -7,3 +7,30 @@ Secondary weapon####Дополнительное оружие
 Core####Ядро
 System####Система
 Universal####Универсальный
+Power####Энергия
+Maximum power####Максимум зарезервированной энергии
+Action points in battle####Очки действия в битве
+Evasion rating####Уклонение
+Mobility####Скорость
+Stealth####Скрытность
+Stealth tier####Ранг скрытности
+Sensor power####Сила сенсоров
+Sensor tier####Ранг сенсоров
+Hyper drive power####Мощность гипер двигателя
+Hyper drive tier####Ранг гипер двигателя
+Hyper drive fuel efficiency####Эффективность испольуемого топлива
+Hull####Прочность
+Hull resist####Сопротивление корпуса
+Hull regeneration####Регенерация корпуса
+Hull structure stability####Сопротивление корпуса критическому урону
+Shield####Щит
+Shield resist####Сопротивление щита
+Shield regeneration####Регенерация щита
+Shield structure stability####Сопротивление щита критическому урону
+Missile defence####Противоракетная защита
+Misiile defence tier####Ранг противоракетной защиты
+Fuel####Топливо
+Additional weapon accuracy####Дополнительная точность оружия
+Total damage multiplier####Общий множитель урона
+Misile defence penalty####Штраф на противоракетную защиту
+Action points penalty####Штраф на очки действия

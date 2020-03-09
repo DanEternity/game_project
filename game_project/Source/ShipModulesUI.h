@@ -35,3 +35,6 @@ void rmPanelChoosenAdded(const int id, const int module_id, tgui::Widget::Ptr wi
 
 // handlers
 void handleShipModulesPanelEvent(const int id, tgui::Widget::Ptr widget, const std::string& signalName);
+
+//stats field
+void buildShipStats();

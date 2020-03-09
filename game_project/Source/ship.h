@@ -34,11 +34,31 @@ public:
 
 	std::map<std::string, Stat> shipStats;
 
-	Stat powerSupply, highPowerSupply, actionPoints, evasion, mobility, 
-			stealth, stealthTier, sensorPower, sensorTier, hyperDrivePower, 
-			hyperDriveTier, hyperDriveFuelEfficiency, hull, hullResist,
-			hullReg, hullStructureStability, shield, shieldResist, shieldReg,
-			shieldStructureStability, missileDefense, missileDefenseTier,
-			fuel, additionalWeaponAccuracy, totalDamageMultiplier, 
-			misiileDefencePenalty, actionPointsPenalty;
+	Stat powerSupply, 
+		highPowerSupply, 
+		actionPoints, 
+		evasion, 
+		mobility, 
+		stealth, 
+		stealthTier, 
+		sensorPower, 
+		sensorTier, 
+		hyperDrivePower, 
+		hyperDriveTier, 
+		hyperDriveFuelEfficiency, 
+		hull, 
+		hullResist,
+		hullReg, 
+		hullStructureStability, 
+		shield, 
+		shieldResist, 
+		shieldReg,
+		shieldStructureStability, 
+		missileDefense, 
+		missileDefenseTier,
+		fuel, 
+		additionalWeaponAccuracy, 
+		totalDamageMultiplier, 
+		misileDefencePenalty, 
+		actionPointsPenalty;
 };

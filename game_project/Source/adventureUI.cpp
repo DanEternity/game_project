@@ -33,6 +33,26 @@ void createAdventureUIButtons()
 	gEnv->game.player.ship->hull.total = 500;
 	gEnv->game.player.ship->hull.current = 200;
 
+	gEnv->game.player.ship->powerSupply.baseValue = 1800;
+	gEnv->game.player.ship->powerSupply.total = 1800;
+	gEnv->game.player.ship->powerSupply.current = 1800;
+
+	gEnv->game.player.ship->highPowerSupply.baseValue = 3000;
+	gEnv->game.player.ship->highPowerSupply.total = 3000;
+	gEnv->game.player.ship->highPowerSupply.current = 3000;
+
+	gEnv->game.player.ship->actionPoints.baseValue = 6;
+	gEnv->game.player.ship->actionPoints.total = 6;
+	gEnv->game.player.ship->actionPoints.current = 6;
+
+	gEnv->game.player.ship->evasion.baseValue = 20;
+	gEnv->game.player.ship->evasion.total = 20;
+	gEnv->game.player.ship->evasion.current = 20;
+
+	gEnv->game.player.ship->mobility.baseValue = 3;
+	gEnv->game.player.ship->mobility.total = 3;
+	gEnv->game.player.ship->mobility.current = 3;
+
 	//create main interface panel
 
 	tgui::Panel::Ptr adventureUIPanel = tgui::Panel::create();
@@ -58,6 +78,12 @@ void createAdventureUIButtons()
 	adventureUISubPanel->add(adventureUIGridSubPanel, "playerUIGridSubPanel");
 	adventureUIGridSubPanel->setEnabled(false);
 	adventureUIGridSubPanel->setVisible(false);
+
+	tgui::Panel::Ptr shipStatsPanel = tgui::Panel::create();
+	shipStatsPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel3"));
+	shipStatsPanel->setSize(450, 570);
+	shipStatsPanel->setPosition("60%", "2%");
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(shipStatsPanel, "shipStatsPanel");
 
 	// create buttons on main interface panel
 
@@ -313,6 +339,7 @@ void createAdventureUIButtons()
 	editBox->setPosition("5%", "5%");
 	editBox->setDefaultText("Search");
 	editBox->connect("TextChanged", filterSearchFieldChanged);
+
 }
 
 
@@ -332,6 +359,7 @@ void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled) // whereCa
 	switch (gEnv->game.player.shipMenu)
 	{
 	case shipMenu::ship:
+		buildShipStats();
 		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(true);
 		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(true);
 		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setEnabled(true);
