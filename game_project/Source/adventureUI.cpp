@@ -273,6 +273,8 @@ void createAdventureUIButtons()
 	gEnv->game.player.ship->modules[0]->name = L"roflanPomoika";
 	gEnv->game.player.ship->modules[0]->slot = moduleSlot::core;
 	gEnv->game.player.ship->modules[0]->itemType = itemType::module;
+	gEnv->game.player.ship->modules[0]->powerPriority = 0;
+
 
 	gEnv->game.player.ship->modules[1] = new Module();
 	gEnv->game.player.ship->modules[1]->name = L"roflanVebenya";

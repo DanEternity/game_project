@@ -15,7 +15,7 @@ void updateShipValues(Ship * p)
 
 	clearStats(p);
 	collectModules(p);
-	calcModuleStats(p);
+	//calcModuleStats(p);
 
 
 }
@@ -90,6 +90,9 @@ void calcModuleStats(Ship * p)
 	for (auto q : p->shipStats)
 	{
 
+		if (q.first == statNames::powerSupply || q.first == statNames::highPowerSupply)
+			continue;
+
 		q.second->calcTotal();
 
 		if (q.first == statNames::fuel || q.first == statNames::powerSupply || q.first == statNames::highPowerSupply)
@@ -106,46 +109,41 @@ void calcModuleStats(Ship * p)
 void collectModules(Ship * p)
 {
 
-	auto energy = &p->powerSupply;
-	
+	// collect energy initial energy
+	// from buffs, effects, something that can give it
 
-	// collect energy
+	p->powerSupply.calcTotal();
+	p->highPowerSupply.calcTotal();
 
-	for (Module*m : p->modules)
-	{
-		auto type = m->moduleType;
-		if (type == moduleType::system)
-		{
-			for (EffectObject*e : m->effects)
-			{
-				auto eGroup = e->effectGroup;
-				if (eGroup == effectGroups::statModifier)
-				{
-					StatModEffect * st = static_cast<StatModEffect *>(e);
-					if (st->targetType != targetType::ship)
-					{
-						continue;
-					}
+	p->powerSupply.current = 0;
+	p->highPowerSupply.current = 0;
 
-					if (st->statName == statNames::powerSupply || st->statName == statNames::highPowerSupply)
-					{
-						applyStatEffect(p, st);
-					}
+	//for (Module*m : p->modules)
+	//{
+	//	auto type = m->moduleType;
+	//	if (type == moduleType::system)
+	//	{
+	//		for (EffectObject*e : m->effects)
+	//		{
+	//			auto eGroup = e->effectGroup;
+	//			if (eGroup == effectGroups::statModifier)
+	//			{
+	//				StatModEffect * st = static_cast<StatModEffect *>(e);
+	//				if (st->targetType != targetType::ship)
+	//				{
+	//					continue;
+	//				}
 
-				}
-			}
-		}
-	}
+	//				if (st->statName == statNames::powerSupply || st->statName == statNames::highPowerSupply)
+	//				{
+	//					applyStatEffect(p, st);
+	//				}
 
-	// ///////////////////////////////////////////////
+	//			}
+	//		}
+	//	}
+	//}
 
-	// Also need to collect bonuses from other sources
-	//
-
-	// ///////////////////////////////////////////////
-
-	energy->current = energy->total;
-	p->highPowerSupply.current = p->highPowerSupply.total;
 
 	for (Module*m : p->modules)
 	{
@@ -182,11 +180,19 @@ void collectModules(Ship * p)
 			if (m->powerPriority == minimalPriorityFound)
 			{
 				// powering module if possible
-				if (energy->current > m->powerSupply && p->highPowerSupply.current > m->highPowerSupply)
+				if (p->powerSupply.total - p->powerSupply.current >= m->powerSupply 
+					&& p->highPowerSupply.total - p->highPowerSupply.current >= m->highPowerSupply)
 				{
+					
 					m->online = true;
-					energy->current -= m->powerSupply;
-					p->highPowerSupply.current - m->highPowerSupply;
+					p->powerSupply.current += m->powerSupply;
+					p->highPowerSupply.current += m->highPowerSupply;
+
+					applySysModuleEffects(p, m);
+
+					p->powerSupply.calcTotal();
+					p->highPowerSupply.calcTotal();
+
 				}
 			}
 		}
@@ -194,6 +200,50 @@ void collectModules(Ship * p)
 		minimalPriorityCollected = minimalPriorityFound;
 
 	}
+
+	for (auto q : p->shipStats)
+	{
+
+		if (q.first == statNames::powerSupply || q.first == statNames::highPowerSupply)
+			continue;
+
+		q.second->calcTotal();
+
+		if (q.first == statNames::fuel || q.first == statNames::powerSupply || q.first == statNames::highPowerSupply)
+			continue;
+
+		q.second->current = q.second->percentage * q.second->total;
+
+	}
+
+	p->fuel.current = (p->fuel.current < p->fuel.total) ? p->fuel.current : p->fuel.total;
+
+
+}
+
+void applySysModuleEffects(Ship * p, Module * m)
+{
+
+	auto type = m->moduleType;
+	if (type == moduleType::system && m->online)
+	{
+		for (EffectObject*e : m->effects)
+		{
+			auto eGroup = e->effectGroup;
+			if (eGroup == effectGroups::statModifier)
+			{
+				StatModEffect * st = static_cast<StatModEffect *>(e);
+				if (st->targetType != targetType::ship)
+				{
+					continue;
+				}
+
+				applyStatEffect(p, st);
+
+			}
+		}
+	}
+
 }
 
 void applyStatEffect(Ship * p, StatModEffect * e)

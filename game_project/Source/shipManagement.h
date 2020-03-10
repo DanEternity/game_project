@@ -10,5 +10,6 @@ void clearStats(Ship * p);
 void calcModuleStats(Ship * p);
 void collectModules(Ship * p);
 
+void applySysModuleEffects(Ship * p, Module * m);
 void applyStatEffect(Ship * p, StatModEffect * e);
 
