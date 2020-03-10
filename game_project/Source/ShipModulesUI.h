@@ -38,3 +38,4 @@ void handleShipModulesPanelEvent(const int id, tgui::Widget::Ptr widget, const s
 
 //stats field
 void buildShipStats();
+void updateShipStatsScreen();

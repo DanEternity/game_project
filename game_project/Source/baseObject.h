@@ -16,6 +16,7 @@ namespace objectType {
 		mapMarker,
 		mapDecoration,
 		mapSector,
+		effect,
 	};
 
 } // namespace objectType

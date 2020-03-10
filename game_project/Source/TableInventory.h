@@ -2,6 +2,8 @@
 
 #include "enviroment.h"
 #include "Item.h"
+#include "shipManagement.h"
+#include "shipModulesUI.h"
 /*
 class InventoryItem;
 class TableInventory;

@@ -33,25 +33,22 @@ void createAdventureUIButtons()
 	gEnv->game.player.ship->hull.total = 500;
 	gEnv->game.player.ship->hull.current = 200;
 
-	gEnv->game.player.ship->powerSupply.baseValue = 1800;
-	gEnv->game.player.ship->powerSupply.total = 1800;
-	gEnv->game.player.ship->powerSupply.current = 1800;
+	gEnv->game.player.ship->powerSupply.baseValue = 125;
+	gEnv->game.player.ship->powerSupply.total = 125;
+	gEnv->game.player.ship->powerSupply.current = 125;
 
-	gEnv->game.player.ship->highPowerSupply.baseValue = 3000;
-	gEnv->game.player.ship->highPowerSupply.total = 3000;
-	gEnv->game.player.ship->highPowerSupply.current = 3000;
+	gEnv->game.player.ship->highPowerSupply.baseValue = 0;
+	gEnv->game.player.ship->highPowerSupply.total = 0;
+	gEnv->game.player.ship->highPowerSupply.current = 0;
 
-	gEnv->game.player.ship->actionPoints.baseValue = 6;
-	gEnv->game.player.ship->actionPoints.total = 6;
-	gEnv->game.player.ship->actionPoints.current = 6;
+	gEnv->game.player.ship->actionPoints.baseValue = 100;
+	gEnv->game.player.ship->actionPoints.total = 100;
+	gEnv->game.player.ship->actionPoints.current = 100;
 
-	gEnv->game.player.ship->evasion.baseValue = 20;
-	gEnv->game.player.ship->evasion.total = 20;
-	gEnv->game.player.ship->evasion.current = 20;
+	gEnv->game.player.ship->shield.baseValue = 100;
+	gEnv->game.player.ship->shield.total = 100;
+	gEnv->game.player.ship->shield.current = 100;
 
-	gEnv->game.player.ship->mobility.baseValue = 3;
-	gEnv->game.player.ship->mobility.total = 3;
-	gEnv->game.player.ship->mobility.current = 3;
 
 	//create main interface panel
 
@@ -237,6 +234,12 @@ void createAdventureUIButtons()
 	gEnv->game.player.inventory[2]->name = L"roflanEbalo";
 	gEnv->game.player.inventory[2]->itemType = itemType::module;
 	static_cast<Module*>(gEnv->game.player.inventory[2])->slot = moduleSlot::engine;
+	static_cast<Module*>(gEnv->game.player.inventory[2])->moduleType = moduleType::system;
+	StatModEffect * sme1 = new StatModEffect();
+	sme1->targetType = targetType::ship;
+	sme1->statName = statNames::hull;
+	sme1->p_add = 1000;
+	static_cast<Module*>(gEnv->game.player.inventory[2])->effects.push_back(sme1);
 
 	gEnv->game.player.inventory[7] = new Module();
 	static_cast<Module*>(gEnv->game.player.inventory[7])->slot = moduleSlot::hyperdrive;
@@ -270,6 +273,8 @@ void createAdventureUIButtons()
 	gEnv->game.player.ship->modules[0]->name = L"roflanPomoika";
 	gEnv->game.player.ship->modules[0]->slot = moduleSlot::core;
 	gEnv->game.player.ship->modules[0]->itemType = itemType::module;
+	gEnv->game.player.ship->modules[0]->powerPriority = 0;
+
 
 	gEnv->game.player.ship->modules[1] = new Module();
 	gEnv->game.player.ship->modules[1]->name = L"roflanVebenya";
@@ -340,6 +345,9 @@ void createAdventureUIButtons()
 	editBox->setDefaultText("Search");
 	editBox->connect("TextChanged", filterSearchFieldChanged);
 
+	buildShipStats();
+
+
 }
 
 
@@ -359,7 +367,7 @@ void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled) // whereCa
 	switch (gEnv->game.player.shipMenu)
 	{
 	case shipMenu::ship:
-		buildShipStats();
+		updateShipStatsScreen();
 		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(true);
 		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(true);
 		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setEnabled(true);
