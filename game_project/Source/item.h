@@ -8,6 +8,7 @@
 
 #include <string>
 #include "baseObject.h"
+#include "effect.h"
 
 namespace itemType {
 	enum ItemType
@@ -58,6 +59,9 @@ namespace moduleType {
 	enum ModuleType
 	{
 		null,
+		system,
+		weapon,
+		special
 	};
 }
 
@@ -125,10 +129,24 @@ public:
 	moduleType::ModuleType moduleType;
 	moduleSlot::ModuleSlotType slot;
 	moduleSlot::ModuleSlotSize size;
+
+	std::vector<EffectObject*> effects;
+
+	bool online;
+	float powerSupply;
+	float highPowerSupply;
+
+	int powerPriority; // lower is better
+
+
 	Module()
 	{
 		ItemEquipable();
 		itemType = itemType::module;
+		online = false;
+		powerSupply = 0;
+		powerPriority = 1;
+		highPowerSupply = 0;
 	}
 };
 
@@ -147,5 +165,5 @@ public:
 class WeaponModule : public Module
 {
 public:
-	
+
 };

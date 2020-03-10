@@ -244,6 +244,7 @@
     <ClCompile Include="Source\scriptSystem.cpp" />
     <ClCompile Include="Source\scriptUtilsUI.cpp" />
     <ClCompile Include="Source\sectorDrawUtility.cpp" />
+    <ClCompile Include="Source\shipManagement.cpp" />
     <ClCompile Include="Source\shipModulesUI.cpp" />
     <ClCompile Include="Source\storageStuff.cpp" />
     <ClCompile Include="Source\tableInventory.cpp" />
@@ -258,6 +259,7 @@
     <ClInclude Include="Source\baseObject.h" />
     <ClInclude Include="Source\convertUtils.h" />
     <ClInclude Include="Source\crewData.h" />
+    <ClInclude Include="Source\effect.h" />
     <ClInclude Include="Source\enviroment.h" />
     <ClInclude Include="Source\enviromentVariablesAccess.h" />
     <ClInclude Include="Source\envUtils.h" />
