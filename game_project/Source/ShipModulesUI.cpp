@@ -419,7 +419,7 @@ void changeShipModulePriority(int id, bool isUp)
 {
 	if (isUp)
 	{
-		if (gEnv->game.player.ship->modules[id]->powerPriority < 100)
+		if (gEnv->game.player.ship->modules[id]->powerPriority < 99)
 			gEnv->game.player.ship->modules[id]->powerPriority++;
 	}
 	else
