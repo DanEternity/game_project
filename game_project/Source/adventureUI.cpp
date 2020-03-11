@@ -33,21 +33,21 @@ void createAdventureUIButtons()
 	gEnv->game.player.ship->hull.total = 500;
 	gEnv->game.player.ship->hull.current = 200;
 
-	gEnv->game.player.ship->powerSupply.baseValue = 125;
-	gEnv->game.player.ship->powerSupply.total = 125;
-	gEnv->game.player.ship->powerSupply.current = 125;
+	gEnv->game.player.ship->powerSupply.baseValue = 0;
+	gEnv->game.player.ship->powerSupply.total = 0;
+	gEnv->game.player.ship->powerSupply.current = 0;
 
 	gEnv->game.player.ship->highPowerSupply.baseValue = 0;
 	gEnv->game.player.ship->highPowerSupply.total = 0;
 	gEnv->game.player.ship->highPowerSupply.current = 0;
 
-	gEnv->game.player.ship->actionPoints.baseValue = 100;
-	gEnv->game.player.ship->actionPoints.total = 100;
-	gEnv->game.player.ship->actionPoints.current = 100;
+	gEnv->game.player.ship->actionPoints.baseValue = 0;
+	gEnv->game.player.ship->actionPoints.total = 0;
+	gEnv->game.player.ship->actionPoints.current = 0;
 
-	gEnv->game.player.ship->shield.baseValue = 100;
-	gEnv->game.player.ship->shield.total = 100;
-	gEnv->game.player.ship->shield.current = 100;
+	gEnv->game.player.ship->shield.baseValue = 0;
+	gEnv->game.player.ship->shield.total = 0;
+	gEnv->game.player.ship->shield.current = 0;
 
 
 	//create main interface panel
@@ -253,6 +253,139 @@ void createAdventureUIButtons()
 	sme1->p_add = 1000;
 	static_cast<Module*>(gEnv->game.player.inventory[2])->effects.push_back(sme1);
 
+	// Basic core
+	// type: Core
+	// +100 power supply +100 hull +2.5 high power supply
+
+
+	megaSuperModule = new Module(L"Basic Core", moduleType::system,
+		moduleSlot::ModuleSlotType::core,
+		moduleSlot::ModuleSlotSize::medium);
+	megaSuperModule->powerPriority = 0;
+	effect = new StatModEffect(targetType::ship, statNames::powerSupply, 100, 0, 0, 0);
+	megaSuperModule->effects.push_back(effect);
+
+	effect = new StatModEffect(targetType::ship, statNames::hull, 100, 0, 0, 0);
+	megaSuperModule->effects.push_back(effect);
+
+	effect = new StatModEffect(targetType::ship, statNames::highPowerSupply, 2.5f, 0, 0, 0);
+	megaSuperModule->effects.push_back(effect);
+
+	gEnv->game.player.inventory[20] = megaSuperModule;
+
+	// Basic engine
+	// Type engine; Required 35 power
+	// +10 mobility +3.5% mobility +50 hull +4 evasion
+
+	megaSuperModule = new Module(L"Basic engine", moduleType::system,
+		moduleSlot::ModuleSlotType::engine,
+		moduleSlot::ModuleSlotSize::medium);
+	megaSuperModule->powerPriority = 5;
+	megaSuperModule->powerSupply = 35;
+	effect = new StatModEffect(targetType::ship, statNames::mobility, 10, 0.035, 0, 0);
+	megaSuperModule->effects.push_back(effect);
+
+	effect = new StatModEffect(targetType::ship, statNames::hull, 50, 0, 0, 0);
+	megaSuperModule->effects.push_back(effect);
+
+	effect = new StatModEffect(targetType::ship, statNames::evasion, 4, 0, 0, 0);
+	megaSuperModule->effects.push_back(effect);
+
+	gEnv->game.player.inventory[21] = megaSuperModule;
+
+	// Advanced engine
+	// Type engine; Required 65 power and 1 high power supply
+	// +15 mobility +5% mobility +20 hull +8 evasion
+
+	megaSuperModule = new Module(L"Advanced engine", moduleType::system,
+		moduleSlot::ModuleSlotType::engine,
+		moduleSlot::ModuleSlotSize::medium);
+	megaSuperModule->powerPriority = 5;
+	megaSuperModule->powerSupply = 65;
+	megaSuperModule->highPowerSupply = 1;
+	effect = new StatModEffect(targetType::ship, statNames::mobility, 15, 0.05, 0, 0);
+	megaSuperModule->effects.push_back(effect);
+
+	effect = new StatModEffect(targetType::ship, statNames::hull, 20, 0, 0, 0);
+	megaSuperModule->effects.push_back(effect);
+
+	effect = new StatModEffect(targetType::ship, statNames::evasion, 8, 0, 0, 0);
+	megaSuperModule->effects.push_back(effect);
+
+	gEnv->game.player.inventory[22] = megaSuperModule;
+
+	// Basic system
+	// Type engine; Required 25 power 
+	// +10% energy +10% high power supply +10% evasion
+
+	megaSuperModule = new Module(L"Basic system", moduleType::system,
+		moduleSlot::ModuleSlotType::system,
+		moduleSlot::ModuleSlotSize::medium);
+	megaSuperModule->powerPriority = 5;
+	megaSuperModule->powerSupply = 25;
+	effect = new StatModEffect(targetType::ship, statNames::powerSupply, 0, 0.1, 0, 0);
+	megaSuperModule->effects.push_back(effect);
+
+	effect = new StatModEffect(targetType::ship, statNames::highPowerSupply, 0, 0.1, 0, 0);
+	megaSuperModule->effects.push_back(effect);
+
+	effect = new StatModEffect(targetType::ship, statNames::evasion, 0, 0.1, 0, 0);
+	megaSuperModule->effects.push_back(effect);
+
+	gEnv->game.player.inventory[23] = megaSuperModule;
+
+	// basic hyperdrive
+	// Type hyperdrive; Required ~max~ power 90;
+	// +20 hyper drive power  +1 hyperdrive tier
+
+	megaSuperModule = new Module(L"Basic hyperdrive", moduleType::system,
+		moduleSlot::ModuleSlotType::hyperdrive,
+		moduleSlot::ModuleSlotSize::medium);
+	megaSuperModule->powerPriority = 5;
+	megaSuperModule->powerSupply = 90;
+	effect = new StatModEffect(targetType::ship, statNames::hyperDrivePower, 20, 0, 0, 0);
+	megaSuperModule->effects.push_back(effect);
+
+	effect = new StatModEffect(targetType::ship, statNames::hyperDriveTier, 1, 0, 0, 0);
+	megaSuperModule->effects.push_back(effect);
+
+	gEnv->game.player.inventory[24] = megaSuperModule;
+
+	// Rd-1000 Engine
+	// Type engine; Required power 200;
+	// +100 mobility
+
+	megaSuperModule = new Module(L"Rd-1000 Engine", moduleType::system,
+		moduleSlot::ModuleSlotType::engine,
+		moduleSlot::ModuleSlotSize::medium);
+	megaSuperModule->powerPriority = 5;
+	megaSuperModule->powerSupply = 200;
+	effect = new StatModEffect(targetType::ship, statNames::mobility, 100, 0, 0, 0);
+	megaSuperModule->effects.push_back(effect);
+
+	gEnv->game.player.inventory[25] = megaSuperModule;
+
+	// V-1 Shield generator
+	// Type universal; Required power 40;
+	// +100 shield +10 shield regen 5 shield physical def
+
+	megaSuperModule = new Module(L"V-1 Shield generator", moduleType::system,
+		moduleSlot::ModuleSlotType::universal,
+		moduleSlot::ModuleSlotSize::medium);
+	megaSuperModule->powerPriority = 5;
+	megaSuperModule->powerSupply = 40;
+	effect = new StatModEffect(targetType::ship, statNames::shield, 100, 0, 0, 0);
+	megaSuperModule->effects.push_back(effect);
+
+	effect = new StatModEffect(targetType::ship, statNames::shieldReg, 10, 0, 0, 0);
+	megaSuperModule->effects.push_back(effect);
+
+	effect = new StatModEffect(targetType::ship, statNames::shieldResist, 5, 0, 0, 0);
+	megaSuperModule->effects.push_back(effect);
+
+	gEnv->game.player.inventory[26] = megaSuperModule;
+
+
 	gEnv->game.player.inventory[7] = new Module();
 	static_cast<Module*>(gEnv->game.player.inventory[7])->slot = moduleSlot::hyperdrive;
 	gEnv->game.player.inventory[7]->name = L"roflanContent";
@@ -272,15 +405,20 @@ void createAdventureUIButtons()
 
 
 	/* INITIALIZE SHIP SLOTS */
-	gEnv->game.player.ship->slots.resize(5, moduleSlot::ModuleSlot());
+	gEnv->game.player.ship->slots.resize(8, moduleSlot::ModuleSlot());
 	gEnv->game.player.ship->slots[0].type = moduleSlot::core;
 	gEnv->game.player.ship->slots[1].type = moduleSlot::hyperdrive;
 	gEnv->game.player.ship->slots[2].type = moduleSlot::engine;
 	gEnv->game.player.ship->slots[3].type = moduleSlot::system;
 	gEnv->game.player.ship->slots[4].type = moduleSlot::primaryWeapon;
+	gEnv->game.player.ship->slots[5].type = moduleSlot::universal;
+	gEnv->game.player.ship->slots[6].type = moduleSlot::universal;
+	gEnv->game.player.ship->slots[7].type = moduleSlot::universal;
+	
+
 
 	/* INITIALIZE SHIP BASE MODULES */
-	gEnv->game.player.ship->modules.resize(5, nullptr);
+	gEnv->game.player.ship->modules.resize(8, nullptr);
 	gEnv->game.player.ship->modules[0] = new Module();
 	gEnv->game.player.ship->modules[0]->name = L"roflanPomoika";
 	gEnv->game.player.ship->modules[0]->slot = moduleSlot::core;
@@ -307,6 +445,8 @@ void createAdventureUIButtons()
 	gEnv->game.player.ship->modules[4]->name = L"roflanStrelyai";
 	gEnv->game.player.ship->modules[4]->slot = moduleSlot::primaryWeapon;
 	gEnv->game.player.ship->modules[4]->itemType = itemType::module;
+
+
 
 	BuildShipSchemeUI(50);
 

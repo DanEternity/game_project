@@ -24,13 +24,13 @@ void BuildShipSchemeUI(int moduleSizeUI)
 		tgui::Button::Ptr btn = tgui::Button::create();
 		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 		btn->setSize(moduleSizeUI, moduleSizeUI);
-		btn->setPosition((rand() % 550) + 25, (rand() % 200) + 12);
+		btn->setPosition(25 + (i % 5) * 90 , 50 + (i / 5) * 80);
 		if (gEnv->game.player.ship->modules[i] != NULL)
 			btn->setText(gEnv->game.player.ship->modules[i]->name);
 		mainShipPanel->add(btn, "ShipSchemeModule" + std::to_string(i));
 		const int id = i;
 
-	//	btn->connect("RightMouseReleased", UIbuttonWasClicked, id);
+		btn->connect("RightMouseReleased", UIbuttonWasClicked, id);
 	//	btn->connect("MouseReleased", UIbuttonWasClicked, id);
 
 		btn->connect("MouseReleased", handleShipModulesPanelEvent, id);
@@ -95,7 +95,7 @@ void UIbuttonWasClicked(const int id, tgui::Widget::Ptr widget, const std::strin
 		btn->setSize(107, 31);
 		btn->setPosition(0, 30);
 		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-		btn->setText(L"Delete");
+		btn->setText(L"Unequip");
 		btn->connect("MouseReleased", rmPanelClickedShip, id);
 
 		btn = tgui::Button::create();
@@ -120,16 +120,30 @@ void rmPanelClickedShip(const int id, tgui::Widget::Ptr widget, const std::strin
 			gEnv->game.ui.tempAddPanelClicked = false;
 		}
 	}
-	else if (widget->cast<tgui::Button>()->getText() == L"Delete")
+	else if (widget->cast<tgui::Button>()->getText() == L"Unequip")
 	{
 		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
 
 		// need to delete module correctly
-		gEnv->game.player.ship->modules[id] = nullptr;
-		
+		// = nullptr;
+		for (int i(0); i < gEnv->game.player.inventory.size(); i++)
+		{
+			if (gEnv->game.player.inventory[i] == NULL)
+			{
+				gEnv->game.player.inventory[i] = gEnv->game.player.ship->modules[id];
+				gEnv->game.player.ship->modules[id] = NULL;
+				break;
+			}
+		}
+
 		tgui::Panel::Ptr panel = gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel");
 		panel->get<tgui::Button>("ShipSchemeModule" + std::to_string(id))->setText("");
 		gEnv->game.ui.rmWasClicked = false;
+
+		updateShipValues(gEnv->game.player.ship);
+		updateShipStatsScreen();
+		RebuildInventoryGridPanel();
+
 	}
 	else if (widget->cast<tgui::Button>()->getText() == L"Add")
 	{
@@ -171,6 +185,8 @@ void rmPanelClickedShip(const int id, tgui::Widget::Ptr widget, const std::strin
 			else
 				gEnv->game.ui.tempAddPanelClicked = false;
 		}
+
+
 	}
 }
 
@@ -200,6 +216,10 @@ void rmPanelChoosenAdded(const int id, const int module_id, tgui::Widget::Ptr wi
 	gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempAddPanel"));
 	gEnv->game.ui.rmWasClicked = false;
 	gEnv->game.ui.tempAddPanelClicked = false;
+
+	updateShipValues(gEnv->game.player.ship);
+	RebuildInventoryGridPanel();
+	updateShipStatsScreen();
 
 }
 
@@ -412,7 +432,23 @@ void updateShipModulePriorityPanel()
 	{
 		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("priorityPanel")->setVisible(true);
 		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("priorityPanel")->setEnabled(true);
+
+		for (int id(0); id < gEnv->game.player.ship->modules.size(); id++)
+		{
+
+
+			if (gEnv->game.player.ship->modules[id] == NULL)
+				continue;
+
+			gEnv->game.adventureGUI.get<tgui::Label>("labelModulePriority" + std::to_string(id))
+				->setText(gEnv->game.player.ship->modules[id]->name + L" [" + std::to_wstring(gEnv->game.player.ship->modules[id]->powerPriority) + L"]");
+
+		}
 	}
+
+	updateShipValues(gEnv->game.player.ship);
+	updateShipStatsScreen();
+
 }
 
 void changeShipModulePriority(int id, bool isUp)
@@ -426,7 +462,7 @@ void changeShipModulePriority(int id, bool isUp)
 	{
 		if (gEnv->game.player.ship->modules[id]->powerPriority > 1)
 			gEnv->game.player.ship->modules[id]->powerPriority--;
-	}
+	}/*
 	std::string str;
 	switch (id)
 	{
@@ -447,7 +483,7 @@ void changeShipModulePriority(int id, bool isUp)
 		break;
 	default:
 		break;
-	};
+	};*/
 	gEnv->game.adventureGUI.get<tgui::Label>("labelModulePriority" + std::to_string(id))
-				->setText(GetString(str) + L" (" + std::to_wstring(gEnv->game.player.ship->modules[id]->powerPriority) + L")");
+				->setText(gEnv->game.player.ship->modules[id]->name + L" [" + std::to_wstring(gEnv->game.player.ship->modules[id]->powerPriority) + L"]");
 }

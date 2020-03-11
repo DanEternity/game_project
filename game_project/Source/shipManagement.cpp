@@ -147,6 +147,10 @@ void collectModules(Ship * p)
 
 	for (Module*m : p->modules)
 	{
+
+		if (m == NULL)
+			continue;
+
 		m->online = false; // disable all by default then boot one by one
 	}
 
@@ -166,6 +170,10 @@ void collectModules(Ship * p)
 
 		for (Module*m : p->modules)
 		{
+
+			if (m == NULL)
+				continue;
+
 			if (m->powerPriority > minimalPriorityCollected && m->powerPriority < minimalPriorityFound)
 				minimalPriorityFound = m->powerPriority;
 		}
@@ -177,8 +185,18 @@ void collectModules(Ship * p)
 		
 		for (Module*m : p->modules)
 		{
+
+			if (m == NULL)
+				continue;
+
 			if (m->powerPriority == minimalPriorityFound)
 			{
+
+				if (m->slot == moduleSlot::hyperdrive)
+				{
+					continue;
+				}
+
 				// powering module if possible
 				if (p->powerSupply.total - p->powerSupply.current >= m->powerSupply 
 					&& p->highPowerSupply.total - p->highPowerSupply.current >= m->highPowerSupply)
@@ -199,6 +217,27 @@ void collectModules(Ship * p)
 
 		minimalPriorityCollected = minimalPriorityFound;
 
+	}
+
+
+	// check for hyperdrive 
+	for (Module*m : p->modules)
+	{
+
+		if (m == NULL)
+			continue;
+
+		if (m->slot == moduleSlot::hyperdrive)
+		{
+			if (p->powerSupply.total >= m->powerSupply && p->highPowerSupply.total >= m->highPowerSupply)
+			{
+				
+				m->online = true;
+				applySysModuleEffects(p, m);
+				break;
+			}
+			
+		}
 	}
 
 	for (auto q : p->shipStats)
