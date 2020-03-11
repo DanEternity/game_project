@@ -148,6 +148,20 @@ public:
 		powerPriority = 1;
 		highPowerSupply = 0;
 	}
+
+	Module(std::wstring name, moduleType::ModuleType moduleType,
+		moduleSlot::ModuleSlotType moduleSlot, moduleSlot::ModuleSlotSize moduleSize)
+	{
+		this->itemType = itemType::module;
+		this->name = name;
+		this->moduleType = moduleType;
+		this->slot = moduleSlot;
+		this->size = moduleSize;
+		for (auto i = 0; i < sizeof(effects) / sizeof(StatModEffect); i++)
+		{
+			this->effects.push_back(effects[i]);
+		}
+	}
 };
 
 class Equipment : public ItemEquipable

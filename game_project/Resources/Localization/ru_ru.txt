@@ -7,8 +7,8 @@ Secondary weapon####Дополнительное оружие
 Core####Ядро
 System####Система
 Universal####Универсальный
-Power####Энергия
-Maximum power####Максимум зарезервированной энергии
+Power supply####Энергия
+High power supply####Максимум зарезервированной энергии
 Action points in battle####Очки действия в битве
 Evasion rating####Уклонение
 Mobility####Скорость

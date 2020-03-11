@@ -11,6 +11,14 @@ void BuildShipSchemeUI(int moduleSizeUI)
 	mainShipPanel->setPosition("1%", "2%");
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(mainShipPanel, "ShipSchemeModulesPanel");
 
+	tgui::Button::Ptr priorityButton = tgui::Button::create();
+	priorityButton->setText(L"Modules priority");
+	priorityButton->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	priorityButton->setSize(130, 30);
+	priorityButton->setPosition("76%", "2%");
+	mainShipPanel->add(priorityButton, "priorityButton");
+	priorityButton->connect("MouseReleased", updateShipModulePriorityPanel);
+
 	for (int i(0); i < gEnv->game.player.ship->modules.size(); i++)
 	{
 		tgui::Button::Ptr btn = tgui::Button::create();
@@ -211,6 +219,7 @@ void handleShipModulesPanelEvent(const int id, tgui::Widget::Ptr widget, const s
 
 			if (s_slot.type == type)
 			{
+				gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(gEnv->game.player.pickedLocalInventory))->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 				auto tmp = gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId];
 				
 				gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.ship->modules[id];
@@ -276,7 +285,29 @@ void buildShipStats()
 	label->setTextSize(18);
 	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label, "shipStatPowerSupply");
 
+	y += 20;
 
+	label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setText(GetString("High power supply") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->highPowerSupply.current)
+		+ L"/"
+		+ std::to_wstring((int)gEnv->game.player.ship->highPowerSupply.total));
+	label->setPosition(5, y);
+	label->setTextSize(18);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label, "shipStatHighPowerSupply");
+
+	y += 20;
+
+	label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setText(GetString("Action points in battle") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->actionPoints.current)
+		+ L"/"
+		+ std::to_wstring((int)gEnv->game.player.ship->actionPoints.total));
+	label->setPosition(5, y);
+	label->setTextSize(18);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label, "shipStatActionPoints");
 }
 
 void updateShipStatsScreen()
@@ -299,4 +330,124 @@ void updateShipStatsScreen()
 		+ L"/"
 		+ std::to_wstring((int)gEnv->game.player.ship->powerSupply.total));
 
+	label = gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->get("shipStatHighPowerSupply")->cast<tgui::Label>();
+	label->setText(GetString("High power supply") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->highPowerSupply.current)
+		+ L"/"
+		+ std::to_wstring((int)gEnv->game.player.ship->highPowerSupply.total));
+
+	label = gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->get("shipStatActionPoints")->cast<tgui::Label>();
+	label->setText(GetString("Action points in battle") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->actionPoints.current)
+		+ L"/"
+		+ std::to_wstring((int)gEnv->game.player.ship->actionPoints.total));
+}
+
+void createShipModulePriorityPanel()
+{
+	tgui::ScrollablePanel::Ptr priorityPanel = tgui::ScrollablePanel::create();
+	priorityPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
+	priorityPanel->setSize(300, 500);
+	priorityPanel->setPosition("51%", "5%");
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(priorityPanel, "priorityPanel");
+	priorityPanel->setVisible(false);
+	priorityPanel->setEnabled(false);
+
+	for (int i = 0; i < gEnv->game.player.ship->modules.size(); i++)
+	{
+		tgui::Label::Ptr label = tgui::Label::create();
+		label->setTextSize(20);
+		label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+		switch (i)
+		{
+		case 0:
+			label->setText(GetString("Core") + L" (" + std::to_wstring(gEnv->game.player.ship->modules[i]->powerPriority) + L")");
+			break;
+		case 1:
+			label->setText(GetString("Hyperdrive") + L" (" + std::to_wstring(gEnv->game.player.ship->modules[i]->powerPriority) + L")");
+			break;
+		case 2:
+			label->setText(GetString("Engine") + L" (" + std::to_wstring(gEnv->game.player.ship->modules[i]->powerPriority) + L")");
+			break;
+		case 3:
+			label->setText(GetString("System") + L" (" + std::to_wstring(gEnv->game.player.ship->modules[i]->powerPriority) + L")");
+			break;
+		case 4:
+			label->setText(GetString("Primary weapon") + L" (" + std::to_wstring(gEnv->game.player.ship->modules[i]->powerPriority) + L")");
+			break;
+		default:
+			break;
+		};
+		label->setPosition("(&.width - width) / 2", 20 + i*60);
+		priorityPanel->add(label, "labelModulePriority" + std::to_string(i));
+		if (i != 0)
+		{
+			tgui::Button::Ptr button1 = tgui::Button::create();
+			button1->setPosition("1%", 20 + i * 60);
+			button1->setSize(30, 30);
+			button1->setText("<");
+			button1->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+			priorityPanel->add(button1);
+			button1->connect("MouseReleased", changeShipModulePriority, i, false);
+
+			tgui::Button::Ptr button2 = tgui::Button::create();
+			button2->setPosition("89%", 20 + i * 60);
+			button2->setSize(30, 30);
+			button2->setText(">");
+			button2->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+			priorityPanel->add(button2);
+			button2->connect("MouseReleased", changeShipModulePriority, i, true);
+		}
+	}
+}
+
+void updateShipModulePriorityPanel()
+{
+	if (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("priorityPanel")->isVisible())
+	{
+		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("priorityPanel")->setVisible(false);
+		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("priorityPanel")->setEnabled(false);
+	}
+	else
+	{
+		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("priorityPanel")->setVisible(true);
+		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("priorityPanel")->setEnabled(true);
+	}
+}
+
+void changeShipModulePriority(int id, bool isUp)
+{
+	if (isUp)
+	{
+		if (gEnv->game.player.ship->modules[id]->powerPriority < 100)
+			gEnv->game.player.ship->modules[id]->powerPriority++;
+	}
+	else
+	{
+		if (gEnv->game.player.ship->modules[id]->powerPriority > 1)
+			gEnv->game.player.ship->modules[id]->powerPriority--;
+	}
+	std::string str;
+	switch (id)
+	{
+	case 0:
+		str = "Core";
+		break;
+	case 1:
+		str = "Hyperdrive";
+		break;
+	case 2:
+		str = "Engine";
+		break;
+	case 3:
+		str = "System";
+		break;
+	case 4:
+		str = "Primary weapon";
+		break;
+	default:
+		break;
+	};
+	gEnv->game.adventureGUI.get<tgui::Label>("labelModulePriority" + std::to_string(id))
+				->setText(GetString(str) + L" (" + std::to_wstring(gEnv->game.player.ship->modules[id]->powerPriority) + L")");
 }
