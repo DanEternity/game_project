@@ -235,6 +235,7 @@ void createAdventureUIButtons()
 	gEnv->game.player.inventory[2]->itemType = itemType::module;
 	static_cast<Module*>(gEnv->game.player.inventory[2])->slot = moduleSlot::engine;
 	static_cast<Module*>(gEnv->game.player.inventory[2])->moduleType = moduleType::system;
+	static_cast<Module*>(gEnv->game.player.inventory[2])->powerSupply = 50;
 	StatModEffect * sme1 = new StatModEffect();
 	sme1->targetType = targetType::ship;
 	sme1->statName = statNames::hull;
