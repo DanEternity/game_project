@@ -211,6 +211,7 @@ void handleShipModulesPanelEvent(const int id, tgui::Widget::Ptr widget, const s
 
 			if (s_slot.type == type)
 			{
+				gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(gEnv->game.player.pickedLocalInventory))->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 				auto tmp = gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId];
 				
 				gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.ship->modules[id];
@@ -276,7 +277,29 @@ void buildShipStats()
 	label->setTextSize(18);
 	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label, "shipStatPowerSupply");
 
+	y += 20;
 
+	label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setText(GetString("High power supply") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->highPowerSupply.current)
+		+ L"/"
+		+ std::to_wstring((int)gEnv->game.player.ship->highPowerSupply.total));
+	label->setPosition(5, y);
+	label->setTextSize(18);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label, "shipStatHighPowerSupply");
+
+	y += 20;
+
+	label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setText(GetString("Action points in battle") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->actionPoints.current)
+		+ L"/"
+		+ std::to_wstring((int)gEnv->game.player.ship->actionPoints.total));
+	label->setPosition(5, y);
+	label->setTextSize(18);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label, "shipStatActionPoints");
 }
 
 void updateShipStatsScreen()
@@ -299,4 +322,15 @@ void updateShipStatsScreen()
 		+ L"/"
 		+ std::to_wstring((int)gEnv->game.player.ship->powerSupply.total));
 
+	label = gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->get("shipStatHighPowerSupply")->cast<tgui::Label>();
+	label->setText(GetString("High power supply") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->highPowerSupply.current)
+		+ L"/"
+		+ std::to_wstring((int)gEnv->game.player.ship->highPowerSupply.total));
+
+	label = gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->get("shipStatActionPoints")->cast<tgui::Label>();
+	label->setText(GetString("Action points in battle") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->actionPoints.current)
+		+ L"/"
+		+ std::to_wstring((int)gEnv->game.player.ship->actionPoints.total));
 }

@@ -540,6 +540,7 @@ void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, cons
 			if ( id < gEnv->game.player.localInventory.size() && gEnv->game.player.localInventory[id] != -1)
 				if (gEnv->game.player.inventory[gEnv->game.player.localInventory[id]] != NULL)
 				{
+					gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->setRenderer(gEnv->globalTheme.getRenderer("Button2"));
 					gEnv->game.player.pickedItem = gEnv->game.player.inventory[gEnv->game.player.localInventory[id]];
 					gEnv->game.player.pickedLocalInventory = id;
 					gEnv->game.player.pickedItemInvId = gEnv->game.player.localInventory[id];
@@ -552,7 +553,7 @@ void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, cons
 			if (id < gEnv->game.player.localInventory.size() && gEnv->game.player.localInventory[id] != -1)
 				if (gEnv->game.player.inventory[gEnv->game.player.localInventory[id]] != NULL)
 				{
-
+					gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(gEnv->game.player.pickedLocalInventory))->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 					std::swap(
 						gEnv->game.player.inventory[gEnv->game.player.localInventory[id]], 
 						gEnv->game.player.inventory[gEnv->game.player.localInventory[gEnv->game.player.pickedLocalInventory]]);

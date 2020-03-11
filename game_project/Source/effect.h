@@ -125,4 +125,18 @@ public:
 		p_negMul = 0;
 	}
 
+	StatModEffect(targetType::TargetType target, statNames::StatName stat, float add, float mul, float sub, float negMul)
+	{
+		this->effectGroup = effectGroups::statModifier;
+		this->objectType = objectType::effect;
+
+		this->targetType = target;
+		this->statName = stat;
+
+		this->p_add = add;
+		this->p_mul = mul;
+		this->p_sub = sub;
+		this->p_negMul = negMul;
+	}
+
 };

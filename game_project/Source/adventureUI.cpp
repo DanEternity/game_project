@@ -81,6 +81,8 @@ void createAdventureUIButtons()
 	shipStatsPanel->setSize(450, 570);
 	shipStatsPanel->setPosition("60%", "2%");
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(shipStatsPanel, "shipStatsPanel");
+	shipStatsPanel->setEnabled(false);
+	shipStatsPanel->setVisible(false);
 
 	// create buttons on main interface panel
 
@@ -230,6 +232,15 @@ void createAdventureUIButtons()
 	// create and fill inventories
 	gEnv->game.player.inventory.resize(50, nullptr);
 
+	Module * megaSuperModule = new Module(L"MegaKomp", moduleType::system, 
+										moduleSlot::ModuleSlotType::system,
+										moduleSlot::ModuleSlotSize::medium);
+
+	StatModEffect* effect = new StatModEffect(targetType::ship, statNames::powerSupply, 50, 0, 0, 0);
+	megaSuperModule->effects.push_back(effect);
+
+	gEnv->game.player.inventory[10] = megaSuperModule;
+
 	gEnv->game.player.inventory[2] = new Module();
 	gEnv->game.player.inventory[2]->name = L"roflanEbalo";
 	gEnv->game.player.inventory[2]->itemType = itemType::module;
@@ -374,6 +385,8 @@ void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled) // whereCa
 		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setVisible(true);
 		gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setEnabled(true);
 		gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setVisible(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->setVisible(true);
 		break;
 	case shipMenu::craft:
 		break;
@@ -465,6 +478,8 @@ void disableAllAdventureUI()
 	gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setVisible(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setEnabled(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setVisible(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->setEnabled(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->setVisible(false);
 }
 
 //this function called when we open inventory
