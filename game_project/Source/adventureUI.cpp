@@ -357,7 +357,7 @@ void createAdventureUIButtons()
 	editBox->connect("TextChanged", filterSearchFieldChanged);
 
 	buildShipStats();
-
+	createShipModulePriorityPanel();
 
 }
 

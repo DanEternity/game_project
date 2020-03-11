@@ -39,3 +39,7 @@ void handleShipModulesPanelEvent(const int id, tgui::Widget::Ptr widget, const s
 //stats field
 void buildShipStats();
 void updateShipStatsScreen();
+
+void createShipModulePriorityPanel();
+void updateShipModulePriorityPanel();
+void changeShipModulePriority(int id, bool isUp);
