@@ -671,13 +671,13 @@ void createTooltip(Item * m)
 			break;
 		}
 		if (static_cast<StatModEffect*>(i)->p_add != 0)
-			str += L"+" + std::to_wstring(static_cast<StatModEffect*>(i)->p_add);
+			str += L"+" + std::to_wstring((int)static_cast<StatModEffect*>(i)->p_add) + L" ";
 		if (static_cast<StatModEffect*>(i)->p_mul != 0)
-			str += L"*" + std::to_wstring(static_cast<StatModEffect*>(i)->p_mul);
+			str += L"+" + std::to_wstring((int)(static_cast<StatModEffect*>(i)->p_mul * 100)) + L"% ";
 		if (static_cast<StatModEffect*>(i)->p_sub != 0)
-			str += L"-" + std::to_wstring(static_cast<StatModEffect*>(i)->p_sub);
+			str += L"-" + std::to_wstring((int)static_cast<StatModEffect*>(i)->p_sub) + L" ";
 		if (static_cast<StatModEffect*>(i)->p_negMul != 0)
-			str += L"/" + std::to_wstring(static_cast<StatModEffect*>(i)->p_negMul);
+			str += L"-" + std::to_wstring((int)(static_cast<StatModEffect*>(i)->p_negMul * 100)) + L"% ";
 
 		if (!first)
 			m->tooltipDescription->setText(m->tooltipDescription->getText() + str + L"\n");
