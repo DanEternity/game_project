@@ -99,7 +99,7 @@ public:
 	int itemId;
 	itemType::ItemType itemType;
 	std::wstring name;
-	tgui::Label::Ptr tooltipDescription = tgui::Label::create();
+	tgui::Panel::Ptr tooltipDescription;
 	Item()
 	{
 		itemType = itemType::null;
@@ -142,6 +142,7 @@ public:
 
 	Module()
 	{
+		tooltipDescription = tgui::Panel::create();
 		ItemEquipable();
 		itemType = itemType::module;
 		online = false;
@@ -153,18 +154,13 @@ public:
 	Module(std::wstring name, moduleType::ModuleType moduleType,
 		moduleSlot::ModuleSlotType moduleSlot, moduleSlot::ModuleSlotSize moduleSize)
 	{
+		tooltipDescription = tgui::Panel::create();
 		this->itemType = itemType::module;
 		this->name = name;
 		this->moduleType = moduleType;
 		this->slot = moduleSlot;
 		this->size = moduleSize;
-		for (auto i = 0; i < sizeof(effects) / sizeof(StatModEffect); i++)
-		{
-			this->effects.push_back(effects[i]);
-		}
 	}
-
-	
 };
 
 class Equipment : public ItemEquipable

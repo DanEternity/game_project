@@ -58,5 +58,6 @@ void filterCategoryFieldChanged(tgui::Widget::Ptr widget, const std::string& sig
 
 void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, const std::string& signalName);
 
-void applyTooltip(int id);
-void createTooltip(Item * m);
+void applyModuleTooltip(int id);
+void createModuleTooltip(Module * m);
+void deleteAllTooltips();

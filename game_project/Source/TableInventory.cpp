@@ -366,7 +366,6 @@ void CreateInventoryGridPanel(int length)
 
 		button->connect("MouseReleased", InventoryGridPanelEventHandler, number);
 		button->connect("RightMouseReleased", InventoryGridPanelEventHandler, number);
-		button->connect("MouseEntered", applyTooltip, i);
 	}
 
 }
@@ -439,6 +438,7 @@ void RebuildInventoryGridPanel()
 		}
 	}
 
+	deleteAllTooltips();
 	for (int id(0); id < gEnv->game.player.inventory.size(); id++)
 	{	
 		if (id < gEnv->game.player.localInventory.size() && gEnv->game.player.localInventory[id] != -1)
@@ -447,10 +447,18 @@ void RebuildInventoryGridPanel()
 		else
 			gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->
 			setText(L"");
-		gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->connect("MouseEntered", applyTooltip, id);
+		if (gEnv->game.player.localInventory.size() > id) {
+			if (gEnv->game.player.inventory[gEnv->game.player.localInventory[id]] != NULL)
+			{
+				switch (gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]->itemType)
+				{
+				case itemType::module:
+					gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->connect("MouseEntered", applyModuleTooltip, id);
+					break;
+				}
+			}
+		}
 	}
-
-
 }
 
 void ApplyDefaultFilterToInventoryPanel()
@@ -576,18 +584,86 @@ void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, cons
 
 }
 
-void applyTooltip(int id)
+void applyModuleTooltip(int id)
 {
 	if (id < gEnv->game.player.localInventory.size())
 	{
-		createTooltip(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]);
+		createModuleTooltip(static_cast<Module*>(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]));
 		gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->setToolTip(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]->tooltipDescription);
 		tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
 	}
 }
 
-void createTooltip(Item * m)
+void createModuleTooltip(Module * m)
 {
+	m->tooltipDescription->setSize(200, 160 + m->effects.size() * 30);
+	m->tooltipDescription->setRenderer(globalEnviroment->globalTheme.getRenderer("Panel2"));
+
+	tgui::Button::Ptr button = tgui::Button::create();
+	button->setRenderer(globalEnviroment->globalTheme.getRenderer("Button"));
+	button->setPosition(0, 0);
+	button->setSize(200, 30);
+	button->setText(m->name);
+	m->tooltipDescription->add(button, "nameButtonTooltip");
+
+	tgui::Label::Ptr label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setPosition("(&.width - width) / 2", 30);
+	label->setText("Chto-to");
+	label->setTextSize(18);
+	m->tooltipDescription->add(label);
+
+	tgui::Label::Ptr label2 = tgui::Label::create();
+	label2->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label2->setPosition("(&.width - width) / 4 - 20", 60);
+	label2->setText(L"Level: " + std::to_wstring(m->level));
+	label2->setTextSize(18);
+	m->tooltipDescription->add(label2);
+
+	tgui::Label::Ptr label3 = tgui::Label::create();
+	label3->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label3->setPosition("(&.width - width) / 4 * 3", 60);
+	label3->setText(L"Rarity: " + std::to_wstring(m->rarity));
+	label3->setTextSize(18);
+	m->tooltipDescription->add(label3);
+
+	tgui::Label::Ptr label4 = tgui::Label::create();
+	label4->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label4->setPosition("(&.width - width) / 2", 90);
+	switch (m->slot)
+	{
+	case moduleSlot::core:
+		label4->setText("Slot type: Core");
+		break;
+	case moduleSlot::hyperdrive:
+		label4->setText("Slot type: Hyperdrive");
+		break;
+	case moduleSlot::engine:
+		label4->setText("Slot type: Engine");
+		break;
+	case moduleSlot::system:
+		label4->setText("Slot type: System");
+		break;
+	case moduleSlot::primaryWeapon:
+		label4->setText("Slot type: Primary Weapon");
+		break;
+	case moduleSlot::secondaryWeapon:
+		label4->setText("Slot type: Secondary Weapon");
+		break;
+	case moduleSlot::universal:
+		label4->setText("Slot type: Universal");
+		break;
+	}
+	label4->setTextSize(18);
+	m->tooltipDescription->add(label4);
+
+
+	tgui::Label::Ptr label5 = tgui::Label::create();
+	label5->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label5->setPosition(10, 120);
+	label5->setTextSize(18);
+	m->tooltipDescription->add(label5);
+
 	std::wstring str = L"";
 	bool first = true;
 	for (auto i : static_cast<Module*>(m)->effects)
@@ -680,11 +756,19 @@ void createTooltip(Item * m)
 			str += L"-" + std::to_wstring((int)(static_cast<StatModEffect*>(i)->p_negMul * 100)) + L"% ";
 
 		if (!first)
-			m->tooltipDescription->setText(m->tooltipDescription->getText() + str + L"\n");
+			label5->setText(label5->getText() + str + L"\n");
 		else 
-			m->tooltipDescription->setText(str + L"\n");
-		m->tooltipDescription->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+			label5->setText(str + L"\n");
 		first = false;
 		str = L"";
+	}
+}
+
+void deleteAllTooltips()
+{
+	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
+	{
+		gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(i))->setToolTip(NULL);
+		gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(i))->disconnectAll("MouseEntered");
 	}
 }
