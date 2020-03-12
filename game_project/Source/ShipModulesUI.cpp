@@ -361,6 +361,16 @@ void updateShipStatsScreen()
 		+ std::to_wstring((int)gEnv->game.player.ship->actionPoints.current)
 		+ L"/"
 		+ std::to_wstring((int)gEnv->game.player.ship->actionPoints.total));
+
+	for (int i(0); i < gEnv->game.player.ship->modules.size(); i++)
+	{
+		if (gEnv->game.player.ship->modules[i] != NULL) {
+			if (!gEnv->game.player.ship->modules[i]->online)
+				gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(i))->setRenderer(gEnv->globalTheme.getRenderer("Button2"));
+			else
+				gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(i))->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+		}
+	}
 }
 
 void createShipModulePriorityPanel()
@@ -462,28 +472,8 @@ void changeShipModulePriority(int id, bool isUp)
 	{
 		if (gEnv->game.player.ship->modules[id]->powerPriority > 1)
 			gEnv->game.player.ship->modules[id]->powerPriority--;
-	}/*
-	std::string str;
-	switch (id)
-	{
-	case 0:
-		str = "Core";
-		break;
-	case 1:
-		str = "Hyperdrive";
-		break;
-	case 2:
-		str = "Engine";
-		break;
-	case 3:
-		str = "System";
-		break;
-	case 4:
-		str = "Primary weapon";
-		break;
-	default:
-		break;
-	};*/
+	}
 	gEnv->game.adventureGUI.get<tgui::Label>("labelModulePriority" + std::to_string(id))
 				->setText(gEnv->game.player.ship->modules[id]->name + L" [" + std::to_wstring(gEnv->game.player.ship->modules[id]->powerPriority) + L"]");
 }
+

@@ -28,7 +28,7 @@ Shield resist####Сопротивление щита
 Shield regeneration####Регенерация щита
 Shield structure stability####Сопротивление щита критическому урону
 Missile defence####Противоракетная защита
-Misiile defence tier####Ранг противоракетной защиты
+Misile defence tier####Ранг противоракетной защиты
 Fuel####Топливо
 Additional weapon accuracy####Дополнительная точность оружия
 Total damage multiplier####Общий множитель урона

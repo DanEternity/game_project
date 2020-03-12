@@ -154,6 +154,13 @@ void collectModules(Ship * p)
 		m->online = false; // disable all by default then boot one by one
 	}
 
+	//for (int i(0); i < p->modules.size(); i++)
+	//{
+	//	if (p->modules[i] == NULL) continue;
+	//	p->modules[i]->online = false;
+	//	
+	//}
+
 	// collect modules
 	
 	int minimalPriorityCollected = -1;

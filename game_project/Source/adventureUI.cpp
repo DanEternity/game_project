@@ -240,6 +240,7 @@ void createAdventureUIButtons()
 	megaSuperModule->effects.push_back(effect);
 
 	gEnv->game.player.inventory[10] = megaSuperModule;
+	
 
 	gEnv->game.player.inventory[2] = new Module();
 	gEnv->game.player.inventory[2]->name = L"roflanEbalo";

@@ -9,6 +9,7 @@
 #include <string>
 #include "baseObject.h"
 #include "effect.h"
+#include <TGUI/tGui.hpp>
 
 namespace itemType {
 	enum ItemType
@@ -98,6 +99,7 @@ public:
 	int itemId;
 	itemType::ItemType itemType;
 	std::wstring name;
+	tgui::Label::Ptr tooltipDescription = tgui::Label::create();
 	Item()
 	{
 		itemType = itemType::null;
@@ -138,7 +140,6 @@ public:
 
 	int powerPriority; // lower is better
 
-
 	Module()
 	{
 		ItemEquipable();
@@ -162,6 +163,8 @@ public:
 			this->effects.push_back(effects[i]);
 		}
 	}
+
+	
 };
 
 class Equipment : public ItemEquipable

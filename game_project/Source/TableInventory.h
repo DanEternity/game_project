@@ -4,6 +4,7 @@
 #include "Item.h"
 #include "shipManagement.h"
 #include "shipModulesUI.h"
+#include "LocaleLoader.h"
 /*
 class InventoryItem;
 class TableInventory;
@@ -57,3 +58,5 @@ void filterCategoryFieldChanged(tgui::Widget::Ptr widget, const std::string& sig
 
 void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, const std::string& signalName);
 
+void applyTooltip(int id);
+void createTooltip(Item * m);

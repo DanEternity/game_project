@@ -366,7 +366,7 @@ void CreateInventoryGridPanel(int length)
 
 		button->connect("MouseReleased", InventoryGridPanelEventHandler, number);
 		button->connect("RightMouseReleased", InventoryGridPanelEventHandler, number);
-
+		button->connect("MouseEntered", applyTooltip, i);
 	}
 
 }
@@ -447,6 +447,7 @@ void RebuildInventoryGridPanel()
 		else
 			gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->
 			setText(L"");
+		gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->connect("MouseEntered", applyTooltip, id);
 	}
 
 
@@ -573,4 +574,117 @@ void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, cons
 		
 	}
 
+}
+
+void applyTooltip(int id)
+{
+	if (id < gEnv->game.player.localInventory.size())
+	{
+		createTooltip(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]);
+		gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->setToolTip(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]->tooltipDescription);
+		tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
+	}
+}
+
+void createTooltip(Item * m)
+{
+	std::wstring str = L"";
+	bool first = true;
+	for (auto i : static_cast<Module*>(m)->effects)
+	{
+		switch (static_cast<StatModEffect*>(i)->statName)
+		{
+		case statNames::hull:
+			str += GetString("Hull") + L" ";
+			break;
+		case statNames::actionPoints:
+			str += GetString("Action points in battle") + L" ";
+			break;
+		case statNames::additionalWeaponAccuracy:
+			str += GetString("Additional weapon accuracy") + L" ";
+			break;
+		case statNames::evasion:
+			str += GetString("Evasion rating") + L" ";
+			break;
+		case statNames::fuel:
+			str += GetString("Fuel") + L" ";
+			break;
+		case statNames::highPowerSupply:
+			str += GetString("High power supply") + L" ";
+			break;
+		case statNames::hullReg:
+			str += GetString("Hull regeneration") + L" ";
+			break;
+		case statNames::hullResist:
+			str += GetString("Hull resist") + L" ";
+			break;
+		case statNames::hullStructureStability:
+			str += GetString("Hull structure stability") + L" ";
+			break;
+		case statNames::hyperDriveFuelEfficiency:
+			str += GetString("Hyper drive fuel efficiency") + L" ";
+			break;
+		case statNames::hyperDrivePower:
+			str += GetString("Hyper drive power") + L" ";
+			break;
+		case statNames::hyperDriveTier:
+			str += GetString("Hyper drive tier") + L" ";
+			break;
+		case statNames::missileDefense:
+			str += GetString("Missile defence") + L" ";
+			break;
+		case statNames::missileDefenseTier:
+			str += GetString("Misile defence tier") + L" ";
+			break;
+		case statNames::mobility:
+			str += GetString("Mobility") + L" ";
+			break;
+		case statNames::powerSupply:
+			str += GetString("Power supply") + L" ";
+			break;
+		case statNames::sensorPower:
+			str += GetString("Sensor power") + L" ";
+			break;
+		case statNames::sensorTier:
+			str += GetString("Sensor tier") + L" ";
+			break;
+		case statNames::shield:
+			str += GetString("Shield") + L" ";
+			break;
+		case statNames::shieldReg:
+			str += GetString("Shield regeneration") + L" ";
+			break;
+		case statNames::shieldResist:
+			str += GetString("Shield resist") + L" ";
+			break;
+		case statNames::shieldStructureStability:
+			str += GetString("Shield structure stability") + L" ";
+			break;
+		case statNames::stealth:
+			str += GetString("Stealth") + L" ";
+			break;
+		case statNames::stealthTier:
+			str += GetString("Stealth tier") + L" ";
+			break;
+		case statNames::totalDamageMultiplier:
+			str += GetString("Total damage multiplier") + L" ";
+			break;
+		}
+		if (static_cast<StatModEffect*>(i)->p_add != 0)
+			str += L"+" + std::to_wstring(static_cast<StatModEffect*>(i)->p_add);
+		if (static_cast<StatModEffect*>(i)->p_mul != 0)
+			str += L"*" + std::to_wstring(static_cast<StatModEffect*>(i)->p_mul);
+		if (static_cast<StatModEffect*>(i)->p_sub != 0)
+			str += L"-" + std::to_wstring(static_cast<StatModEffect*>(i)->p_sub);
+		if (static_cast<StatModEffect*>(i)->p_negMul != 0)
+			str += L"/" + std::to_wstring(static_cast<StatModEffect*>(i)->p_negMul);
+
+		if (!first)
+			m->tooltipDescription->setText(m->tooltipDescription->getText() + str + L"\n");
+		else 
+			m->tooltipDescription->setText(str + L"\n");
+		m->tooltipDescription->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+		first = false;
+		str = L"";
+	}
 }
