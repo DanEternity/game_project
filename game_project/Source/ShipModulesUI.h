@@ -43,3 +43,7 @@ void updateShipStatsScreen();
 void createShipModulePriorityPanel();
 void updateShipModulePriorityPanel();
 void changeShipModulePriority(int id, bool isUp);
+
+void applyModuleTooltipShipUI(int id);
+void createModuleTooltipShipUI(Module * m);
+void deleteAllTooltipsShipUI();

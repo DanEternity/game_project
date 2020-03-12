@@ -35,6 +35,7 @@ void BuildShipSchemeUI(int moduleSizeUI)
 
 		btn->connect("MouseReleased", handleShipModulesPanelEvent, id);
 		btn->connect("RightMouseReleased", handleShipModulesPanelEvent, id);
+		btn->connect("MouseEntered", applyModuleTooltipShipUI, id);
 	}
 
 	mainShipPanel->setVisible(false);
@@ -477,3 +478,191 @@ void changeShipModulePriority(int id, bool isUp)
 				->setText(gEnv->game.player.ship->modules[id]->name + L" [" + std::to_wstring(gEnv->game.player.ship->modules[id]->powerPriority) + L"]");
 }
 
+void applyModuleTooltipShipUI(int id)
+{
+	if (gEnv->game.player.ship->modules[id] != NULL)
+	{
+		createModuleTooltip(gEnv->game.player.ship->modules[id]);
+		gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(id))->setToolTip(gEnv->game.player.ship->modules[id]->tooltipDescription);
+		tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
+	}
+}
+
+void createModuleTooltipShipUI(Module * m)
+{
+	m->tooltipDescription->setSize(200, 160 + m->effects.size() * 30);
+	m->tooltipDescription->setRenderer(globalEnviroment->globalTheme.getRenderer("Panel2"));
+
+	tgui::Button::Ptr button = tgui::Button::create();
+	button->setRenderer(globalEnviroment->globalTheme.getRenderer("Button"));
+	button->setPosition(0, 0);
+	button->setSize(200, 30);
+	button->setText(m->name);
+	m->tooltipDescription->add(button, "nameButtonTooltip");
+
+	tgui::Label::Ptr label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setPosition("(&.width - width) / 2", 30);
+	label->setText("Chto-to");
+	label->setTextSize(18);
+	m->tooltipDescription->add(label);
+
+	tgui::Label::Ptr label2 = tgui::Label::create();
+	label2->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label2->setPosition("(&.width - width) / 4 - 20", 60);
+	label2->setText(L"Level: " + std::to_wstring(m->level));
+	label2->setTextSize(18);
+	m->tooltipDescription->add(label2);
+
+	tgui::Label::Ptr label3 = tgui::Label::create();
+	label3->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label3->setPosition("(&.width - width) / 4 * 3", 60);
+	label3->setText(L"Rarity: " + std::to_wstring(m->rarity));
+	label3->setTextSize(18);
+	m->tooltipDescription->add(label3);
+
+	tgui::Label::Ptr label4 = tgui::Label::create();
+	label4->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label4->setPosition("(&.width - width) / 2", 90);
+	switch (m->slot)
+	{
+	case moduleSlot::core:
+		label4->setText("Slot type: Core");
+		break;
+	case moduleSlot::hyperdrive:
+		label4->setText("Slot type: Hyperdrive");
+		break;
+	case moduleSlot::engine:
+		label4->setText("Slot type: Engine");
+		break;
+	case moduleSlot::system:
+		label4->setText("Slot type: System");
+		break;
+	case moduleSlot::primaryWeapon:
+		label4->setText("Slot type: Primary Weapon");
+		break;
+	case moduleSlot::secondaryWeapon:
+		label4->setText("Slot type: Secondary Weapon");
+		break;
+	case moduleSlot::universal:
+		label4->setText("Slot type: Universal");
+		break;
+	}
+	label4->setTextSize(18);
+	m->tooltipDescription->add(label4);
+
+
+	tgui::Label::Ptr label5 = tgui::Label::create();
+	label5->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label5->setPosition(10, 120);
+	label5->setTextSize(18);
+	m->tooltipDescription->add(label5);
+
+	std::wstring str = L"";
+	bool first = true;
+	for (auto i : static_cast<Module*>(m)->effects)
+	{
+		switch (static_cast<StatModEffect*>(i)->statName)
+		{
+		case statNames::hull:
+			str += GetString("Hull") + L" ";
+			break;
+		case statNames::actionPoints:
+			str += GetString("Action points in battle") + L" ";
+			break;
+		case statNames::additionalWeaponAccuracy:
+			str += GetString("Additional weapon accuracy") + L" ";
+			break;
+		case statNames::evasion:
+			str += GetString("Evasion rating") + L" ";
+			break;
+		case statNames::fuel:
+			str += GetString("Fuel") + L" ";
+			break;
+		case statNames::highPowerSupply:
+			str += GetString("High power supply") + L" ";
+			break;
+		case statNames::hullReg:
+			str += GetString("Hull regeneration") + L" ";
+			break;
+		case statNames::hullResist:
+			str += GetString("Hull resist") + L" ";
+			break;
+		case statNames::hullStructureStability:
+			str += GetString("Hull structure stability") + L" ";
+			break;
+		case statNames::hyperDriveFuelEfficiency:
+			str += GetString("Hyper drive fuel efficiency") + L" ";
+			break;
+		case statNames::hyperDrivePower:
+			str += GetString("Hyper drive power") + L" ";
+			break;
+		case statNames::hyperDriveTier:
+			str += GetString("Hyper drive tier") + L" ";
+			break;
+		case statNames::missileDefense:
+			str += GetString("Missile defence") + L" ";
+			break;
+		case statNames::missileDefenseTier:
+			str += GetString("Misile defence tier") + L" ";
+			break;
+		case statNames::mobility:
+			str += GetString("Mobility") + L" ";
+			break;
+		case statNames::powerSupply:
+			str += GetString("Power supply") + L" ";
+			break;
+		case statNames::sensorPower:
+			str += GetString("Sensor power") + L" ";
+			break;
+		case statNames::sensorTier:
+			str += GetString("Sensor tier") + L" ";
+			break;
+		case statNames::shield:
+			str += GetString("Shield") + L" ";
+			break;
+		case statNames::shieldReg:
+			str += GetString("Shield regeneration") + L" ";
+			break;
+		case statNames::shieldResist:
+			str += GetString("Shield resist") + L" ";
+			break;
+		case statNames::shieldStructureStability:
+			str += GetString("Shield structure stability") + L" ";
+			break;
+		case statNames::stealth:
+			str += GetString("Stealth") + L" ";
+			break;
+		case statNames::stealthTier:
+			str += GetString("Stealth tier") + L" ";
+			break;
+		case statNames::totalDamageMultiplier:
+			str += GetString("Total damage multiplier") + L" ";
+			break;
+		}
+		if (static_cast<StatModEffect*>(i)->p_add != 0)
+			str += L"+" + std::to_wstring((int)static_cast<StatModEffect*>(i)->p_add) + L" ";
+		if (static_cast<StatModEffect*>(i)->p_mul != 0)
+			str += L"+" + std::to_wstring((int)(static_cast<StatModEffect*>(i)->p_mul * 100)) + L"% ";
+		if (static_cast<StatModEffect*>(i)->p_sub != 0)
+			str += L"-" + std::to_wstring((int)static_cast<StatModEffect*>(i)->p_sub) + L" ";
+		if (static_cast<StatModEffect*>(i)->p_negMul != 0)
+			str += L"-" + std::to_wstring((int)(static_cast<StatModEffect*>(i)->p_negMul * 100)) + L"% ";
+
+		if (!first)
+			label5->setText(label5->getText() + str + L"\n");
+		else
+			label5->setText(str + L"\n");
+		first = false;
+		str = L"";
+	}
+}
+
+void deleteAllTooltipsShipUI()
+{
+	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
+	{
+		gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(i))->setToolTip(NULL);
+		gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(i))->disconnectAll("MouseEntered");
+	}
+}
