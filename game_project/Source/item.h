@@ -168,10 +168,19 @@ class Equipment : public ItemEquipable
 public:
 	equipmentType::EquipmentType equipmentType;
 	equipmentSlot::EquipmentSlotType equipmentSlotType;
+
 	Equipment()
 	{
 		ItemEquipable();
 		itemType = itemType::equipment;
+	}
+
+	Equipment(std::wstring name, equipmentSlot::EquipmentSlotType type)
+	{
+		this->name = name;
+		ItemEquipable();
+		itemType = itemType::equipment;
+		this->equipmentSlotType = type;
 	}
 };
 

@@ -457,22 +457,15 @@ void createAdventureUIButtons()
 	//gEnv->game.player.crew->shipCrew[0] = new Person();
 	//gEnv->game.player.crew->shipCrew[0]->personEquipment.resize(7, nullptr);
 
-	gEnv->game.player.crew.characters.push_back(new Character());
-	gEnv->game.player.crew.characters[0]->name = L"roflanDaun";
-	gEnv->game.player.crew.characters[0]->slot.resize(7, equipmentSlot::head);
-	gEnv->game.player.crew.characters[0]->slot[0] = equipmentSlot::head;
-	gEnv->game.player.crew.characters[0]->slot[1] = equipmentSlot::body;
-	gEnv->game.player.crew.characters[0]->slot[2] = equipmentSlot::arms;
-	gEnv->game.player.crew.characters[0]->slot[3] = equipmentSlot::legs;
-	gEnv->game.player.crew.characters[0]->slot[4] = equipmentSlot::universal;
-	gEnv->game.player.crew.characters[0]->slot[5] = equipmentSlot::universal;
-	gEnv->game.player.crew.characters[0]->slot[6] = equipmentSlot::universal;
-	gEnv->game.player.crew.characters[0]->equipment.resize(7, nullptr);
-	gEnv->game.player.crew.characters[0]->equipment[0] = new Equipment();
-	gEnv->game.player.crew.characters[0]->equipment[0]->name = L"roflanBoshka";
-	gEnv->game.player.crew.characters[0]->equipment[0]->equipmentSlotType = equipmentSlot::head;
+	gEnv->game.player.crew.characters.push_back(new Character(L"roflanDaun"));
 
+	gEnv->game.player.crew.characters[0]->equipment[0] = new Equipment(L"RoflanBoshka", equipmentSlot::head);
+
+	gEnv->game.player.crew.characters.push_back(new Character(L"Ne Daun"));
+
+	BuildSchemeChooseCharacter();
 	BuildPersonSchemeUI(50, 0);
+	BuildPersonSchemeUI(50, 1);
 	CreateInventoryGridPanel(10);
 
 	// filter components
@@ -533,8 +526,16 @@ void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled) // whereCa
 	case shipMenu::craft:
 		break;
 	case shipMenu::crew:
-		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setEnabled(true);
-		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setVisible(true);
+		for (int i = 0; i < gEnv->game.player.crew.characters.size(); i++)
+		{
+			if (i == gEnv->game.ui.activeOpenPersonWindow)
+			{
+				gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i))->setEnabled(true);
+				gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i))->setVisible(true);
+			}
+		}
+		gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel")->setVisible(true);
 		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setEnabled(true);
 		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setVisible(true);
 		gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setEnabled(true);
@@ -606,14 +607,19 @@ void updateCategoryFilters()
 
 void disableAllAdventureUI()
 {
+	gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel")->setEnabled(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel")->setVisible(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setEnabled(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setVisible(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setEnabled(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setVisible(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setEnabled(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel")->setVisible(false);
+	for (int i = 0; i < gEnv->game.player.crew.characters.size(); i++)
+	{
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i))->setEnabled(false);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i))->setVisible(false);
+	}
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setEnabled(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setVisible(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setEnabled(false);

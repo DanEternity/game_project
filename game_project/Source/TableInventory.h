@@ -61,3 +61,5 @@ void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, cons
 void applyModuleTooltip(int id);
 void createModuleTooltip(Module * m);
 void deleteAllTooltips();
+
+void applyStorageTooltip(int id);
