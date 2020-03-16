@@ -35,6 +35,26 @@ namespace itemModifier {
 	};
 }
 
+namespace itemClass {
+
+	enum ItemClass
+	{
+		null,
+		miscellaneos, // category not specified
+		// ship modules section
+		core,
+		hyperdrive,
+		engine,
+		system,
+		shieldGenerator,
+		shieldAmplifier, // req shieldGenerator
+		sensorSystem,
+		sensorAmplifier, // req sensor
+
+	};
+
+}
+
 
 
 namespace equipmentType {
@@ -94,15 +114,17 @@ namespace moduleSlot {
 class Item : public BaseObject
 {
 public:
-	int level;
-	int rarity;
+	int level; // level of item; used in generation
+	int rarity; // rarity of item; used in generation
 	int itemId;
 	itemType::ItemType itemType;
+	std::string itemClass; // item class for dependecies
 	std::wstring name;
-	tgui::Panel::Ptr tooltipDescription;
+	tgui::Panel::Ptr tooltipDescription; // owo what's this?
 	Item()
 	{
 		itemType = itemType::null;
+		itemClass = "Not defined";
 	}
 };
 

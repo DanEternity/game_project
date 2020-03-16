@@ -120,6 +120,9 @@
     <ClCompile Include="Source\shipManagement.cpp">
       <Filter>Adventure\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameLogicCore.cpp">
+      <Filter>Adventure\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\game.h">
@@ -283,6 +286,12 @@
     </ClInclude>
     <ClInclude Include="Source\effect.h">
       <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\gameLogic.h">
+      <Filter>Enviroment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameLogicCore.h">
+      <Filter>Adventure\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

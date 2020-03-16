@@ -232,6 +232,7 @@
     <ClCompile Include="Source\enviromentVariablesAccess.cpp" />
     <ClCompile Include="Source\envUtils.cpp" />
     <ClCompile Include="Source\game.cpp" />
+    <ClCompile Include="Source\GameLogicCore.cpp" />
     <ClCompile Include="Source\generationUtility.cpp" />
     <ClCompile Include="Source\loader.cpp" />
     <ClCompile Include="Source\LocaleLoader.cpp" />
@@ -265,6 +266,8 @@
     <ClInclude Include="Source\envUtils.h" />
     <ClInclude Include="Source\game.h" />
     <ClInclude Include="Source\gamedata.h" />
+    <ClInclude Include="Source\gameLogic.h" />
+    <ClInclude Include="Source\GameLogicCore.h" />
     <ClInclude Include="Source\generationUtility.h" />
     <ClInclude Include="Source\graphics.h" />
     <ClInclude Include="Source\graphicsModel.h" />

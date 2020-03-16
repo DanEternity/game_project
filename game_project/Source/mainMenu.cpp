@@ -242,6 +242,9 @@ void createMenuButtons()
 
 void startClick()
 {
+
+	InitGameLogic();
+
 	gEnv->game.gameAdventureGUIRequiresUpdate = true;
 	gEnv->game.adventureUI.adventureUIDrawRequired = true;
 	disableAllMainMenuWidgets();

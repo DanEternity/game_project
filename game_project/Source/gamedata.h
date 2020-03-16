@@ -8,6 +8,7 @@
 #include "playerData.h"
 #include "uiData.h"
 #include "localization.h"
+#include "gameLogic.h"
 
 namespace menuState
 {
@@ -162,6 +163,9 @@ public:
 
 	// localization
 	LocaleData locale;
+
+	// game logic data
+	GameLogicData gameLogic;
 
 	// generation utility
 

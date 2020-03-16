@@ -7,6 +7,7 @@
 #include "envUtils.h"
 #include "scriptCompiler.h"
 #include "worldGenerator.h"
+#include "GameLogicCore.h"
 #include <fstream>
 #include <sstream>
 #include <codecvt>

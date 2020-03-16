@@ -205,8 +205,7 @@ void collectModules(Ship * p)
 				}
 
 				// powering module if possible
-				if (p->powerSupply.total - p->powerSupply.current >= m->powerSupply 
-					&& p->highPowerSupply.total - p->highPowerSupply.current >= m->highPowerSupply)
+				if (checkRequirements(p,m))
 				{
 					
 					m->online = true;
@@ -304,4 +303,39 @@ void applyStatEffect(Ship * p, StatModEffect * e)
 	s->decrement += e->p_sub;
 	s->debuffMultiplier *= (1 - e->p_negMul);
 
+}
+
+bool checkRequirements(Ship * p, Module * m)
+{
+
+	bool check = true;
+
+	if (!(p->powerSupply.total - p->powerSupply.current >= m->powerSupply
+		&& p->highPowerSupply.total - p->highPowerSupply.current >= m->highPowerSupply))
+	{
+		return false;
+	}
+
+	//for (int i(0); i<gEnv->game.gameLogic.moduleWorkRequirements_otherModuleByClass)
+	auto t = gEnv->game.gameLogic.moduleWorkRequirements_otherModuleByClass.lower_bound(m->itemClass);
+
+	while (t != gEnv->game.gameLogic.moduleWorkRequirements_otherModuleByClass.end() && t->first == m->itemClass)
+	{
+		auto req = t->second;
+		bool f = false;
+		for (auto mmm : p->modules)
+			if (mmm != NULL)
+			{
+				if (mmm->itemClass == req)
+				{
+					f = true;
+					break;
+				}
+			}
+		if (!f)
+			return false;
+	}
+
+
+	return check;
 }
