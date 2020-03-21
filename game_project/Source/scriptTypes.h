@@ -84,11 +84,13 @@ class BaseScript : public BaseObject
 {
 public:
 	scriptType::ScriptType scriptType;
+	std::wstring prefix;
 	int commandId;
 	BaseScript()
 	{
 		this->memoryControl = memoryControl::free;
 		this->scriptType = scriptType::null;
+		prefix = L"";
 	}
 };
 

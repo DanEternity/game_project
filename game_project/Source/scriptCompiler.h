@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include "envUtils.h"
+#include "compilerTemplatesFormat.h"
 
 //
 // This file contain code generation procedures
@@ -61,27 +62,12 @@ namespace syntaxType {
 		c_changeScriptEntryPoint,
 		c_spendTime,
 		c_initRewardBuffer,
+		t_command,
 	};
 
 }
 
 class ScriptCompiler;
-
-namespace commandTemplate {
-	enum tStatus
-	{
-		init,
-		seeking,
-		capturing,
-		completed,
-		undefined,
-	};
-	struct CommandTemplate
-	{
-		std::wstring str_template;
-		bool(ScriptCompiler::*handler)(std::wstring s);
-	};
-}
 
 class ScriptCompiler
 {
@@ -133,42 +119,31 @@ private:
 	bool parseCommand(std::wstring s);
 	bool parseMarker(std::wstring s);
 
-	// command parsers
-	bool parsePut(std::wstring s);
-	bool parseText(std::wstring s);
-	bool parseTerminate(std::wstring s);
-	bool parseJump(std::wstring s);
-	bool parseChoose(std::wstring s);
-	bool parseAriphmetic(std::wstring s);
-	bool parseChangeScriptEntryPoint(std::wstring s);
-	bool parseSpendTime(std::wstring s);
-	bool parseInitRewardBuffer(std::wstring s);
-
 	ComparatorElement parseCondition(std::wstring s);
-
-	// post update
-	bool postUpdateChoose(BaseScript * ptr);
-	bool postUpdateJump(BaseScript * ptr);
-	bool postUpdateIfDoJump(BaseScript * ptr);
-	bool postUpdateChangeScriptEntryPoint(BaseScript * ptr);
 
 	int convertMarkerToLine(std::wstring marker);
 	std::wstring convertExtReferences(std::wstring line);
 
 	// new parser version (by templates)
 
-	std::map<std::wstring, commandTemplate::CommandTemplate> scriptTemplates;
-	std::wstring parsedCommand = L"";
-	std::vector<std::wstring> aElements;
-	int templateIdx = 0;
-	std::wstring collectedBuff;
-	commandTemplate::tStatus tStatus = commandTemplate::init; // init
+	CompilerCommandTemplate * targetTemplate;
+	CompilerCommandTemplateDataBuffer TemplateBuffer;
+	std::string argumentName;
+	std::wstring selectedTemplateCommandName;
 
-	void parseCommandByTemplate();
+	std::wstring collectedBody;
 
-	void registerCommands();
-	
-	void addCommand(std::wstring command, std::wstring str_template, bool(ScriptCompiler::*handler)(std::wstring s));
+	int templateBodyPos;
+	bool repeatedBlock;
+	int repeatedBlockLeft;
+	int blockCount;
+	bool collectingArgument;
+	bool templateCollected;
+
+	void collectNewSymbol(wchar_t c);
+	bool checkTemplate();
+	void completeCommand();
+
 };
 
 

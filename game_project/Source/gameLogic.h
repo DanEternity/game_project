@@ -11,6 +11,8 @@
 #include <map>
 #include <string>
 
+#include "compilerTemplatesFormat.h"
+
 class GameLogicData
 {
 public:
@@ -23,5 +25,8 @@ public:
 	// by default there are certain rules:
 	// Shield Amplifier need Shield Generator
 	// Sensor Amplifier need Sensor System
+
+	std::map<std::wstring, CompilerCommandTemplate> compilerCommandTemplates;
+
 
 };

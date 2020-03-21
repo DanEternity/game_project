@@ -43,6 +43,9 @@
     <Filter Include="Файлы ресурсов\Locales">
       <UniqueIdentifier>{db6b2cdc-b9a0-4314-a777-3bb91f773b5e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ScriptEngine\Compiler">
+      <UniqueIdentifier>{087cac6f-810b-4b13-ad92-4e4b5e1e39ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -79,9 +82,6 @@
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Source\scriptUtilsUI.cpp">
-      <Filter>ScriptEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\scriptCompiler.cpp">
       <Filter>ScriptEngine</Filter>
     </ClCompile>
     <ClCompile Include="Source\enviromentVariablesAccess.cpp">
@@ -122,6 +122,15 @@
     </ClCompile>
     <ClCompile Include="Source\GameLogicCore.cpp">
       <Filter>Adventure\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\scriptCompiler.cpp">
+      <Filter>ScriptEngine\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\scriptCompilerTemplates.cpp">
+      <Filter>ScriptEngine\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\scriptCompilerUtilityParsers.cpp">
+      <Filter>ScriptEngine\Compiler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -183,9 +192,6 @@
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Source\scriptUtilsUI.h">
-      <Filter>ScriptEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\scriptCompiler.h">
       <Filter>ScriptEngine</Filter>
     </ClInclude>
     <ClInclude Include="Source\scriptDescriptorGroups.h">
@@ -292,6 +298,18 @@
     </ClInclude>
     <ClInclude Include="Source\GameLogicCore.h">
       <Filter>Adventure\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\compilerTemplatesFormat.h">
+      <Filter>ScriptEngine\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\scriptCompiler.h">
+      <Filter>ScriptEngine\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\scriptCompilerTemplates.h">
+      <Filter>ScriptEngine\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\scriptCompilerUtilityParsers.h">
+      <Filter>ScriptEngine\Compiler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -57,7 +57,9 @@ void updateLoadingMode()
 
 		createMenuButtons();
 		createAdventureUIButtons();
-		
+
+		InitGameLogic();
+
 		LoadEnglishLocale();
 		LoadRussianLocale(); // only for testing
 

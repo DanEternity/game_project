@@ -241,6 +241,8 @@
     <ClCompile Include="Source\personEquipmentUI.cpp" />
     <ClCompile Include="Source\preload.cpp" />
     <ClCompile Include="Source\scriptCompiler.cpp" />
+    <ClCompile Include="Source\scriptCompilerTemplates.cpp" />
+    <ClCompile Include="Source\scriptCompilerUtilityParsers.cpp" />
     <ClCompile Include="Source\scriptMemoryUtils.cpp" />
     <ClCompile Include="Source\scriptSystem.cpp" />
     <ClCompile Include="Source\scriptUtilsUI.cpp" />
@@ -258,6 +260,7 @@
     <ClInclude Include="Source\adventureModeCore.h" />
     <ClInclude Include="Source\adventureUI.h" />
     <ClInclude Include="Source\baseObject.h" />
+    <ClInclude Include="Source\compilerTemplatesFormat.h" />
     <ClInclude Include="Source\convertUtils.h" />
     <ClInclude Include="Source\crewData.h" />
     <ClInclude Include="Source\effect.h" />
@@ -285,6 +288,8 @@
     <ClInclude Include="Source\playerData.h" />
     <ClInclude Include="Source\preload.h" />
     <ClInclude Include="Source\scriptCompiler.h" />
+    <ClInclude Include="Source\scriptCompilerTemplates.h" />
+    <ClInclude Include="Source\scriptCompilerUtilityParsers.h" />
     <ClInclude Include="Source\scriptDescriptor.h" />
     <ClInclude Include="Source\scriptDescriptorGroups.h" />
     <ClInclude Include="Source\scriptMemoryUtils.h" />

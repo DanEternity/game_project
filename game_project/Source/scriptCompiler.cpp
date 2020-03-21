@@ -21,6 +21,9 @@ bool ScriptCompiler::compileScriptText(std::vector<std::wstring> src)
 
 	p_s = createScriptDescriptor();
 
+	TemplateBuffer.localExtReference = &localExtReference;
+	TemplateBuffer.markers = &markers;
+
 	bool directiveHasOpenBracket;
 
 	while (!error)
@@ -41,6 +44,9 @@ bool ScriptCompiler::compileScriptText(std::vector<std::wstring> src)
 			}
 			continue;
 		}
+
+
+		// check if symbol correct
 		if (src[line][idx] < 60000)
 		{
 			// zero sybmols in selection
@@ -125,7 +131,7 @@ bool ScriptCompiler::compileScriptText(std::vector<std::wstring> src)
 					)
 				{
 					// invalid symbol
-					printf("Error while script parsing! Expected [#directive ""value""] found (%ws <-)\n", selection.c_str());
+					printf("Error while script parsing! Expected [#directive \"value\"] found (%ws <-)\n", selection.c_str());
 					printf("Hint: You probably forgot \" \". Directive comments should be inside brackets.\n");
 				}
 
@@ -168,198 +174,18 @@ bool ScriptCompiler::compileScriptText(std::vector<std::wstring> src)
 				}
 			}
 
-			if (tp == syntaxType::c_put)
+
+			if (tp == syntaxType::t_command)
 			{
-				selection += src[line][idx];
-				if (src[line][idx] == '"')
-				{
-					bracketCount++;
-					if (bracketCount == 2)
-					{
-						bracketCount = 0;
-						parameterCount++;
-						if (parameterCount == 2)
-						{
-							parsePut(selection);
-						}
-					}
-				}
-			}
 
-			if (tp == syntaxType::c_ariphmetic)
-			{
-				selection += src[line][idx];
-				if (src[line][idx] == '"')
+				if (checkTemplate())
 				{
-					bracketCount++;
-					if (bracketCount == 2)
-					{
-						bracketCount = 0;
-						parameterCount++;
-						if (parameterCount == 2)
-						{
-							parseAriphmetic(selection);
-						}
-					}
+					// make object code
+					completeCommand();
 				}
-			}
+				else
+					collectNewSymbol(src[line][idx]);
 
-			if (tp == syntaxType::c_text)
-			{
-				selection += src[line][idx];
-				if (src[line][idx] == '"')
-				{
-					bracketCount++;
-					if (bracketCount == 2)
-					{
-						bracketCount = 0;
-						parameterCount++;
-						if (parameterCount == 1)
-						{
-							parseText(selection);
-						}
-					}
-				}
-			}
-
-			if (tp == syntaxType::c_choose)
-			{
-				selection += src[line][idx];
-
-				switch (status)
-				{
-				case 0:
-				{
-					if (src[line][idx] == '"')
-					{
-						bracketCount++;
-						if (bracketCount == 2)
-						{
-							bracketCount = 0;
-							status = 1;
-						}
-					}
-				}
-				break;
-				case 1:
-				{
-					if (src[line][idx] == ';')
-					{
-						if (parameterCount == 0)
-						{
-							printf("Error while script parsing! [Line: %i] ';' found, ',' expected: (%ws <-). Choose should have at least 1 variant", line, selection.c_str());
-							error = true;
-						}
-						else
-						{
-							parseChoose(selection);
-						}
-					}
-					else
-						if (src[line][idx] == ',')
-						{
-							status = 2;
-							bracketCount = 0;
-							squareBracketCount = 0;
-						}
-						else
-							if (src[line][idx] != ' ')
-							{
-								printf("Error while script parsing! [Line: %i] Invalid character: (%ws <-)", line, selection.c_str());
-								error = true;
-							}
-				}
-				break;
-				case 2:
-				{
-					if (src[line][idx] == '[')
-					{
-						status = 3;
-					}
-				}
-				break;
-				case 3:
-				{
-					if (src[line][idx] == ']')
-					{
-						status = 4;
-					}
-					break;
-				}
-				case 4:
-				{
-					if (src[line][idx] == '"')
-					{
-						status = 5;
-					}
-					break;
-				}
-				case 5:
-				{
-					if (src[line][idx] == '"')
-					{
-						status = 6;
-					}
-					break;
-				}
-				case 6:
-				{
-					if (src[line][idx] == '[')
-					{
-						status = 7;
-					}
-					break;
-				}
-				case 7:
-				{
-					if (src[line][idx] == ']')
-					{
-						parameterCount += 1;
-						status = 1;
-					}
-					break;
-				}
-				default:
-					break;
-				}
-
-
-			}
-
-			if (tp == syntaxType::c_changeScriptEntryPoint)
-			{
-				selection += src[line][idx];
-				if (src[line][idx] == '"')
-				{
-					bracketCount++;
-					if (bracketCount == 2)
-					{
-						bracketCount = 0;
-						parameterCount++;
-						if (parameterCount == 2)
-						{
-							parseChangeScriptEntryPoint(selection);
-						}
-					}
-				}
-			}
-
-			if (tp == syntaxType::c_spendTime)
-			{
-				selection += src[line][idx];
-				if (src[line][idx] == '"')
-				{
-					bracketCount++;
-					if (bracketCount == 2)
-					{
-						bracketCount = 0;
-						parameterCount++;
-						if (parameterCount == 1)
-						{
-							parseSpendTime(selection);
-						}
-					}
-				}
 			}
 
 		}
@@ -390,6 +216,13 @@ bool ScriptCompiler::compileScriptText(std::vector<std::wstring> src)
 			if (tp == syntaxType::command)
 			{
 				bool code = parseCommand(selection);
+
+				if (checkTemplate())
+				{
+					// make object code
+					completeCommand();
+				}
+
 			}
 
 			if (tp == syntaxType::directive)
@@ -467,35 +300,9 @@ void ScriptCompiler::postProcessCommands()
 	{
 		auto ptr = p_s->scriptLines[i];
 
-		auto tp = ptr->scriptType;
-
-		switch (tp)
-		{
-		case scriptType::null:
-			break;
-		case scriptType::text:
-			break;
-		case scriptType::put:
-			break;
-		case scriptType::choose:
-			postUpdateChoose(ptr);
-			break;
-		case scriptType::terminate:
-			break;
-		case scriptType::jump:
-			postUpdateJump(ptr);
-			break;
-		case scriptType::ariphmetic:
-			break;
-		case scriptType::ifDoJump:
-			postUpdateIfDoJump(ptr);
-			break;
-		case scriptType::changeScriptEntryPoint:
-			postUpdateChangeScriptEntryPoint(ptr);
-			break;
-		default:
-			break;
-		}
+		if (gEnv->game.gameLogic.compilerCommandTemplates[ptr->prefix].postUpdateHandler != NULL)
+			gEnv->game.gameLogic.compilerCommandTemplates[ptr->prefix].postUpdateHandler(&TemplateBuffer, ptr);
+	
 	}
 
 }
@@ -576,6 +383,11 @@ bool ScriptCompiler::parseCommand(std::wstring s)
 	if (pos > 0)
 		s = s.substr(0, pos);
 
+	std::for_each(s.begin(), s.end(), [](wchar_t & c) {
+		c = ::toupper(c);
+	});
+
+	/*
 	if (s == L"Put" || s == L"put")
 	{
 		// Put "value/const" to "value"
@@ -678,6 +490,34 @@ bool ScriptCompiler::parseCommand(std::wstring s)
 		parseInitRewardBuffer(s);
 		return true;
 	}
+	*/
+
+	for (auto t(gEnv->game.gameLogic.compilerCommandTemplates.begin()); t != gEnv->game.gameLogic.compilerCommandTemplates.end(); t++)
+	{
+		if (t->second.mainPrefix == s)
+		{
+			tp = syntaxType::t_command;
+			selectedTemplateCommandName = t->first;
+			targetTemplate = &t->second;
+			
+			if (quote)
+				collectedBody = L"\"";
+			else
+				collectedBody = L"";
+
+			templateBodyPos = 0;
+			repeatedBlock = false;
+			collectingArgument = false;
+			
+			if (targetTemplate->body.size() > 2)
+				templateCollected = false;
+			else
+				templateCollected = true;
+			
+			return true;
+		}
+
+	}
 
 	printf("Error! [Line: %i] Undefined command: (%ws)", line, s.c_str());
 	error = true;
@@ -704,421 +544,6 @@ bool ScriptCompiler::parseMarker(std::wstring s)
 
 
 
-	return true;
-}
-
-bool ScriptCompiler::parsePut(std::wstring s)
-{
-
-	// "value/const" to "value"
-	// it's possible to not use "to"
-	// example: "value/const" "value"	
-
-	std::wstring f1;
-	std::wstring f2;
-	int posf1;
-	int posf12;
-	int posf2;
-
-	posf1 = s.find('"', 0);
-	s = s.substr(posf1+1, s.size() - posf1 - 1);
-
-	posf1 = s.find('"', 1);
-	posf12 = s.find('"', posf1 + 1);
-	posf2 = s.find('"', posf12 + 1);
-
-	f1 = s.substr(0, posf1);
-	f2 = s.substr(posf12 + 1, posf2 - posf12 - 1);
-
-	PutScript * ptr = static_cast<PutScript*>(createScriptCommand(scriptType::put));
-
-	f1 = convertExtReferences(f1);
-	f2 = convertExtReferences(f2);
-
-	ptr->scr = f1;
-	ptr->dest = f2;
-
-	ptr->commandId = commandsCount++;
-
-	p_s->scriptLines.push_back(ptr);
-
-	tp = syntaxType::none;
-	selection = L"";
-	emptyLine = true;
-	return true;
-}
-
-bool ScriptCompiler::parseText(std::wstring s)
-{
-
-	// Text "text" 
-
-	std::wstring f1;
-	int posf1;
-
-	posf1 = s.find('"', 0);
-	s = s.substr(posf1+1, s.size() - posf1 - 1);
-
-	posf1 = s.find('"', 1);
-
-	f1 = s.substr(0, posf1);
-
-	TextScript * ptr = static_cast<TextScript*>(createScriptCommand(scriptType::text));
-
-	f1 = convertExtReferences(f1);
-
-	ptr->text = f1;
-
-	// increase lines counter
-	ptr->commandId = commandsCount++;
-
-	p_s->scriptLines.push_back(ptr);
-
-
-
-	tp = syntaxType::none;
-	selection = L"";
-	emptyLine = true;
-	return true;
-}
-
-bool ScriptCompiler::parseTerminate(std::wstring s)
-{
-	TerminateScript * ptr = static_cast<TerminateScript*>(createScriptCommand(scriptType::terminate));
-
-
-	// increase lines counter
-	ptr->commandId = commandsCount++;
-
-	p_s->scriptLines.push_back(ptr);
-	tp = syntaxType::none;
-	selection = L"";
-	emptyLine = true;
-
-
-	return true;
-}
-
-bool ScriptCompiler::parseJump(std::wstring s)
-{
-
-	// jump command cant be determined immediantly because of not all marks parsed
-
-	std::wstring f1;
-	int posf1;
-
-	posf1 = s.find('"', 0);
-	s = s.substr(posf1 + 1, s.size() - posf1 - 1);
-
-	posf1 = s.find('"', 1);
-
-	f1 = s.substr(0, posf1);
-
-	JumpScript * ptr = static_cast<JumpScript*>(createScriptCommand(scriptType::jump));
-	ptr->chache = f1;
-
-	// increase lines counter
-	ptr->commandId = commandsCount++;
-
-	p_s->scriptLines.push_back(ptr);
-	tp = syntaxType::none;
-	selection = L"";
-	emptyLine = true;
-	return true;
-}
-
-bool ScriptCompiler::parseChoose(std::wstring s)
-{
-
-	// Choose "some text", [true]"variant 1"[1], [true]"variant 2"[2], [true]"variant 3"[3];
-
-	std::wstring f1;
-	int posf1;
-	int posf2;
-	posf1 = s.find('"', 0);
-	posf2 = s.find('"', posf1 + 1);
-
-	f1 = s.substr(posf1 + 1, posf2 - posf1 - 1);
-	int p = posf2+1;
-
-	ChooseScript * ptr = static_cast<ChooseScript*>(createScriptCommand(scriptType::choose));
-
-	f1 = convertExtReferences(f1);
-
-	ptr->text = f1;
-
-	while (1)
-	{
-		if (p > s.size()-1)
-		{
-			// error
-			printf("Error! [Line: %i] ';' or ',' expected. (%ws)", line, s.c_str());
-			error = true;
-			break;
-		}
-
-		if (s[p] == ',')
-		{
-			std::wstring a1;
-			std::wstring a2;
-			std::wstring a3;
-
-			int posB1;
-			int posB2;
-
-			posB1 = s.find('[', p);
-			posB2 = s.find(']', p);
-
-			a1 = s.substr(posB1 + 1, posB2 - posB1 - 1);
-
-			posB1 = s.find('"', posB2+1);
-			posB2 = s.find('"', posB1+1);
-
-			a2 = s.substr(posB1 + 1, posB2 - posB1 - 1);
-
-			posB1 = s.find('[', posB2 + 1);
-			posB2 = s.find(']', posB1 + 1);
-
-			a3 = s.substr(posB1 + 1, posB2 - posB1 - 1);
-
-			ComparatorElement comp = parseCondition(a1);
-
-			ptr->variants.push_back(ChooseElement(a2, 0, comp));
-
-			ptr->variants[ptr->variants.size() - 1].chache = a3;
-
-			p = posB2 + 1;
-
-		}
-		else
-		{
-			break;
-		}
-	}
-
-	// increase lines counter
-	ptr->commandId = commandsCount++;
-
-	tp = syntaxType::none;
-	selection = L"";
-	emptyLine = true;
-
-	if (error)
-	{
-		delete ptr;
-		return false;
-	}
-
-	p_s->scriptLines.push_back(ptr);
-
-	return true;
-}
-
-bool ScriptCompiler::parseAriphmetic(std::wstring s)
-{
-
-	// "value/const operator value/const" to "value"
-
-	AriphmeticScript * ptr = static_cast<AriphmeticScript*>(createScriptCommand(scriptType::ariphmetic));
-
-	std::wstring f1;
-	std::wstring f2;
-	int pos1;
-	int pos2;
-	int pos3;
-	int pos4;
-
-	pos1 = s.find('"', 0);
-	pos2 = s.find('"', pos1 + 1);
-	pos3 = s.find('"', pos2 + 1);
-	pos4 = s.find('"', pos3 + 1);
-
-	f2 = s.substr(pos3 + 1, pos4 - pos3 - 1);
-	s = s.substr(pos1 + 1, pos2 - pos1 - 1);
-
-	// parsing ariphmetic (left) fragment
-
-	bool operatorFound = false;
-	int size = 1;
-	int pos = -1;
-
-	if (!operatorFound && s.find(L"+", 0) != std::wstring::npos)
-	{
-		pos = s.find(L"+", 0);
-		operatorFound = true;
-	}
-
-	if (!operatorFound && s.find(L"-", 0) != std::wstring::npos)
-	{
-		pos = s.find(L"-", 0);
-		operatorFound = true;
-	}
-
-	if (!operatorFound && s.find(L"/", 0) != std::wstring::npos)
-	{
-		pos = s.find(L"/", 0);
-		operatorFound = true;
-	}
-
-	if (!operatorFound && s.find(L"*", 0) != std::wstring::npos)
-	{
-		pos = s.find(L"*", 0);
-		operatorFound = true;
-	}
-
-	if (operatorFound)
-	{
-		std::wstring f1;
-		std::wstring op;
-		std::wstring f2;
-
-		int ps;
-
-		f1 = s.substr(0, pos);
-
-		// need to erase spaces
-		ps = f1.find(' ');
-		if (ps != std::wstring::npos)
-			if (ps == 0)
-				f1 = f1.substr(1, f1.size() - 1);
-
-		ps = f1.find(' ');
-		if (ps != std::wstring::npos)
-			if (ps > 0)
-				f1 = f1.substr(0, ps);
-
-
-		op = s.substr(pos, size);
-
-		f2 = s.substr(pos + size, s.size() - pos - size);
-
-
-		ps = f2.find(' ');
-		if (ps != std::wstring::npos)
-			if (ps == 0)
-				f2 = f2.substr(1, f2.size() - 1);
-
-		ps = f2.find(' ');
-		if (ps != std::wstring::npos)
-			if (ps > 0)
-				f2 = f2.substr(0, ps);
-
-		ptr->left = f1;
-		ptr->operation = op;
-		ptr->right = f2;
-
-	}
-	else
-		error = true;
-
-	ptr->dest = f2;
-
-	// increase lines counter
-	ptr->commandId = commandsCount++;
-
-	tp = syntaxType::none;
-	selection = L"";
-	emptyLine = true;
-
-	if (error)
-	{
-		delete ptr;
-		return false;
-	}
-
-	p_s->scriptLines.push_back(ptr);
-
-	return true;
-}
-
-bool ScriptCompiler::parseChangeScriptEntryPoint(std::wstring s)
-{
-
-	std::wstring f1;
-	std::wstring f2;
-	int pos1;
-	int pos2;
-	int pos3;
-	int pos4;
-
-	pos1 = s.find('"', 0);
-	pos2 = s.find('"', pos1 + 1);
-	pos3 = s.find('"', pos2 + 1);
-	pos4 = s.find('"', pos3 + 1);
-
-	f2 = s.substr(pos3 + 1, pos4 - pos3 - 1);
-	s = s.substr(pos1 + 1, pos2 - pos1 - 1);
-
-	ChangeScriptEntryPointScript * ptr = static_cast<ChangeScriptEntryPointScript*>(createScriptCommand(scriptType::changeScriptEntryPoint));
-
-	ptr->chache = f2;
-	ptr->scriptId = s;
-
-	ptr->commandId = commandsCount++;
-
-	tp = syntaxType::none;
-	selection = L"";
-	emptyLine = true;
-
-	if (error)
-	{
-		delete ptr;
-		return false;
-	}
-
-	p_s->scriptLines.push_back(ptr);
-
-	return true;
-}
-
-bool ScriptCompiler::parseSpendTime(std::wstring s)
-{
-	int pos1;
-	int pos2;
-	pos1 = s.find('"', 0);
-	pos2 = s.find('"', pos1 + 1);
-
-	s = s.substr(pos1 + 1, pos2 - pos1 - 1);
-
-	SpendTimeScript * ptr = static_cast<SpendTimeScript *>(createScriptCommand(scriptType::spendTime));
-
-	ptr->amount = s;
-
-	ptr->commandId = commandsCount++;
-
-	tp = syntaxType::none;
-	selection = L"";
-	emptyLine = true;
-
-	if (error)
-	{
-		delete ptr;
-		return false;
-	}
-
-	p_s->scriptLines.push_back(ptr);
-
-	return true;
-
-}
-
-bool ScriptCompiler::parseInitRewardBuffer(std::wstring s)
-{
-	InitRewardBufferScript * ptr = static_cast<InitRewardBufferScript *>(createScriptCommand(scriptType::initRewardBuffer));
-
-	ptr->commandId = commandsCount++;
-
-	tp = syntaxType::none;
-	selection = L"";
-	emptyLine = true;
-
-	if (error)
-	{
-		delete ptr;
-		return false;
-	}
-
-	p_s->scriptLines.push_back(ptr);
 	return true;
 }
 
@@ -1260,79 +685,6 @@ ComparatorElement ScriptCompiler::parseCondition(std::wstring s)
 	return ComparatorElement(true, s, L"",L"");
 }
 
-bool ScriptCompiler::postUpdateChoose(BaseScript * ptr)
-{
-	ChooseScript * p = static_cast<ChooseScript*>(ptr);
-
-	for (int i(0); i < p->variants.size(); i++)
-	{
-		if (p->variants[i].chache[0] == '@')
-		{
-			p->variants[i].jump = convertMarkerToLine(p->variants[i].chache);
-		}
-		else
-		{
-			p->variants[i].jump = _wtoi(p->variants[i].chache.c_str());
-		}
-		p->variants[i].chache = L"";
-	}
-
-	return true;
-}
-
-bool ScriptCompiler::postUpdateJump(BaseScript * ptr)
-{
-
-	JumpScript * p = static_cast<JumpScript*>(ptr);
-
-	if (p->chache[0] == '@')
-	{
-		p->lineId = convertMarkerToLine(p->chache);
-	}
-	else
-	{
-		p->lineId = _wtoi(p->chache.c_str());
-	}
-	p->chache = L"";
-	return true;
-}
-
-bool ScriptCompiler::postUpdateIfDoJump(BaseScript * ptr)
-{
-
-	IfDoJumpScript * p = static_cast<IfDoJumpScript*>(ptr);
-	
-	if (p->chache[0] == '@')
-	{
-		p->lineId = convertMarkerToLine(p->chache);
-	}
-	else
-	{
-		p->lineId = _wtoi(p->chache.c_str());
-	}
-	p->chache = L"";
-	return true;
-	
-}
-
-bool ScriptCompiler::postUpdateChangeScriptEntryPoint(BaseScript * ptr)
-{
-
-	ChangeScriptEntryPointScript * p = static_cast<ChangeScriptEntryPointScript*>(ptr);
-
-	if (p->chache[0] == '@')
-	{
-		p->lineId = convertMarkerToLine(p->chache);
-	}
-	else
-	{
-		p->lineId = _wtoi(p->chache.c_str());
-	}
-	p->chache = L"";
-
-	return true;
-}
-
 int ScriptCompiler::convertMarkerToLine(std::wstring marker)
 {
 	
@@ -1406,36 +758,154 @@ std::wstring ScriptCompiler::convertExtReferences(std::wstring line)
 	return res;
 }
 
-void ScriptCompiler::parseCommandByTemplate()
-{
+void ScriptCompiler::collectNewSymbol(wchar_t c)
+{	
+	while (targetTemplate->body[templateBodyPos] == ' ') templateBodyPos++;
 
+	wchar_t br = targetTemplate->body[templateBodyPos];
 
+	collectedBody += c;
 
-}
-
-void ScriptCompiler::registerCommands()
-{
-	// Replace rule:
-	// ^ -> "
-	
-	// Put "" to ""
-	//addCommand(L"Put", L"\"A\" \"A\"", parsePut);
-	//addCommand(L"Put", L"^A^ ^A^", parsePut);
-	//addCommand(L"Choose", L"^A^ *[A],^A^,[A]*;", parseChoose);
-}
-
-void ScriptCompiler::addCommand(std::wstring command, std::wstring str_template, bool(ScriptCompiler::* handler)(std::wstring s))
-{
-	commandTemplate::CommandTemplate w;
-	w.handler = handler;
-	for (int i(0); i < str_template.size(); i++)
+	if (collectingArgument)
 	{
-		if (str_template[i] == '^')
-			str_template[i] = '\"';
+		// collecting argument
+
+		if (c == br)
+		{
+			// argument collected
+			collectingArgument = false;
+
+			if (templateBodyPos >= targetTemplate->body.size() - 1)
+			{
+				templateCollected = true;
+				return;
+			}
+
+			templateBodyPos++;
+		}
+		else
+		{
+			if (repeatedBlock)
+				TemplateBuffer.arg[argumentName + std::to_string(blockCount)] += c;
+			else
+				TemplateBuffer.arg[argumentName] += c;
+
+		}
+
 	}
-	w.str_template = str_template;
-	scriptTemplates[command] = w;
+	else
+	{
+		// collecting left bracket
+		if (br == '%')
+		{
+			if (!repeatedBlock)
+			{
+				repeatedBlock = true;
+				repeatedBlockLeft = templateBodyPos;
+				templateBodyPos++;
+				blockCount = 1;
+				while (targetTemplate->body[templateBodyPos] == ' ' && templateBodyPos < targetTemplate->body.size() - 1) templateBodyPos++;
+				
+				if (templateBodyPos < targetTemplate->body.size() - 1)
+					br = targetTemplate->body[templateBodyPos];
+			}
+			else
+			{
+				char v1 = targetTemplate->body[templateBodyPos + 1];
+				char v2 = targetTemplate->body[templateBodyPos + 2];
+
+				if (c == v1)
+				{
+					// repeat once more
+					templateBodyPos = repeatedBlockLeft + 1;
+					blockCount++;
+					while (targetTemplate->body[templateBodyPos] == ' ' && templateBodyPos < targetTemplate->body.size() - 1) templateBodyPos++;
+
+					if (templateBodyPos < targetTemplate->body.size() - 1)
+						br = targetTemplate->body[templateBodyPos];
+				}
+				else
+				{
+					if (c == v2)
+					{
+						// exit repeat mode
+						templateBodyPos+= 2;
+						while (targetTemplate->body[templateBodyPos] == ' ' && templateBodyPos < targetTemplate->body.size() - 1) templateBodyPos++;
+						
+						if (templateBodyPos >= targetTemplate->body.size() - 1)
+						{
+							templateCollected = true;
+							return;
+						}
+
+						if (templateBodyPos < targetTemplate->body.size() - 1)
+							br = targetTemplate->body[templateBodyPos];
+
+					}
+				}
+			}
+		}
+
+
+		if (c == br)
+		{
+			// left bracket collected
+			argumentName = "";
+			templateBodyPos++;
+
+			if (templateBodyPos >= targetTemplate->body.size() - 1)
+			{
+				templateCollected = true;
+				return;
+			}
+			while (
+				(targetTemplate->body[templateBodyPos] >= 'a' && targetTemplate->body[templateBodyPos] <= 'z'
+				|| targetTemplate->body[templateBodyPos] >= 'A' && targetTemplate->body[templateBodyPos] <= 'Z'
+				|| targetTemplate->body[templateBodyPos] >= '0' && targetTemplate->body[templateBodyPos] <= '9'
+				|| targetTemplate->body[templateBodyPos] == '$'
+				|| targetTemplate->body[templateBodyPos] == '_') 
+				&& templateBodyPos < targetTemplate->body.size() - 1)
+			{
+				argumentName += targetTemplate->body[templateBodyPos];
+				templateBodyPos++;
+			}
+			collectingArgument = true;
+		}	
+
+	}
+
 }
 
+bool ScriptCompiler::checkTemplate()
+{
+	return templateCollected;
+}
+
+void ScriptCompiler::completeCommand()
+{
+
+	TemplateBuffer.commandId = commandsCount;
+	BaseScript * ptr = targetTemplate->mainHandler(&TemplateBuffer);
+
+	tp = syntaxType::none;
+	selection = L"";
+	emptyLine = true;
+	
+	commandsCount++;
+	ptr->prefix = targetTemplate->mainPrefix;
+
+	if (error)
+	{
+		delete ptr;
+		return;
+	}
+
+	p_s->scriptLines.push_back(ptr);
+
+
+	TemplateBuffer.arg.clear();
+	
+
+}
 
 
