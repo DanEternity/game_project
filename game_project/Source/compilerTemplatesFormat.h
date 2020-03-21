@@ -24,7 +24,7 @@ struct CompilerCommandTemplate
 	// %"$A"[$B]"$C",%;
 	// last symbol will be used as separator -> ','
 	// symbol after '%' is terminate symbol
-	// Example: X%Y
+	// Example: %XY
 	// X - block devider
 	// Y - block terminator
 	// Important: X shouldn't be equal to Y.
