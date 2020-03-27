@@ -12,6 +12,10 @@ BaseObject * _getEnviromentVariable(uint32_t hash)
 	case getHash(L"gameTime"):
 	case getHash(L"GameTime"):
 		return new IntObject(gEnv->game.adventureData.gameTime);
+
+	case getHash(L"Self"):
+	case getHash(L"self"):
+		return gEnv->scripts.currentScript;
 	default:
 		break;
 	}

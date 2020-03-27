@@ -16,16 +16,19 @@ namespace scriptCompilerTemplates
 	namespace mainHandler 
 	{
 
-		BaseScript * Put(CompilerCommandTemplateDataBuffer * buffer);
-		BaseScript * Text(CompilerCommandTemplateDataBuffer * buffer);
-		BaseScript * Terminate(CompilerCommandTemplateDataBuffer * buffer);
-		BaseScript * Jump(CompilerCommandTemplateDataBuffer * buffer);
-		BaseScript * Choose(CompilerCommandTemplateDataBuffer * buffer);
-		BaseScript * Ariphmetic(CompilerCommandTemplateDataBuffer * buffer);
-		BaseScript * ChangeScriptEntryPoint(CompilerCommandTemplateDataBuffer * buffer);
-		BaseScript * SpendTime(CompilerCommandTemplateDataBuffer * buffer);
-		BaseScript * InitRewardBuffer(CompilerCommandTemplateDataBuffer * buffer);
-
+		BaseScript * Put(CompilerCommandTemplateDataBuffer * buffer); // ok
+		BaseScript * Text(CompilerCommandTemplateDataBuffer * buffer); // ok
+		BaseScript * Terminate(CompilerCommandTemplateDataBuffer * buffer); // ok
+		BaseScript * Jump(CompilerCommandTemplateDataBuffer * buffer); // ok
+		BaseScript * Choose(CompilerCommandTemplateDataBuffer * buffer); // ok
+		BaseScript * Ariphmetic(CompilerCommandTemplateDataBuffer * buffer); // ok 
+		BaseScript * ChangeScriptEntryPoint(CompilerCommandTemplateDataBuffer * buffer); // ok - only with $self
+		BaseScript * SpendTime(CompilerCommandTemplateDataBuffer * buffer); // ok
+		BaseScript * InitRewardBuffer(CompilerCommandTemplateDataBuffer * buffer); // not ok - Do not completed
+		BaseScript * PutToPointer(CompilerCommandTemplateDataBuffer * buffer);  // ok - not tested
+		BaseScript * AddToRewardBuffer(CompilerCommandTemplateDataBuffer * buffer);  // not ok - Do not completed
+		BaseScript * Call(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * PutFromPointer(CompilerCommandTemplateDataBuffer * buffer);
 	}
 
 	namespace afterUpdateHandler 

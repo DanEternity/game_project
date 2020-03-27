@@ -19,7 +19,8 @@ public:
 	std::wstring status = L"null";
 
 	// scriptQueue
-	std::deque<ScriptDescriptor *> queue;
+	//std::deque<ScriptDescriptor *> queue;
+	std::deque<StackElement *> queue;
 
 	// ExternalReaction
 	bool buttonPressed = false;
@@ -29,6 +30,8 @@ public:
 	std::map<std::wstring, int> enviromentMap;
 
 	std::map<int, ScriptDescriptor *> scriptDB;
+
+	ScriptDescriptor * currentScript = NULL;
 
 	// This value shouldn't be changed manually
 	int nextScriptID = 0; 

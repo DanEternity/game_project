@@ -358,6 +358,22 @@ bool ScriptCompiler::parseDirecive(std::wstring s)
 		}
 	}
 	
+	if (f1 == L"#RegisterFunction" || f1 == L"#registerFunction")
+	{
+		// f2 = table id
+		//convertExtReferences;
+		std::wstring func_addr = convertExtReferences(f2);
+		ScriptDescriptor * fPtr = p_s;
+		fPtr->memoryControl = memoryControl::fixed;
+		auto code = putMemoryCell(func_addr, fPtr, NULL);
+
+		if (code != memoryUtil::ok)
+		{
+			wprintf(L"Error! Cannot register function [%s]. Probably ext table name is wrong.\n", f2.c_str());
+			return false;
+		}
+		return true;
+	}
 
 	return false;
 }

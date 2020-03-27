@@ -34,7 +34,6 @@ BaseScript * scriptCompilerTemplates::mainHandler::Jump(CompilerCommandTemplateD
 	JumpScript * p = new JumpScript();
 	p->chache = buffer->arg["$A"];
 	p->commandId = buffer->commandId;
-
 	return p;
 }
 
@@ -154,21 +153,62 @@ BaseScript * scriptCompilerTemplates::mainHandler::ChangeScriptEntryPoint(Compil
 
 	p->scriptId = convertExtReferences(buffer, buffer->arg["$A"]);
 	p->chache = buffer->arg["$B"];
-
+	p->commandId = buffer->commandId;
 	return p;
 }
 
 BaseScript * scriptCompilerTemplates::mainHandler::SpendTime(CompilerCommandTemplateDataBuffer * buffer)
 {
 	SpendTimeScript * p = new SpendTimeScript();
-	p->amount = buffer->arg["$A"];
+	p->amount = convertExtReferences(buffer, buffer->arg["$A"]);
+	p->commandId = buffer->commandId;
 	return p;
 }
 
 BaseScript * scriptCompilerTemplates::mainHandler::InitRewardBuffer(CompilerCommandTemplateDataBuffer * buffer)
 {
 	InitRewardBufferScript * p = new InitRewardBufferScript();
+	p->commandId = buffer->commandId;
+	return p;
+}
 
+BaseScript * scriptCompilerTemplates::mainHandler::PutToPointer(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new PutToPointerScript();
+	p->src = convertExtReferences(buffer, buffer->arg["$A"]);
+	p->dst = convertExtReferences(buffer, buffer->arg["$B"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::AddToRewardBuffer(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new AddRewardToBufferScript();
+	p->src = convertExtReferences(buffer, buffer->arg["$A"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::Call(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new CallScript();
+	p->scriptId = convertExtReferences(buffer, buffer->arg["$PTR"]);
+	int variants = 0;
+	while (buffer->arg.find("$A" + std::to_string(variants + 1)) != buffer->arg.end())
+	{
+		variants++;
+		p->arg.push_back(convertExtReferences(buffer, buffer->arg["$A" + std::to_string(variants)]));
+	}
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::PutFromPointer(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new PutFromPointerScript();
+	p->src = convertExtReferences(buffer, buffer->arg["$A"]);
+	p->dst = convertExtReferences(buffer, buffer->arg["$B"]);
+	p->commandId = buffer->commandId;
 	return p;
 }
 

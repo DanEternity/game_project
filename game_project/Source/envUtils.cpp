@@ -170,7 +170,12 @@ BaseScript * createScriptCommand(scriptType::ScriptType type)
 
 bool addScriptToQueue(ScriptDescriptor * sd)
 {
-	gEnv->scripts.queue.push_back(sd);
+	auto * p = new StackElement();
+	p->scriptId = sd;
+	p->returnPoint = sd->entryPoint;
+	// new memory
+	p->localMemory.clear();
+	gEnv->scripts.queue.push_back(p);
 	return true;
 }
 

@@ -95,4 +95,33 @@ void LoadScriptTemplates()
 	p.mainHandler = scriptCompilerTemplates::mainHandler::SpendTime;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
+	// PutToPointer
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"PUTTOPOINTER";
+	p.body = "\"$A\" \"$B\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::PutToPointer;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// AddToRewardBuffer
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"ADDTOREWARDBUFFER";
+	p.body = "\"$A\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::AddToRewardBuffer;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// Call
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"CALL";
+	p.body = "\"$PTR\" %\"$A\"%,;";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::Call;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// PutFromPointer
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"PUTFROMPOINTER";
+	p.body = "\"$A\" \"$B\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::PutFromPointer;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+
 }

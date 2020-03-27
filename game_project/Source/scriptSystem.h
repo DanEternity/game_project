@@ -33,8 +33,8 @@ private:
 	p_sysStatus::Status p_s;
 	// target descriptor 
 	ScriptDescriptor * p_d;
-	// stack
-	std::stack<StackElement*> p_stack;
+	//// stack
+	//std::stack<StackElement*> p_stack;
 	// terminate flag
 	bool p_terminate;
 	// chache flag;
@@ -80,6 +80,11 @@ private:
 
 	std::wstring p_getGlobalValueAsString(std::wstring ValueName);
 
+	// Utility
+	bool GetObjectOrConstFromMemory(std::wstring src, BaseObject ** obj);
+
+	void _CallFunction(StackElement * target, int entryPoint);
+
 	// commands
 	void p_processText(TextScript * command);
 	void p_processPut(PutScript * command);
@@ -91,6 +96,9 @@ private:
 	void p_processChangeScriptEntryPoint(ChangeScriptEntryPointScript * command);
 	void p_processSpendTime(SpendTimeScript * command);
 	void p_processInitRewardBuffer(InitRewardBufferScript * command);
+	void p_processPutToPointer(PutToPointerScript * command);
+	void p_processCall(CallScript * command);
+	void p_processPutFromPointer(PutFromPointerScript * command);
 };
 
 extern ScriptSystem * scriptSystem;

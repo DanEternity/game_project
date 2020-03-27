@@ -2,14 +2,14 @@
 #ext "global123"
 Put "10" to "$EXT:123:123"
 Put "20" to "$EXT:global123:222"
-Text "$EXT:123:123  $EXT:123:123  $EXT:global123:222"
+Text "$EXT:123:123  $EXT:123:123  $EXT:global123:222  my argument  $_arg0 "
 Put "2.51" to "$_123"
 Ariphmetic "$_123 / 2" to "$_123"
 Text "$_123  Вы обнаружили обломки торгового корабля. Сенсоры не фиксируют 
 никакой жизненной активности, скорее всего экипаж уже давно мертв. 
 Однако здесь всё ещё могут находится контейнеры с товарами"
 Choose "Обыскать обломки?", [true]"Отправить команду на поиск"[@a1], [true]
-"Покинуть место"[@exit];
+"Покинуть место"[@exit], [true]"test"[@test1];
 @a1
 Text "Кажется в обломках остались какие-то контейнеры"
 SpendTime "1day"
@@ -21,3 +21,8 @@ Terminate
 @alternative
 Text "Всё полезное, что здесь было вы уже забрали"
 Terminate
+@test1
+Call "$EXT:global123:my_function" "123";
+Text "Returned successfully // test : $_arg0 "
+// space string
+#registerFunction "$EXT:global123:my_function"

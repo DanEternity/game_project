@@ -25,20 +25,14 @@ namespace scriptType
 		changeScriptEntryPoint,
 		spendTime,
 		initRewardBuffer,
+		call,
+		putToPointer,
+		createItem,
+		addRewardToBuffer,
+		putFromPointer,
+		callReturn,
 	};
 }
-
-class StackElement
-{
-public:
-	
-	std::map<std::wstring, BaseObject*> localMemory;
-
-	int returnPoint;
-
-
-
-};
 
 class ComparatorElement
 {
@@ -93,6 +87,34 @@ public:
 		prefix = L"";
 	}
 };
+
+#define LocalMemory std::map<std::wstring, BaseObject*> 
+
+// Structure that contain script local memory, commands and default entry point
+class ScriptDescriptor : public BaseObject
+{
+public:
+	std::vector<BaseScript*> scriptLines;
+	int entryPoint;
+	LocalMemory localMemory;
+
+	ScriptDescriptor()
+	{
+		this->objectType = objectType::scriptDescriptor;
+		this->memoryControl = memoryControl::fixed;
+	}
+};
+
+class StackElement
+{
+public:
+
+	std::map<std::wstring, BaseObject*> localMemory;
+	ScriptDescriptor * scriptId;
+	int returnPoint;
+
+};
+
 
 class TextScript : public BaseScript
 {
@@ -198,5 +220,72 @@ public:
 	InitRewardBufferScript()
 	{
 		this->scriptType = scriptType::initRewardBuffer;
+	}
+};
+
+class CallScript : public BaseScript
+{
+public:
+	std::wstring scriptId;
+	std::vector<std::wstring> arg;
+	CallScript()
+	{
+		this->scriptType = scriptType::call;
+	}
+};
+
+class CallReturnScript : public BaseScript
+{
+public:
+	// this service function
+	// it cannot be called manually
+
+	std::wstring extTableName;
+	std::vector<std::wstring> args;
+	CallReturnScript()
+	{
+		this->scriptType = scriptType::callReturn;
+	}
+};
+
+class PutToPointerScript : public BaseScript
+{
+public:
+	std::wstring src;
+	std::wstring dst;
+	PutToPointerScript()
+	{
+		this->scriptType = scriptType::putToPointer;
+	}
+};
+
+class CreateItemScript : public BaseScript // Not finished
+{
+public:
+	
+	CreateItemScript()
+	{
+		this->scriptType = scriptType::createItem;
+	}
+};
+
+class AddRewardToBufferScript : public BaseScript
+{
+public:
+	std::wstring src;
+	AddRewardToBufferScript()
+	{
+		this->scriptType = scriptType::addRewardToBuffer;
+	}
+};
+
+class PutFromPointerScript : public BaseScript
+{
+public:
+	std::wstring src;
+	std::wstring dst;
+	PutFromPointerScript()
+	{
+		this->scriptType = scriptType::putFromPointer;
 	}
 };

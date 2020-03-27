@@ -57,12 +57,15 @@ void ScriptSystem::p_processFrame()
 			// check for new script
 			if (gEnv->scripts.queue.empty())
 				break;
-			ScriptDescriptor * sd = gEnv->scripts.queue.front();
-			this->p_l = sd->entryPoint;
-			this->p_nl = sd->entryPoint;
-			this->p_d = sd;
-			gEnv->scripts.queue.pop_front();
+			auto * sd = gEnv->scripts.queue.front();
+			this->p_l = sd->returnPoint;
+			this->p_nl = sd->returnPoint;
+			this->p_d = sd->scriptId;
+			this->p_d->localMemory = sd->localMemory;
 
+			gEnv->scripts.queue.pop_front();
+			delete(sd);
+			gEnv->scripts.currentScript = p_d;
 			p_s = p_sysStatus::processingScript;
 
 			p_blockGame_ScriptRunning();
@@ -79,6 +82,7 @@ void ScriptSystem::p_processFrame()
 		{
 			p_blockGame_ScriptRunning(false);
 			p_s = p_sysStatus::idle;
+			gEnv->scripts.currentScript = NULL;
 		}
 
 		break;
@@ -182,6 +186,15 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 		break;
 	case scriptType::initRewardBuffer:
 		p_processInitRewardBuffer(static_cast<InitRewardBufferScript*>(command));
+		break;
+	case scriptType::putToPointer:
+		p_processPutToPointer(static_cast<PutToPointerScript*>(command));
+		break;
+	case scriptType::call:
+		p_processCall(static_cast<CallScript*>(command));
+		break;
+	case scriptType::putFromPointer:
+		p_processPutFromPointer(static_cast<PutFromPointerScript*>(command));
 		break;
 	default:
 		printf("Debug: Error! Script command has unknown type -> %i", sType);
@@ -562,6 +575,68 @@ std::wstring ScriptSystem::p_getGlobalValueAsString(std::wstring ValueName)
 	return std::wstring();
 }
 
+bool ScriptSystem::GetObjectOrConstFromMemory(std::wstring src, BaseObject ** obj)
+{
+
+	*obj = NULL;
+
+	// check if src is const
+	if (src.size() >= 1)
+	{
+		if (src[0] != '$')
+		{
+			// value is const
+			auto code = convertConstToObject(src, obj);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return false;
+			}
+		}
+		else
+		{
+			// get src object if not a const
+			auto code = getMemoryCell(src, obj, &p_d->localMemory);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return false;
+			}
+		}
+	}
+	else
+	{
+		// failed
+		// no source provided
+		return false;
+	}
+
+	return true;
+
+}
+
+void ScriptSystem::_CallFunction(StackElement * target, int entryPoint)
+{
+
+	auto * ret = new StackElement();
+	ret->returnPoint = p_nl;
+	ret->scriptId = p_d;
+	ret->localMemory = p_d->localMemory;
+	gEnv->scripts.queue.push_front(ret);
+
+	auto * p = target;
+	p->returnPoint = entryPoint;
+	//p->scriptId;
+	//p->localMemory;
+	//p->localMemory.clear();
+	gEnv->scripts.queue.push_front(p);
+
+	// this should interrupt current script 
+	p_s = p_sysStatus::scriptTerminated;
+	p_terminate = true;
+
+}
+
 void ScriptSystem::p_processText(TextScript * command)
 {
 
@@ -849,15 +924,59 @@ void ScriptSystem::p_processIfDoJump(IfDoJumpScript * command)
 
 void ScriptSystem::p_processChangeScriptEntryPoint(ChangeScriptEntryPointScript * command)
 {
-	if (command->scriptId == L"" || command->scriptId == L"$self")
+	/*if (command->scriptId == L"" || command->scriptId == L"$self")
 	{
-		p_d->entryPoint = command->lineId;
+		// Что-то
 	}
 	else
 	{
 		// doesnt work xd
+	}*/
+
+	auto src = command->scriptId;
+
+	BaseObject * obj = NULL;
+
+	// check if src is const
+	if (src.size() >= 1)
+	{
+		if (src[0] != '$')
+		{
+			// Const not allowed
+			// failed
+			return;
+
+		}
+		else
+		{
+			// get src object if not a const
+			auto code = getMemoryCell(src, &obj, &p_d->localMemory);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+		}
+	}
+	else
+	{
+		// failed
+		// no source provided
+		return;
 	}
 
+	auto tp = obj->objectType;
+
+	if (tp == objectType::scriptDescriptor)
+	{
+		auto sd = static_cast<ScriptDescriptor*>(obj);
+		sd->entryPoint = command->lineId;
+	}
+	else
+	{
+		// failed
+		return;
+	}
 
 }
 
@@ -893,6 +1012,244 @@ void ScriptSystem::p_processInitRewardBuffer(InitRewardBufferScript * command)
 	printf("Initializing reward buffer...\n");
 
 	// Code goes here...
+
+}
+
+void ScriptSystem::p_processPutToPointer(PutToPointerScript * command)
+{
+
+	auto src = command->src;
+	auto dst = command->dst;
+
+	BaseObject * destObject = NULL;
+
+	if (dst.size() >= 1)
+	{
+		if (dst[0] != '$')
+		{
+			auto code = getMemoryCell(dst, &destObject, &p_d->localMemory);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+		}
+		else
+		{
+			// failed
+			return;
+		}
+	}
+
+	auto tp = destObject->objectType;
+
+	if (tp != objectType::string)
+	{
+		auto v_dst = static_cast<StringObject*>(destObject);
+		dst = v_dst->value;
+	}
+	else
+	{
+		// failed
+		return;
+	}
+
+	BaseObject * obj = NULL;
+
+	// check if src is const
+	if (src.size() >= 1)
+	{
+		if (src[0] != '$')
+		{
+			// value is const
+			auto code = convertConstToObject(src, &obj);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+		}
+		else
+		{
+			// get src object if not a const
+			auto code = getMemoryCell(src, &obj, &p_d->localMemory);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+		}
+	}
+	else
+	{
+		// failed
+		// no source provided
+		return;
+	}
+
+	auto code = putMemoryCell(dst, obj, &p_d->localMemory);
+
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+
+
+}
+
+void ScriptSystem::p_processCall(CallScript * command)
+{
+	
+	auto dst = command->scriptId;
+	BaseObject * destObject = NULL;
+
+	if (dst.size() >= 1)
+	{
+		if (dst[0] == '$')
+		{
+			auto code = getMemoryCell(dst, &destObject, &p_d->localMemory);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+		}
+		else
+		{
+			// failed
+			return;
+		}
+	}
+
+	auto tp = destObject->objectType;
+
+	if (tp != objectType::scriptDescriptor)
+	{
+		if (debugMode)
+		{
+			wprintf(L"Error! Failed to call [%s] function. Invalid descriptor or adress not correct\n", dst.c_str());
+		}
+		// failed
+		return;
+	}
+
+	ScriptDescriptor * target = static_cast<ScriptDescriptor*>(destObject);
+	StackElement * t = new StackElement();
+	t->localMemory.clear();
+
+	for (int i(0); i < command->arg.size(); i++)
+	{
+		StringObject * obj = new StringObject();
+		obj->memoryControl = memoryControl::free;
+		obj->value = command->arg[i];
+		std::wstring ndst = L"$_arg" + std::to_wstring(i);
+		auto code = putMemoryCell(ndst, obj, &t->localMemory);
+		if (code != memoryUtil::ok)
+		{
+			// failed
+			return;
+		}	
+	}
+
+	//target->localMemory;
+
+	if (debugMode)
+	{
+		wprintf(L"Calling a function [%s].\n", dst.c_str());
+	}
+
+	t->scriptId = target;
+
+	_CallFunction(t, target->entryPoint);
+
+}
+
+void ScriptSystem::p_processPutFromPointer(PutFromPointerScript * command)
+{
+
+	auto src = command->src;
+	auto dst = command->dst;
+
+	// Extracting real src adress
+
+	BaseObject * srcObject = NULL;
+
+	if (dst.size() >= 1)
+	{
+		if (dst[0] != '$')
+		{
+			auto code = getMemoryCell(src, &srcObject, &p_d->localMemory);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+		}
+		else
+		{
+			// failed
+			return;
+		}
+	}
+
+	auto tp = srcObject->objectType;
+
+	if (tp != objectType::string)
+	{
+		auto v_src = static_cast<StringObject*>(srcObject);
+		src = v_src->value;
+	}
+	else
+	{
+		// failed
+		return;
+	}
+
+	// Performing put operation
+
+	BaseObject * obj = NULL;
+
+	// check if src is const
+	if (src.size() >= 1)
+	{
+		if (src[0] != '$')
+		{
+			// value is const
+			auto code = convertConstToObject(src, &obj);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+		}
+		else
+		{
+			// get src object if not a const
+			auto code = getMemoryCell(src, &obj, &p_d->localMemory);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+		}
+	}
+	else
+	{
+		// failed
+		// no source provided
+		return;
+	}
+
+	auto code = putMemoryCell(dst, obj, &p_d->localMemory);
+
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
 
 }
 

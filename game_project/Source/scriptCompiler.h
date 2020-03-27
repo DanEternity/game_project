@@ -5,6 +5,7 @@
 #include <map>
 #include "envUtils.h"
 #include "compilerTemplatesFormat.h"
+#include "scriptMemoryUtils.h"
 
 //
 // This file contain code generation procedures
