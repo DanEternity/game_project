@@ -30,7 +30,6 @@ namespace scriptType
 		createItem,
 		addRewardToBuffer,
 		putFromPointer,
-		callReturn,
 	};
 }
 
@@ -105,6 +104,12 @@ public:
 	}
 };
 
+struct RetContext
+{
+	std::wstring linkTable;
+	std::vector<std::wstring> srcVarLink;
+};
+
 class StackElement
 {
 public:
@@ -112,6 +117,14 @@ public:
 	std::map<std::wstring, BaseObject*> localMemory;
 	ScriptDescriptor * scriptId;
 	int returnPoint;
+	RetContext * rContext;
+
+	StackElement()
+	{
+		scriptId = NULL;
+		returnPoint = 0;
+		rContext = NULL;
+	}
 
 };
 
@@ -231,20 +244,6 @@ public:
 	CallScript()
 	{
 		this->scriptType = scriptType::call;
-	}
-};
-
-class CallReturnScript : public BaseScript
-{
-public:
-	// this service function
-	// it cannot be called manually
-
-	std::wstring extTableName;
-	std::vector<std::wstring> args;
-	CallReturnScript()
-	{
-		this->scriptType = scriptType::callReturn;
 	}
 };
 

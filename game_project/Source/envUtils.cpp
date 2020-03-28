@@ -190,3 +190,22 @@ std::wstring createExternalTable()
 
 	return internalId;
 }
+
+void deleteExternalTable(std::wstring id)
+{
+	auto t = gEnv->extTables[id];
+
+	for (auto q = t->p_memory.begin(); q != t->p_memory.end(); q++)
+	{
+		auto mt = q->second->memoryControl;
+		if (mt == memoryControl::free)
+		{
+			auto obj = q->second;
+			delete obj;
+		}
+	}
+
+	delete (t);
+
+	gEnv->extTables.erase(id);
+}

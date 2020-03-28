@@ -131,8 +131,9 @@ bool ScriptCompiler::compileScriptText(std::vector<std::wstring> src)
 					)
 				{
 					// invalid symbol
+					/*
 					printf("Error while script parsing! Expected [#directive \"value\"] found (%ws <-)\n", selection.c_str());
-					printf("Hint: You probably forgot \" \". Directive comments should be inside brackets.\n");
+					printf("Hint: You probably forgot \" \". Directive comments should be inside brackets.\n");*/
 				}
 
 			}

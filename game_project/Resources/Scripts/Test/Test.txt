@@ -2,7 +2,11 @@
 #ext "global123"
 Put "10" to "$EXT:123:123"
 Put "20" to "$EXT:global123:222"
-Text "$EXT:123:123  $EXT:123:123  $EXT:global123:222  my argument  $_arg0 "
+Put "69" to "$_testVal"
+PutFromPointer "$_arg0" "$_ttt1"
+Text "$EXT:123:123  $EXT:123:123  $EXT:global123:222  my arguments  $_arg0   ->   $_ttt1  ; $_arg1  "
+Ariphmetic "$_ttt1 * 10" to "$_ttt1"
+PutToPointer "$_ttt1" to "$_arg0"
 Put "2.51" to "$_123"
 Ariphmetic "$_123 / 2" to "$_123"
 Text "$_123  Вы обнаружили обломки торгового корабля. Сенсоры не фиксируют 
@@ -22,7 +26,8 @@ Terminate
 Text "Всё полезное, что здесь было вы уже забрали"
 Terminate
 @test1
-Call "$EXT:global123:my_function" "123";
-Text "Returned successfully // test : $_arg0 "
+Call "$EXT:global123:my_function" "$_testVal", "123456";
+Text "Returned successfully // test : $_arg0  ; result $_testVal"
+Terminate
 // space string
 #registerFunction "$EXT:global123:my_function"

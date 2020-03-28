@@ -106,3 +106,13 @@ bool addScriptToQueue(ScriptDescriptor * sd);
 ///
 std::wstring createExternalTable();
 #pragma endregion
+
+#pragma region deleteExternalTable(std::wstring id)
+///
+/// <summary> Deletes external table and all "free" objects inside
+/// 
+/// </summary>
+/// 
+///
+void deleteExternalTable(std::wstring id);
+#pragma endregion

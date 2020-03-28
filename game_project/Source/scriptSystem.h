@@ -83,7 +83,8 @@ private:
 	// Utility
 	bool GetObjectOrConstFromMemory(std::wstring src, BaseObject ** obj);
 
-	void _CallFunction(StackElement * target, int entryPoint);
+	void _CallFunction(StackElement * target, int entryPoint, RetContext * retContext);
+	void _RetFunction(StackElement * target);
 
 	// commands
 	void p_processText(TextScript * command);

@@ -62,7 +62,8 @@ void ScriptSystem::p_processFrame()
 			this->p_nl = sd->returnPoint;
 			this->p_d = sd->scriptId;
 			this->p_d->localMemory = sd->localMemory;
-
+			if (sd->rContext != NULL)
+				_RetFunction(sd);
 			gEnv->scripts.queue.pop_front();
 			delete(sd);
 			gEnv->scripts.currentScript = p_d;
@@ -615,13 +616,14 @@ bool ScriptSystem::GetObjectOrConstFromMemory(std::wstring src, BaseObject ** ob
 
 }
 
-void ScriptSystem::_CallFunction(StackElement * target, int entryPoint)
+void ScriptSystem::_CallFunction(StackElement * target, int entryPoint, RetContext * retContext)
 {
 
 	auto * ret = new StackElement();
 	ret->returnPoint = p_nl;
 	ret->scriptId = p_d;
 	ret->localMemory = p_d->localMemory;
+	ret->rContext = retContext;
 	gEnv->scripts.queue.push_front(ret);
 
 	auto * p = target;
@@ -634,6 +636,42 @@ void ScriptSystem::_CallFunction(StackElement * target, int entryPoint)
 	// this should interrupt current script 
 	p_s = p_sysStatus::scriptTerminated;
 	p_terminate = true;
+
+}
+
+void ScriptSystem::_RetFunction(StackElement * target)
+{
+
+	if (debugMode)
+	{
+		printf("Returning from function. Recovering context...\n");
+	}
+
+	auto ctx = target->rContext;
+
+	if (ctx == NULL)
+		return;
+
+	for (int i(0); i < ctx->srcVarLink.size(); i++)
+	{
+		if (ctx->srcVarLink[i] != L"")
+		{
+			BaseObject * tmp = NULL;
+			std::wstring qs = L"$EXT:" + ctx->linkTable + L":" + std::to_wstring(i);
+			auto code = getMemoryCell(qs, &tmp, NULL);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				// Do not copy element
+				continue;
+			}
+			putMemoryCell(ctx->srcVarLink[i], tmp, &p_d->localMemory);
+			
+		}
+	}
+
+	deleteExternalTable(ctx->linkTable);
+	delete(target->rContext);
 
 }
 
@@ -1025,7 +1063,7 @@ void ScriptSystem::p_processPutToPointer(PutToPointerScript * command)
 
 	if (dst.size() >= 1)
 	{
-		if (dst[0] != '$')
+		if (dst[0] == '$')
 		{
 			auto code = getMemoryCell(dst, &destObject, &p_d->localMemory);
 			if (code != memoryUtil::ok)
@@ -1040,10 +1078,15 @@ void ScriptSystem::p_processPutToPointer(PutToPointerScript * command)
 			return;
 		}
 	}
+	else
+	{
+		// failed
+		return;
+	}
 
 	auto tp = destObject->objectType;
 
-	if (tp != objectType::string)
+	if (tp == objectType::string)
 	{
 		auto v_dst = static_cast<StringObject*>(destObject);
 		dst = v_dst->value;
@@ -1138,12 +1181,56 @@ void ScriptSystem::p_processCall(CallScript * command)
 	ScriptDescriptor * target = static_cast<ScriptDescriptor*>(destObject);
 	StackElement * t = new StackElement();
 	t->localMemory.clear();
+	RetContext * retContext = new RetContext();
+	auto extTable = createExternalTable();
+	//t->rContext = retContext;
+	
+	retContext->linkTable = extTable;
 
 	for (int i(0); i < command->arg.size(); i++)
 	{
+
+		std::wstring eDest = L"$EXT:" + extTable + L":" + std::to_wstring(i);
+
+		if (command->arg[i].size() > 0)
+		{
+			if (command->arg[i][0] == '$')
+			{
+				retContext->srcVarLink.push_back(command->arg[i]);
+				BaseObject * qsrc = NULL;
+				auto code = getMemoryCell(command->arg[i], &qsrc, &p_d->localMemory);
+				if (code != memoryUtil::ok)
+				{
+					// failed
+					return;
+				}
+				code = putMemoryCell(eDest, qsrc, &p_d->localMemory);
+				if (code != memoryUtil::ok)
+				{
+					// failed
+					return;
+				}
+
+			}
+			else
+				retContext->srcVarLink.push_back(L"");
+		}
+		else
+			retContext->srcVarLink.push_back(L"");
+
 		StringObject * obj = new StringObject();
 		obj->memoryControl = memoryControl::free;
-		obj->value = command->arg[i];
+		if (command->arg[i].size() > 0)
+		{
+			if (command->arg[i][0] == '$')
+			{
+				obj->value = eDest;
+			}
+			else
+				obj->value = command->arg[i];
+		}
+		else
+			obj->value = command->arg[i];
 		std::wstring ndst = L"$_arg" + std::to_wstring(i);
 		auto code = putMemoryCell(ndst, obj, &t->localMemory);
 		if (code != memoryUtil::ok)
@@ -1162,7 +1249,7 @@ void ScriptSystem::p_processCall(CallScript * command)
 
 	t->scriptId = target;
 
-	_CallFunction(t, target->entryPoint);
+	_CallFunction(t, target->entryPoint, retContext);
 
 }
 
@@ -1176,9 +1263,9 @@ void ScriptSystem::p_processPutFromPointer(PutFromPointerScript * command)
 
 	BaseObject * srcObject = NULL;
 
-	if (dst.size() >= 1)
+	if (src.size() >= 1)
 	{
-		if (dst[0] != '$')
+		if (src[0] == '$')
 		{
 			auto code = getMemoryCell(src, &srcObject, &p_d->localMemory);
 			if (code != memoryUtil::ok)
@@ -1193,10 +1280,15 @@ void ScriptSystem::p_processPutFromPointer(PutFromPointerScript * command)
 			return;
 		}
 	}
+	else
+	{
+		// failed
+		return;
+	}
 
 	auto tp = srcObject->objectType;
 
-	if (tp != objectType::string)
+	if (tp == objectType::string)
 	{
 		auto v_src = static_cast<StringObject*>(srcObject);
 		src = v_src->value;
