@@ -324,7 +324,7 @@ void testFunctionExecScript()
 	t.push_back(std::wstring(wss.str()));
 	wss.clear();
 	ScriptCompiler * c = new ScriptCompiler();
-
+	c->setFamilyId(L"testMod");
 	c->compileScriptText(t);
 
 	addScriptToQueue(c->getScriptDescriptor());

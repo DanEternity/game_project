@@ -1,10 +1,14 @@
 ﻿#extLocal "123"
 #ext "global123"
+
+#import "testMod.global123"
+#extLinkRename "testMod.global123->my_table"
+
 Put "10" to "$EXT:123:123"
 Put "20" to "$EXT:global123:222"
 Put "69" to "$_testVal"
 PutFromPointer "$_arg0" "$_ttt1"
-Text "$EXT:123:123  $EXT:123:123  $EXT:global123:222  my arguments  $_arg0   ->   $_ttt1  ; $_arg1  "
+Text "$EXT:123:123  $EXT:123:123  $EXT:global123:222  my arguments  $_arg0   ->   $_ttt1  ; $_arg1  // import test $EXT:my_table:222 "
 Ariphmetic "$_ttt1 * 10" to "$_ttt1"
 PutToPointer "$_ttt1" to "$_arg0"
 Put "2.51" to "$_123"

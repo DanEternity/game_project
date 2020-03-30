@@ -358,6 +358,69 @@ bool ScriptCompiler::parseDirecive(std::wstring s)
 			}
 		}
 	}
+
+	if (f1 == L"#import" || f1 == L"#Import")
+	{
+		// import public table fron other mod family
+		// example: #import "my_mod.my_table"
+		// warning: corresponding table should exist to be loaded
+		// correctly. Otherwise it will generate an error.
+
+		int pos = f2.find('.');
+
+		auto fml = f2.substr(0, pos);
+		auto table = f2.substr(pos+1, f2.size() - pos - 1);
+
+		if (gEnv->scripts.scriptGroups.find(fml) != gEnv->scripts.scriptGroups.end())
+		{
+			// mod reference found
+			if (gEnv->scripts.scriptGroups[fml].extReference.find(table) != gEnv->scripts.scriptGroups[fml].extReference.end())
+			{
+				// table reference found
+				localExtReference[f2] = gEnv->scripts.scriptGroups[fml].extReference[table];
+
+				// table name will be "my_mod.my_table" 
+
+
+			}
+			else
+			{
+				error = true;
+				return false;
+			}
+		}
+		else
+		{
+			error = true;
+			return false;
+		}
+
+	}
+
+	if (f1 == L"#extLinkRename" || f1 == L"#ExtLinkRename")
+	{
+		// example #extLinkRename "oldName->newName"
+		// warnign: This operation can overwrite other link name
+		// be carefull. 
+		int pos = f2.find(L"->");
+
+		auto oldName = f2.substr(0, pos);
+		auto newName = f2.substr(pos + 2, f2.size() - pos - 2);
+
+		if (localExtReference.find(oldName) != localExtReference.end())
+		{
+			auto w = localExtReference[oldName];
+			localExtReference.erase(oldName);
+			localExtReference[newName] = w;
+		}
+		else
+		{
+			// failed
+			error = true;
+			return false;
+		}
+
+	}
 	
 	if (f1 == L"#RegisterFunction" || f1 == L"#registerFunction")
 	{
