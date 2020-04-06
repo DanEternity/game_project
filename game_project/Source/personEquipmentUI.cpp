@@ -4,20 +4,36 @@ void BuildSchemeChooseCharacter()
 {
 	tgui::Panel::Ptr choosePersonPanel = tgui::Panel::create();
 	choosePersonPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel3"));
-	choosePersonPanel->setSize(600, 350);
-	choosePersonPanel->setPosition("1%", "5%");
+	choosePersonPanel->setSize(300, 580);
+	choosePersonPanel->setPosition("73%", "1%");
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(choosePersonPanel, "choosePersonPanel");
 
 	for (int i = 0; i < gEnv->game.player.crew.characters.size(); i++)
 	{
 		tgui::Button::Ptr button = tgui::Button::create();
 		button->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-		button->setSize(100, 175);
+		button->setSize(300, 90);
 		button->setText(gEnv->game.player.crew.characters[i]->name);
-		button->setPosition(i * 100, 0);
+		button->setPosition(0, i*90);
 		choosePersonPanel->add(button, "ChoosePerson" + std::to_string(i));
 		button->connect("MouseReleased", ChangeActiveCharacter, i);
 	}
+}
+
+void BuildSchemeRoles()
+{
+	tgui::Panel::Ptr choosePersonPanel = tgui::Panel::create();
+	choosePersonPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel3"));
+	choosePersonPanel->setSize(840, 580);
+	choosePersonPanel->setPosition("1%", "1%");
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(choosePersonPanel, "ShipSchemePersonRoles");
+
+	tgui::Button::Ptr showBonusesButton = tgui::Button::create();
+	showBonusesButton->setPosition("5%", "90%");
+	showBonusesButton->setSize(200, 50);
+	showBonusesButton->setText("Show Bonuses");
+	showBonusesButton->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	choosePersonPanel->add(showBonusesButton, "CrewBonusesShow");
 }
 
 void BuildPersonSchemeUI(int equipSizeUI, int crewPersonNumber)
@@ -246,9 +262,22 @@ void rmPanelChoosenAddedPerson(const int id, const int equip_id, tgui::Widget::P
 
 void ChangeActiveCharacter(int id)
 {
+	gEnv->game.ui.puistate = PUIState::inventoryState;
 	gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->setEnabled(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->setVisible(false);
 	gEnv->game.ui.activeOpenPersonWindow = id;
 	gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->setEnabled(true);
 	gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->setVisible(true);
+
+	gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel")->setEnabled(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel")->setVisible(false);
+
+	gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setEnabled(true);
+	gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setVisible(true);
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setEnabled(true);
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setVisible(true);
+
+	
+	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->setEnabled(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->setVisible(false);
 }

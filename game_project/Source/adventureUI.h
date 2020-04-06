@@ -18,8 +18,6 @@ void updateCategoryFilters();
 void disableAllAdventureUI();
 
 // ui event handlers
-void adventureUIChangeState(AdventureUIInventoryStateNamespace::AdventureUIInventoryState state);
-void adventureUIInventorySpecialButtons(AdventureUIInventoryStateNamespace::AdventureUIInventoryState newState);
 
 //
 void createPauseMenu();

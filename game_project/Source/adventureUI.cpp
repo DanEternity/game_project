@@ -464,6 +464,7 @@ void createAdventureUIButtons()
 	gEnv->game.player.crew.characters.push_back(new Character(L"Ne Daun"));
 
 	BuildSchemeChooseCharacter();
+	BuildSchemeRoles();
 	BuildPersonSchemeUI(50, 0);
 	BuildPersonSchemeUI(50, 1);
 	CreateInventoryGridPanel(10);
@@ -502,7 +503,10 @@ void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled) // whereCa
 {
 	disableAllAdventureUI();
 	if (whereCalled == 0)
+	{
 		gEnv->game.adventureUI.isInventoryOpen = !gEnv->game.adventureUI.isInventoryOpen;
+		gEnv->game.ui.puistate = PUIState::defaultState;
+	}
 	if (!gEnv->game.adventureUI.isInventoryOpen)
 		return;
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setEnabled(true);
@@ -526,20 +530,21 @@ void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled) // whereCa
 	case shipMenu::craft:
 		break;
 	case shipMenu::crew:
-		for (int i = 0; i < gEnv->game.player.crew.characters.size(); i++)
+		switch (gEnv->game.ui.puistate)
 		{
-			if (i == gEnv->game.ui.activeOpenPersonWindow)
-			{
-				gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i))->setEnabled(true);
-				gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i))->setVisible(true);
-			}
+		case PUIState::defaultState:
+			gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel")->setEnabled(true);
+			gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel")->setVisible(true);
+			gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->setEnabled(true);
+			gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->setVisible(true);
+			break;
+		case PUIState::inventoryState:
+			break;
+		case PUIState::skillTreeState:
+			break;
+		case PUIState::battleAbilitiesState:
+			break;
 		}
-		gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel")->setEnabled(true);
-		gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel")->setVisible(true);
-		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setEnabled(true);
-		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setVisible(true);
-		gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setEnabled(true);
-		gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setVisible(true);
 		break;
 	case shipMenu::hangar:
 		break;
