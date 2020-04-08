@@ -292,34 +292,18 @@ void testFunctionCreateScript()
 
 void testFunctionExecScript()
 {
-
+	/*
 	std::vector<std::wstring> t;
 
-	//t.push_back(L"Put """"25"""" to """"$_abc"""" ");
-
-	//t.push_back(L"Text ""Value abc = $_abc \n Sybmols: #%@%Y^H%&EIK*OO:"" ");
 
 	std::string filename;
 	filename = gEnv->game.workDir;
 	filename += "\\resources\\scripts\\test\\test.txt";
-	/*std::wifstream fin(filename);
 
-	while (!fin.eof())
-	{
-		std::wstring line;
-		std::getline(fin, line);
-		t.push_back(line);
-	}
-	fin.close();*/
 	std::wifstream wif(filename);
 	wif.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
 	std::wstringstream wss;
-	//while (!wif.eof())
-	//{
-	//	wss << wif.rdbuf();
-	//	t.push_back(std::wstring(wss.str()));
-	//	wss.clear();
-	//}
+
 	wss << wif.rdbuf();
 	t.push_back(std::wstring(wss.str()));
 	wss.clear();
@@ -327,12 +311,21 @@ void testFunctionExecScript()
 	c->setFamilyId(L"testMod");
 	c->compileScriptText(t);
 
-	addScriptToQueue(c->getScriptDescriptor());
+	addScriptToQueue(c->getScriptDescriptor());*/
+
+	std::string filename = gEnv->game.workDir;
+	filename += "\\resources\\scripts\\test\\test2.txt";
+
+	ScriptCompiler * c = new ScriptCompiler();
+	ScriptDescriptor * q = c->compileFile(filename, L"testMod");
+
+	if (q != NULL)
+		addScriptToQueue(q);
 
 }
 
 void btnNextPressed()
-{
+{ 
 	gEnv->scripts.buttonPressed = true;
 }
 

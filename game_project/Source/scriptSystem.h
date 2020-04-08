@@ -2,6 +2,8 @@
 
 #include "enviroment.h"
 #include "scriptUtilsUI.h"
+#include "generationUtility.h"
+#include "scriptWorkflowUtility.h"
 #include <stack>
 //#include "scriptDescriptor.h"
 
@@ -100,6 +102,13 @@ private:
 	void p_processPutToPointer(PutToPointerScript * command);
 	void p_processCall(CallScript * command);
 	void p_processPutFromPointer(PutFromPointerScript * command);
+	void p_processRandom(RandomScript * command);
+	void p_processCreateSysModule(CreateSysModuleScript * command);
+	void p_processCreateModStatEffect(CreateModStatEffectScript * command);
+	void p_processApplyEffectToSysModule(ApplyEffectScript * command);
+	void p_processPutItemToPlayerInventory(PutItemToPlayerInventoryScript * command);
+	void p_processEditItemProperties(EditItemPropertiesScript * command);
+	void p_processEditModuleProperties(EditModulePropertiesScript * command);
 };
 
 extern ScriptSystem * scriptSystem;

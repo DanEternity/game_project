@@ -25,6 +25,7 @@
 #include "menuData.h"
 #include "valueObjects.h"
 #include "scriptSystemData.h"
+#include "objectStorage.h"
 
 // Short name for global enviroment 
 #define gEnv globalEnviroment
@@ -68,6 +69,10 @@ public:
 
 	// Script system data
 	ScriptSystemData scripts;
+
+	// Contain game objects
+	ObjectStorage objects;
+
 };
 
 extern GlobalEnviroment * globalEnviroment;

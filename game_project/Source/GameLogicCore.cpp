@@ -123,5 +123,53 @@ void LoadScriptTemplates()
 	p.mainHandler = scriptCompilerTemplates::mainHandler::PutFromPointer;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
+	// Random
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"RANDOM";
+	p.body = "\"$A\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::Random;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// CreateSysModule
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"CREATESYSMODULE";
+	p.body = "\"$A\" \"$B\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::CreateSysModule;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// CreateModStatEffect
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"CREATEMODSTATEFFECT";
+	p.body = "\"$A\" \"$Target\" \"$Stat\" \"$Add\" \"$Mul\" \"$Sub\" \"$NegMul\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::CreateModStatEffect;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// ApplyEffectToSysModule
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"APPLYEFFECTTOSYSMODULE";
+	p.body = "\"$A\" \"$B\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::ApplyEffectToSysModule;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// PutItemToPlayerInventory
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"PUTITEMTOPLAYERINVENTORY";
+	p.body = "\"$A\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::PutItemToPlayerInventory;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// EditItemProperties
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"EDITITEMPROPERTIES";
+	p.body = "\"$src\" \"$level\" \"$rarity\" \"$itemId\" \"$itemClass\" \"$itemName\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::EditItemProperties;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// EditModuleProperties
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"EDITMODULEPROPERTIES";
+	p.body = "\"$src\" \"$moduleType\" \"$moduleSlot\" \"$moduleSize\" \"$powerSupply\" \"$highPowerSupply\" \"$powerPriority\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::EditModuleProperties;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
 }

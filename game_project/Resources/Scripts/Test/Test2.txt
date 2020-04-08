@@ -1,0 +1,12 @@
+﻿Text "Test - создание предмета"
+Put "1000" to "$_pAdd"
+Put "0" to "$_zero"
+CreateSysModule "$_p" "My_module" 
+EditItemProperties "$_p" "10" "5" "1001" "none" "Polarized Iron Hull Plating"
+EditModuleProperties "$_p" "system" "universal" "large" "28" "0" "5"
+CreateModStatEffect "$_effect" "ship" "hull" "1000" "0" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+PutItemToPlayerInventory "$_p"
+// End section
+Text "Completed"
+Terminate

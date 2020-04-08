@@ -212,6 +212,92 @@ BaseScript * scriptCompilerTemplates::mainHandler::PutFromPointer(CompilerComman
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::Random(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new RandomScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$A"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::CreateSysModule(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new CreateSysModuleScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$A"]);
+	p->name = convertExtReferences(buffer, buffer->arg["$B"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::CreateModStatEffect(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new CreateModStatEffectScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$A"]);
+	p->targetType = convertExtReferences(buffer, buffer->arg["$Target"]);
+	p->statName = convertExtReferences(buffer, buffer->arg["$Stat"]);
+	p->p_add = convertExtReferences(buffer, buffer->arg["$Add"]);
+	p->p_mul = convertExtReferences(buffer, buffer->arg["$Mul"]);
+	p->p_sub = convertExtReferences(buffer, buffer->arg["$Sub"]);
+	p->p_negMul = convertExtReferences(buffer, buffer->arg["$NegMul"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::ApplyEffect(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new ApplyEffectScript();
+	p->src = convertExtReferences(buffer, buffer->arg["$A"]);
+	p->dst = convertExtReferences(buffer, buffer->arg["$B"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::ApplyEffectToSysModule(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new ApplyEffectScript();
+	p->scriptType = scriptType::applyEffectToSysModule; // override type
+
+	p->src = convertExtReferences(buffer, buffer->arg["$A"]); 
+	p->dst = convertExtReferences(buffer, buffer->arg["$B"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::PutItemToPlayerInventory(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new PutItemToPlayerInventoryScript();
+	p->src = convertExtReferences(buffer, buffer->arg["$A"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::EditItemProperties(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new EditItemPropertiesScript();
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->level = convertExtReferences(buffer, buffer->arg["$level"]);
+	p->rarity = convertExtReferences(buffer, buffer->arg["$rarity"]);
+	p->itemId = convertExtReferences(buffer, buffer->arg["$itemId"]);
+	p->itemClass = convertExtReferences(buffer, buffer->arg["$itemClass"]);
+	p->itemName = convertExtReferences(buffer, buffer->arg["$itemName"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::EditModuleProperties(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new EditModulePropertiesScript();
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->moduleType = convertExtReferences(buffer, buffer->arg["$moduleType"]);
+	p->moduleSlot = convertExtReferences(buffer, buffer->arg["$moduleSlot"]);
+	p->moduleSize = convertExtReferences(buffer, buffer->arg["$moduleSize"]);
+	p->powerSupply = convertExtReferences(buffer, buffer->arg["$powerSupply"]);
+	p->highPowerSupply = convertExtReferences(buffer, buffer->arg["$highPowerSupply"]);
+	p->powerPriority = convertExtReferences(buffer, buffer->arg["$powerPriority"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);

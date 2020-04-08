@@ -17,6 +17,7 @@ namespace objectType {
 		mapDecoration,
 		mapSector,
 		effect,
+		item,
 	};
 
 } // namespace objectType
@@ -53,4 +54,10 @@ public:
 		objectType = objectType::undefined;
 		memoryControl = memoryControl::free;
 	}
+
+	bool singleUse()
+	{
+		return ((memoryControl & memoryControl::singleUse) != 0);
+	}
+
 };

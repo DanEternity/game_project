@@ -30,6 +30,14 @@ namespace scriptType
 		createItem,
 		addRewardToBuffer,
 		putFromPointer,
+		random,
+		createSysModule,
+		createModStatEffect,
+		applyEffect,
+		applyEffectToSysModule,
+		putItemToPlayerInventory,
+		editItemProperties,
+		editModuleProperties,
 	};
 }
 
@@ -133,7 +141,7 @@ class TextScript : public BaseScript
 {
 public:
 	std::wstring text;
-	TextScript()
+	TextScript() : BaseScript()
 	{
 		this->scriptType = scriptType::text;
 	}
@@ -143,7 +151,7 @@ class ChooseScript : public TextScript
 {
 public:
 	std::vector<ChooseElement> variants;
-	ChooseScript()
+	ChooseScript() : TextScript()
 	{
 		this->scriptType = scriptType::choose;
 	}
@@ -154,7 +162,7 @@ class PutScript : public BaseScript
 public:
 	std::wstring scr;
 	std::wstring dest;
-	PutScript()
+	PutScript() : BaseScript()
 	{
 		this->scriptType = scriptType::put;
 	}
@@ -163,7 +171,7 @@ public:
 class TerminateScript : public BaseScript
 {
 public:
-	TerminateScript()
+	TerminateScript() : BaseScript()
 	{
 		this->scriptType = scriptType::terminate;
 	}
@@ -174,7 +182,7 @@ class JumpScript : public BaseScript
 public:
 	int lineId;
 	std::wstring chache = L"";
-	JumpScript()
+	JumpScript() : BaseScript()
 	{
 		this->scriptType = scriptType::jump;
 	}
@@ -187,7 +195,7 @@ public:
 	std::wstring operation;
 	std::wstring left;
 	std::wstring right;
-	AriphmeticScript()
+	AriphmeticScript() : BaseScript()
 	{
 		this->scriptType = scriptType::ariphmetic;
 	}
@@ -199,7 +207,7 @@ public:
 	ComparatorElement condition;
 	int lineId; // jump to line
 	std::wstring chache = L"";
-	IfDoJumpScript()
+	IfDoJumpScript() : BaseScript()
 	{
 		this->scriptType = scriptType::ifDoJump;
 	}
@@ -211,7 +219,7 @@ public:
 	std::wstring scriptId;
 	int lineId;
 	std::wstring chache = L"";
-	ChangeScriptEntryPointScript()
+	ChangeScriptEntryPointScript() : BaseScript()
 	{
 		this->scriptType = scriptType::changeScriptEntryPoint;
 	}
@@ -221,7 +229,7 @@ class SpendTimeScript : public BaseScript
 {
 public:
 	std::wstring amount;
-	SpendTimeScript()
+	SpendTimeScript() : BaseScript()
 	{
 		this->scriptType = scriptType::spendTime;
 	}
@@ -230,7 +238,7 @@ public:
 class InitRewardBufferScript : public BaseScript
 {
 public:
-	InitRewardBufferScript()
+	InitRewardBufferScript() : BaseScript()
 	{
 		this->scriptType = scriptType::initRewardBuffer;
 	}
@@ -241,7 +249,7 @@ class CallScript : public BaseScript
 public:
 	std::wstring scriptId;
 	std::vector<std::wstring> arg;
-	CallScript()
+	CallScript() : BaseScript()
 	{
 		this->scriptType = scriptType::call;
 	}
@@ -252,7 +260,7 @@ class PutToPointerScript : public BaseScript
 public:
 	std::wstring src;
 	std::wstring dst;
-	PutToPointerScript()
+	PutToPointerScript() : BaseScript()
 	{
 		this->scriptType = scriptType::putToPointer;
 	}
@@ -262,7 +270,7 @@ class CreateItemScript : public BaseScript // Not finished
 {
 public:
 	
-	CreateItemScript()
+	CreateItemScript() : BaseScript()
 	{
 		this->scriptType = scriptType::createItem;
 	}
@@ -272,7 +280,7 @@ class AddRewardToBufferScript : public BaseScript
 {
 public:
 	std::wstring src;
-	AddRewardToBufferScript()
+	AddRewardToBufferScript() : BaseScript()
 	{
 		this->scriptType = scriptType::addRewardToBuffer;
 	}
@@ -283,8 +291,115 @@ class PutFromPointerScript : public BaseScript
 public:
 	std::wstring src;
 	std::wstring dst;
-	PutFromPointerScript()
+	PutFromPointerScript() : BaseScript()
 	{
 		this->scriptType = scriptType::putFromPointer;
+	}
+};
+
+class RandomScript : public BaseScript
+{
+public:
+	std::wstring dst;
+	RandomScript() : BaseScript()
+	{
+		this->scriptType = scriptType::random;
+	}
+};
+
+class CreateSysModuleScript : public BaseScript
+{
+public:
+	std::wstring dst;
+	std::wstring name;
+	CreateSysModuleScript() : BaseScript()
+	{
+		this->scriptType = scriptType::createSysModule;
+	}
+};
+
+class CreateModStatEffectScript : public BaseScript
+{
+public:
+	std::wstring dst;
+
+	//targetType::TargetType targetType; // entity type name // ship, character... etc
+
+	//statNames::StatName statName;
+
+	//float p_add;	// +X			// base + X1+X2+X3+...+Xn
+	//float p_mul;	// *(1+X)		// base * (X1+X2+X3+...+Xn)
+	//float p_sub;	// -X			// total - X1 ... Xn 
+	//float p_negMul;	// *(1-X)		// total * (1-X1) * (1-X2) * ... * (1-Xn)
+
+	std::wstring targetType; // string
+	std::wstring statName; // string
+	std::wstring p_add; // float
+	std::wstring p_mul; // float
+	std::wstring p_sub; // float
+	std::wstring p_negMul; // float
+
+	CreateModStatEffectScript() : BaseScript()
+	{
+		this->scriptType = scriptType::createModStatEffect;
+	}
+
+};
+
+class ApplyEffectScript : public BaseScript
+{
+public:
+	std::wstring src;
+	std::wstring dst;
+
+	ApplyEffectScript() : BaseScript()
+	{
+		this->scriptType = scriptType::applyEffect;
+	}
+
+};
+
+class PutItemToPlayerInventoryScript : public BaseScript
+{
+public:
+	std::wstring src;
+
+	PutItemToPlayerInventoryScript() : BaseScript()
+	{
+		this->scriptType = scriptType::putItemToPlayerInventory;
+	}
+
+};
+
+class EditItemPropertiesScript : public BaseScript
+{
+public:
+	std::wstring src;
+	std::wstring level;
+	std::wstring rarity;
+	std::wstring itemId;
+	std::wstring itemClass;
+	std::wstring itemName;
+
+	EditItemPropertiesScript() : BaseScript()
+	{
+		this->scriptType = scriptType::editItemProperties;
+	}
+};
+
+class EditModulePropertiesScript : public BaseScript
+{
+public:
+	std::wstring src;
+	std::wstring moduleType;
+	std::wstring moduleSlot;
+	std::wstring moduleSize;
+	std::wstring powerSupply;
+	std::wstring highPowerSupply;
+	std::wstring powerPriority;
+
+	EditModulePropertiesScript() : BaseScript()
+	{
+		this->scriptType = scriptType::editModuleProperties;
 	}
 };

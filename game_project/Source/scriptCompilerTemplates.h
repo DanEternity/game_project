@@ -13,7 +13,7 @@
 namespace scriptCompilerTemplates
 {
 
-	namespace mainHandler 
+	namespace mainHandler
 	{
 
 		BaseScript * Put(CompilerCommandTemplateDataBuffer * buffer); // ok
@@ -25,10 +25,18 @@ namespace scriptCompilerTemplates
 		BaseScript * ChangeScriptEntryPoint(CompilerCommandTemplateDataBuffer * buffer); // ok - only with $self
 		BaseScript * SpendTime(CompilerCommandTemplateDataBuffer * buffer); // ok
 		BaseScript * InitRewardBuffer(CompilerCommandTemplateDataBuffer * buffer); // not ok - Do not completed
-		BaseScript * PutToPointer(CompilerCommandTemplateDataBuffer * buffer);  // ok - not tested
+		BaseScript * PutToPointer(CompilerCommandTemplateDataBuffer * buffer);  // ok
 		BaseScript * AddToRewardBuffer(CompilerCommandTemplateDataBuffer * buffer);  // not ok - Do not completed
-		BaseScript * Call(CompilerCommandTemplateDataBuffer * buffer); // ?
-		BaseScript * PutFromPointer(CompilerCommandTemplateDataBuffer * buffer);
+		BaseScript * Call(CompilerCommandTemplateDataBuffer * buffer); // ok - tested partially
+		BaseScript * PutFromPointer(CompilerCommandTemplateDataBuffer * buffer); // ok
+		BaseScript * Random(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * CreateSysModule(CompilerCommandTemplateDataBuffer * buffer); // work
+		BaseScript * CreateModStatEffect(CompilerCommandTemplateDataBuffer * buffer); // work - not full tested
+		BaseScript * ApplyEffect(CompilerCommandTemplateDataBuffer * buffer); // ? - not used for now
+		BaseScript * ApplyEffectToSysModule(CompilerCommandTemplateDataBuffer * buffer); // work
+		BaseScript * PutItemToPlayerInventory(CompilerCommandTemplateDataBuffer * buffer); // work
+		BaseScript * EditItemProperties(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * EditModuleProperties(CompilerCommandTemplateDataBuffer * buffer); // ?
 	}
 
 	namespace afterUpdateHandler 

@@ -294,6 +294,23 @@ void ScriptCompiler::setFamilyId(std::wstring id)
 	familyId = id;
 }
 
+ScriptDescriptor * ScriptCompiler::compileFile(std::string filename, std::wstring familyId)
+{
+	std::vector<std::wstring> t;
+	std::wifstream wif(filename);
+	wif.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
+	std::wstringstream wss;
+	wss << wif.rdbuf();
+	t.push_back(std::wstring(wss.str()));
+	wss.clear();
+	setFamilyId(familyId);
+	bool result = compileScriptText(t);
+	if (result)
+		return getScriptDescriptor();
+	else
+		return NULL;
+}
+
 void ScriptCompiler::postProcessCommands()
 {
 
