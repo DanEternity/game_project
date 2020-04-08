@@ -633,6 +633,8 @@ void disableAllAdventureUI()
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setVisible(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->setEnabled(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->setVisible(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->setEnabled(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->setVisible(false);
 }
 
 

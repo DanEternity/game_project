@@ -22,18 +22,20 @@ void BuildSchemeChooseCharacter()
 
 void BuildSchemeRoles()
 {
-	tgui::Panel::Ptr choosePersonPanel = tgui::Panel::create();
-	choosePersonPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel3"));
-	choosePersonPanel->setSize(840, 580);
-	choosePersonPanel->setPosition("1%", "1%");
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(choosePersonPanel, "ShipSchemePersonRoles");
+	tgui::Panel::Ptr ShipSchemePersonRoles = tgui::Panel::create();
+	ShipSchemePersonRoles->setRenderer(gEnv->globalTheme.getRenderer("Panel3"));
+	ShipSchemePersonRoles->setSize(840, 580);
+	ShipSchemePersonRoles->setPosition("1%", "1%");
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(ShipSchemePersonRoles, "ShipSchemePersonRoles");
+	ShipSchemePersonRoles->setEnabled(false);
+	ShipSchemePersonRoles->setVisible(false);
 
 	tgui::Button::Ptr showBonusesButton = tgui::Button::create();
 	showBonusesButton->setPosition("5%", "90%");
 	showBonusesButton->setSize(200, 50);
 	showBonusesButton->setText("Show Bonuses");
 	showBonusesButton->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	choosePersonPanel->add(showBonusesButton, "CrewBonusesShow");
+	ShipSchemePersonRoles->add(showBonusesButton, "CrewBonusesShow");
 }
 
 void BuildPersonSchemeUI(int equipSizeUI, int crewPersonNumber)
