@@ -490,13 +490,13 @@ void applyModuleTooltipShipUI(int id)
 
 void createModuleTooltipShipUI(Module * m)
 {
-	m->tooltipDescription->setSize(200, 160 + m->effects.size() * 30);
+	m->tooltipDescription->setSize(300, 250 + m->effects.size() * 30);
 	m->tooltipDescription->setRenderer(globalEnviroment->globalTheme.getRenderer("Panel2"));
 
 	tgui::Button::Ptr button = tgui::Button::create();
 	button->setRenderer(globalEnviroment->globalTheme.getRenderer("Button"));
 	button->setPosition(0, 0);
-	button->setSize(200, 30);
+	button->setSize(300, 30);
 	button->setText(m->name);
 	m->tooltipDescription->add(button, "nameButtonTooltip");
 
@@ -560,6 +560,9 @@ void createModuleTooltipShipUI(Module * m)
 
 	std::wstring str = L"";
 	bool first = true;
+
+	str += L"Usage Power Supply: " + std::to_wstring((int)(static_cast<Module*>(m)->powerSupply)) + L"\n";
+	str += L"Usage High Power Supply: " + std::to_wstring((int)(static_cast<Module*>(m)->highPowerSupply)) + L"\n\n";
 	for (auto i : static_cast<Module*>(m)->effects)
 	{
 		switch (static_cast<StatModEffect*>(i)->statName)

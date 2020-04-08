@@ -5,8 +5,10 @@
 
 #include "enviroment.h"
 #include "item.h"
+#include "LocaleLoader.h"
 
 void BuildSchemeChooseCharacter();
+void BuildSchemeRoles();
 void BuildPersonSchemeUI(int moduleSizeUI, int crewPersonNumber);
 void personUIElementWasClicked(const int id, tgui::Widget::Ptr widget, const std::string& signalName);
 void rmPanelClickedPerson(const int id, tgui::Widget::Ptr widget, const std::string& signalName);
