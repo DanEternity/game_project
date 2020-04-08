@@ -97,6 +97,12 @@ BaseScript * scriptCompilerTemplates::mainHandler::Ariphmetic(CompilerCommandTem
 		operatorFound = true;
 	}
 
+	if (!operatorFound && s.find(L"%", 0) != std::wstring::npos)
+	{
+		pos = s.find(L"%", 0);
+		operatorFound = true;
+	}
+
 	if (operatorFound)
 	{
 		std::wstring f1;

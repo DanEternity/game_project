@@ -1,10 +1,24 @@
 ﻿Text "Test - создание предмета"
-Put "1000" to "$_pAdd"
-Put "0" to "$_zero"
+Put "25810595" to "$_key"
+
+// hull param
+Ariphmetic "$_key * 44441" to "$_pA"
+Ariphmetic "$_pA % 10000" to "$_pA"
+Ariphmetic "$_pA / 10000" to "$_pA"
+Ariphmetic "$_pA * 360" to "$_pA"
+Ariphmetic "$_pA + 820" to "$_pA"
+
+// energy cost
+Ariphmetic "$_key * 53331" to "$_pB"
+Ariphmetic "$_pB % 10000" to "$_pB"
+Ariphmetic "$_pB / 10000" to "$_pB"
+Ariphmetic "$_pB * 20" to "$_pB"
+Ariphmetic "$_pB + 10" to "$_pB"
+
 CreateSysModule "$_p" "My_module" 
 EditItemProperties "$_p" "10" "5" "1001" "none" "Polarized Iron Hull Plating"
-EditModuleProperties "$_p" "system" "universal" "large" "28" "0" "5"
-CreateModStatEffect "$_effect" "ship" "hull" "1000" "0" "0" "0"
+EditModuleProperties "$_p" "system" "universal" "large" "$_pB" "0" "5"
+CreateModStatEffect "$_effect" "ship" "hull" "$_pA" "0" "0" "0"
 ApplyEffectToSysModule "$_effect" "$_p"
 PutItemToPlayerInventory "$_p"
 // End section

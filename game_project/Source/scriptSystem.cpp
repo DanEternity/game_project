@@ -524,6 +524,36 @@ bool ScriptSystem::p_calculateExpression(BaseObject * left, BaseObject * right, 
 			static_cast<IntObject*>(*dest)->value = leftI / rightI;
 	}
 
+	if (operation == L"%")
+	{
+		if ((*dest)->objectType == objectType::real)
+		{
+			if (rightF < 0.000001)
+			{
+				printf("Error! Ariphmetic script - Division by zero\n");
+				delete *dest;
+				return false;
+			}
+		}
+		else
+		{
+			if (rightI == 0)
+			{
+				printf("Error! Ariphmetic script - Division by zero\n");
+				delete *dest;
+				return false;
+			}
+		}
+		if ((*dest)->objectType == objectType::real)
+		{
+			printf("Error! Ariphmetic script - Cannot perform reamainder of the division operation - argument should be int\n");
+			delete *dest;
+			return false;
+		}
+		else
+			static_cast<IntObject*>(*dest)->value = leftI % rightI;
+	}
+
 	return true;
 }
 
