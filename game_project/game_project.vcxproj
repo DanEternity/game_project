@@ -246,6 +246,7 @@
     <ClCompile Include="Source\scriptMemoryUtils.cpp" />
     <ClCompile Include="Source\scriptSystem.cpp" />
     <ClCompile Include="Source\scriptUtilsUI.cpp" />
+    <ClCompile Include="Source\scriptWorkflowUtility.cpp" />
     <ClCompile Include="Source\sectorDrawUtility.cpp" />
     <ClCompile Include="Source\shipManagement.cpp" />
     <ClCompile Include="Source\shipModulesUI.cpp" />
@@ -284,6 +285,7 @@
     <ClInclude Include="Source\menuData.h" />
     <ClInclude Include="Source\menuOverlay.h" />
     <ClInclude Include="Source\character.h" />
+    <ClInclude Include="Source\objectStorage.h" />
     <ClInclude Include="Source\personEquipmentUI.h" />
     <ClInclude Include="Source\playerData.h" />
     <ClInclude Include="Source\preload.h" />
@@ -297,6 +299,7 @@
     <ClInclude Include="Source\scriptSystemData.h" />
     <ClInclude Include="Source\scriptTypes.h" />
     <ClInclude Include="Source\scriptUtilsUI.h" />
+    <ClInclude Include="Source\scriptWorkflowUtility.h" />
     <ClInclude Include="Source\sectorData.h" />
     <ClInclude Include="Source\sectorDrawUtility.h" />
     <ClInclude Include="Source\ship.h" />
@@ -315,6 +318,7 @@
   <ItemGroup>
     <Text Include="Resources\Localization\ru_ru.txt" />
     <Text Include="Resources\Scripts\Test\Test.txt" />
+    <Text Include="Resources\Scripts\Test\Test2.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

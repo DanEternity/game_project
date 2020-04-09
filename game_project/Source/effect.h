@@ -25,6 +25,9 @@ namespace statNames {
 	// it may not work for specific objects and should be ignored then
 
 	enum StatName {
+		
+		null = 0,
+
 
 		powerSupply, // ship energy for module operation
 		highPowerSupply, // ship energy for module operation
@@ -93,6 +96,7 @@ public:
 	EffectObject()
 	{
 		this->objectType = objectType::effect;
+		this->memoryControl = memoryControl::fixed;
 	}
 
 };
@@ -114,8 +118,9 @@ public:
 	// This is not battle effect
 	// It shouldn't be used as battle effect 
 
-	StatModEffect()
+	StatModEffect() : EffectObject()
 	{
+		
 		this->effectGroup = effectGroups::statModifier;
 		this->objectType = objectType::effect;
 

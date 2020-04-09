@@ -197,6 +197,27 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::putFromPointer:
 		p_processPutFromPointer(static_cast<PutFromPointerScript*>(command));
 		break;
+	case scriptType::random:
+		p_processRandom(static_cast<RandomScript*>(command));
+		break;
+	case scriptType::createSysModule:
+		p_processCreateSysModule(static_cast<CreateSysModuleScript*>(command));
+		break;
+	case scriptType::createModStatEffect:
+		p_processCreateModStatEffect(static_cast<CreateModStatEffectScript*>(command));
+		break;
+	case scriptType::applyEffectToSysModule:
+		p_processApplyEffectToSysModule(static_cast<ApplyEffectScript*>(command));
+		break;
+	case scriptType::putItemToPlayerInventory:
+		p_processPutItemToPlayerInventory(static_cast<PutItemToPlayerInventoryScript*>(command));
+		break;
+	case scriptType::editItemProperties:
+		p_processEditItemProperties(static_cast<EditItemPropertiesScript*>(command));
+		break;
+	case scriptType::editModuleProperties:
+		p_processEditModuleProperties(static_cast<EditModulePropertiesScript*>(command));
+		break;
 	default:
 		printf("Debug: Error! Script command has unknown type -> %i", sType);
 		break;
@@ -501,6 +522,36 @@ bool ScriptSystem::p_calculateExpression(BaseObject * left, BaseObject * right, 
 			static_cast<FloatObject*>(*dest)->value = leftF / rightF;
 		else
 			static_cast<IntObject*>(*dest)->value = leftI / rightI;
+	}
+
+	if (operation == L"%")
+	{
+		if ((*dest)->objectType == objectType::real)
+		{
+			if (rightF < 0.000001)
+			{
+				printf("Error! Ariphmetic script - Division by zero\n");
+				delete *dest;
+				return false;
+			}
+		}
+		else
+		{
+			if (rightI == 0)
+			{
+				printf("Error! Ariphmetic script - Division by zero\n");
+				delete *dest;
+				return false;
+			}
+		}
+		if ((*dest)->objectType == objectType::real)
+		{
+			printf("Error! Ariphmetic script - Cannot perform reamainder of the division operation - argument should be int\n");
+			delete *dest;
+			return false;
+		}
+		else
+			static_cast<IntObject*>(*dest)->value = leftI % rightI;
 	}
 
 	return true;
@@ -1342,6 +1393,356 @@ void ScriptSystem::p_processPutFromPointer(PutFromPointerScript * command)
 		return;
 	}
 
+
+}
+
+void ScriptSystem::p_processRandom(RandomScript * command)
+{
+	auto r = getRand();
+	auto dst = command->dst;
+	IntObject * obj = new IntObject(r);
+	obj->memoryControl = memoryControl::singleUse;
+	auto code = putMemoryCell(dst, obj, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+}
+
+void ScriptSystem::p_processCreateSysModule(CreateSysModuleScript * command)
+{
+
+	auto dst = command->dst;
+
+	// create item
+	// need to store in global item db
+
+	int id = gEnv->objects.nextItemId++;
+	Module * obj = new Module;
+	gEnv->objects.items[id] = obj;
+	obj->name = command->name;
+
+	auto code = putMemoryCell(dst, obj, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+}
+
+void ScriptSystem::p_processCreateModStatEffect(CreateModStatEffectScript * command)
+{
+
+	// I probably need to delete obj if creation failed
+	// because it will lose memory instead
+
+	std::wstring dst = command->dst;
+
+	int id = gEnv->objects.nextEffectId++;
+	StatModEffect * obj = new StatModEffect();
+	
+	auto tp = command->objectType;
+
+	BaseObject * targetTypeP = NULL;
+	if (!GetObjectOrConstFromMemory(command->targetType, &targetTypeP))
+	{
+		// failed
+		delete(obj);
+		return;
+	}
+	if (targetTypeP->objectType != objectType::string)
+	{
+		// failed
+		delete(obj);
+		return;
+	}
+
+	std::wstring targetType = static_cast<StringObject*>(targetTypeP)->value;
+	if (targetType == L"ship" || targetType == L"Ship")
+		obj->targetType = targetType::ship;
+	if (targetType == L"character" || targetType == L"Character")
+		obj->targetType = targetType::character;
+	delete(targetTypeP);
+
+	// other fields
+
+	bool error = false;
+
+	float p_add = scriptUtil::getArgumentFloatValue(command->p_add, p_d, error);
+	if (error)
+	{
+		// failed
+		return;
+	}
+	float p_mul = scriptUtil::getArgumentFloatValue(command->p_mul, p_d, error);
+	if (error)
+	{
+		// failed
+		return;
+	}
+	float p_sub = scriptUtil::getArgumentFloatValue(command->p_sub, p_d, error);
+	if (error)
+	{
+		// failed
+		return;
+	}
+	float p_negMul = scriptUtil::getArgumentFloatValue(command->p_negMul, p_d, error);
+	if (error)
+	{
+		// failed
+		return;
+	}
+
+	BaseObject * statNameP = NULL;
+	if (!GetObjectOrConstFromMemory(command->statName, &statNameP))
+	{
+		// failed
+		return;
+	}
+	if (statNameP->objectType != objectType::string)
+	{
+		// failed
+		return;
+	}
+
+	std::wstring statName = static_cast<StringObject*>(statNameP)->value;
+	
+	// need convert string to enum
+	
+	obj->statName = scriptUtil::getFromStringStatName(statName);
+	if (statNameP->singleUse())
+		delete (statNameP);
+
+	obj->p_add = p_add;
+	obj->p_mul = p_mul;
+	obj->p_negMul = p_negMul;
+	obj->p_sub = p_sub;
+
+	auto code = putMemoryCell(dst, obj, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	gEnv->objects.effects[id] = obj;
+
+}
+
+void ScriptSystem::p_processApplyEffectToSysModule(ApplyEffectScript * command)
+{
+	auto src = command->src;
+	auto dst = command->dst;
+
+	BaseObject * objSrc = NULL;
+
+	auto code = getMemoryCell(src, &objSrc, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	BaseObject * objDst = NULL;
+	code = getMemoryCell(dst, &objDst, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::effect)
+	{
+		// failed
+		return;
+	}
+
+	if (objDst->objectType != objectType::item)
+	{
+		// failed
+		return;
+	}
+	else
+	{
+		if (static_cast<Item*>(objDst)->itemType != itemType::module)
+		{
+			// failed
+			return;
+		}
+	}
+
+	Module * trg = static_cast<Module*>(objDst);
+
+	trg->effects.push_back(static_cast<EffectObject*>(objSrc));
+}
+
+void ScriptSystem::p_processPutItemToPlayerInventory(PutItemToPlayerInventoryScript * command)
+{
+
+	auto src = command->src;
+	BaseObject * objSrc = NULL;
+
+	auto code = getMemoryCell(src, &objSrc, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::item)
+	{
+		// failed
+		return;
+	}
+
+	for (int i(0); i<gEnv->game.player.inventory.size(); i++)
+		if (gEnv->game.player.inventory[i] == NULL)
+		{
+			// successful
+			gEnv->game.player.inventory[i] = static_cast<Item*>(objSrc);
+			return;
+		}
+
+	// failed 
+	//gEnv->game.player.inventory
+
+}
+
+void ScriptSystem::p_processEditItemProperties(EditItemPropertiesScript * command)
+{
+
+	auto src = command->src;
+	BaseObject * objSrc = NULL;
+
+	auto code = getMemoryCell(src, &objSrc, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::item)
+	{
+		// failed
+		return;
+	}
+
+	Item * obj = static_cast<Item*>(objSrc);
+
+	bool error = false;
+	int level = scriptUtil::getArgumentIntValue(command->level, p_d, error);
+	int rarity = scriptUtil::getArgumentIntValue(command->rarity, p_d, error);
+	int itemId = scriptUtil::getArgumentIntValue(command->itemId, p_d, error);
+	std::wstring itemClass = scriptUtil::getArgumentStringValue(command->itemClass, p_d, error);
+	std::wstring itemName = scriptUtil::getArgumentStringValue(command->itemName, p_d, error);
+
+	if (error)
+	{
+		// failed
+		return;
+	}
+
+	obj->level = level;
+	obj->rarity = rarity;
+	obj->itemId = itemId;
+	obj->itemClass = "";
+	for (int i(0); i < itemClass.size(); i++)
+		obj->itemClass.push_back(itemClass[i]);
+
+	obj->name = itemName;
+
+}
+
+void ScriptSystem::p_processEditModuleProperties(EditModulePropertiesScript * command)
+{
+
+	auto src = command->src;
+	BaseObject * objSrc = NULL;
+
+	auto code = getMemoryCell(src, &objSrc, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::item)
+	{
+		// failed
+		return;
+	}
+	Item * obj = static_cast<Item*>(objSrc);
+	if (obj->itemType != itemType::module)
+	{
+		// failed
+		return;
+	}
+	Module * p = static_cast<Module*>(obj);
+	
+	bool error = false;
+	std::wstring moduleType = scriptUtil::getArgumentStringValue(command->moduleType, p_d, error);
+	std::wstring moduleSlot = scriptUtil::getArgumentStringValue(command->moduleSlot, p_d, error);
+	std::wstring moduleSize = scriptUtil::getArgumentStringValue(command->moduleSize, p_d, error);
+	float powerSupply = scriptUtil::getArgumentFloatValue(command->powerSupply, p_d, error);
+	float powerHighSupply = scriptUtil::getArgumentFloatValue(command->highPowerSupply, p_d, error);
+	float powerPriority = scriptUtil::getArgumentFloatValue(command->powerPriority, p_d, error);
+
+	if (error)
+	{
+		// failed
+		return;
+	}
+
+	p->powerSupply = powerSupply;
+	p->highPowerSupply = powerHighSupply;
+	p->powerPriority = powerPriority;
+
+	// Type
+	if (moduleType == L"system" || moduleType == L"System")
+		p->moduleType = moduleType::system;
+	
+	if (moduleType == L"special" || moduleType == L"Special")
+		p->moduleType = moduleType::special;
+	
+	if (moduleType == L"weapon" || moduleType == L"Weapon")
+		p->moduleType = moduleType::weapon;
+	
+	// Size
+	if (moduleSlot == L"small" || moduleSlot == L"Small")
+		p->size = moduleSlot::small;
+	
+	if (moduleSlot == L"medium" || moduleSlot == L"Medium")
+		p->size = moduleSlot::medium;
+
+	if (moduleSlot == L"large" || moduleSlot == L"Large")
+		p->size = moduleSlot::large;
+
+	if (moduleSlot == L"huge" || moduleSlot == L"Huge")
+		p->size = moduleSlot::huge;
+
+	// Slot type
+	if (moduleSlot == L"core" || moduleSlot == L"Core")
+		p->slot = moduleSlot::core;
+
+	if (moduleSlot == L"engine" || moduleSlot == L"Engine")
+		p->slot = moduleSlot::engine;
+
+	if (moduleSlot == L"hyperdrive" || moduleSlot == L"Hyperdrive")
+		p->slot = moduleSlot::hyperdrive;
+
+	if (moduleSlot == L"system" || moduleSlot == L"System")
+		p->slot = moduleSlot::system;
+
+	if (moduleSlot == L"primaryWeapon" || moduleSlot == L"PrimaryWeapon")
+		p->slot = moduleSlot::primaryWeapon;
+
+	if (moduleSlot == L"secondaryWeapon" || moduleSlot == L"SecondaryWeapon")
+		p->slot = moduleSlot::secondaryWeapon;
+
+	if (moduleSlot == L"universal" || moduleSlot == L"Universal")
+		p->slot = moduleSlot::universal;
 
 }
 

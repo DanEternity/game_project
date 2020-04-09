@@ -42,6 +42,12 @@ public:
 	{
 		this->objectType = objectType::real;
 	}
+
+	FloatObject(float x)
+	{
+		this->objectType = objectType::real;
+		this->value = x;
+	}
 };
 
 class BooleanObject : public BaseObject

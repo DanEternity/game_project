@@ -123,6 +123,7 @@ public:
 	tgui::Panel::Ptr tooltipDescription; // owo what's this?
 	Item()
 	{
+		objectType = objectType::item;
 		itemType = itemType::null;
 		itemClass = "Not defined";
 	}
@@ -135,12 +136,18 @@ public:
 	__int64 key;
 	int quality;
 	itemModifier::ItemModifier modifier;
+
+	ItemConstructable() : Item()
+	{
+
+	}
+
 };
 
 class ItemEquipable : public ItemConstructable
 {
 public:
-	ItemEquipable()
+	ItemEquipable() : ItemConstructable()
 	{
 		ItemConstructable();
 		itemType = itemType::equipment;
@@ -162,11 +169,13 @@ public:
 
 	int powerPriority; // lower is better
 
-	Module()
+	Module() : ItemEquipable()
 	{
 		tooltipDescription = tgui::Panel::create();
 		ItemEquipable();
 		itemType = itemType::module;
+		memoryControl = memoryControl::fixed;
+		moduleType = moduleType::system;
 		online = false;
 		powerSupply = 0;
 		powerPriority = 1;
@@ -174,10 +183,12 @@ public:
 	}
 
 	Module(std::wstring name, moduleType::ModuleType moduleType,
-		moduleSlot::ModuleSlotType moduleSlot, moduleSlot::ModuleSlotSize moduleSize)
+		moduleSlot::ModuleSlotType moduleSlot, moduleSlot::ModuleSlotSize moduleSize) : ItemEquipable()
 	{
 		tooltipDescription = tgui::Panel::create();
 		this->itemType = itemType::module;
+		this->memoryControl = memoryControl::fixed;
+		this->moduleType = moduleType::system;
 		this->name = name;
 		this->moduleType = moduleType;
 		this->slot = moduleSlot;
@@ -191,16 +202,14 @@ public:
 	equipmentType::EquipmentType equipmentType;
 	equipmentSlot::EquipmentSlotType equipmentSlotType;
 
-	Equipment()
+	Equipment() : ItemEquipable()
 	{
-		ItemEquipable();
 		itemType = itemType::equipment;
 	}
 
-	Equipment(std::wstring name, equipmentSlot::EquipmentSlotType type)
+	Equipment(std::wstring name, equipmentSlot::EquipmentSlotType type) : ItemEquipable()
 	{
 		this->name = name;
-		ItemEquipable();
 		itemType = itemType::equipment;
 		this->equipmentSlotType = type;
 	}

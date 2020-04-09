@@ -132,6 +132,9 @@
     <ClCompile Include="Source\scriptCompilerUtilityParsers.cpp">
       <Filter>ScriptEngine\Compiler</Filter>
     </ClCompile>
+    <ClCompile Include="Source\scriptWorkflowUtility.cpp">
+      <Filter>ScriptEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\game.h">
@@ -311,6 +314,12 @@
     <ClInclude Include="Source\scriptCompilerUtilityParsers.h">
       <Filter>ScriptEngine\Compiler</Filter>
     </ClInclude>
+    <ClInclude Include="Source\objectStorage.h">
+      <Filter>Enviroment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\scriptWorkflowUtility.h">
+      <Filter>ScriptEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\Scripts\Test\Test.txt">
@@ -318,6 +327,9 @@
     </Text>
     <Text Include="Resources\Localization\ru_ru.txt">
       <Filter>Файлы ресурсов\Locales</Filter>
+    </Text>
+    <Text Include="Resources\Scripts\Test\Test2.txt">
+      <Filter>Файлы ресурсов</Filter>
     </Text>
   </ItemGroup>
 </Project>

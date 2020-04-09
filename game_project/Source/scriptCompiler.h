@@ -3,9 +3,13 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <fstream>
+#include <sstream>
+#include <codecvt>
 #include "envUtils.h"
 #include "compilerTemplatesFormat.h"
 #include "scriptMemoryUtils.h"
+
 
 //
 // This file contain code generation procedures
@@ -80,8 +84,10 @@ public:
 	// Return compiled script descriptor
 	ScriptDescriptor * getScriptDescriptor();
 
-
 	void setFamilyId(std::wstring id);
+
+	// compile entire file; return NULL if failed
+	ScriptDescriptor * compileFile(std::string filename, std::wstring familyId);
 
 private:
 
