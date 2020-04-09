@@ -231,6 +231,7 @@ public:
 
 	ItemResource() : Item()
 	{
+		memoryControl = memoryControl::fixed;
 		itemType = itemType::resource;
 	}
 };

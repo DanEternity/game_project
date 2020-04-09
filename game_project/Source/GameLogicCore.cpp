@@ -187,4 +187,13 @@ void LoadScriptTemplates()
 	p.mainHandler = scriptCompilerTemplates::mainHandler::IfDoJump;
 	p.postUpdateHandler = scriptCompilerTemplates::afterUpdateHandler::IfDoJump;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// CreateResourceItem
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"CREATERESOURCEITEM";
+	p.body = "\"$dst\" \"$name\" \"$count\" \"$maxCount\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::CreateResourceItem;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+
 }

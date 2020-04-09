@@ -39,6 +39,7 @@ namespace scriptType
 		editItemProperties,
 		editModuleProperties,
 		editItemConstructableProperties,
+		createResourceItem,
 	};
 }
 
@@ -416,5 +417,18 @@ public:
 	EditItemConstructablePropertiesScript() : BaseScript()
 	{
 		this->scriptType = scriptType::editItemConstructableProperties;
+	}
+};
+
+class CreateResourceItemScript : public BaseScript
+{
+public:
+	std::wstring dst;
+	std::wstring count;
+	std::wstring maxCount;
+	std::wstring name;
+	CreateResourceItemScript() : BaseScript()
+	{
+		this->scriptType = scriptType::createResourceItem;
 	}
 };

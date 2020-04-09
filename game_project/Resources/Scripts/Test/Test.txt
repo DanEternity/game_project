@@ -1,6 +1,15 @@
 ﻿#import "testMod.ItemTemplates"
 #extLinkRename "testMod.ItemTemplates->my_table"
 
+Choose "Выберете тест: " [true]"Create Item"[@testitem], [true]"create resource"[@testres];
+@testres
+
+CreateResourceItem "$_p" "Iron" "10" "64"
+EditItemProperties "$_p" "5" "2" "10" "none" "Iron"
+PutItemToPlayerInventory "$_p"
+
+Terminate
+@testitem
 Text "Test - 5 random reactors"
 Put "0" to "$_ret" // compability issues
 

@@ -110,6 +110,7 @@ private:
 	void p_processEditItemProperties(EditItemPropertiesScript * command);
 	void p_processEditModuleProperties(EditModulePropertiesScript * command);
 	void p_processEditItemConstructableProperties(EditItemConstructablePropertiesScript * command);
+	void p_processCreateResourceItem(CreateResourceItemScript * command);
 };
 
 extern ScriptSystem * scriptSystem;
