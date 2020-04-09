@@ -392,14 +392,17 @@ bool ScriptSystem::p_calculateComporator(ComparatorElement * comparator)
 	}
 	else
 	{
-		std::wstring l_arg = p_convertValueToString(comparator->left);
-		std::wstring r_arg = p_convertValueToString(comparator->right);
+	//	std::wstring l_arg = p_convertValueToString(comparator->left);
+	//	std::wstring r_arg = p_convertValueToString(comparator->right);
 
 		std::wstring op = comparator->operation;
+		bool error = false;
 
+		float l = scriptUtil::getArgumentFloatValue(comparator->left, p_d, error);
+		float r = scriptUtil::getArgumentFloatValue(comparator->right, p_d, error);
 
-		float l = _wtof(l_arg.c_str());
-		float r = _wtof(r_arg.c_str());
+	//	float l = _wtof(l_arg.c_str());
+	//	float r = _wtof(r_arg.c_str());
 
 		if (op == L"==")
 		{

@@ -62,8 +62,9 @@ void LoadScriptTemplates()
 	//Jump
 	p = CompilerCommandTemplate();
 	p.mainPrefix = L"JUMP";
-	p.body = "\"$A\" \"$B\"";
+	p.body = "\"$A\"";
 	p.mainHandler = scriptCompilerTemplates::mainHandler::Jump;
+	p.postUpdateHandler = scriptCompilerTemplates::afterUpdateHandler::Jump;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
 	// Ariphmetic
@@ -177,5 +178,13 @@ void LoadScriptTemplates()
 	p.mainPrefix = L"EDITITEMCONSTRUCTABLEPROPERTIES";
 	p.body = "\"$src\" \"$key\" \"$quality\" \"$modifier\"";
 	p.mainHandler = scriptCompilerTemplates::mainHandler::EditItemConstructableProperties;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// IfDoJump
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"IFDOJUMP";
+	p.body = "\"$A\" \"$B\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::IfDoJump;
+	p.postUpdateHandler = scriptCompilerTemplates::afterUpdateHandler::IfDoJump;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 }

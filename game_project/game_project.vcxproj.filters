@@ -331,5 +331,8 @@
     <Text Include="Resources\Scripts\Test\Test2.txt">
       <Filter>Файлы ресурсов</Filter>
     </Text>
+    <Text Include="Resources\Scripts\Test\TestCoreItem.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
   </ItemGroup>
 </Project>

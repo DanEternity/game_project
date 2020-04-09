@@ -18,6 +18,7 @@ namespace itemType {
 		null,
 		module = 1,
 		equipment,
+		resource,
 
 	};
 } // itemType
@@ -219,4 +220,17 @@ class WeaponModule : public Module
 {
 public:
 
+};
+
+class ItemResource : public Item
+{
+public:
+	
+	int count;
+	int maxCount;
+
+	ItemResource() : Item()
+	{
+		itemType = itemType::resource;
+	}
 };

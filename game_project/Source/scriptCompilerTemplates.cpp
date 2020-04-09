@@ -315,6 +315,16 @@ BaseScript * scriptCompilerTemplates::mainHandler::EditItemConstructableProperti
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::IfDoJump(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new IfDoJumpScript();
+	ComparatorElement c = parseCondition(convertExtReferences(buffer, buffer->arg["$A"]));
+	p->condition = c;
+	p->chache = buffer->arg["$B"];
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);
@@ -333,5 +343,11 @@ void scriptCompilerTemplates::afterUpdateHandler::Choose(CompilerCommandTemplate
 void scriptCompilerTemplates::afterUpdateHandler::ChangeScriptEntryPoint(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<ChangeScriptEntryPointScript*>(p1);
+	p->lineId = convertMarkerToLine(buffer, p->chache);
+}
+
+void scriptCompilerTemplates::afterUpdateHandler::IfDoJump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
+{
+	auto p = static_cast<IfDoJumpScript*>(p1);
 	p->lineId = convertMarkerToLine(buffer, p->chache);
 }

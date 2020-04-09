@@ -1,9 +1,69 @@
 ﻿#import "testMod.ItemTemplates"
 #extLinkRename "testMod.ItemTemplates->my_table"
 
-Text "Test - Вызов функции через Call"
+Text "Test - 5 random reactors"
 Put "0" to "$_ret" // compability issues
-Call "$EXT:my_table:1001" "25810596", "1000", "$_ret";
+
+Random "$_key"
+Ariphmetic "$_key % 800" to "$_quality"
+Ariphmetic "$_quality + 600" to "$_quality"
+Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
 PutItemToPlayerInventory "$_ret"
+
+Random "$_key"
+Ariphmetic "$_key % 800" to "$_quality"
+Ariphmetic "$_quality + 600" to "$_quality"
+Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
+PutItemToPlayerInventory "$_ret"
+
+Random "$_key"
+Ariphmetic "$_key % 800" to "$_quality"
+Ariphmetic "$_quality + 600" to "$_quality"
+Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
+PutItemToPlayerInventory "$_ret"
+
+Random "$_key"
+Ariphmetic "$_key % 800" to "$_quality"
+Ariphmetic "$_quality + 600" to "$_quality"
+Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
+PutItemToPlayerInventory "$_ret"
+
+Random "$_key"
+Ariphmetic "$_key % 800" to "$_quality"
+Ariphmetic "$_quality + 600" to "$_quality"
+Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
+PutItemToPlayerInventory "$_ret"
+
+Random "$_key"
+Ariphmetic "$_key % 800" to "$_quality"
+Ariphmetic "$_quality + 600" to "$_quality"
+Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
+PutItemToPlayerInventory "$_ret"
+
+Random "$_key"
+Ariphmetic "$_key % 800" to "$_quality"
+Ariphmetic "$_quality + 600" to "$_quality"
+Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
+PutItemToPlayerInventory "$_ret"
+
+Random "$_key"
+Ariphmetic "$_key % 800" to "$_quality"
+Ariphmetic "$_quality + 600" to "$_quality"
+Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
+PutItemToPlayerInventory "$_ret"
+
+Random "$_key"
+Ariphmetic "$_key % 800" to "$_quality"
+Ariphmetic "$_quality + 600" to "$_quality"
+Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
+PutItemToPlayerInventory "$_ret"
+
+Random "$_key"
+Ariphmetic "$_key % 800" to "$_quality"
+Ariphmetic "$_quality + 600" to "$_quality"
+Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
+PutItemToPlayerInventory "$_ret"
+
+
 Text "Return completed"
-Terminate
+Terminate 

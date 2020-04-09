@@ -319,6 +319,7 @@
     <Text Include="Resources\Localization\ru_ru.txt" />
     <Text Include="Resources\Scripts\Test\Test.txt" />
     <Text Include="Resources\Scripts\Test\Test2.txt" />
+    <Text Include="Resources\Scripts\Test\TestCoreItem.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

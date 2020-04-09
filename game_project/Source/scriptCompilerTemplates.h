@@ -38,6 +38,7 @@ namespace scriptCompilerTemplates
 		BaseScript * EditItemProperties(CompilerCommandTemplateDataBuffer * buffer); // ? // work
 		BaseScript * EditModuleProperties(CompilerCommandTemplateDataBuffer * buffer); // ? // work
 		BaseScript * EditItemConstructableProperties(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * IfDoJump(CompilerCommandTemplateDataBuffer * buffer); // ?
 	}
 
 	namespace afterUpdateHandler 
@@ -48,6 +49,7 @@ namespace scriptCompilerTemplates
 		void Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1);
 		void Choose(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1);
 		void ChangeScriptEntryPoint(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1);
+		void IfDoJump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1);
 	}
 
 }

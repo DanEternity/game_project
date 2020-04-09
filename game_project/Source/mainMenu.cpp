@@ -316,10 +316,19 @@ void testFunctionExecScript()
 	std::string filename = gEnv->game.workDir;
 	filename += "\\resources\\scripts\\test\\test2.txt";
 
-	ScriptCompiler * c = new ScriptCompiler();
-	ScriptDescriptor * q = c->compileFile(filename, L"testMod");
+	ScriptCompiler * c;
+	ScriptDescriptor * q;
+	
+	c = new ScriptCompiler();
+	q = c->compileFile(filename, L"testMod");
 	delete(c);
 
+	filename = gEnv->game.workDir;
+	filename += "\\resources\\scripts\\test\\testCoreItem.txt";
+	c = new ScriptCompiler();
+	q = c->compileFile(filename, L"testMod");
+	delete(c);
+	
 	filename = gEnv->game.workDir;
 	filename += "\\resources\\scripts\\test\\test.txt";
 	c = new ScriptCompiler();

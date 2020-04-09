@@ -94,6 +94,8 @@ private:
 	std::wstring errText;
 	bool error = false;
 
+	//int commandId = 0;
+	int lineID = 0; // actual line ID;
 	int line = 0;
 	int idx = 0;
 

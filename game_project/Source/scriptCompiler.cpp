@@ -257,6 +257,7 @@ bool ScriptCompiler::compileScriptText(std::vector<std::wstring> src)
 			if (src[line][idx] == '\n')
 			{
 				idx++;
+				lineID++;
 			}
 			else
 				if (line < src.size() - 1)
@@ -296,6 +297,7 @@ void ScriptCompiler::setFamilyId(std::wstring id)
 
 ScriptDescriptor * ScriptCompiler::compileFile(std::string filename, std::wstring familyId)
 {
+	lineID = 1;
 	std::vector<std::wstring> t;
 	std::wifstream wif(filename);
 	wif.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
@@ -618,7 +620,7 @@ bool ScriptCompiler::parseCommand(std::wstring s)
 
 	}
 
-	printf("Error! [Line: %i] Undefined command: (%ws)", line, s.c_str());
+	printf("Error! [Line: %i] Undefined command: (%ws)", lineID, s.c_str());
 	error = true;
 
 	return false;
