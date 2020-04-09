@@ -17,6 +17,10 @@ void updateCategoryFilters();
 
 void disableAllAdventureUI();
 
+void showItemsReward(std::vector<Item*> items);
+void applyRewardTooltip(Item *item);
+void closeRewardWindow();
+
 // ui event handlers
 
 //

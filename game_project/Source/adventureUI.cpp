@@ -240,7 +240,10 @@ void createAdventureUIButtons()
 	megaSuperModule->effects.push_back(effect);
 
 	gEnv->game.player.inventory[10] = megaSuperModule;
-	
+
+	std::vector<Item*> items;
+	items.push_back(static_cast<Item*>(megaSuperModule));
+	showItemsReward(items);
 
 	gEnv->game.player.inventory[2] = new Module();
 	gEnv->game.player.inventory[2]->name = L"roflanEbalo";
@@ -502,10 +505,10 @@ void createAdventureUIButtons()
 void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled) // whereCalled - 0 для кнопок в нижнем левом углу экрана, 1 для кнопок на панели интерфейса
 {
 	disableAllAdventureUI();
+	gEnv->game.ui.puistate = PUIState::defaultState;
 	if (whereCalled == 0)
 	{
 		gEnv->game.adventureUI.isInventoryOpen = !gEnv->game.adventureUI.isInventoryOpen;
-		gEnv->game.ui.puistate = PUIState::defaultState;
 	}
 	if (!gEnv->game.adventureUI.isInventoryOpen)
 		return;
@@ -648,4 +651,55 @@ void createPauseMenu()
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	gEnv->game.adventureGUI.add(btn);
+}
+
+void showItemsReward(std::vector<Item*> items)
+{
+	tgui::Panel::Ptr rewardPanel = tgui::Panel::create();
+	rewardPanel->setSize(700, 500);
+	rewardPanel->setPosition("30%", "15%");
+	rewardPanel->setRenderer(globalEnviroment->globalTheme.getRenderer("Panel"));
+	globalEnviroment->game.adventureGUI.add(rewardPanel, "rewardPanel");
+
+	int i = 0;
+	for (auto item : items)
+	{
+		tgui::Button::Ptr button = tgui::Button::create();
+		button->setSize(200, 50);
+		button->setPosition("(&.width - width) / 2", 25 + i);
+		button->setText(item->name);
+		button->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+		rewardPanel->add(button);
+		applyRewardTooltip(item);
+		button->setToolTip(item->tooltipDescription);
+
+		i += 75;
+	}
+
+	tgui::Button::Ptr exit = tgui::Button::create();
+	exit->setSize(200, 50);
+	exit->setPosition("70%", "88%");
+	exit->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	exit->connect("MouseReleased", closeRewardWindow);
+	exit->setText("Snova huina, skip");
+	rewardPanel->add(exit);
+}
+
+void applyRewardTooltip(Item *item)
+{
+	if (item != NULL)
+	{
+		switch (item->itemType)
+		{
+		case itemType::module:
+			createModuleTooltip(static_cast<Module*>(item));
+			tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
+		}
+	}
+}
+
+void closeRewardWindow()
+{
+	gEnv->game.adventureGUI.get<tgui::Panel>("rewardPanel")->removeAllWidgets();
+	gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("rewardPanel"));
 }
