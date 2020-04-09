@@ -24,4 +24,5 @@ public:
 	int activeOpenPersonWindow = 0;
 	bool adventureMenuActive = false;
 	PUIState::personUIstate puistate = PUIState::personUIstate::defaultState;
+
 };

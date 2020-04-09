@@ -386,7 +386,7 @@ void RebuildInventoryGridPanel()
 				switch (gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]->itemType)
 				{
 				case itemType::module:
-					gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->connect("MouseEntered", applyModuleTooltip, id);
+					gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->connect("MouseEntered", applyGridModuleTooltip, id);
 					break;
 				}
 			}
@@ -517,7 +517,7 @@ void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, cons
 
 }
 
-void applyModuleTooltip(int id)
+void applyGridModuleTooltip(int id)
 {
 	if (id < gEnv->game.player.localInventory.size())
 	{
@@ -717,6 +717,7 @@ void applyStorageTooltip(int id)
 		case itemType::module:
 			createModuleTooltip(static_cast<Module*>(gEnv->game.player.inventory[id]));
 			gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(id))->setToolTip(gEnv->game.player.inventory[id]->tooltipDescription);
+			tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
 		}
 	}
 }
