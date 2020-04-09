@@ -304,6 +304,17 @@ BaseScript * scriptCompilerTemplates::mainHandler::EditModuleProperties(Compiler
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::EditItemConstructableProperties(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new EditItemConstructablePropertiesScript();
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->key = convertExtReferences(buffer, buffer->arg["$key"]);
+	p->quality = convertExtReferences(buffer, buffer->arg["$quality"]);
+	p->modifier = convertExtReferences(buffer, buffer->arg["$modifier"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);

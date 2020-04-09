@@ -172,4 +172,10 @@ void LoadScriptTemplates()
 	p.mainHandler = scriptCompilerTemplates::mainHandler::EditModuleProperties;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
+	// EditItemConstructableProperties
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"EDITITEMCONSTRUCTABLEPROPERTIES";
+	p.body = "\"$src\" \"$key\" \"$quality\" \"$modifier\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::EditItemConstructableProperties;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 }

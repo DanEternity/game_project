@@ -402,12 +402,14 @@ bool ScriptCompiler::parseDirecive(std::wstring s)
 			}
 			else
 			{
+				wprintf(L"Error! While compiling script file. Import table not found [%ws]", table.c_str());
 				error = true;
 				return false;
 			}
 		}
 		else
 		{
+			wprintf(L"Error! While compiling script file. Import group id not found [%ws]", fml.c_str());
 			error = true;
 			return false;
 		}

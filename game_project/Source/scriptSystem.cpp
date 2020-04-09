@@ -218,6 +218,9 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::editModuleProperties:
 		p_processEditModuleProperties(static_cast<EditModulePropertiesScript*>(command));
 		break;
+	case scriptType::editItemConstructableProperties:
+		p_processEditItemConstructableProperties(static_cast<EditItemConstructablePropertiesScript*>(command));
+		break;
 	default:
 		printf("Debug: Error! Script command has unknown type -> %i", sType);
 		break;
@@ -1252,6 +1255,11 @@ void ScriptSystem::p_processCall(CallScript * command)
 				auto code = getMemoryCell(command->arg[i], &qsrc, &p_d->localMemory);
 				if (code != memoryUtil::ok)
 				{
+					// Operation can be failed because we want to share a pointer to memory
+					// but not actual object. Thats mean that we cannot use actual object here
+
+					// So there shouldn't be return function
+
 					// failed
 					return;
 				}
@@ -1743,6 +1751,71 @@ void ScriptSystem::p_processEditModuleProperties(EditModulePropertiesScript * co
 
 	if (moduleSlot == L"universal" || moduleSlot == L"Universal")
 		p->slot = moduleSlot::universal;
+
+}
+
+void ScriptSystem::p_processEditItemConstructableProperties(EditItemConstructablePropertiesScript * command)
+{
+
+	auto src = command->src;
+	BaseObject * objSrc = NULL;
+
+	auto code = getMemoryCell(src, &objSrc, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::item)
+	{
+		// failed
+		return;
+	}
+
+	Item * obj = static_cast<Item*>(objSrc);
+
+	// not a item constructable
+	if (obj->itemType != itemType::module && obj->itemType != itemType::equipment)
+	{
+		// failed
+		return;
+	}
+
+	ItemConstructable * p = static_cast<ItemConstructable*>(obj);
+
+	bool error = false;
+
+	int quality = scriptUtil::getArgumentIntValue(command->quality, p_d, error);
+	int key = scriptUtil::getArgumentIntValue(command->key, p_d, error);
+	std::wstring modifier = scriptUtil::getArgumentStringValue(command->modifier, p_d, error);
+
+	if (error)
+	{
+		// failed
+		return;
+	}
+
+	p->key = key;
+	p->quality = quality;
+
+	if (modifier == L"broken" || modifier == L"Broken")
+		p->modifier = itemModifier::broken;
+
+	if (modifier == L"bad" || modifier == L"Bad")
+		p->modifier = itemModifier::bad;
+
+	if (modifier == L"normal" || modifier == L"Normal")
+		p->modifier = itemModifier::normal;
+
+	if (modifier == L"upgrade1" || modifier == L"Upgrade1")
+		p->modifier = itemModifier::upgrade1;
+
+	if (modifier == L"upgrade2" || modifier == L"Upgrade2")
+		p->modifier = itemModifier::upgrade2;
+
+	if (modifier == L"legendary" || modifier == L"Legendary")
+		p->modifier = itemModifier::legendary;
 
 }
 

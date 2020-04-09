@@ -318,6 +318,12 @@ void testFunctionExecScript()
 
 	ScriptCompiler * c = new ScriptCompiler();
 	ScriptDescriptor * q = c->compileFile(filename, L"testMod");
+	delete(c);
+
+	filename = gEnv->game.workDir;
+	filename += "\\resources\\scripts\\test\\test.txt";
+	c = new ScriptCompiler();
+	q = c->compileFile(filename, L"testMod");
 
 	if (q != NULL)
 		addScriptToQueue(q);

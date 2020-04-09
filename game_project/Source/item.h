@@ -133,7 +133,7 @@ class ItemConstructable : public Item
 {
 public:
 	// Constructor constructor;
-	__int64 key;
+	int key;
 	int quality;
 	itemModifier::ItemModifier modifier;
 

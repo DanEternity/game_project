@@ -112,6 +112,7 @@ BaseObject * scriptUtil::getArgumentFloatObject(std::wstring arg, ScriptDescript
 			if ((obj->memoryControl & memoryControl::singleUse) != 0)
 				delete (obj);
 			obj = q;
+			obj->memoryControl = memoryControl::singleUse;
 		}
 	}
 	return obj;
@@ -173,7 +174,20 @@ BaseObject * scriptUtil::getArgumentStringObject(std::wstring arg, ScriptDescrip
 	}
 
 	if (obj->objectType != objectType::string)
-		error = true;
+	{
+		if (obj->objectType != objectType::integer)
+			error = true;
+		else
+		{
+			// convert int to float
+			StringObject * q = new StringObject();
+			q->value = std::to_wstring(static_cast<IntObject*>(obj)->value);
+			if ((obj->memoryControl & memoryControl::singleUse) != 0)
+				delete (obj);
+			obj = q;
+			obj->memoryControl = memoryControl::singleUse;
+		}
+	}
 
 	return obj;
 

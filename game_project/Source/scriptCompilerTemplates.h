@@ -35,8 +35,9 @@ namespace scriptCompilerTemplates
 		BaseScript * ApplyEffect(CompilerCommandTemplateDataBuffer * buffer); // ? - not used for now
 		BaseScript * ApplyEffectToSysModule(CompilerCommandTemplateDataBuffer * buffer); // work
 		BaseScript * PutItemToPlayerInventory(CompilerCommandTemplateDataBuffer * buffer); // work
-		BaseScript * EditItemProperties(CompilerCommandTemplateDataBuffer * buffer); // ?
-		BaseScript * EditModuleProperties(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * EditItemProperties(CompilerCommandTemplateDataBuffer * buffer); // ? // work
+		BaseScript * EditModuleProperties(CompilerCommandTemplateDataBuffer * buffer); // ? // work
+		BaseScript * EditItemConstructableProperties(CompilerCommandTemplateDataBuffer * buffer); // ?
 	}
 
 	namespace afterUpdateHandler 

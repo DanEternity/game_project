@@ -38,6 +38,7 @@ namespace scriptType
 		putItemToPlayerInventory,
 		editItemProperties,
 		editModuleProperties,
+		editItemConstructableProperties,
 	};
 }
 
@@ -401,5 +402,19 @@ public:
 	EditModulePropertiesScript() : BaseScript()
 	{
 		this->scriptType = scriptType::editModuleProperties;
+	}
+};
+
+class EditItemConstructablePropertiesScript : public BaseScript
+{
+public:
+	std::wstring src;
+	std::wstring key;
+	std::wstring quality;
+	std::wstring modifier;
+
+	EditItemConstructablePropertiesScript() : BaseScript()
+	{
+		this->scriptType = scriptType::editItemConstructableProperties;
 	}
 };

@@ -109,6 +109,7 @@ private:
 	void p_processPutItemToPlayerInventory(PutItemToPlayerInventoryScript * command);
 	void p_processEditItemProperties(EditItemPropertiesScript * command);
 	void p_processEditModuleProperties(EditModulePropertiesScript * command);
+	void p_processEditItemConstructableProperties(EditItemConstructablePropertiesScript * command);
 };
 
 extern ScriptSystem * scriptSystem;
