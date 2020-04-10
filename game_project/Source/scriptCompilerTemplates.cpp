@@ -325,6 +325,17 @@ BaseScript * scriptCompilerTemplates::mainHandler::IfDoJump(CompilerCommandTempl
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::CreateResourceItem(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new CreateResourceItemScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->count = convertExtReferences(buffer, buffer->arg["$count"]);
+	p->maxCount = convertExtReferences(buffer, buffer->arg["$maxCount"]);
+	p->name = convertExtReferences(buffer, buffer->arg["$name"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);

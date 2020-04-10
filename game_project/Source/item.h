@@ -233,6 +233,7 @@ public:
 
 	ItemResource() : Item()
 	{
+		memoryControl = memoryControl::fixed;
 		tooltipDescription = tgui::Panel::create();
 		itemType = itemType::resource;
 	}

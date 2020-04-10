@@ -38,7 +38,9 @@ namespace scriptCompilerTemplates
 		BaseScript * EditItemProperties(CompilerCommandTemplateDataBuffer * buffer); // ? // work
 		BaseScript * EditModuleProperties(CompilerCommandTemplateDataBuffer * buffer); // ? // work
 		BaseScript * EditItemConstructableProperties(CompilerCommandTemplateDataBuffer * buffer); // ?
-		BaseScript * IfDoJump(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * IfDoJump(CompilerCommandTemplateDataBuffer * buffer); // ? // work
+		BaseScript * CreateResourceItem(CompilerCommandTemplateDataBuffer * buffer); // ?
+
 	}
 
 	namespace afterUpdateHandler 

@@ -221,6 +221,9 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::editItemConstructableProperties:
 		p_processEditItemConstructableProperties(static_cast<EditItemConstructablePropertiesScript*>(command));
 		break;
+	case scriptType::createResourceItem:
+		p_processCreateResourceItem(static_cast<CreateResourceItemScript*>(command));
+		break;
 	default:
 		printf("Debug: Error! Script command has unknown type -> %i", sType);
 		break;
@@ -1820,6 +1823,31 @@ void ScriptSystem::p_processEditItemConstructableProperties(EditItemConstructabl
 	if (modifier == L"legendary" || modifier == L"Legendary")
 		p->modifier = itemModifier::legendary;
 
+}
+
+void ScriptSystem::p_processCreateResourceItem(CreateResourceItemScript * command)
+{
+	auto dst = command->dst;
+
+	// create item
+	// need to store in global item db
+
+	int id = gEnv->objects.nextItemId++;
+	ItemResource * obj = new ItemResource;
+	gEnv->objects.items[id] = obj;
+
+	bool error;
+	
+	obj->name = scriptUtil::getArgumentStringValue(command->name, p_d, error);
+	obj->count = scriptUtil::getArgumentIntValue(command->count, p_d, error);
+	obj->maxCount = scriptUtil::getArgumentIntValue(command->maxCount, p_d, error);
+
+	auto code = putMemoryCell(dst, obj, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
 }
 
 extern ScriptSystem * scriptSystem = NULL;
