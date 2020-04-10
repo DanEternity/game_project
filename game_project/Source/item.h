@@ -121,7 +121,7 @@ public:
 	itemType::ItemType itemType;
 	std::string itemClass; // item class for dependecies
 	std::wstring name;
-	tgui::Panel::Ptr tooltipDescription; // owo what's this?
+	tgui::Panel::Ptr tooltipDescription; // Panel with description of module
 	Item()
 	{
 		objectType = objectType::item;
@@ -205,11 +205,13 @@ public:
 
 	Equipment() : ItemEquipable()
 	{
+		tooltipDescription = tgui::Panel::create();
 		itemType = itemType::equipment;
 	}
 
 	Equipment(std::wstring name, equipmentSlot::EquipmentSlotType type) : ItemEquipable()
 	{
+		tooltipDescription = tgui::Panel::create();
 		this->name = name;
 		itemType = itemType::equipment;
 		this->equipmentSlotType = type;
@@ -231,6 +233,7 @@ public:
 
 	ItemResource() : Item()
 	{
+		tooltipDescription = tgui::Panel::create();
 		itemType = itemType::resource;
 	}
 };

@@ -250,7 +250,6 @@
     <ClCompile Include="Source\sectorDrawUtility.cpp" />
     <ClCompile Include="Source\shipManagement.cpp" />
     <ClCompile Include="Source\shipModulesUI.cpp" />
-    <ClCompile Include="Source\storageStuff.cpp" />
     <ClCompile Include="Source\tableInventory.cpp" />
     <ClCompile Include="Source\uiEventHandlers.cpp" />
     <ClCompile Include="Source\worldGenerator.cpp" />
@@ -306,7 +305,6 @@
     <ClInclude Include="Source\shipManagement.h" />
     <ClInclude Include="Source\shipModulesUI.h" />
     <ClInclude Include="Source\stat.h" />
-    <ClInclude Include="Source\storageStuff.h" />
     <ClInclude Include="Source\stringHashGenerator.h" />
     <ClInclude Include="Source\tableInventory.h" />
     <ClInclude Include="Source\uiData.h" />

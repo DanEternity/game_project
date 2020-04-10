@@ -111,9 +111,6 @@
     <ClCompile Include="Source\worldGenerator.cpp">
       <Filter>WorldGenerator</Filter>
     </ClCompile>
-    <ClCompile Include="Source\storageStuff.cpp">
-      <Filter>Adventure\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Source\LocaleLoader.cpp">
       <Filter>Enviroment</Filter>
     </ClCompile>
@@ -279,9 +276,6 @@
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="Source\adventureUI.h">
-      <Filter>Adventure\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\storageStuff.h">
       <Filter>Adventure\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\localization.h">

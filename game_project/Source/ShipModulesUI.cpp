@@ -30,7 +30,6 @@ void BuildShipSchemeUI(int moduleSizeUI)
 		mainShipPanel->add(btn, "ShipSchemeModule" + std::to_string(i));
 		const int id = i;
 
-		btn->connect("RightMouseReleased", UIbuttonWasClicked, id);
 	//	btn->connect("MouseReleased", UIbuttonWasClicked, id);
 
 		btn->connect("MouseReleased", handleShipModulesPanelEvent, id);
@@ -42,33 +41,47 @@ void BuildShipSchemeUI(int moduleSizeUI)
 	mainShipPanel->setEnabled(false);
 }
 
-void UIbuttonWasClicked(const int id, tgui::Widget::Ptr widget, const std::string& signalName)
+void handleShipModulesPanelEvent(const int id, tgui::Widget::Ptr widget, const std::string & signalName)
 {
+
 	if (signalName == "MouseReleased")
 	{
-		if (gEnv->game.ui.selected != -1)
+		if (gEnv->game.player.pickedItem != NULL)
 		{
-			if (static_cast<Module*>(gEnv->game.player.inventory[gEnv->game.ui.selected])->slot == gEnv->game.player.ship->modules[id]->slot)
+			auto p_module = static_cast<Module*>(gEnv->game.player.pickedItem);
+			auto type = p_module->slot;
+
+			auto s_slot = gEnv->game.player.ship->slots[id];
+
+			// compare to compability
+
+			if (s_slot.type == type)
 			{
-				Module* temp = static_cast<Module*>(gEnv->game.player.inventory[gEnv->game.ui.selected]);
+				gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(gEnv->game.player.pickedLocalInventory))->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+				auto tmp = gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId];
 
-				gEnv->game.player.inventory[gEnv->game.ui.selected] = gEnv->game.player.ship->modules[id];
-				gEnv->game.player.ship->modules[id] = temp;
+				gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.ship->modules[id];
+				gEnv->game.player.ship->modules[id] = static_cast<Module*>(tmp);
 
-				tgui::Panel::Ptr panel = gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel");
-				tgui::Panel::Ptr panel2 = gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel");
+				widget->cast<tgui::Button>()->setText(gEnv->game.player.ship->modules[id]->name);
 
-				if (gEnv->game.player.inventory[gEnv->game.ui.selected] != NULL)
-					panel->get<tgui::Button>("InventoryCell" + std::to_string(gEnv->game.ui.selected))->setText(gEnv->game.player.inventory[gEnv->game.ui.selected]->name);
-				else
-					panel->get<tgui::Button>("InventoryCell" + std::to_string(id))->setText(L"");
+				gEnv->game.player.pickedItemInvId = -1;
+				gEnv->game.player.pickedItem = NULL;
+				gEnv->game.player.pickedLocalInventory = -1;
 
-				if (gEnv->game.player.ship->modules[id] != NULL)
-					panel2->get<tgui::Button>("ShipSchemeModule" + std::to_string(id))->setText(gEnv->game.player.ship->modules[id]->name);
-				else
-					panel2->get<tgui::Button>("ShipSchemeModule" + std::to_string(id))->setText(L"");
-				gEnv->game.ui.selected = -1;
+				RebuildInventoryGridPanel();
+				updateShipValues(gEnv->game.player.ship);
+				updateShipStatsScreen();
+
+				deleteAllTooltipsShipUI();
 			}
+			else
+			{
+				// nothing
+				return;
+			}
+
+
 		}
 	}
 	if (signalName == "RightMouseReleased" && !gEnv->game.ui.rmWasClicked)
@@ -90,7 +103,7 @@ void UIbuttonWasClicked(const int id, tgui::Widget::Ptr widget, const std::strin
 		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 		btn->setText(L"Add");
 		btn->connect("MouseReleased", rmPanelClickedShip, id);
-		
+
 		btn = tgui::Button::create();
 		temp->add(btn);
 		btn->setSize(107, 31);
@@ -107,6 +120,7 @@ void UIbuttonWasClicked(const int id, tgui::Widget::Ptr widget, const std::strin
 		btn->setText(L"Cancel");
 		btn->connect("MouseReleased", rmPanelClickedShip, id);
 	}
+
 }
 
 void rmPanelClickedShip(const int id, tgui::Widget::Ptr widget, const std::string& signalName)
@@ -142,9 +156,10 @@ void rmPanelClickedShip(const int id, tgui::Widget::Ptr widget, const std::strin
 		gEnv->game.ui.rmWasClicked = false;
 
 		updateShipValues(gEnv->game.player.ship);
-		updateShipStatsScreen();
 		RebuildInventoryGridPanel();
+		updateShipStatsScreen();
 
+		deleteAllTooltipsShipUI();
 	}
 	else if (widget->cast<tgui::Button>()->getText() == L"Add")
 	{
@@ -222,52 +237,10 @@ void rmPanelChoosenAdded(const int id, const int module_id, tgui::Widget::Ptr wi
 	RebuildInventoryGridPanel();
 	updateShipStatsScreen();
 
-}
-
-void handleShipModulesPanelEvent(const int id, tgui::Widget::Ptr widget, const std::string & signalName)
-{
-
-	if (signalName == "MouseReleased")
-	{
-		if (gEnv->game.player.pickedItem != NULL)
-		{
-			auto p_module = static_cast<Module*>(gEnv->game.player.pickedItem);
-			auto type = p_module->slot;
-
-			auto s_slot = gEnv->game.player.ship->slots[id];
-
-			// compare to compability
-
-			if (s_slot.type == type)
-			{
-				gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(gEnv->game.player.pickedLocalInventory))->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-				auto tmp = gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId];
-				
-				gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.ship->modules[id];
-				gEnv->game.player.ship->modules[id] = static_cast<Module*>(tmp);
-					
-				widget->cast<tgui::Button>()->setText(gEnv->game.player.ship->modules[id]->name);
-
-				gEnv->game.player.pickedItemInvId = -1;
-				gEnv->game.player.pickedItem = NULL;
-				gEnv->game.player.pickedLocalInventory = -1;
-
-				RebuildInventoryGridPanel();
-				updateShipValues(gEnv->game.player.ship);
-				updateShipStatsScreen();
-
-			}
-			else
-			{
-				// nothing
-				return;
-			}
-
-
-		}
-	}
+	deleteAllTooltipsShipUI();
 
 }
+
 
 void buildShipStats()
 {
@@ -371,6 +344,8 @@ void updateShipStatsScreen()
 			else
 				gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(i))->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 		}
+		else
+			gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(i))->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	}
 }
 
@@ -663,7 +638,7 @@ void createModuleTooltipShipUI(Module * m)
 
 void deleteAllTooltipsShipUI()
 {
-	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
+	for (int i = 0; i < gEnv->game.player.ship->modules.size(); i++)
 	{
 		gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(i))->setToolTip(NULL);
 		gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(i))->disconnectAll("MouseEntered");

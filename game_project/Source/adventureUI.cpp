@@ -232,6 +232,13 @@ void createAdventureUIButtons()
 	// create and fill inventories
 	gEnv->game.player.inventory.resize(50, nullptr);
 
+	ItemResource* resource = new ItemResource();
+	resource->level = 0;
+	resource->count = 47;
+	resource->maxCount = 500;
+	resource->name = L"Iron";
+	gEnv->game.player.inventory[1] = resource;
+
 	Module * megaSuperModule = new Module(L"MegaKomp", moduleType::system, 
 										moduleSlot::ModuleSlotType::system,
 										moduleSlot::ModuleSlotSize::medium);
