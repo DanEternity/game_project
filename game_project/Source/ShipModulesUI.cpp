@@ -73,6 +73,7 @@ void handleShipModulesPanelEvent(const int id, tgui::Widget::Ptr widget, const s
 				updateShipValues(gEnv->game.player.ship);
 				updateShipStatsScreen();
 
+				UpdateInventoryUI();
 				deleteAllTooltipsShipUI();
 			}
 			else
@@ -159,6 +160,7 @@ void rmPanelClickedShip(const int id, tgui::Widget::Ptr widget, const std::strin
 		RebuildInventoryGridPanel();
 		updateShipStatsScreen();
 
+		UpdateInventoryUI();
 		deleteAllTooltipsShipUI();
 	}
 	else if (widget->cast<tgui::Button>()->getText() == L"Add")
@@ -237,6 +239,7 @@ void rmPanelChoosenAdded(const int id, const int module_id, tgui::Widget::Ptr wi
 	RebuildInventoryGridPanel();
 	updateShipStatsScreen();
 
+	UpdateInventoryUI();
 	deleteAllTooltipsShipUI();
 
 }

@@ -38,6 +38,7 @@ void InventoryItemClicked(TableInventory* inv, InventoryItem *item, tgui::Widget
 
 
 void BuildInventoryUI(int cellSize);
+void UpdateInventoryUI();
 void DeleteInventoryUI();
 void IntentoryResponseSignal(int cellId, std::string inventoryId, tgui::Widget::Ptr widget, const std::string & signalName);
 void rmPanelClickedInventory(const int id, tgui::Widget::Ptr widget, const std::string& signalName);

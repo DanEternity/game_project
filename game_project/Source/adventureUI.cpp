@@ -589,6 +589,12 @@ void updateCategoryFilters()
 	p->addItem(GetString("No filter"), "No filter");
 	p->setSelectedItem(GetString("No filter"));
 
+	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
+	{
+		gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(i))->setToolTip(NULL);
+		gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(i))->disconnectAll("MouseEntered");
+	}
+
 	switch (t)
 	{
 	case shipMenu::null:

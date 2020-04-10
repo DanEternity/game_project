@@ -46,6 +46,16 @@ void BuildInventoryUI(int cellSize)
 	scrollablePanel->setVisible(false);
 }
 
+void UpdateInventoryUI()
+{
+	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
+	{
+		if (gEnv->game.player.inventory[i] != NULL)
+			gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(i))->setText(gEnv->game.player.inventory[i]->name);
+		else gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(i))->setText("");
+	}
+}
+
 void DeleteInventoryUI()
 {
 }
@@ -75,6 +85,7 @@ void IntentoryResponseSignal( int cellId, std::string inventoryId, tgui::Widget:
 				panel->get<tgui::Button>("InventoryCell" + std::to_string(gEnv->game.ui.selected))->setText(L"");
 
 			gEnv->game.ui.selected = -1;
+			UpdateInventoryUI();
 			deleteAllInventoryTooltips();
 		}
 		else
@@ -239,6 +250,7 @@ void rmPanelChoosenInsert(const int id, const int item_id, int inventory, tgui::
 		else
 			panel2->get<tgui::Button>("ShipSchemeModule" + std::to_string(item_id))->setText(L"");
 
+		UpdateInventoryUI();
 		deleteAllInventoryTooltips();
 
 		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
@@ -267,6 +279,7 @@ void rmPanelChoosenInsert(const int id, const int item_id, int inventory, tgui::
 		else
 			panel2->get<tgui::Button>("Person" + std::to_string(gEnv->game.ui.activeOpenPersonWindow) + "Equip" + std::to_string(item_id))->setText(L"");
 
+		UpdateInventoryUI();
 		deleteAllInventoryTooltips();
 
 		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
@@ -376,6 +389,7 @@ void RebuildInventoryGridPanel()
 		}
 	}
 
+	UpdateInventoryUI();
 	deleteAllGridTooltips();
 	for (int id(0); id < gEnv->game.player.inventory.size(); id++)
 	{	
@@ -736,7 +750,7 @@ void deleteAllInventoryTooltips()
 	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
 	{
 		gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(i))->setToolTip(NULL);
-		gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(i))->disconnectAll("MouseEntered");
+		//gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(i))->disconnectAll("MouseEntered");
 	}
 }
 
@@ -745,7 +759,7 @@ void deleteAllGridTooltips()
 	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
 	{
 		gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(i))->setToolTip(NULL);
-		gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(i))->disconnectAll("MouseEntered");
+		//gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(i))->disconnectAll("MouseEntered");
 	}
 }
 
