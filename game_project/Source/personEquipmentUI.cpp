@@ -42,8 +42,8 @@ void BuildPersonSchemeUI(int equipSizeUI, int crewPersonNumber)
 {
 	tgui::Panel::Ptr mainPersonPanel = tgui::Panel::create();
 	mainPersonPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel3"));
-	mainPersonPanel->setSize(400, 550);
-	mainPersonPanel->setPosition("60%", "5%");
+	mainPersonPanel->setSize(600, 370);
+	mainPersonPanel->setPosition("1%", "1%");
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(mainPersonPanel, "PersonSchemeEquipPanel" + std::to_string(crewPersonNumber));
 
 	tgui::Label::Ptr characterName = tgui::Label::create();
@@ -58,7 +58,7 @@ void BuildPersonSchemeUI(int equipSizeUI, int crewPersonNumber)
 		tgui::Button::Ptr btn = tgui::Button::create();
 		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 		btn->setSize(equipSizeUI, equipSizeUI);
-		btn->setPosition(30,40+75*i);
+		btn->setPosition(i <= 3 ? 30 : 600 - 30 - equipSizeUI, i <= 3 ? 40+75*i : 40+75*(i-4));
 		if (gEnv->game.player.crew.characters[crewPersonNumber]->equipment[i] != NULL)
 			btn->setText(gEnv->game.player.crew.characters[i]->equipment[i]->name);
 		mainPersonPanel->add(btn, "Person" + std::to_string(crewPersonNumber) + "Equip" + std::to_string(i));
@@ -69,6 +69,108 @@ void BuildPersonSchemeUI(int equipSizeUI, int crewPersonNumber)
 
 	mainPersonPanel->setEnabled(false);
 	mainPersonPanel->setVisible(false);
+}
+
+void BuildStatPersonScreen(int crewPersonNumber)
+{
+	tgui::Panel::Ptr mainPersonPanel = tgui::Panel::create();
+	mainPersonPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel3"));
+	mainPersonPanel->setSize(400, 580);
+	mainPersonPanel->setPosition("1% + 610", "1%");
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(mainPersonPanel, "PersonStatScreen" + std::to_string(crewPersonNumber));
+	mainPersonPanel->setVisible(false);
+	mainPersonPanel->setEnabled(false);
+}
+
+void UpdateStatPersonScreen()
+{
+	updateCharacterStats();
+	
+	gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->removeAllWidgets();
+
+	tgui::Label::Ptr label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setPosition("(&.width - width) / 2", 10);
+	label->setText(gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->name);
+	label->setTextSize(24);
+	gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->add(label);
+
+	tgui::Label::Ptr label2 = tgui::Label::create();
+	label2->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label2->setPosition("(&.width - width) / 4", 40);
+	label2->setText(L"Class: " + gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->characterClass);
+	label2->setTextSize(20);
+	gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->add(label2);
+
+	tgui::Label::Ptr label3 = tgui::Label::create();
+	label3->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label3->setPosition("(&.width - width) / 4 * 3", 40);
+	label3->setText(L"Race: " + gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->characterRace);
+	label3->setTextSize(20);
+	gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->add(label3);
+
+	tgui::Label::Ptr label4 = tgui::Label::create();
+	label4->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label4->setPosition("(&.width - width) / 4", 70);
+	switch (gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->role){
+	case characterRole::noneRole:
+		label4->setText(L"Role: none");
+		break;
+	}
+	label4->setTextSize(20);
+	gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->add(label4);
+
+	tgui::Label::Ptr label5 = tgui::Label::create();
+	label5->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label5->setPosition("(&.width - width) / 4 * 3", 70);
+	switch (gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->role) {
+	case characterAspect::noneAspect:
+		label5->setText(L"Aspect: none");
+		break;
+	}
+	label5->setTextSize(20);
+	gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->add(label5);
+
+	tgui::Label::Ptr label6 = tgui::Label::create();
+	label6->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label6->setPosition("(&.width - width) / 2", 100);
+	label6->setText(L"Health: " + std::to_wstring((int)(gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->health.total)));
+	label6->setTextSize(20);
+	gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->add(label6);
+
+}
+
+void BuildPanelChangePersonState()
+{
+	tgui::Panel::Ptr mainPersonPanel = tgui::Panel::create();
+	mainPersonPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
+	mainPersonPanel->setSize(150, 580);
+	mainPersonPanel->setPosition("1% + 1010", "1%");
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(mainPersonPanel, "PanelChangePersonState");
+	mainPersonPanel->setVisible(false);
+	mainPersonPanel->setEnabled(false);
+
+	tgui::Button::Ptr button = tgui::Button::create();
+	button->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	button->setSize(180, 600 / 3);
+	button->setPosition(-15, 0);
+	button->setText("Inventory");
+	mainPersonPanel->add(button, "ChoosePersonInventory");
+
+	tgui::Button::Ptr button2 = tgui::Button::create();
+	button2->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	button2->setSize(180, 600 / 3);
+	button2->setPosition(-15, "33%");
+	button2->setText("Skill Tree");
+	mainPersonPanel->add(button2, "ChoosePersonInventory");
+
+	tgui::Button::Ptr button3 = tgui::Button::create();
+	button3->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	button3->setSize(180, 600 / 3);
+	button3->setPosition(-15, "66%");
+	button3->setText("Battle Abilities");
+	mainPersonPanel->add(button3, "ChoosePersonInventory");
+
 }
 
 void personUIElementWasClicked(const int id, tgui::Widget::Ptr widget, const std::string& signalName)
@@ -264,22 +366,57 @@ void rmPanelChoosenAddedPerson(const int id, const int equip_id, tgui::Widget::P
 
 void ChangeActiveCharacter(int id)
 {
-	gEnv->game.ui.puistate = PUIState::inventoryState;
-	gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->setEnabled(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->setVisible(false);
 	gEnv->game.ui.activeOpenPersonWindow = id;
-	gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->setEnabled(true);
-	gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->setVisible(true);
+	ChangePersonPanelsState(PUIState::inventoryState);
+}
 
+void ChangePersonPanelsState(PUIState::personUIstate state)
+{
 	gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel")->setEnabled(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel")->setVisible(false);
-
-	gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setEnabled(true);
-	gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setVisible(true);
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setEnabled(true);
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setVisible(true);
-
-	
 	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->setEnabled(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->setVisible(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setEnabled(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setVisible(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setEnabled(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setVisible(false);
+	for (int i = 0; i < gEnv->game.player.crew.characters.size(); i++)
+	{
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i))->setEnabled(false);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i))->setVisible(false);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i))->setEnabled(false);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i))->setVisible(false);
+
+	}
+
+	switch (state)
+	{
+	case PUIState::defaultState:
+		gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel")->setVisible(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->setVisible(true);
+		break;
+	case PUIState::inventoryState:
+		UpdateStatPersonScreen();
+		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setVisible(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setVisible(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel"
+			+ std::to_string(gEnv->game.ui.activeOpenPersonWindow))->setVisible(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel"
+			+ std::to_string(gEnv->game.ui.activeOpenPersonWindow))->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen"
+			+ std::to_string(gEnv->game.ui.activeOpenPersonWindow))->setVisible(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen"
+			+ std::to_string(gEnv->game.ui.activeOpenPersonWindow))->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PanelChangePersonState")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PanelChangePersonState")->setVisible(true);
+		break;
+	case PUIState::skillTreeState:
+		break;
+	case PUIState::battleAbilitiesState:
+		break;
+	}
 }

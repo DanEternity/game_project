@@ -132,6 +132,12 @@
     <ClCompile Include="Source\scriptWorkflowUtility.cpp">
       <Filter>ScriptEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CraftUI.cpp">
+      <Filter>Adventure\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\characterManagement.cpp">
+      <Filter>Adventure\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\game.h">
@@ -313,6 +319,15 @@
     </ClInclude>
     <ClInclude Include="Source\scriptWorkflowUtility.h">
       <Filter>ScriptEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CraftUI.h">
+      <Filter>Adventure\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\plan.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\characterManagement.h">
+      <Filter>Adventure\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -232,13 +232,6 @@ void createAdventureUIButtons()
 	// create and fill inventories
 	gEnv->game.player.inventory.resize(50, nullptr);
 
-	ItemResource* resource = new ItemResource();
-	resource->level = 0;
-	resource->count = 47;
-	resource->maxCount = 500;
-	resource->name = L"Iron";
-	gEnv->game.player.inventory[1] = resource;
-
 	Module * megaSuperModule = new Module(L"MegaKomp", moduleType::system, 
 										moduleSlot::ModuleSlotType::system,
 										moduleSlot::ModuleSlotSize::medium);
@@ -471,12 +464,21 @@ void createAdventureUIButtons()
 
 	gEnv->game.player.crew.characters[0]->equipment[0] = new Equipment(L"RoflanBoshka", equipmentSlot::head);
 
+	StatModEffect * sme10 = new StatModEffect();
+	sme10->targetType = targetType::character;
+	sme10->statName = statNames::characterHealth;
+	sme10->p_add = 60;
+	gEnv->game.player.crew.characters[0]->equipment[0]->effects.push_back(sme10);
+
 	gEnv->game.player.crew.characters.push_back(new Character(L"Ne Daun"));
 
 	BuildSchemeChooseCharacter();
 	BuildSchemeRoles();
 	BuildPersonSchemeUI(50, 0);
 	BuildPersonSchemeUI(50, 1);
+	BuildStatPersonScreen(0);
+	BuildStatPersonScreen(1);
+	BuildPanelChangePersonState();
 	CreateInventoryGridPanel(10);
 
 	// filter components
@@ -503,6 +505,7 @@ void createAdventureUIButtons()
 	editBox->connect("TextChanged", filterSearchFieldChanged);
 
 	buildShipStats();
+	BuildPlanPanel();
 	createShipModulePriorityPanel();
 
 }
@@ -538,23 +541,16 @@ void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled) // whereCa
 		gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->setVisible(true);
 		break;
 	case shipMenu::craft:
+		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setVisible(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setVisible(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PlanPanel")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PlanPanel")->setVisible(true);
 		break;
 	case shipMenu::crew:
-		switch (gEnv->game.ui.puistate)
-		{
-		case PUIState::defaultState:
-			gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel")->setEnabled(true);
-			gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel")->setVisible(true);
-			gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->setEnabled(true);
-			gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->setVisible(true);
-			break;
-		case PUIState::inventoryState:
-			break;
-		case PUIState::skillTreeState:
-			break;
-		case PUIState::battleAbilitiesState:
-			break;
-		}
+		gEnv->game.ui.puistate = PUIState::defaultState;
+		ChangePersonPanelsState(gEnv->game.ui.puistate);
 		break;
 	case shipMenu::hangar:
 		break;
@@ -640,6 +636,9 @@ void disableAllAdventureUI()
 	{
 		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i))->setEnabled(false);
 		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i))->setVisible(false);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i))->setEnabled(false);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i))->setVisible(false);
+		
 	}
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setEnabled(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setVisible(false);
@@ -651,6 +650,10 @@ void disableAllAdventureUI()
 	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->setVisible(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->setEnabled(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->setVisible(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("PlanPanel")->setEnabled(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("PlanPanel")->setVisible(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("PanelChangePersonState")->setEnabled(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("PanelChangePersonState")->setVisible(false);
 }
 
 

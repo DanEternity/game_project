@@ -62,6 +62,19 @@ namespace statNames {
 
 		fuel, // hyperdrive fuel
 
+		//character stats
+
+		characterHealth,
+		characterArmor,
+		characterShield,
+		characterBlock,
+		characterResist,
+		characterShieldReg,
+		characterActionPoints,
+		characterEnergy,
+		characterEnergyReg,
+		characterInitiative,
+
 	};
 
 }

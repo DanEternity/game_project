@@ -203,10 +203,13 @@ public:
 	equipmentType::EquipmentType equipmentType;
 	equipmentSlot::EquipmentSlotType equipmentSlotType;
 
+	std::vector<EffectObject*> effects;
+
 	Equipment() : ItemEquipable()
 	{
 		tooltipDescription = tgui::Panel::create();
 		itemType = itemType::equipment;
+		this->memoryControl = memoryControl::fixed;
 	}
 
 	Equipment(std::wstring name, equipmentSlot::EquipmentSlotType type) : ItemEquipable()
@@ -214,6 +217,7 @@ public:
 		tooltipDescription = tgui::Panel::create();
 		this->name = name;
 		itemType = itemType::equipment;
+		this->memoryControl = memoryControl::fixed;
 		this->equipmentSlotType = type;
 	}
 };

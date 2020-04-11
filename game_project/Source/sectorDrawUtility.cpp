@@ -11,7 +11,7 @@ void buildDecoration(MapDecoration * obj)
 	}
 
 	auto tex = gEnv->modelDB[obj->model];
-	
+
 	if (tex->status != modelStatus::loaded && tex->status != modelStatus::loadedAndUsed)
 	{
 		wprintf(L"Error! model <%s> not loaded \n", obj->model.c_str());

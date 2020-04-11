@@ -7,6 +7,7 @@
 #include "tableInventory.h"
 #include "storageStuff.h"
 #include "LocaleLoader.h"
+#include "CraftUI.h"
 
 void updateAdventureUI();
 void disableAllAdventureUIWidgets();
