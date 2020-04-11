@@ -644,6 +644,5 @@ void deleteAllTooltipsShipUI()
 	for (int i = 0; i < gEnv->game.player.ship->modules.size(); i++)
 	{
 		gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(i))->setToolTip(NULL);
-		gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(i))->disconnectAll("MouseEntered");
 	}
 }

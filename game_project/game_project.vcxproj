@@ -228,6 +228,8 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Source\adventureModeCore.cpp" />
     <ClCompile Include="Source\adventureUI.cpp" />
+    <ClCompile Include="Source\characterManagement.cpp" />
+    <ClCompile Include="Source\CraftUI.cpp" />
     <ClCompile Include="Source\enviroment.cpp" />
     <ClCompile Include="Source\enviromentVariablesAccess.cpp" />
     <ClCompile Include="Source\envUtils.cpp" />
@@ -260,8 +262,10 @@
     <ClInclude Include="Source\adventureModeCore.h" />
     <ClInclude Include="Source\adventureUI.h" />
     <ClInclude Include="Source\baseObject.h" />
+    <ClInclude Include="Source\characterManagement.h" />
     <ClInclude Include="Source\compilerTemplatesFormat.h" />
     <ClInclude Include="Source\convertUtils.h" />
+    <ClInclude Include="Source\CraftUI.h" />
     <ClInclude Include="Source\crewData.h" />
     <ClInclude Include="Source\effect.h" />
     <ClInclude Include="Source\enviroment.h" />
@@ -286,6 +290,7 @@
     <ClInclude Include="Source\character.h" />
     <ClInclude Include="Source\objectStorage.h" />
     <ClInclude Include="Source\personEquipmentUI.h" />
+    <ClInclude Include="Source\plan.h" />
     <ClInclude Include="Source\playerData.h" />
     <ClInclude Include="Source\preload.h" />
     <ClInclude Include="Source\scriptCompiler.h" />

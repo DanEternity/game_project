@@ -9,6 +9,7 @@
 #include "ship.h"
 #include "character.h"
 #include "crewData.h"
+#include "plan.h"
 
 class IntventoryFilter
 {
@@ -50,6 +51,9 @@ public:
 
 	// filter condition
 	IntventoryFilter inventoryFilter;
+
+	// list of all known plans
+	std::vector<Plan*> planList;
 
 	// player ship
 	Ship * ship;

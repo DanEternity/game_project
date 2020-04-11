@@ -14,18 +14,23 @@ void BuildInventoryUI(int cellSize)
 		int positionX = i % cellSize;
 		int positionY = i / cellSize;
 		const int number = i;
-		tgui::Button::Ptr button = tgui::Button::create();
+		tgui::BitmapButton::Ptr button = tgui::BitmapButton::create();
 
 		scrollablePanel->add(button, "InventoryCell"+ std::to_string(i));
 
 		button->setSize(45, 40);
 		button->setPosition(5 + positionX * 50, 10 + positionY * 50);
 		button->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-		
+
+		//tgui::Texture* tex = new tgui::Texture(gEnv->modelDB[L"butText"]->tex,sf::IntRect(0,0,45,40), sf::IntRect(0,0,45,40));
+		//button->setImage(*tex);
+
 		if (gEnv->game.player.inventory[i] != NULL)
 			button->setText(gEnv->game.player.inventory[i]->name);
 		else
 			button->setText(L"");
+
+
 
 		button->connect("MouseReleased", IntentoryResponseSignal, number, std::string("ShipInventory"));
 		button->connect("RightMouseReleased", IntentoryResponseSignal, number, std::string("ShipInventory"));
@@ -381,6 +386,13 @@ void RebuildInventoryGridPanel()
 					}
 				}
 			}
+			if (p->itemType == itemType::resource)
+			{
+				if (filter->equipmentType.size() > 0)
+				{
+						filter_ok = false;
+				}
+			}
 
 			if (!filter_ok)
 				continue;
@@ -428,7 +440,10 @@ void ApplyDefaultFilterToInventoryPanel()
 	{
 		gEnv->game.player.inventoryFilter.itemType.insert(itemType::equipment);
 	}
-
+	if (q == shipMenu::craft)
+	{
+		gEnv->game.player.inventoryFilter.itemType.insert(itemType::resource);
+	}
 }
 
 void filterSearchFieldChanged(tgui::Widget::Ptr widget, const std::string & signalName)
