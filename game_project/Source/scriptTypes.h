@@ -40,6 +40,9 @@ namespace scriptType
 		editModuleProperties,
 		editItemConstructableProperties,
 		createResourceItem,
+		createEquipmentItem,
+		editEquipmentProperties,
+		applyEffectToEquipment,
 	};
 }
 
@@ -430,5 +433,31 @@ public:
 	CreateResourceItemScript() : BaseScript()
 	{
 		this->scriptType = scriptType::createResourceItem;
+	}
+};
+
+class CreateEquipmentItemScript : public BaseScript
+{
+public:
+	std::wstring dst;
+	std::wstring name;
+
+	CreateEquipmentItemScript() : BaseScript()
+	{
+		this->scriptType = scriptType::createEquipmentItem;
+	}
+};
+
+class EditEquipmentPropertiesScript : public BaseScript
+{
+public:
+	std::wstring src;
+	// add more fields
+	std::wstring slot;
+	std::wstring name;
+
+	EditEquipmentPropertiesScript() : BaseScript()
+	{
+		this->scriptType = scriptType::editEquipmentProperties;
 	}
 };

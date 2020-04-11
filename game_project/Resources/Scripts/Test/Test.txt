@@ -1,7 +1,7 @@
 ﻿#import "testMod.ItemTemplates"
 #extLinkRename "testMod.ItemTemplates->my_table"
 
-Choose "Выберете тест: " [true]"Create Item"[@testitem], [true]"create resource"[@testres];
+Choose "Выберете тест: " [true]"Create Item"[@testitem], [true]"create resource"[@testres], [true]"create equipment"[@testeq];
 @testres
 
 CreateResourceItem "$_p" "Iron" "10" "64"
@@ -19,60 +19,27 @@ Ariphmetic "$_quality + 600" to "$_quality"
 Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
 PutItemToPlayerInventory "$_ret"
 
-Random "$_key"
-Ariphmetic "$_key % 800" to "$_quality"
-Ariphmetic "$_quality + 600" to "$_quality"
-Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
-PutItemToPlayerInventory "$_ret"
-
-Random "$_key"
-Ariphmetic "$_key % 800" to "$_quality"
-Ariphmetic "$_quality + 600" to "$_quality"
-Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
-PutItemToPlayerInventory "$_ret"
-
-Random "$_key"
-Ariphmetic "$_key % 800" to "$_quality"
-Ariphmetic "$_quality + 600" to "$_quality"
-Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
-PutItemToPlayerInventory "$_ret"
-
-Random "$_key"
-Ariphmetic "$_key % 800" to "$_quality"
-Ariphmetic "$_quality + 600" to "$_quality"
-Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
-PutItemToPlayerInventory "$_ret"
-
-Random "$_key"
-Ariphmetic "$_key % 800" to "$_quality"
-Ariphmetic "$_quality + 600" to "$_quality"
-Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
-PutItemToPlayerInventory "$_ret"
-
-Random "$_key"
-Ariphmetic "$_key % 800" to "$_quality"
-Ariphmetic "$_quality + 600" to "$_quality"
-Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
-PutItemToPlayerInventory "$_ret"
-
-Random "$_key"
-Ariphmetic "$_key % 800" to "$_quality"
-Ariphmetic "$_quality + 600" to "$_quality"
-Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
-PutItemToPlayerInventory "$_ret"
-
-Random "$_key"
-Ariphmetic "$_key % 800" to "$_quality"
-Ariphmetic "$_quality + 600" to "$_quality"
-Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
-PutItemToPlayerInventory "$_ret"
-
-Random "$_key"
-Ariphmetic "$_key % 800" to "$_quality"
-Ariphmetic "$_quality + 600" to "$_quality"
-Call "$EXT:my_table:1002" "$_key", "$_quality", "$_ret";
-PutItemToPlayerInventory "$_ret"
 
 
 Text "Return completed"
 Terminate 
+
+@testeq
+Text "Processing..."
+
+
+CreateEquipmentItem "$_it" "new_equip"
+CreateModStatEffect "$_effect" "character" "characterHealth" "1000" "0" "0" "0"
+ApplyEffectToEquipment "$_effect" "$_it"
+EditEquipmentProperties "$_it" "UBER ARMOR" "body"
+PutItemToPlayerInventory "$_it"
+
+CreateEquipmentItem "$_it" "new_equip"
+CreateModStatEffect "$_effect" "character" "characterHealth" "1000" "0" "0" "0"
+ApplyEffectToEquipment "$_effect" "$_it"
+EditEquipmentProperties "$_it" "UBER HEAD" "head"
+PutItemToPlayerInventory "$_it"
+
+
+Text "Completed"
+Terminate

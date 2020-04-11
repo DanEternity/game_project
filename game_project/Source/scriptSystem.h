@@ -111,6 +111,9 @@ private:
 	void p_processEditModuleProperties(EditModulePropertiesScript * command);
 	void p_processEditItemConstructableProperties(EditItemConstructablePropertiesScript * command);
 	void p_processCreateResourceItem(CreateResourceItemScript * command);
+	void p_processEditEquipmentProperties(EditEquipmentPropertiesScript * command); // not finished
+	void p_processCreateEquipmentItem(CreateEquipmentItemScript * command);
+	void p_processApplyEffectEquipment(ApplyEffectScript * command);
 };
 
 extern ScriptSystem * scriptSystem;

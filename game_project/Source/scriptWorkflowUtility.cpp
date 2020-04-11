@@ -246,6 +246,17 @@ statNames::StatName scriptUtil::getFromStringStatName(std::wstring name)
 	//	totalDamageMultiplier, 
 	//	fuel, 
 
+	//characterHealth,
+	//characterArmor,
+	//characterShield,
+	//characterBlock,
+	//characterResist,
+	//characterShieldReg,
+	//characterActionPoints,
+	//characterEnergy,
+	//characterEnergyReg,
+	//characterInitiative,
+
 	if (name == L"powerSupply") { return statNames::powerSupply; }
 	if (name == L"highPowerSupply") { return statNames::highPowerSupply; } 
 	if (name == L"actionPoints") { return statNames::actionPoints; } 
@@ -271,6 +282,17 @@ statNames::StatName scriptUtil::getFromStringStatName(std::wstring name)
 	if (name == L"additionalWeaponAccuracy") { return statNames::additionalWeaponAccuracy; }
 	if (name == L"totalDamageMultiplier") { return statNames::totalDamageMultiplier; } 
 	if (name == L"fuel") { return statNames::fuel; } 
+	// character
+	if (name == L"characterHealth") { return statNames::characterHealth; }
+	if (name == L"characterArmor") { return statNames::characterArmor; }
+	if (name == L"characterShield") { return statNames::characterShield; }
+	if (name == L"characterBlock") { return statNames::characterBlock; }
+	if (name == L"characterResist") { return statNames::characterResist; }
+	if (name == L"characterShieldReg") { return statNames::characterShieldReg; }
+	if (name == L"characterActionPoints") { return statNames::characterActionPoints; }
+	if (name == L"characterEnergy") { return statNames::characterEnergy; }
+	if (name == L"characterEnergyReg") { return statNames::characterEnergyReg; }
+	if (name == L"characterInitiative") { return statNames::characterInitiative; }
 
 
 

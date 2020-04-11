@@ -195,5 +195,25 @@ void LoadScriptTemplates()
 	p.mainHandler = scriptCompilerTemplates::mainHandler::CreateResourceItem;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
+	// CreateEquipmentItem
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"CREATEEQUIPMENTITEM";
+	p.body = "\"$dst\" \"$name\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::CreateEquipmentItem;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// ApplyEffectToEquipment
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"APPLYEFFECTTOEQUIPMENT";
+	p.body = "\"$A\" \"$B\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::ApplyEffectToEquipment;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// EditEquipmentProperties
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"EDITEQUIPMENTPROPERTIES";
+	p.body = "\"$src\" \"$name\" \"$slot\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::EditEquipmentProperties;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
 }

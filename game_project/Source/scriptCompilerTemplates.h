@@ -40,7 +40,9 @@ namespace scriptCompilerTemplates
 		BaseScript * EditItemConstructableProperties(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * IfDoJump(CompilerCommandTemplateDataBuffer * buffer); // ? // work
 		BaseScript * CreateResourceItem(CompilerCommandTemplateDataBuffer * buffer); // ?
-
+		BaseScript * CreateEquipmentItem(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * ApplyEffectToEquipment(CompilerCommandTemplateDataBuffer * buffer); // work
+		BaseScript * EditEquipmentProperties(CompilerCommandTemplateDataBuffer * buffer);;
 	}
 
 	namespace afterUpdateHandler 

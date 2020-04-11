@@ -224,6 +224,15 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::createResourceItem:
 		p_processCreateResourceItem(static_cast<CreateResourceItemScript*>(command));
 		break;
+	case scriptType::editEquipmentProperties:
+		p_processEditEquipmentProperties(static_cast<EditEquipmentPropertiesScript*>(command));
+		break;
+	case scriptType::createEquipmentItem:
+		p_processCreateEquipmentItem(static_cast<CreateEquipmentItemScript*>(command));
+		break;
+	case scriptType::applyEffectToEquipment:
+		p_processApplyEffectEquipment(static_cast<ApplyEffectScript*>(command));
+		break;
 	default:
 		printf("Debug: Error! Script command has unknown type -> %i", sType);
 		break;
@@ -1848,6 +1857,135 @@ void ScriptSystem::p_processCreateResourceItem(CreateResourceItemScript * comman
 		// failed
 		return;
 	}
+}
+
+void ScriptSystem::p_processEditEquipmentProperties(EditEquipmentPropertiesScript * command)
+{
+
+	auto src = command->src;
+	BaseObject * objSrc = NULL;
+
+	auto code = getMemoryCell(src, &objSrc, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::item)
+	{
+		// failed
+		return;
+	}
+
+	Item * obj = static_cast<Item*>(objSrc);
+
+
+	if ( obj->itemType != itemType::equipment)
+	{
+		// failed
+		return;
+	}
+
+	Equipment * p = static_cast<Equipment*>(obj);
+
+	bool error = false;
+
+	std::wstring name = scriptUtil::getArgumentStringValue(command->name, p_d, error);
+	std::wstring slot = scriptUtil::getArgumentStringValue(command->slot, p_d, error);
+
+	if (error)
+	{
+		// failed
+		return;
+	}
+
+	p->name = name;
+
+	// slot
+	if (slot == L"head" || slot == L"Head" || slot == L"4Head")
+		p->equipmentSlotType = equipmentSlot::head;
+
+	if (slot == L"body" || slot == L"Body")
+		p->equipmentSlotType = equipmentSlot::body;
+
+	if (slot == L"arms" || slot == L"Arms")
+		p->equipmentSlotType = equipmentSlot::arms;
+
+	if (slot == L"legs" || slot == L"Legs")
+		p->equipmentSlotType = equipmentSlot::legs;
+
+	if (slot == L"universal" || slot == L"Universal")
+		p->equipmentSlotType = equipmentSlot::universal;
+
+}
+
+void ScriptSystem::p_processCreateEquipmentItem(CreateEquipmentItemScript * command)
+{
+	auto dst = command->dst;
+
+	// create item
+	// need to store in global item db
+
+	int id = gEnv->objects.nextItemId++;
+	Equipment * obj = new Equipment;
+	gEnv->objects.items[id] = obj;
+	obj->name = command->name;
+
+	auto code = putMemoryCell(dst, obj, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+}
+
+void ScriptSystem::p_processApplyEffectEquipment(ApplyEffectScript * command)
+{
+	auto src = command->src;
+	auto dst = command->dst;
+
+	BaseObject * objSrc = NULL;
+
+	auto code = getMemoryCell(src, &objSrc, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	BaseObject * objDst = NULL;
+	code = getMemoryCell(dst, &objDst, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::effect)
+	{
+		// failed
+		return;
+	}
+
+	if (objDst->objectType != objectType::item)
+	{
+		// failed
+		return;
+	}
+	else
+	{
+		if (static_cast<Item*>(objDst)->itemType != itemType::equipment)
+		{
+			// failed
+			return;
+		}
+	}
+
+	Equipment * trg = static_cast<Equipment*>(objDst);
+
+	trg->effects.push_back(static_cast<EffectObject*>(objSrc));
 }
 
 extern ScriptSystem * scriptSystem = NULL;

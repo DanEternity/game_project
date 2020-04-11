@@ -336,6 +336,36 @@ BaseScript * scriptCompilerTemplates::mainHandler::CreateResourceItem(CompilerCo
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::CreateEquipmentItem(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new CreateEquipmentItemScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->name = convertExtReferences(buffer, buffer->arg["$name"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::ApplyEffectToEquipment(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new ApplyEffectScript();
+	p->scriptType = scriptType::applyEffectToEquipment; // override type
+
+	p->src = convertExtReferences(buffer, buffer->arg["$A"]);
+	p->dst = convertExtReferences(buffer, buffer->arg["$B"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::EditEquipmentProperties(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new EditEquipmentPropertiesScript();
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->name = convertExtReferences(buffer, buffer->arg["$name"]);
+	p->slot = convertExtReferences(buffer, buffer->arg["$slot"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);
