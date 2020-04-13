@@ -329,18 +329,24 @@
     <ClInclude Include="Source\characterManagement.h">
       <Filter>Adventure\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Source\poolObject.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Resources\Scripts\Test\Test.txt">
-      <Filter>Файлы ресурсов</Filter>
-    </Text>
     <Text Include="Resources\Localization\ru_ru.txt">
       <Filter>Файлы ресурсов\Locales</Filter>
     </Text>
-    <Text Include="Resources\Scripts\Test\Test2.txt">
+    <Text Include="Resources\Scripts\Test\Test.esl">
       <Filter>Файлы ресурсов</Filter>
     </Text>
-    <Text Include="Resources\Scripts\Test\TestCoreItem.txt">
+    <Text Include="Resources\Scripts\Test\Test2.esl">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="Resources\Scripts\Test\ESL_CORE.esl">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="Resources\Scripts\Test\TestCoreItem.esl">
       <Filter>Файлы ресурсов</Filter>
     </Text>
   </ItemGroup>

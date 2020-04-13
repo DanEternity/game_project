@@ -313,27 +313,33 @@ void testFunctionExecScript()
 
 	addScriptToQueue(c->getScriptDescriptor());*/
 
-	std::string filename = gEnv->game.workDir;
-	filename += "\\resources\\scripts\\test\\test2.txt";
-
 	ScriptCompiler * c;
 	ScriptDescriptor * q;
-	
+	std::string filename;
+		
+	//filename = gEnv->game.workDir;
+	//filename += "\\resources\\scripts\\test\\ESL_CORE.esl";
+	//c = new ScriptCompiler();
+	//q = c->compileFile(filename, L"testMod");
+	//delete(c);
+
+	filename = gEnv->game.workDir;
+	filename += "\\resources\\scripts\\test\\test.esl";
 	c = new ScriptCompiler();
 	q = c->compileFile(filename, L"testMod");
 	delete(c);
-
+	/*
 	filename = gEnv->game.workDir;
-	filename += "\\resources\\scripts\\test\\testCoreItem.txt";
+	filename += "\\resources\\scripts\\test\\testCoreItem.esl";
 	c = new ScriptCompiler();
 	q = c->compileFile(filename, L"testMod");
 	delete(c);
 	
 	filename = gEnv->game.workDir;
-	filename += "\\resources\\scripts\\test\\test.txt";
+	filename += "\\resources\\scripts\\test\\test.esl";
 	c = new ScriptCompiler();
 	q = c->compileFile(filename, L"testMod");
-
+	*/
 	if (q != NULL)
 		addScriptToQueue(q);
 

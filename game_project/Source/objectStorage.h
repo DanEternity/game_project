@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include "poolObject.h"
 #include "item.h"
 
 class ObjectStorage
@@ -11,4 +12,7 @@ public:
 
 	int nextEffectId = 0;
 	std::map<int, EffectObject*> effects;
+
+	int nextPoolId = 0;
+	std::map<int, PoolObject*> pools;
 };

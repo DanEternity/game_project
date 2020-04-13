@@ -43,6 +43,9 @@ namespace scriptType
 		createEquipmentItem,
 		editEquipmentProperties,
 		applyEffectToEquipment,
+		createPool,
+		addToPool,
+		getFromPool,
 	};
 }
 
@@ -459,5 +462,40 @@ public:
 	EditEquipmentPropertiesScript() : BaseScript()
 	{
 		this->scriptType = scriptType::editEquipmentProperties;
+	}
+};
+
+class CreatePoolScript : public BaseScript
+{
+public:
+	std::wstring dst;
+	std::wstring count;
+	CreatePoolScript() : BaseScript()
+	{
+		this->scriptType = scriptType::createPool;
+	}
+};
+
+class AddToPoolScript : public BaseScript
+{
+public:
+	std::wstring dst;
+	std::wstring weight;
+	std::vector<std::wstring> args;
+	AddToPoolScript() : BaseScript()
+	{
+		this->scriptType = scriptType::addToPool;
+	}
+};
+
+class GetFromPoolScript : public BaseScript
+{
+public:
+	std::wstring src;
+	std::wstring key;
+	std::vector<std::wstring> args;
+	GetFromPoolScript() : BaseScript()
+	{
+		this->scriptType = scriptType::getFromPool;
 	}
 };

@@ -233,8 +233,17 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::applyEffectToEquipment:
 		p_processApplyEffectEquipment(static_cast<ApplyEffectScript*>(command));
 		break;
+	case scriptType::getFromPool:
+		p_processGetFromPool(static_cast<GetFromPoolScript*>(command));
+		break;
+	case scriptType::addToPool:
+		p_processAddToPool(static_cast<AddToPoolScript*>(command));
+		break;
+	case scriptType::createPool:
+		p_processCreatePool(static_cast<CreatePoolScript*>(command));
+		break;
 	default:
-		printf("Debug: Error! Script command has unknown type -> %i", sType);
+		printf("Debug: ScriptSystem Error! Script command has unknown type -> %i", sType);
 		break;
 	}
 
@@ -1986,6 +1995,177 @@ void ScriptSystem::p_processApplyEffectEquipment(ApplyEffectScript * command)
 	Equipment * trg = static_cast<Equipment*>(objDst);
 
 	trg->effects.push_back(static_cast<EffectObject*>(objSrc));
+}
+
+void ScriptSystem::p_processCreatePool(CreatePoolScript * command)
+{
+	auto dst = command->dst;
+
+	// create item
+	// need to store in global item db
+
+	int id = gEnv->objects.nextPoolId;
+	PoolObject * obj = new PoolObject;
+	gEnv->objects.pools[id] = obj;
+
+	bool error;
+	auto argCount = scriptUtil::getArgumentIntValue(command->count, p_d, error);
+	
+	obj->argCount = argCount;
+	
+
+	auto code = putMemoryCell(dst, obj, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+}
+
+void ScriptSystem::p_processAddToPool(AddToPoolScript * command)
+{
+	auto dst = command->dst;
+
+	BaseObject * objDst = NULL;
+
+	auto code = getMemoryCell(dst, &objDst, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objDst->objectType != objectType::pool)
+	{
+		// failed
+		return;
+	}
+
+	PoolObject * obj = static_cast<PoolObject*>(objDst);
+	PoolDataCell * p = new PoolDataCell();
+	p->a = new BaseObject*[obj->argCount];
+	bool error = false;
+
+	int weight = scriptUtil::getArgumentIntValue(command->weight, p_d, error);
+	
+	if (command->args.size() != obj->argCount)
+	{
+		// failed
+		return;
+	}
+
+	for (int i(0); i < command->args.size(); i++)
+	{
+		//p->a command->args[i];
+		auto s = command->args[i];
+		BaseObject * q = NULL;
+		bool error = false;
+		q = scriptUtil::replicateStandart(s, p_d, error);
+		if (error)
+		{
+			// failed
+			return;
+		}
+		p->a[i] = q;
+
+	}
+
+	obj->AddObject(p, weight);
+
+}
+
+void ScriptSystem::p_processGetFromPool(GetFromPoolScript * command)
+{
+
+	auto src = command->src;
+
+	BaseObject * objSrc = NULL;
+
+	auto code = getMemoryCell(src, &objSrc, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::pool)
+	{
+		// failed
+		return;
+	}
+
+	PoolObject * obj = static_cast<PoolObject*>(objSrc);
+
+	bool error = false;
+
+	int key = scriptUtil::getArgumentIntValue(command->key, p_d, error);
+
+	if (command->args.size() != obj->argCount)
+	{
+		// failed
+		return;
+	}
+
+	auto q = obj->GetRandomObject(key);
+
+	for (int i(0); i < command->args.size(); i++)
+	{
+		//p->a command->args[i];
+		auto s = command->args[i];
+		BaseObject * w = q->a[i];
+
+		if (w->objectType == objectType::integer)
+		{
+			IntObject * p = new IntObject(static_cast<IntObject*>(w)->value);
+			if (w->singleUse())
+				delete(w);
+			code = putMemoryCell(s, p, &p_d->localMemory);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+			continue;
+		}
+
+		if (w->objectType == objectType::real)
+		{
+			FloatObject * p = new FloatObject(static_cast<FloatObject*>(w)->value);
+			if (w->singleUse())
+				delete(w);
+			code = putMemoryCell(s, p, &p_d->localMemory);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+			continue;
+		}
+	
+		if (w->objectType == objectType::string)
+		{
+			StringObject * p = new StringObject(static_cast<StringObject*>(w)->value);
+			if (w->singleUse())
+				delete(w);
+			code = putMemoryCell(s, p, &p_d->localMemory);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+			continue;
+		}
+
+		code = putMemoryCell(s, w, &p_d->localMemory);
+		if (code != memoryUtil::ok)
+		{
+			// failed
+			return;
+		}
+
+	}
+
+
 }
 
 extern ScriptSystem * scriptSystem = NULL;

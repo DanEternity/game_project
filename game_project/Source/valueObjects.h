@@ -32,6 +32,12 @@ public:
 	{
 		this->objectType = objectType::string;
 	}
+
+	StringObject(std::wstring arg)
+	{
+		this->objectType = objectType::string;
+		value = arg;
+	}
 };
 
 class FloatObject : public BaseObject

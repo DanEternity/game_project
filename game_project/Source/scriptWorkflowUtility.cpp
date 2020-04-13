@@ -217,6 +217,79 @@ targetType::TargetType scriptUtil::getFromStringTargetType(std::wstring name)
 	return targetType::TargetType();
 }
 
+BaseObject * scriptUtil::replicateStandart(std::wstring arg, ScriptDescriptor * sd, bool & error)
+{
+	error = false;
+	BaseObject * obj = NULL;
+
+	// check if src is const
+	if (arg.size() >= 1)
+	{
+		if (arg[0] != '$')
+		{
+			// value is const
+			auto code = convertConstToObject(arg, &obj);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				error = true;
+				return obj;
+			}
+		}
+		else
+		{
+			// get src object if not a const
+			auto code = getMemoryCell(arg, &obj, &sd->localMemory);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				error = true;
+				return obj;
+			}
+		}
+	}
+	else
+	{
+		// failed
+		// no source provided
+		error = true;
+		return obj;
+	}
+
+	if (obj->memoryControl == memoryControl::fixed)
+		return obj;
+	
+
+	if (obj->objectType == objectType::integer)
+	{
+		IntObject * p = new IntObject(static_cast<IntObject*>(obj)->value);
+		if (obj->singleUse())
+			delete(obj);
+		return p;
+	}
+
+	if (obj->objectType == objectType::real)
+	{
+		FloatObject * p = new FloatObject(static_cast<FloatObject*>(obj)->value);
+		if (obj->singleUse())
+			delete(obj);
+		return p;
+	}
+
+	if (obj->objectType == objectType::string)
+	{
+		StringObject * p = new StringObject(static_cast<StringObject*>(obj)->value);
+		if (obj->singleUse())
+			delete(obj);
+		return p;
+	}
+
+	// unsafe return
+	wprintf(L"Warning replicate function encountered unsafe argument that cannot be replicated. Arg = [%ws] \n", arg.c_str());
+	return obj;
+
+}
+
 statNames::StatName scriptUtil::getFromStringStatName(std::wstring name)
 {
 

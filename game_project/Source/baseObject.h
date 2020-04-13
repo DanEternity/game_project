@@ -18,6 +18,7 @@ namespace objectType {
 		mapSector,
 		effect,
 		item,
+		pool,
 	};
 
 } // namespace objectType
