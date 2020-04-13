@@ -7,6 +7,7 @@
 #include "item.h"
 #include "LocaleLoader.h"
 #include "characterManagement.h"
+#include "tableInventory.h"
 
 void BuildSchemeChooseCharacter();
 void BuildSchemeRoles();

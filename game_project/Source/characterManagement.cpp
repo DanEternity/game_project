@@ -43,7 +43,6 @@ void collectEquipment()
 				continue;
 
 			applyCharEquipmentEffects(c, m);
-			break;
 
 		}
 	}

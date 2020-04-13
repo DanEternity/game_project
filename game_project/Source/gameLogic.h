@@ -10,6 +10,7 @@
 
 #include <map>
 #include <string>
+#include "passiveSkill.h"
 
 #include "compilerTemplatesFormat.h"
 
@@ -28,5 +29,5 @@ public:
 
 	std::map<std::wstring, CompilerCommandTemplate> compilerCommandTemplates;
 
-
+	std::map<std::wstring, PassiveSkill> PassiveTrees;
 };
