@@ -64,6 +64,8 @@ public:
 	sf::Vector2f shipPosition = { 0, 0 };
 	// camera position (world coord) // adventure ONLY
 	sf::Vector2f cameraPosition = { 0, -600 };
+
+	float cameraSpeed = 250;
 	
 	// UI section
 	// current ship menu

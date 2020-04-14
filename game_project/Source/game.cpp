@@ -24,6 +24,13 @@ void updateGameCycle(double deltaTime)
 		case gameMode::mainMenuMode:
 			updateMainMenu();
 			break;
+		case gameMode::adventureMode:
+			//updateAdventureGameMode(deltaTime);
+			//updateAdventureUI();
+			
+			drawAdventureGameMode(deltaTime);
+			DrawAdventureUI();
+			break;
 		default:
 			// invalid game mode
 			// Probably critical error
@@ -41,7 +48,7 @@ void updateGameCycle(double deltaTime)
 			updateLoadingMode();
 			break;
 		case gameMode::adventureMode:
-			updateAdventureGameMode();
+			updateAdventureGameMode(deltaTime);
 			updateAdventureUI();
 			break;
 		default:
@@ -55,6 +62,7 @@ void updateGameCycle(double deltaTime)
 
 	if (gEnv->game.scriptSystemRequiresUpdate)
 	{
+		gEnv->scripts.scriptGui.draw();
 		scriptSystem->updateScriptEngine();
 	}
 

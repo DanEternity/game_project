@@ -1,0 +1,73 @@
+﻿#import "core.ItemModule"
+#extLinkRename "core.ItemModule->db"
+
+// input
+// arg0  arg1    arg2    arg3    arg4
+// key, quality, level, rarity, destination
+// EXAMPLE: Call "$EXT:db:1001" "41234134" "1300" "5" "1" "$_res"
+
+PutFromPointer "$_arg0" to "$_key"
+PutFromPointer "$_arg1" to "$_q" // quality
+PutFromPointer "$_arg2" to "$_level" // level
+PutFromPointer "$_arg3" to "$_rarity" // rarity
+
+Ariphmetic "$_q / 1000" to "$_qmod" // multiplier 
+
+// energy supply param
+Ariphmetic "$_key * 44441" to "$_pA"
+Ariphmetic "$_pA % 10000" to "$_pA"
+Ariphmetic "$_pA / 10000" to "$_pA"
+Ariphmetic "$_pA * 20" to "$_pA"
+Ariphmetic "$_pA + 80" to "$_pA"
+Ariphmetic "$_level * 0.4" to "$_temp"
+Ariphmetic "$_pA + $_temp" to "$_pA"
+Ariphmetic "$_rarity * 2.5" to "$_temp"
+Ariphmetic "$_pA + $_temp" to "$_pA"
+Ariphmetic "$_pA * $_qmod" to "$_pA"
+
+IfDoJump "$_q >= 1500" "@up3"
+IfDoJump "$_q >= 1300" "@up2"
+IfDoJump "$_q >= 1100" "@up1"
+IfDoJump "$_q >= 900" "@normal"
+IfDoJump "$_q >= 750" "@bad"
+
+@broken
+Put "broken" to "$_qname"
+Put "Broken Basic reactor" to "$_mname"
+Jump "@next"
+@bad
+Put "bad" to "$_qname"
+Put "Defective Basic reactor" to "$_mname"
+Jump "@next"
+@normal
+Put "normal" to "$_qname"
+Put "Basic reactor" to "$_mname"
+Jump "@next"
+@up1
+Put "upgrade1" to "$_qname"
+Put "Basic reactor+" to "$_mname"
+Jump "@next"
+@up2
+Put "upgrade2" to "$_qname"
+Put "Basic reactor++" to "$_mname"
+Jump "@next"
+@up3
+Put "legendary" to "$_qname"
+Put "Basic reactor★" to "$_mname"
+Jump "@next"
+
+@next
+CreateSysModule "$_p" "My_module" 
+EditItemProperties "$_p" "$_level" "$_rarity" "1001" "none" "$_mname"
+EditItemConstructableProperties "$_p" "$_key" "$_q" "$_qname"
+EditModuleProperties "$_p" "system" "core" "large" "0" "0" "1"
+
+CreateModStatEffect "$_effect" "ship" "powerSupply" "$_pA" "0" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+
+PutToPointer "$_p" "$_arg4"
+
+// End section
+Terminate
+
+#registerFunction "$EXT:db:1001"

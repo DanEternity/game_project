@@ -1,6 +1,11 @@
-﻿#ext "std"
-#ext "ItemResource" 
+﻿
+// ESL Core not required to be executed 
 
+// External table initialization
+#ext "std"
+#ext "ItemResource" 
+#ext "ItemModule"
+#ext "ItemEquipment"
 
 
 

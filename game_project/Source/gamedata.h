@@ -137,7 +137,12 @@ public:
 	bool globalGUIeventsRequiresUpdate = false;
 	// Does game should display adventure
 	bool gameAdventureGUIRequiresUpdate = false;
-	
+	// WASD controls
+	bool gameCanPlayerMoveWASD = false;
+	// Can trigger markers
+	bool gameCanPlayerTriggerMarkers = false;
+	// For space bar based actions
+	bool gameSpaceBarPressed = false;
 
 	// Active game mode
 	gameMode::GameMode activeGameMode = gameMode::blankMode;

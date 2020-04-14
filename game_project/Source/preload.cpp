@@ -29,6 +29,7 @@ void preloadModels()
 	createModelDescriptor(L"blankTexture2", "\\resources\\textures\\blankTexture.png");
 	createModelDescriptor(L"asteroidsSample", "\\resources\\textures\\world_decorations\\asteroids_sample.png");
 	createModelDescriptor(L"butText", "\\resources\\textures\\buttonTextureTest.png");
+	createModelDescriptor(L"markerBase", "\\resources\\textures\\System\\Marker_Base.png");
 	//createModelDescriptor(L"fsfa", "fsaf", true);
 }
 
@@ -37,14 +38,18 @@ void preloadScripts()
 	//gEnv->game.loader.scriptFilenames.push_back("\\resources\\scripts\\ESL_CORE.esl");
 	addScriptToPreloadQueue("\\resources\\scripts\\ESL_CORE.esl", L"core");
 
-//	gEnv->game.loader.scriptFilenames.push_back("\\resources\\scripts\\Items\\Resources\\101_Iron.esl");
+	// resources templaetes
 	addScriptToPreloadQueue("\\resources\\scripts\\Items\\Resources\\101_Iron.esl", L"core");
-//	gEnv->game.loader.scriptFilenames.push_back("\\resources\\scripts\\Items\\Resources\\102_Titan.esl");
 	addScriptToPreloadQueue("\\resources\\scripts\\Items\\Resources\\102_Titan.esl", L"core");
 
 
 	addScriptToPreloadQueue("\\resources\\scripts\\Items\\Resources\\111_Copper.esl", L"core");
 	addScriptToPreloadQueue("\\resources\\scripts\\Items\\Resources\\112_Bismut.esl", L"core");
+
+
+
+	// modules template
+	addScriptToPreloadQueue("\\resources\\scripts\\Items\\Modules\\1001_BasicReactor.esl", L"core");
 }
 
 void postLoad()

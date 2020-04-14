@@ -1,6 +1,8 @@
 #include "adventureUI.h"
 
 
+
+
 void updateAdventureUI()
 {
 	if (gEnv->game.adventureUI.adventureUIDrawRequired)
@@ -12,6 +14,14 @@ void updateAdventureUI()
 	{
 		disableAllAdventureUIWidgets();
 		gEnv->game.mainMenu.widgetDisable = false;
+	}
+}
+
+void DrawAdventureUI()
+{
+	if (gEnv->game.adventureUI.adventureUIDrawRequired)
+	{
+		gEnv->game.adventureGUI.draw();
 	}
 }
 
