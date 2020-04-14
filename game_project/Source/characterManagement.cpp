@@ -33,7 +33,6 @@ void clearCharacterStats()
 
 void collectEquipment()
 {
-	// check for hyperdrive
 	for (Character* c : gEnv->game.player.crew.characters)
 	{
 		for (Equipment*m : c->equipment)
@@ -44,6 +43,24 @@ void collectEquipment()
 
 			applyCharEquipmentEffects(c, m);
 
+		}
+	}
+
+	for (Character* c : gEnv->game.player.crew.characters)
+	{
+		std::wstring treeName = L"";
+		switch (c->classToInt(c->characterClass))
+		{
+		case 0:
+			treeName = L"classicTree";
+		}
+
+		for (auto p : c->skillTrees[treeName])
+		{
+			if (p->active == true)
+			{
+				applyCharacterStatEffect(c, p->effect);
+			}
 		}
 	}
 

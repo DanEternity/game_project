@@ -491,5 +491,6 @@ void skillUp(Character *c, PassiveSkill *p, std::wstring treeName, tgui::Widget:
 		{
 			
 	}*/
-	
+	p->active = true;
+	widget->setRenderer(gEnv->globalTheme.getRenderer("Button2"));
 }

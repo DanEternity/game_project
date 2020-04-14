@@ -111,14 +111,14 @@ public:
 			skill->effect = new StatModEffect();
 			skill->effect->targetType = targetType::character;
 			skill->effect->statName = statNames::characterHealth;
-			skill->effect->p_add = 10;
+			skill->effect->p_add = 20;
 			vct.push_back(skill);
 
 			skill = new PassiveSkill(L"thirdSKill", 2);
 			skill->effect = new StatModEffect();
 			skill->effect->targetType = targetType::character;
 			skill->effect->statName = statNames::characterHealth;
-			skill->effect->p_add = 10;
+			skill->effect->p_add = 30;
 			vct.push_back(skill);
 
 			skillTrees[L"classicTree"] = vct;
