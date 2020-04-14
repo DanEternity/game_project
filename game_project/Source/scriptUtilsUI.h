@@ -17,7 +17,16 @@ public:
 		gEnv->scripts.scriptGui.add(scrollablePanel);
 		scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
 		scrollablePanel->setPosition(x, y);
-		scrollablePanel->setSize(250, 200);
+		scrollablePanel->setSize(500, 200);
+	}
+
+	ChooseUI(std::string mode)
+	{
+		scrollablePanel = tgui::ScrollablePanel::create();
+		gEnv->scripts.scriptGui.add(scrollablePanel);
+		scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
+		scrollablePanel->setPosition("50% - 250", "20% + 105");
+		scrollablePanel->setSize(500, 200);
 	}
 
 	void initButtons(int count)
@@ -28,8 +37,8 @@ public:
 			chooseButton = tgui::BitmapButton::create();
 			chooseButtons.push_back(chooseButton);
 			scrollablePanel->add(chooseButton);
-			chooseButton->setPosition(0, i*35 + 10);
-			chooseButton->setSize(250, 30);
+			chooseButton->setPosition(5, i*40 + 10);
+			chooseButton->setSize(490, 35);
 			chooseButton->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 			chooseButton->connect("MouseReleased", buttonWasClicked, i);
 		}

@@ -31,6 +31,9 @@ public:
 	// unique key value
 	int key;
 
+	// background
+	std::wstring backgroundImage;
+
 	MapSector()
 	{
 		this->objectType = objectType::mapSector;

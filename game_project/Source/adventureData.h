@@ -31,4 +31,6 @@ public:
 
 	WorldGenerationData worldGeneratorData;
 
+	sf::Sprite * bgImage = NULL;
+
 };

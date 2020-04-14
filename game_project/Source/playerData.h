@@ -57,7 +57,11 @@ public:
 
 	// player ship
 	Ship * ship;
-
+	sf::Sprite * shipModel = NULL;
+	sf::Sprite * shipModelIdle = NULL;
+	sf::Sprite * shipModelMove = NULL;
+	bool PlayerShipMoving = false;
+	float shipAngle = 0;
 	CrewData crew;
 	
 	// Adventure ship position on sector (world coord)
@@ -67,6 +71,8 @@ public:
 
 	float cameraSpeed = 250;
 	
+	double HeavyUpdateTime = 0;
+
 	// UI section
 	// current ship menu
 	shipMenu::ShipMenu shipMenu = shipMenu::null;
@@ -75,5 +81,10 @@ public:
 	Item * pickedItem = NULL;
 	int pickedLocalInventory = -1; // NULL
 	int pickedItemInvId = -1; // NULL
+
+
+	// stats
+
+	int money = 0;
 
 };

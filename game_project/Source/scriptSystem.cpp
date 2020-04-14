@@ -14,7 +14,7 @@ void ScriptSystem::updateScriptEngine()
 
 			// init
 
-			chooseUI = new ChooseUI(100, 300);
+			chooseUI = new ChooseUI("auto");
 			chooseUI->setVisible(false);
 			//gEnv->scripts.scriptGui.get<tgui::TextBox>(L"scriptTextMessage")->setVisible(false);
 

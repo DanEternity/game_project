@@ -30,6 +30,10 @@ void preloadModels()
 	createModelDescriptor(L"asteroidsSample", "\\resources\\textures\\world_decorations\\asteroids_sample.png");
 	createModelDescriptor(L"butText", "\\resources\\textures\\buttonTextureTest.png");
 	createModelDescriptor(L"markerBase", "\\resources\\textures\\System\\Marker_Base.png");
+	createModelDescriptor(L"shipBase", "\\resources\\textures\\Ships\\PlayerBase.png");
+	createModelDescriptor(L"shipBaseMove", "\\resources\\textures\\Ships\\PlayerBaseMove.png");
+	createModelDescriptor(L"testBackgroundSpace", "\\resources\\textures\\World_Decorations\\spaceBG.jpg");
+	createModelDescriptor(L"decorationSpaceDebris", "\\resources\\textures\\World_Decorations\\spaceDebris01.png");
 	//createModelDescriptor(L"fsfa", "fsaf", true);
 }
 
@@ -46,6 +50,8 @@ void preloadScripts()
 	addScriptToPreloadQueue("\\resources\\scripts\\Items\\Resources\\111_Copper.esl", L"core");
 	addScriptToPreloadQueue("\\resources\\scripts\\Items\\Resources\\112_Bismut.esl", L"core");
 
+	addScriptToPreloadQueue("\\resources\\scripts\\Items\\Resources\\121_Uranium.esl", L"core");
+	addScriptToPreloadQueue("\\resources\\scripts\\Items\\Resources\\122_Plutonium.esl", L"core");
 
 
 	// modules template

@@ -792,7 +792,7 @@ int ScriptCompiler::convertMarkerToLine(std::wstring marker)
 	if (markers.find(marker) == markers.end())
 	{
 		// error
-		printf("Error! [Line: %i] Undefined marker reference: (%ws)", line, marker.c_str());
+		printf("Error! [Line: %i] Undefined marker reference: (%ws)\n", line, marker.c_str());
 		error = true;
 	}
 

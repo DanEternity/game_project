@@ -16,6 +16,12 @@ public:
 	sf::Vector2f pos;
 	ScriptDescriptor * sd; // script link
 
+	int level;
+	int danger;
+	std::wstring name;
+	std::wstring description;
+	sf::Sprite * iconImage = NULL; // Do not use if null
+
 	//sf::Vector2f pos;
 	//sf::Vector2f scale;
 

@@ -7,7 +7,7 @@
 PutFromPointer "$_arg0" to "$_count"
 
 CreateResourceItem "$_p" "tmp" "$_count" "64"
-EditItemProperties "$_p" "2" "5" "122" "none" "Titan"
+EditItemProperties "$_p" "2" "5" "122" "none" "Plutonium"
 
 PutToPointer "$_p" "$_arg1"
 

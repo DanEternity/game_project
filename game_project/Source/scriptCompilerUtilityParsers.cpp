@@ -5,7 +5,7 @@ int convertMarkerToLine(CompilerCommandTemplateDataBuffer * buffer, std::wstring
 	if (buffer->markers->find(marker) == buffer->markers->end())
 	{
 		// error
-		printf("Error! [Line: %i] Undefined marker reference: (%ws)", buffer->line, marker.c_str());
+		printf("Error! [Line: %i] Undefined marker reference: (%ws)\n", buffer->line, marker.c_str());
 		buffer->error = true;
 	}
 

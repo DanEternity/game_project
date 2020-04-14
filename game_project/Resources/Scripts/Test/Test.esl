@@ -1,6 +1,6 @@
 ﻿#import "core.ItemModule"
 #extLinkRename "core.ItemModule->dbMod"
-
+Text "QQQQ"
 Choose "Ваши инженеры смастерили новый миксер, но возможно ему можно найти более подходящее применение: " [true]"Сделайте из него ядерный реактор"[@test1];
 @test1
 

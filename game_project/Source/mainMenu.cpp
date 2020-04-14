@@ -198,8 +198,9 @@ void createMenuButtons()
 
 	auto testbox = tgui::TextBox::create();
 	testbox->setRenderer(gEnv->globalTheme.getRenderer("TextBox"));
-	testbox->setText(L"ROFLAN EBALO WWWW");
-	testbox->setPosition({ 50,50 });
+	testbox->setText(L"Script text message");
+	testbox->setPosition("50% - (width / 2)", "20% - (height / 2)");
+	testbox->setSize({ "500", "200" });
 	testbox->setReadOnly();
 	testbox->setVisible(false);
 	gEnv->scripts.scriptGui.add(testbox, "scriptTextMessage");
@@ -218,7 +219,7 @@ void createMenuButtons()
 	/*do not delete*/
 	auto testButton2 = tgui::Button::create();
 	testButton2->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	testButton2->setPosition({ "15%-40", "15%+50" });
+	testButton2->setPosition("50% + 250 - 80", "20% + 105");
 	testButton2->setSize({"80", "40"});
 	testButton2->setText(L"Next");
 	testButton2->setEnabled(false);
