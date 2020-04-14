@@ -82,6 +82,49 @@ void BuildStatPersonScreen(int crewPersonNumber)
 	mainPersonPanel->setEnabled(false);
 }
 
+void BuildPersonSkillTree(int crewPersonNumber)
+{
+	tgui::Panel::Ptr mainPersonPanel = tgui::Panel::create();
+	mainPersonPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel3"));
+	mainPersonPanel->setSize(400, 580);
+	mainPersonPanel->setPosition("1%", "1%");
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(mainPersonPanel, "PersonFirstSkillTree" + std::to_string(crewPersonNumber));
+	mainPersonPanel->setVisible(false);
+	mainPersonPanel->setEnabled(false);
+
+	Character *c = gEnv->game.player.crew.characters[crewPersonNumber];
+	std::wstring treeName = L"";
+	switch (c->classToInt(c->characterClass))
+	{
+	case 0:
+		treeName = L"classicTree";
+	}
+
+	for (int i = 1; i <= 5; i++)
+	{
+		int rep = 0;
+		for (auto j : c->skillTrees[treeName])
+		{
+			if (i == j->level)
+			{
+				tgui::Button::Ptr button = tgui::Button::create();
+				button->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+				button->setSize(100, 100);
+				button->setPosition(20 + rep*200, 10 + 200 * (i - 1));
+				mainPersonPanel->add(button);
+				button->setText(j->name);
+
+				const std::wstring str = treeName;
+
+				button->connect("MouseReleased", skillUp, &(*c), &(*j), str);
+
+
+				rep++;
+			}
+		}
+	}
+}
+
 void UpdateStatPersonScreen()
 {
 	updateCharacterStats();
@@ -156,6 +199,7 @@ void BuildPanelChangePersonState()
 	button->setPosition(-15, 0);
 	button->setText("Inventory");
 	mainPersonPanel->add(button, "ChoosePersonInventory");
+	button->connect("MouseReleased", ChangePersonPanelsState, PUIState::inventoryState);
 
 	tgui::Button::Ptr button2 = tgui::Button::create();
 	button2->setRenderer(gEnv->globalTheme.getRenderer("Button"));
@@ -163,6 +207,7 @@ void BuildPanelChangePersonState()
 	button2->setPosition(-15, "33%");
 	button2->setText("Skill Tree");
 	mainPersonPanel->add(button2, "ChoosePersonInventory");
+	button2->connect("MouseReleased", ChangePersonPanelsState, PUIState::skillTreeState);
 
 	tgui::Button::Ptr button3 = tgui::Button::create();
 	button3->setRenderer(gEnv->globalTheme.getRenderer("Button"));
@@ -170,6 +215,7 @@ void BuildPanelChangePersonState()
 	button3->setPosition(-15, "66%");
 	button3->setText("Battle Abilities");
 	mainPersonPanel->add(button3, "ChoosePersonInventory");
+	button3->connect("MouseReleased", ChangePersonPanelsState, PUIState::battleAbilitiesState);
 
 }
 
@@ -396,9 +442,11 @@ void ChangePersonPanelsState(PUIState::personUIstate state)
 		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i))->setVisible(false);
 		gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i))->setEnabled(false);
 		gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i))->setVisible(false);
-
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(i))->setEnabled(false);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(i))->setVisible(false);
 	}
 
+	
 	switch (state)
 	{
 	case PUIState::defaultState:
@@ -425,8 +473,23 @@ void ChangePersonPanelsState(PUIState::personUIstate state)
 		gEnv->game.adventureGUI.get<tgui::Panel>("PanelChangePersonState")->setVisible(true);
 		break;
 	case PUIState::skillTreeState:
+		gEnv->game.adventureGUI.get<tgui::Panel>("PanelChangePersonState")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PanelChangePersonState")->setVisible(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->setVisible(true);
 		break;
 	case PUIState::battleAbilitiesState:
 		break;
 	}
+}
+
+void skillUp(Character *c, PassiveSkill *p, std::wstring treeName, tgui::Widget::Ptr widget, const std::string& signalName)
+{
+	/*for (auto j : c->skillTrees[treeName])
+	{
+		if (i == j->level)
+		{
+			
+	}*/
+	
 }

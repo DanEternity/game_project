@@ -28,6 +28,4 @@ public:
 	// Sensor Amplifier need Sensor System
 
 	std::map<std::wstring, CompilerCommandTemplate> compilerCommandTemplates;
-
-	std::map<std::wstring, PassiveSkill> PassiveTrees;
 };

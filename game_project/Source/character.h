@@ -4,6 +4,7 @@
 #include "item.h"
 #include "stat.h"
 #include "effect.h"
+#include "passiveSkill.h"
 #include <vector>
 
 namespace characterAspect
@@ -64,7 +65,7 @@ public:
 
 	// skill tree stuff
 
-	std::map<std::wstring, std::map<StatModEffect*, bool>> skillTreePassives;
+	std::map<std::wstring, std::vector<PassiveSkill*>> skillTrees;
 
 	Character(std::wstring name)
 	{
@@ -93,5 +94,41 @@ public:
 		characterStats[statNames::characterInitiative] = &initiative;
 
 		equipment.resize(7, nullptr);
+
+		switch (classToInt(characterClass))
+		{
+		case 0:
+			std::vector<PassiveSkill*> vct;
+
+			PassiveSkill* skill = new PassiveSkill(L"baseSkill", 1);
+			skill->effect = new StatModEffect();
+			skill->effect->targetType = targetType::character;
+			skill->effect->statName = statNames::characterHealth;
+			skill->effect->p_add = 10;
+			vct.push_back(skill);
+
+			skill = new PassiveSkill(L"secondSkill", 1);
+			skill->effect = new StatModEffect();
+			skill->effect->targetType = targetType::character;
+			skill->effect->statName = statNames::characterHealth;
+			skill->effect->p_add = 10;
+			vct.push_back(skill);
+
+			skill = new PassiveSkill(L"thirdSKill", 2);
+			skill->effect = new StatModEffect();
+			skill->effect->targetType = targetType::character;
+			skill->effect->statName = statNames::characterHealth;
+			skill->effect->p_add = 10;
+			vct.push_back(skill);
+
+			skillTrees[L"classicTree"] = vct;
+			break;
+		}
+	}
+
+	int classToInt(std::wstring persClass)
+	{
+		if (persClass == L"None")
+			return 0;
 	}
 };

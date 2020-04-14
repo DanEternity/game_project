@@ -241,10 +241,6 @@ void createAdventureUIButtons()
 
 	gEnv->game.player.inventory[10] = megaSuperModule;
 
-	std::vector<Item*> items;
-	items.push_back(static_cast<Item*>(megaSuperModule));
-	showItemsReward(items);
-
 	gEnv->game.player.inventory[2] = new Module();
 	gEnv->game.player.inventory[2]->name = L"roflanEbalo";
 	gEnv->game.player.inventory[2]->itemType = itemType::module;
@@ -478,6 +474,8 @@ void createAdventureUIButtons()
 	BuildPersonSchemeUI(50, 1);
 	BuildStatPersonScreen(0);
 	BuildStatPersonScreen(1);
+	BuildPersonSkillTree(0);
+	BuildPersonSkillTree(1);
 	BuildPanelChangePersonState();
 	CreateInventoryGridPanel(10);
 

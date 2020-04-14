@@ -19,6 +19,7 @@ namespace objectType {
 		effect,
 		item,
 		pool,
+		skillObject
 	};
 
 } // namespace objectType

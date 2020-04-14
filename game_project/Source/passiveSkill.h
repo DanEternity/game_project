@@ -9,11 +9,15 @@ public:
 	std::wstring name;
 	int level;
 	bool active;
+	StatModEffect* effect;
 
-	passiveSkill(std::wstring name, int level)
+	PassiveSkill(std::wstring name, int level)
 	{
+		this->objectType = objectType::skillObject;
+		this->memoryControl = memoryControl::fixed;
 		this->name = name;
 		this->level = level;
 		active = false;
+		
 	}
 };
