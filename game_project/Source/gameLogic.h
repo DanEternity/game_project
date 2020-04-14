@@ -10,6 +10,7 @@
 
 #include <map>
 #include <string>
+#include "passiveSkill.h"
 
 #include "compilerTemplatesFormat.h"
 
@@ -27,6 +28,4 @@ public:
 	// Sensor Amplifier need Sensor System
 
 	std::map<std::wstring, CompilerCommandTemplate> compilerCommandTemplates;
-
-
 };

@@ -289,6 +289,7 @@
     <ClInclude Include="Source\menuOverlay.h" />
     <ClInclude Include="Source\character.h" />
     <ClInclude Include="Source\objectStorage.h" />
+    <ClInclude Include="Source\passiveSkill.h" />
     <ClInclude Include="Source\personEquipmentUI.h" />
     <ClInclude Include="Source\plan.h" />
     <ClInclude Include="Source\playerData.h" />

@@ -329,6 +329,9 @@
     <ClInclude Include="Source\characterManagement.h">
       <Filter>Adventure\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Source\passiveSkill.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
     <ClInclude Include="Source\poolObject.h">
       <Filter>Objects</Filter>
     </ClInclude>

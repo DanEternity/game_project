@@ -15,4 +15,7 @@ public:
 
 	int nextPoolId = 0;
 	std::map<int, PoolObject*> pools;
+
+	int nextSkillId = 0;
+	std::map<int, PassiveSkill*> skills;
 };
