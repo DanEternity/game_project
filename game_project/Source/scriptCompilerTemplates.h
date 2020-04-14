@@ -42,7 +42,10 @@ namespace scriptCompilerTemplates
 		BaseScript * CreateResourceItem(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * CreateEquipmentItem(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * ApplyEffectToEquipment(CompilerCommandTemplateDataBuffer * buffer); // work
-		BaseScript * EditEquipmentProperties(CompilerCommandTemplateDataBuffer * buffer);;
+		BaseScript * EditEquipmentProperties(CompilerCommandTemplateDataBuffer * buffer); // work // not finished
+		BaseScript * CreatePool(CompilerCommandTemplateDataBuffer * buffer);
+		BaseScript * AddToPool(CompilerCommandTemplateDataBuffer * buffer);
+		BaseScript * GetFromPool(CompilerCommandTemplateDataBuffer * buffer);
 	}
 
 	namespace afterUpdateHandler 

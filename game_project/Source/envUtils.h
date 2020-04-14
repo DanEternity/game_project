@@ -116,3 +116,10 @@ std::wstring createExternalTable();
 ///
 void deleteExternalTable(std::wstring id);
 #pragma endregion
+
+
+//
+//
+//
+
+void addScriptToPreloadQueue(std::string filename, std::wstring familyId);

@@ -1,0 +1,15 @@
+﻿
+// ESL Core not required to be executed 
+
+// External table initialization
+#ext "std"
+#ext "ItemResource" 
+#ext "ItemModule"
+#ext "ItemEquipment"
+
+
+
+// End section
+Terminate
+
+#registerFunction "$EXT:std:init"

@@ -1,0 +1,10 @@
+﻿#ext "std"
+#ext "ItemResource" 
+
+
+
+
+// End section
+Terminate
+
+#registerFunction "$EXT:std:init"

@@ -10,3 +10,4 @@
 void preloadResources();
 
 void preloadModels();
+void preloadScripts();

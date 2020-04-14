@@ -209,3 +209,11 @@ void deleteExternalTable(std::wstring id)
 
 	gEnv->extTables.erase(id);
 }
+
+void addScriptToPreloadQueue(std::string filename, std::wstring familyId)
+{
+	ScriptLoaderInfo q;
+	q.filename = filename;
+	q.familyId = familyId;
+	gEnv->game.loader.scriptFilenames.push_back(q);
+}

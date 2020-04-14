@@ -3,7 +3,7 @@
 void InitGameLogic()
 {
 	LoadModuleDependities();
-	LoadScriptTemplates();
+	//LoadScriptTemplates();
 
 }
 
@@ -214,6 +214,27 @@ void LoadScriptTemplates()
 	p.mainPrefix = L"EDITEQUIPMENTPROPERTIES";
 	p.body = "\"$src\" \"$name\" \"$slot\"";
 	p.mainHandler = scriptCompilerTemplates::mainHandler::EditEquipmentProperties;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// CreatePool
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"CREATEPOOL";
+	p.body = "\"$dst\" \"$argCount\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::CreatePool;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// AddToPool
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"ADDTOPOOL";
+	p.body = "\"$dst\" \"$weight\" %\"$arg\"%,;";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::AddToPool;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// GetFromPool
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"GETFROMPOOL";
+	p.body = "\"$src\" \"$key\" %\"$arg\"%,;";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::GetFromPool;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
 }

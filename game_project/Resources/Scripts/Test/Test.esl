@@ -1,0 +1,20 @@
+﻿#import "core.ItemResource"
+#extLinkRename "core.ItemResource->dbRes"
+
+Choose "Выберете тест: " [true]"Create resource"[@test1];
+@test1
+
+Put "0" "$_res"
+Call "$EXT:dbRes:101" "64", "$_res";
+PutItemToPlayerInventory "$_res"
+
+Call "$EXT:dbRes:102" "32", "$_res";
+PutItemToPlayerInventory "$_res"
+
+Call "$EXT:dbRes:111" "22", "$_res";
+PutItemToPlayerInventory "$_res"
+
+Terminate
+
+@exit 
+Terminate 

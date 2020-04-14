@@ -1,0 +1,17 @@
+﻿#import "core.ItemResource"
+#extLinkRename "core.ItemResource->db"
+
+// input
+// count destination
+
+PutFromPointer "$_arg0" to "$_count"
+
+CreateResourceItem "$_p" "tmp" "$_count" "64"
+EditItemProperties "$_p" "3" "5" "123" "none" "Tritium"
+
+PutToPointer "$_p" "$_arg1"
+
+// End section
+Terminate
+
+#registerFunction "$EXT:db:123"

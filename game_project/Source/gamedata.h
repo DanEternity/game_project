@@ -62,6 +62,12 @@ public:
 	AdventureUIState adventureUIState;
 };
 
+struct ScriptLoaderInfo
+{
+	std::string filename;
+	std::wstring familyId;
+};
+
 // Loader variables
 class ResourseLoader
 {
@@ -70,6 +76,9 @@ public:
 	std::map<std::wstring, ModelDescriptor *>::iterator pointer;
 
 	std::string task = "null";
+
+	std::vector<ScriptLoaderInfo> scriptFilenames;
+	int scriptFilenameId;
 
 };
 

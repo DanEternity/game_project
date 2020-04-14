@@ -23,6 +23,8 @@ namespace scriptUtil
 	BaseObject * getArgumentStringObject(std::wstring arg, ScriptDescriptor * sd, bool &error);
 	std::wstring getArgumentStringValue(std::wstring arg, ScriptDescriptor * sd, bool &error);
 
+	// Make copy of object
+	BaseObject * replicateStandart(std::wstring arg, ScriptDescriptor * sd, bool &error);
 
 	statNames::StatName getFromStringStatName(std::wstring name);
 	targetType::TargetType getFromStringTargetType(std::wstring name);

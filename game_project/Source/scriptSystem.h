@@ -114,6 +114,9 @@ private:
 	void p_processEditEquipmentProperties(EditEquipmentPropertiesScript * command); // not finished
 	void p_processCreateEquipmentItem(CreateEquipmentItemScript * command);
 	void p_processApplyEffectEquipment(ApplyEffectScript * command);
+	void p_processCreatePool(CreatePoolScript * command);
+	void p_processAddToPool(AddToPoolScript * command);
+	void p_processGetFromPool(GetFromPoolScript * command);
 };
 
 extern ScriptSystem * scriptSystem;

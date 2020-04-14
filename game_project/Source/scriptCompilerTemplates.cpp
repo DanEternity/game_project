@@ -366,6 +366,45 @@ BaseScript * scriptCompilerTemplates::mainHandler::EditEquipmentProperties(Compi
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::CreatePool(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new CreatePoolScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->count = convertExtReferences(buffer, buffer->arg["$argCount"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::AddToPool(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new AddToPoolScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->weight = convertExtReferences(buffer, buffer->arg["$weight"]);
+	int variants = 0;
+	while (buffer->arg.find("$arg" + std::to_string(variants + 1)) != buffer->arg.end())
+	{
+		variants++;
+		p->args.push_back(convertExtReferences(buffer, buffer->arg["$arg" + std::to_string(variants)]));
+	}
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::GetFromPool(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new GetFromPoolScript();
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->key = convertExtReferences(buffer, buffer->arg["$key"]);
+	int variants = 0;
+	while (buffer->arg.find("$arg" + std::to_string(variants + 1)) != buffer->arg.end())
+	{
+		variants++;
+		p->args.push_back(convertExtReferences(buffer, buffer->arg["$arg" + std::to_string(variants)]));
+	}
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);
