@@ -10,6 +10,7 @@
 #include "CraftUI.h"
 
 void updateAdventureUI();
+void DrawAdventureUI();
 void disableAllAdventureUIWidgets();
 void createAdventureUIButtons();
 

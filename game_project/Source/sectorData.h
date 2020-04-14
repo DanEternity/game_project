@@ -29,7 +29,7 @@ public:
 	int distance;
 
 	// unique key value
-	__int64 key;
+	int key;
 
 	MapSector()
 	{

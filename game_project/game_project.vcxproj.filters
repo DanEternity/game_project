@@ -346,11 +346,13 @@
     <Text Include="Resources\Scripts\Test\Test2.esl">
       <Filter>Файлы ресурсов</Filter>
     </Text>
-    <Text Include="Resources\Scripts\Test\ESL_CORE.esl">
-      <Filter>Файлы ресурсов</Filter>
-    </Text>
     <Text Include="Resources\Scripts\Test\TestCoreItem.esl">
       <Filter>Файлы ресурсов</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Scripts\ESL_CORE.esl">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
   </ItemGroup>
 </Project>

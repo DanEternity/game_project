@@ -11,7 +11,7 @@ void updateMainMenu()
 	{
 		gEnv->globalGui.draw();
 
-		gEnv->scripts.scriptGui.draw();
+		//gEnv->scripts.scriptGui.draw();
 		
 	}
 

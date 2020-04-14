@@ -322,10 +322,12 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\Localization\ru_ru.txt" />
-    <Text Include="Resources\Scripts\Test\ESL_CORE.esl" />
     <Text Include="Resources\Scripts\Test\Test.esl" />
     <Text Include="Resources\Scripts\Test\Test2.esl" />
     <Text Include="Resources\Scripts\Test\TestCoreItem.esl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Scripts\ESL_CORE.esl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
