@@ -34,6 +34,7 @@ void preloadModels()
 	createModelDescriptor(L"shipBaseMove", "\\resources\\textures\\Ships\\PlayerBaseMove.png");
 	createModelDescriptor(L"testBackgroundSpace", "\\resources\\textures\\World_Decorations\\spaceBG.jpg");
 	createModelDescriptor(L"decorationSpaceDebris", "\\resources\\textures\\World_Decorations\\spaceDebris01.png");
+	createModelDescriptor(L"decorationSpaceBeacon", "\\resources\\textures\\World_Decorations\\spaceBeacon01.png");
 	//createModelDescriptor(L"fsfa", "fsaf", true);
 }
 
