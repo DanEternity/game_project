@@ -249,6 +249,7 @@ void updateAdventureGameMode(double delteTime)
 
 			if (dist2 < 100 * 100)
 			{
+
 				if (debugMode)
 					printf("Debug: Trigger marker event %i \n", id);
 
@@ -337,7 +338,31 @@ void drawAdventureGameMode(double deltaTime)
 		if (dist2 < 100 * 100)
 		{
 			// draw marker panel
+			
+			if (!gEnv->game.ui.markerDraw)
+			{
+				int x = gEnv->game.player.shipPosition.x;
+				int y = gEnv->game.player.shipPosition.y;
+				x /= gEnv->game.adventureData.settingMapScale;
+				y /= gEnv->game.adventureData.settingMapScale;
+				x -= (gEnv->game.player.cameraPosition.x / gEnv->game.adventureData.settingMapScale);
+				y -= (gEnv->game.player.cameraPosition.y / gEnv->game.adventureData.settingMapScale);
 
+				tgui::Panel::Ptr marker = tgui::Panel::create();
+				marker->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
+				marker->setSize(400, 100);
+				marker->setPosition(x + 20, y + 20);
+				gEnv->game.adventureGUI.add(marker, "eventMarker");
+
+				tgui::Label::Ptr label = tgui::Label::create();
+				label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+				label->setText("Press Space to start event");
+				label->setTextSize(18);
+				label->setPosition("(&.width - width) / 2", "75%");
+				marker->add(label);
+			}
+
+			gEnv->game.ui.markerDraw = true;
 			// trg->markers[id]
 
 			
@@ -345,7 +370,11 @@ void drawAdventureGameMode(double deltaTime)
 		}
 		else
 		{
-
+			if (gEnv->game.ui.markerDraw)
+			{
+				gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("eventMarker"));
+				gEnv->game.ui.markerDraw = false;
+			}
 		//	printf("TEST\n");
 
 			// no need to draw marker panel (markers too far)

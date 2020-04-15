@@ -86,7 +86,7 @@ void createAdventureUIButtons()
 	adventureUIGridSubPanel->setEnabled(false);
 	adventureUIGridSubPanel->setVisible(false);
 
-	tgui::Panel::Ptr shipStatsPanel = tgui::Panel::create();
+	tgui::ScrollablePanel::Ptr shipStatsPanel = tgui::ScrollablePanel::create();
 	shipStatsPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel3"));
 	shipStatsPanel->setSize(450, 570);
 	shipStatsPanel->setPosition("60%", "2%");
@@ -466,9 +466,9 @@ void createAdventureUIButtons()
 	//gEnv->game.player.crew->shipCrew[0] = new Person();
 	//gEnv->game.player.crew->shipCrew[0]->personEquipment.resize(7, nullptr);
 
-	gEnv->game.player.crew.characters.push_back(new Character(L"roflanDaun"));
+	gEnv->game.player.crew.characters.push_back(new Character(L"Person 1"));
 
-	gEnv->game.player.crew.characters[0]->equipment[0] = new Equipment(L"RoflanBoshka", equipmentSlot::head);
+	gEnv->game.player.crew.characters[0]->equipment[0] = new Equipment(L"Base Helmet", equipmentSlot::head);
 
 	StatModEffect * sme10 = new StatModEffect();
 	sme10->targetType = targetType::character;
@@ -476,7 +476,7 @@ void createAdventureUIButtons()
 	sme10->p_add = 60;
 	gEnv->game.player.crew.characters[0]->equipment[0]->effects.push_back(sme10);
 
-	gEnv->game.player.crew.characters.push_back(new Character(L"Ne Daun"));
+	gEnv->game.player.crew.characters.push_back(new Character(L"Person 2"));
 
 	BuildSchemeChooseCharacter();
 	BuildSchemeRoles();

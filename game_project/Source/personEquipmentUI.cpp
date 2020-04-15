@@ -102,24 +102,66 @@ void BuildPersonSkillTree(int crewPersonNumber)
 
 	for (int i = 1; i <= 5; i++)
 	{
+		tgui::Label::Ptr label = tgui::Label::create();
+		label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+		label->setText("Tree level: " + std::to_string(i));
+		label->setPosition(5, 20 + 60*(i-1));
+		label->setTextSize(20);
+		mainPersonPanel->add(label);
 		int rep = 0;
+		for (auto j : c->skillTrees[treeName])
+		{
+			if (i == j->level)
+				rep++;
+		}
+		int rep2 = 1;
 		for (auto j : c->skillTrees[treeName])
 		{
 			if (i == j->level)
 			{
 				tgui::Button::Ptr button = tgui::Button::create();
 				button->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-				button->setSize(100, 100);
-				button->setPosition(20 + rep*200, 10 + 200 * (i - 1));
+				button->setSize(50, 50);
+				switch (rep)
+				{
+				case 1:
+					button->setPosition("(&.width - width) / 2 + 15", 10 + 60 * (i - 1));
+					break;
+				case 2:
+					switch (rep2)
+					{
+					case 1:
+						button->setPosition("(&.width - width) / 3 + 15", 10 + 60 * (i - 1));
+						rep2++;
+						break;
+					case 2:
+						button->setPosition("(&.width - width) / 3 * 2 + 15", 10 + 60 * (i - 1));
+						break;
+					}
+					break;
+				case 3:
+					switch (rep2)
+					{
+					case 1:
+						button->setPosition("(&.width - width) / 4 + 15", 10 + 60 * (i - 1));
+						rep2++;
+						break;
+					case 2:
+						button->setPosition("(&.width - width) / 4 * 2 + 15", 10 + 60 * (i - 1));
+						rep2++;
+						break;
+					case 3:
+						button->setPosition("(&.width - width) / 4 * 3 + 15", 10 + 60 * (i - 1));
+						break;
+					}
+					break;
+				}
 				mainPersonPanel->add(button);
 				button->setText(j->name);
 
 				const std::wstring str = treeName;
 
 				button->connect("MouseReleased", skillUp, &(*c), &(*j), str);
-
-
-				rep++;
 			}
 		}
 	}
@@ -127,7 +169,7 @@ void BuildPersonSkillTree(int crewPersonNumber)
 
 void UpdateStatPersonScreen()
 {
-	updateCharacterStats();
+	updateCharacterStats(gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]);
 	
 	gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->removeAllWidgets();
 
@@ -247,7 +289,7 @@ void personUIElementWasClicked(const int id, tgui::Widget::Ptr widget, const std
 				gEnv->game.player.pickedLocalInventory = -1;
 
 				RebuildInventoryGridPanel();
-
+				UpdateStatPersonScreen();
 				UpdateInventoryUI();
 			}
 		}
@@ -321,8 +363,14 @@ void rmPanelClickedPerson(const int id, tgui::Widget::Ptr widget, const std::str
 		tgui::Panel::Ptr panel = gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(gEnv->game.ui.activeOpenPersonWindow));
 		panel->get<tgui::Button>("Person" + std::to_string(gEnv->game.ui.activeOpenPersonWindow) + "Equip" + std::to_string(id))->setText("");
 		gEnv->game.ui.rmWasClicked = false;
-
+		if (gEnv->game.ui.tempAddPanelClicked)
+		{
+			gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempAddPanel"));
+			gEnv->game.ui.tempAddPanelClicked = false;
+		}
+		RebuildInventoryGridPanel();
 		UpdateStatPersonScreen();
+		UpdateInventoryUI();
 	}
 	else if (widget->cast<tgui::Button>()->getText() == L"Unequip")
 	{
@@ -336,14 +384,22 @@ void rmPanelClickedPerson(const int id, tgui::Widget::Ptr widget, const std::str
 					gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id] = static_cast<Equipment*>(gEnv->game.player.inventory[i]);
 					gEnv->game.player.inventory[i] = temp;
 
-					gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("inventoryPanel")
-						->get<tgui::Button>("InventoryCell" + std::to_string(i))
-						->setText(gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))
-							->get<tgui::Button>("Person" + std::to_string(gEnv->game.ui.activeOpenPersonWindow) + "Equip" + std::to_string(id))->getText());
-
+					
 					gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->get<tgui::Button>("Person" + std::to_string(gEnv->game.ui.activeOpenPersonWindow) + "Equip" + std::to_string(id))->setText("");
-				
+					
+					gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
+					gEnv->game.ui.rmWasClicked = false;
+					if (gEnv->game.ui.tempAddPanelClicked)
+					{
+						gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempAddPanel"));
+						gEnv->game.ui.tempAddPanelClicked = false;
+					}
+
+					
+					RebuildInventoryGridPanel();
+					UpdateInventoryUI();
 					UpdateStatPersonScreen();
+					break;
 				}
 			}
 		}
@@ -417,7 +473,9 @@ void rmPanelChoosenAddedPerson(const int id, const int equip_id, tgui::Widget::P
 	gEnv->game.ui.rmWasClicked = false;
 	gEnv->game.ui.tempAddPanelClicked = false;
 
+	RebuildInventoryGridPanel();
 	UpdateStatPersonScreen();
+	UpdateInventoryUI();
 }
 
 void ChangeActiveCharacter(int id)
@@ -491,6 +549,15 @@ void skillUp(Character *c, PassiveSkill *p, std::wstring treeName, tgui::Widget:
 		{
 			
 	}*/
+	bool ok = true;
+	for (auto pp : c->skillTrees[treeName])
+	{
+		if ((pp->level == p->level) && (pp->active == true))
+			ok = false;
+	}
+
+	if (!ok) return;
+
 	p->active = true;
 	widget->setRenderer(gEnv->globalTheme.getRenderer("Button2"));
 }
