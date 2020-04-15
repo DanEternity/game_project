@@ -122,6 +122,7 @@ public:
 	std::string itemClass; // item class for dependecies
 	std::wstring name;
 	tgui::Panel::Ptr tooltipDescription; // Panel with description of module
+	bool tooltipWasCreated = false;
 	Item()
 	{
 		objectType = objectType::item;

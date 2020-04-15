@@ -21,6 +21,7 @@ public:
 	// selected cell id
 	int selected = -1;
 	bool rmWasClicked = false, tempAddPanelClicked = false;
+	bool markerDraw = false;
 	int activeOpenPersonWindow = 0;
 	bool adventureMenuActive = false;
 	PUIState::personUIstate puistate = PUIState::personUIstate::defaultState;

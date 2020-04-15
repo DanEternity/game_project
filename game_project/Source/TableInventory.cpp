@@ -419,6 +419,9 @@ void RebuildInventoryGridPanel()
 				case itemType::module:
 					gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->connect("MouseEntered", applyGridModuleTooltip, id);
 					break;
+				case itemType::equipment:
+					gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->connect("MouseEntered", applyGridEquipmentTooltip, id);
+					break;
 				}
 			}
 		}
@@ -551,16 +554,6 @@ void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, cons
 
 }
 
-void applyGridModuleTooltip(int id)
-{
-	if (id < gEnv->game.player.localInventory.size())
-	{
-		createModuleTooltip(static_cast<Module*>(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]));
-		gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->setToolTip(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]->tooltipDescription);
-		tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
-	}
-}
-
 void createModuleTooltip(Module * m)
 {
 	m->tooltipDescription->setSize(300, 250 + m->effects.size() * 30);
@@ -576,7 +569,7 @@ void createModuleTooltip(Module * m)
 	tgui::Label::Ptr label = tgui::Label::create();
 	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
 	label->setPosition("(&.width - width) / 2", 30);
-	label->setText("Chto-to");
+	label->setText("Module");
 	label->setTextSize(18);
 	m->tooltipDescription->add(label);
 
@@ -760,6 +753,124 @@ void createResourseTooltip(ItemResource * r)
 	r->tooltipDescription->add(label2);
 }
 
+void createEquipmentTooltip(Equipment* e)
+{
+	e->tooltipDescription->setSize(300, 250 + e->effects.size() * 30);
+	e->tooltipDescription->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
+
+	tgui::Button::Ptr button = tgui::Button::create();
+	button->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	button->setPosition(0, 0);
+	button->setSize(300, 30);
+	button->setText(e->name);
+	e->tooltipDescription->add(button, "nameButtonTooltip");
+
+	tgui::Label::Ptr label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setPosition("(&.width - width) / 2", 30);
+	label->setText("Equipment");
+	label->setTextSize(18);
+	e->tooltipDescription->add(label);
+
+	tgui::Label::Ptr label2 = tgui::Label::create();
+	label2->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label2->setPosition("(&.width - width) / 4 - 20", 60);
+	label2->setText(L"Level: " + std::to_wstring(e->level));
+	label2->setTextSize(18);
+	e->tooltipDescription->add(label2);
+
+	tgui::Label::Ptr label3 = tgui::Label::create();
+	label3->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label3->setPosition("(&.width - width) / 4 * 3", 60);
+	label3->setText(L"Rarity: " + std::to_wstring(e->rarity));
+	label3->setTextSize(18);
+	e->tooltipDescription->add(label3);
+
+	tgui::Label::Ptr label4 = tgui::Label::create();
+	label4->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label4->setPosition("(&.width - width) / 2", 90);
+	switch (e->equipmentSlotType)
+	{
+	case equipmentSlot::head:
+		label4->setText("Slot type: Helmet");
+		break;
+	case equipmentSlot::arms:
+		label4->setText("Slot type: Arms");
+		break;
+	case equipmentSlot::body:
+		label4->setText("Slot type: Body");
+		break;
+	case equipmentSlot::legs:
+		label4->setText("Slot type: Legs");
+		break;
+	case equipmentSlot::universal:
+		label4->setText("Slot type: Universal");
+	}
+	label4->setTextSize(18);
+	e->tooltipDescription->add(label4);
+
+
+	tgui::Label::Ptr label5 = tgui::Label::create();
+	label5->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label5->setPosition(10, 120);
+	label5->setTextSize(18);
+	e->tooltipDescription->add(label5);
+
+	std::wstring str = L"";
+	bool first = true;
+	for (auto i : static_cast<Equipment*>(e)->effects)
+	{
+		switch (static_cast<StatModEffect*>(i)->statName)
+		{
+		case statNames::characterHealth:
+			str += GetString("Health") + L" ";
+			break;
+		case statNames::characterArmor:
+			str += GetString("Armor") + L" ";
+			break;
+		case statNames::characterShield:
+			str += GetString("Shield") + L" ";
+			break;
+		case statNames::characterBlock:
+			str += GetString("Block") + L" ";
+			break;
+		case statNames::characterResist:
+			str += GetString("Resist") + L" ";
+			break;
+		case statNames::characterShieldReg:
+			str += GetString("Shield Regeneration") + L" ";
+			break;
+		case statNames::characterActionPoints:
+			str += GetString("Action Points") + L" ";
+			break;
+		case statNames::characterEnergy:
+			str += GetString("Energy") + L" ";
+			break;
+		case statNames::characterEnergyReg:
+			str += GetString("Energy Regeneration") + L" ";
+			break;
+		case statNames::characterInitiative:
+			str += GetString("Initiative") + L" ";
+			break;
+		}
+		if (static_cast<StatModEffect*>(i)->p_add != 0)
+			str += L"+" + std::to_wstring((int)static_cast<StatModEffect*>(i)->p_add) + L" ";
+		if (static_cast<StatModEffect*>(i)->p_mul != 0)
+			str += L"+" + std::to_wstring((int)(static_cast<StatModEffect*>(i)->p_mul * 100)) + L"% ";
+		if (static_cast<StatModEffect*>(i)->p_sub != 0)
+			str += L"-" + std::to_wstring((int)static_cast<StatModEffect*>(i)->p_sub) + L" ";
+		if (static_cast<StatModEffect*>(i)->p_negMul != 0)
+			str += L"-" + std::to_wstring((int)(static_cast<StatModEffect*>(i)->p_negMul * 100)) + L"% ";
+
+		if (!first)
+			label5->setText(label5->getText() + str + L"\n");
+		else
+			label5->setText(str + L"\n");
+		first = false;
+		str = L"";
+	}
+}
+
 void deleteAllInventoryTooltips()
 {
 	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
@@ -786,15 +897,60 @@ void applyStorageTooltip(int id)
 		switch (gEnv->game.player.inventory[id]->itemType)
 		{
 		case itemType::module:
-			createModuleTooltip(static_cast<Module*>(gEnv->game.player.inventory[id]));
+			if (!gEnv->game.player.inventory[id]->tooltipWasCreated)
+			{
+				createModuleTooltip(static_cast<Module*>(gEnv->game.player.inventory[id]));
+				gEnv->game.player.inventory[id]->tooltipWasCreated = true;
+			}
 			gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(id))->setToolTip(gEnv->game.player.inventory[id]->tooltipDescription);
 			tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
 			break;
 		case itemType::resource:
-			createResourseTooltip(static_cast<ItemResource*>(gEnv->game.player.inventory[id]));
+			if (!gEnv->game.player.inventory[id]->tooltipWasCreated)
+			{
+				createResourseTooltip(static_cast<ItemResource*>(gEnv->game.player.inventory[id]));
+				gEnv->game.player.inventory[id]->tooltipWasCreated = true;
+			}
+			gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(id))->setToolTip(gEnv->game.player.inventory[id]->tooltipDescription);
+			tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
+			break;
+		case itemType::equipment:
+			if (!gEnv->game.player.inventory[id]->tooltipWasCreated)
+			{
+				createEquipmentTooltip(static_cast<Equipment*>(gEnv->game.player.inventory[id]));
+				gEnv->game.player.inventory[id]->tooltipWasCreated = true;
+			}
 			gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(id))->setToolTip(gEnv->game.player.inventory[id]->tooltipDescription);
 			tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
 			break;
 		}
+	}
+}
+
+void applyGridModuleTooltip(int id)
+{
+	if (id < gEnv->game.player.localInventory.size())
+	{
+		if (!gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]->tooltipWasCreated)
+		{
+			gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]->tooltipWasCreated = true;
+			createModuleTooltip(static_cast<Module*>(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]));
+		}
+		gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->setToolTip(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]->tooltipDescription);
+		tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
+	}
+}
+
+void applyGridEquipmentTooltip(int id)
+{
+	if (id < gEnv->game.player.localInventory.size())
+	{
+		if (!gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]->tooltipWasCreated)
+		{
+			gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]->tooltipWasCreated = true;
+			createEquipmentTooltip(static_cast<Equipment*>(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]));
+		}
+		gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->setToolTip(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]->tooltipDescription);
+		tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
 	}
 }

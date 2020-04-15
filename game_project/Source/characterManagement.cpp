@@ -1,6 +1,6 @@
 #include "characterManagement.h"
 
-void updateCharacterStats()
+void updateCharacterStats(Character * c)
 {
 	for (auto q : gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->characterStats)
 	{
@@ -11,7 +11,7 @@ void updateCharacterStats()
 	}
 
 	clearCharacterStats();
-	collectEquipment();
+	collectEquipment(c);
 }
 
 void clearCharacterStats()
@@ -31,31 +31,42 @@ void clearCharacterStats()
 
 }
 
-void collectEquipment()
+void collectEquipment(Character * c)
 {
-	// check for hyperdrive
-	for (Character* c : gEnv->game.player.crew.characters)
+
+	for (Equipment*m : c->equipment)
 	{
-		for (Equipment*m : c->equipment)
-		{
 
-			if (m == NULL)
-				continue;
+		if (m == NULL)
+			continue;
 
-			applyCharEquipmentEffects(c, m);
+		applyCharEquipmentEffects(c, m);
 
-		}
 	}
 
-	for (Character* c : gEnv->game.player.crew.characters)
-	{
+
+		std::wstring treeName = L"";
+		switch (c->classToInt(c->characterClass))
+		{
+		case 0:
+			treeName = L"classicTree";
+		}
+
+		for (auto p : c->skillTrees[treeName])
+		{
+			if (p->active == true)
+			{
+				applyCharacterStatEffect(c, p->effect);
+			}
+		}
+
 		for (auto q : c->characterStats)
 		{
 			q.second->calcTotal();
 			q.second->current = q.second->percentage * q.second->total;
 
 		}
-	}
+
 }
 
 void applyCharEquipmentEffects(Character * c, Equipment * m)

@@ -100,25 +100,25 @@ public:
 		case 0:
 			std::vector<PassiveSkill*> vct;
 
-			PassiveSkill* skill = new PassiveSkill(L"baseSkill", 1);
+			PassiveSkill* skill = new PassiveSkill(L"+10 hp", 1);
 			skill->effect = new StatModEffect();
 			skill->effect->targetType = targetType::character;
 			skill->effect->statName = statNames::characterHealth;
 			skill->effect->p_add = 10;
 			vct.push_back(skill);
 
-			skill = new PassiveSkill(L"secondSkill", 1);
+			skill = new PassiveSkill(L"+20 hp", 1);
 			skill->effect = new StatModEffect();
 			skill->effect->targetType = targetType::character;
 			skill->effect->statName = statNames::characterHealth;
-			skill->effect->p_add = 10;
+			skill->effect->p_add = 20;
 			vct.push_back(skill);
 
-			skill = new PassiveSkill(L"thirdSKill", 2);
+			skill = new PassiveSkill(L"+30 hp", 2);
 			skill->effect = new StatModEffect();
 			skill->effect->targetType = targetType::character;
 			skill->effect->statName = statNames::characterHealth;
-			skill->effect->p_add = 10;
+			skill->effect->p_add = 30;
 			vct.push_back(skill);
 
 			skillTrees[L"classicTree"] = vct;

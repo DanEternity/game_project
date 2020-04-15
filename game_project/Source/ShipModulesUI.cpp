@@ -155,6 +155,11 @@ void rmPanelClickedShip(const int id, tgui::Widget::Ptr widget, const std::strin
 		tgui::Panel::Ptr panel = gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel");
 		panel->get<tgui::Button>("ShipSchemeModule" + std::to_string(id))->setText("");
 		gEnv->game.ui.rmWasClicked = false;
+		if (gEnv->game.ui.tempAddPanelClicked)
+		{
+			gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempAddPanel"));
+			gEnv->game.ui.tempAddPanelClicked = false;
+		}
 
 		updateShipValues(gEnv->game.player.ship);
 		RebuildInventoryGridPanel();
@@ -305,6 +310,66 @@ void buildShipStats()
 	label->setPosition(5, y);
 	label->setTextSize(18);
 	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label, "shipStatActionPoints");
+
+	y += 20;
+
+	label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setText(GetString("Hull regeneration") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->hullReg.total));
+	label->setPosition(5, y);
+	label->setTextSize(18);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label, "shipStatHullReg");
+
+	y += 20;
+
+	label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setText(GetString("Hull resist to damage") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->hullResist.total));
+	label->setPosition(5, y);
+	label->setTextSize(18);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label, "shipStatHullResist");
+
+	y += 20;
+
+	label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setText(GetString("Hull structure stability") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->hullStructureStability.total));
+	label->setPosition(5, y);
+	label->setTextSize(18);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label, "shipStatHullStructureStability");
+
+	y += 20;
+
+	label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setText(GetString("Shield regeneration") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->shieldReg.total));
+	label->setPosition(5, y);
+	label->setTextSize(18);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label, "shipStatShieldRegeneration");
+
+	y += 20;
+
+	label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setText(GetString("Shield resist to damage") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->shieldResist.total));
+	label->setPosition(5, y);
+	label->setTextSize(18);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label, "shipStatShieldResist");
+
+	y += 20;
+
+	label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setText(GetString("Shield structure stability") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->shieldStructureStability.total));
+	label->setPosition(5, y);
+	label->setTextSize(18);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label, "shipStatShieldStructureStability");
 }
 
 void updateShipStatsScreen()
@@ -338,6 +403,36 @@ void updateShipStatsScreen()
 		+ std::to_wstring((int)gEnv->game.player.ship->actionPoints.current)
 		+ L"/"
 		+ std::to_wstring((int)gEnv->game.player.ship->actionPoints.total));
+
+	label = gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->get("shipStatActionPoints")->cast<tgui::Label>();
+	label->setText(GetString("Action points in battle") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->actionPoints.current)
+		+ L"/"
+		+ std::to_wstring((int)gEnv->game.player.ship->actionPoints.total));
+
+	label = gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->get("shipStatHullReg")->cast<tgui::Label>();
+	label->setText(GetString("Hull regeneration") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->hullReg.total));
+
+	label = gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->get("shipStatHullResist")->cast<tgui::Label>();
+	label->setText(GetString("Hull resist to damage") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->hullResist.total));
+
+	label = gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->get("shipStatHullStructureStability")->cast<tgui::Label>();
+	label->setText(GetString("Hull structure stability") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->hullStructureStability.total));
+
+	label = gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->get("shipStatShieldRegeneration")->cast<tgui::Label>();
+	label->setText(GetString("Shield regeneration") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->shieldReg.total));
+
+	label = gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->get("shipStatShieldResist")->cast<tgui::Label>();
+	label->setText(GetString("Shield resist to damage") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->shieldResist.total));
+
+	label = gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->get("shipStatShieldStructureStability")->cast<tgui::Label>();
+	label->setText(GetString("Shield structure stability") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->shieldStructureStability.total));
 
 	for (int i(0); i < gEnv->game.player.ship->modules.size(); i++)
 	{
@@ -460,7 +555,11 @@ void applyModuleTooltipShipUI(int id)
 {
 	if (gEnv->game.player.ship->modules[id] != NULL)
 	{
-		createModuleTooltip(gEnv->game.player.ship->modules[id]);
+		if (!gEnv->game.player.ship->modules[id]->tooltipWasCreated)
+		{
+			createModuleTooltip(gEnv->game.player.ship->modules[id]);
+			gEnv->game.player.ship->modules[id]->tooltipWasCreated = true;
+		}
 		gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(id))->setToolTip(gEnv->game.player.ship->modules[id]->tooltipDescription);
 		tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
 	}
@@ -481,7 +580,7 @@ void createModuleTooltipShipUI(Module * m)
 	tgui::Label::Ptr label = tgui::Label::create();
 	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
 	label->setPosition("(&.width - width) / 2", 30);
-	label->setText("Chto-to");
+	label->setText("Module");
 	label->setTextSize(18);
 	m->tooltipDescription->add(label);
 
