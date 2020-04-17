@@ -27,7 +27,9 @@ public:
 	// links to characters binded to this ship
 	// this vector does not represent all characters available for player control
 	// only characters that affect this ship stats and functions
-	std::vector<Character*> crew;
+	
+	std::vector<characterRole::Role> characterRoleSlots;
+	std::vector<Character*> characterPosition;
 
 	// stats section
 
@@ -105,7 +107,10 @@ public:
 
 		shipStats[statNames::fuel] = &fuel;
 
-
+		characterPosition.resize(4, nullptr);
+		characterRoleSlots.resize(4, characterRole::noneRole);
+		characterRoleSlots[1] = characterRole::programmer;
+		
 	}
 
 };

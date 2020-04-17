@@ -109,6 +109,19 @@ void calcModuleStats(Ship * p)
 void collectModules(Ship * p)
 {
 
+	//collect buffs from crew
+
+	for (auto c : gEnv->game.player.crew.characters)
+	{
+		if (c->haveRole)
+		{
+			for (auto e : c->effectsForShip)
+			{
+				applyStatEffect(p, e);
+			}
+		}
+	}
+
 	// collect energy initial energy
 	// from buffs, effects, something that can give it
 
@@ -225,7 +238,6 @@ void collectModules(Ship * p)
 
 	}
 
-
 	// check for hyperdrive 
 	for (Module*m : p->modules)
 	{
@@ -262,7 +274,6 @@ void collectModules(Ship * p)
 	}
 
 	p->fuel.current = (p->fuel.current < p->fuel.total) ? p->fuel.current : p->fuel.total;
-
 
 }
 

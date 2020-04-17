@@ -54,7 +54,7 @@ void collectEquipment(Character * c)
 
 		for (auto p : c->skillTrees[treeName])
 		{
-			if (p->active == true)
+			if (p->active == true && p->effect->targetType == targetType::character)
 			{
 				applyCharacterStatEffect(c, p->effect);
 			}

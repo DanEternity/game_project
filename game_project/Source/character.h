@@ -20,6 +20,7 @@ namespace characterRole
 	enum Role
 	{
 		noneRole,
+		programmer,
 	};
 }
 
@@ -44,7 +45,9 @@ public:
 	// stats
 
 	std::map<statNames::StatName, Stat*> characterStats;
-	std::map<statNames::StatName, Stat*> statsForShip;
+	std::vector<StatModEffect*> effectsForShip;
+
+	bool haveRole = false;
 
 	int level;
 	float exp;
@@ -118,6 +121,20 @@ public:
 			skill->effect = new StatModEffect();
 			skill->effect->targetType = targetType::character;
 			skill->effect->statName = statNames::characterHealth;
+			skill->effect->p_add = 30;
+			vct.push_back(skill);
+
+			skill = new PassiveSkill(L"+1000 hull", 3);
+			skill->effect = new StatModEffect();
+			skill->effect->targetType = targetType::ship;
+			skill->effect->statName = statNames::hull;
+			skill->effect->p_add = 1000;
+			vct.push_back(skill);
+
+			skill = new PassiveSkill(L"+30 power supply", 3);
+			skill->effect = new StatModEffect();
+			skill->effect->targetType = targetType::ship;
+			skill->effect->statName = statNames::powerSupply;
 			skill->effect->p_add = 30;
 			vct.push_back(skill);
 

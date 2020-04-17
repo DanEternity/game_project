@@ -36,6 +36,17 @@ void BuildSchemeRoles()
 	showBonusesButton->setText("Show Bonuses");
 	showBonusesButton->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	ShipSchemePersonRoles->add(showBonusesButton, "CrewBonusesShow");
+
+	for (int i = 0; i < gEnv->game.player.ship->characterRoleSlots.size(); i++)
+	{
+		tgui::Button::Ptr but = tgui::Button::create();
+		but->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+		but->setPosition(100 + i * 120, "50%");
+		but->setSize(100, 100);
+		ShipSchemePersonRoles->add(but, "buttonChangeRole" + std::to_string(i));
+		const int id = i;
+		but->connect("RightMouseReleased", giveRoleFind, id, id);
+	}
 }
 
 void BuildPersonSchemeUI(int equipSizeUI, int crewPersonNumber)
@@ -559,5 +570,84 @@ void skillUp(Character *c, PassiveSkill *p, std::wstring treeName, tgui::Widget:
 	if (!ok) return;
 
 	p->active = true;
+	if (p->effect->targetType == targetType::ship)
+	{
+		c->effectsForShip.push_back(p->effect);
+		updateShipValues(gEnv->game.player.ship);
+		updateShipStatsScreen();
+	}
+	
 	widget->setRenderer(gEnv->globalTheme.getRenderer("Button2"));
+}
+
+void giveRoleFind(int id, int buttonId, tgui::Widget::Ptr widget, const std::string& signalName)
+{
+	if (!gEnv->game.ui.rmWasClicked)
+	{
+		tgui::Panel::Ptr temp = tgui::Panel::create();
+		int x = sf::Mouse::getPosition(gEnv->globalWindow).x;
+		int y = sf::Mouse::getPosition(gEnv->globalWindow).y - 5;
+		temp->setPosition(x, y);
+		temp->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
+		gEnv->game.adventureGUI.add(temp, "tempRightPanel");
+		gEnv->game.ui.rmWasClicked = true;
+
+		int count = 0;
+		for (int i = 0; i < gEnv->game.player.crew.characters.size(); i++)
+		{
+			if (gEnv->game.player.crew.characters[i]->role == gEnv->game.player.ship->characterRoleSlots[id] && !gEnv->game.player.crew.characters[i]->haveRole)
+			{
+				tgui::Button::Ptr but = tgui::Button::create();
+				but->setSize(120, 30);
+				but->setText(gEnv->game.player.crew.characters[i]->name);
+				but->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+				but->setPosition(-10, 30 * count);
+				count++;
+				temp->add(but);
+				const int constButtonId = buttonId;
+				but->connect("MouseReleased", giveRole, &(*gEnv->game.player.crew.characters[i]), constButtonId);
+			}
+		}
+		temp->setSize(100, 30 * (count + 1));
+
+		if (count == 0) {
+			gEnv->game.ui.rmWasClicked = false;
+			gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
+		}
+		else
+		{
+			tgui::Button::Ptr but = tgui::Button::create();
+			but->setSize(120, 30);
+			but->setText("Cancel");
+			but->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+			but->setPosition(-10, 30 * count);
+			temp->add(but);
+			const int constButtonId = buttonId;
+			but->connect("MouseReleased", giveRole, nullptr, constButtonId);
+		}
+	}
+}
+
+void giveRole(Character *c, int buttonId, tgui::Widget::Ptr widget, const std::string& signalName)
+{
+	std::string str = widget->cast<tgui::Button>()->getText();
+	if (str == "Cancel")
+	{
+		gEnv->game.ui.rmWasClicked = false;
+		gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->removeAllWidgets();
+		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
+	}
+	else
+	{
+		gEnv->game.ui.rmWasClicked = false;
+		gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->removeAllWidgets();
+		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
+
+		gEnv->game.adventureGUI.get<tgui::Button>("buttonChangeRole" + std::to_string(buttonId))->setText(c->name);
+		c->haveRole = true;
+		gEnv->game.player.ship->characterPosition[buttonId] = c;
+
+		updateShipValues(gEnv->game.player.ship);
+		updateShipStatsScreen();
+	}
 }

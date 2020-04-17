@@ -31,9 +31,6 @@
     <Filter Include="Adventure">
       <UniqueIdentifier>{d9b42055-73de-404a-a000-a92776962c59}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Adventure\UI">
-      <UniqueIdentifier>{2a3ca394-ba26-4db3-9526-1cdeec9f3873}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Adventure\Core">
       <UniqueIdentifier>{17c0416a-a010-4ef1-8249-ea2e7f2f9302}</UniqueIdentifier>
     </Filter>
@@ -45,6 +42,9 @@
     </Filter>
     <Filter Include="ScriptEngine\Compiler">
       <UniqueIdentifier>{087cac6f-810b-4b13-ad92-4e4b5e1e39ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Adventure\UI">
+      <UniqueIdentifier>{2a3ca394-ba26-4db3-9526-1cdeec9f3873}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
