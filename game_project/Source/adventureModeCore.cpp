@@ -39,6 +39,13 @@ void updateAdventureGameMode(double delteTime)
 		gEnv->game.adventureData.sectors["TEST"]->objects[2]->pos = { 1700, 0 };
 		buildDecoration(gEnv->game.adventureData.sectors["TEST"]->objects[2]);
 
+		gEnv->game.adventureData.sectors["TEST"]->objects.push_back(new MapDecoration());
+		gEnv->game.adventureData.sectors["TEST"]->objects[3]->model = L"decorationSpaceBeacon";
+		gEnv->game.adventureData.sectors["TEST"]->objects[3]->scale = { 1,1 };
+		gEnv->game.adventureData.sectors["TEST"]->objects[3]->rotation = 0;
+		gEnv->game.adventureData.sectors["TEST"]->objects[3]->pos = { 0, 1100 };
+		buildDecoration(gEnv->game.adventureData.sectors["TEST"]->objects[3]);
+
 		// debug
 		gEnv->game.gameCanPlayerMoveWASD = true;
 		gEnv->game.gameCanPlayerTriggerMarkers = true;
@@ -69,6 +76,26 @@ void updateAdventureGameMode(double delteTime)
 		delete(c);
 
 		gEnv->game.adventureData.sectors["TEST"]->markers[1]->sd = q;
+
+		gEnv->game.adventureData.sectors["TEST"]->markers.push_back(new MapMarker({ 0 , 1100 }));
+		buildMarker(gEnv->game.adventureData.sectors["TEST"]->markers[2]);
+		filename = gEnv->game.workDir;
+		filename += "\\resources\\scripts\\test\\demoEvent01.esl";
+		c = new ScriptCompiler();
+		q = c->compileFile(filename, L"testMod");
+		delete(c);
+
+		gEnv->game.adventureData.sectors["TEST"]->markers[2]->sd = q;
+
+		gEnv->game.adventureData.sectors["TEST"]->markers.push_back(new MapMarker({ 2700 , 500 }));
+		buildMarker(gEnv->game.adventureData.sectors["TEST"]->markers[3]);
+		filename = gEnv->game.workDir;
+		filename += "\\resources\\scripts\\test\\demoEvent02.esl";
+		c = new ScriptCompiler();
+		q = c->compileFile(filename, L"testMod");
+		delete(c);
+
+		gEnv->game.adventureData.sectors["TEST"]->markers[3]->sd = q;
 
 		
 	//	buildSprite(&gEnv->game.player.shipModel, L"shipBase");
