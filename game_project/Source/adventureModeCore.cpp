@@ -293,14 +293,14 @@ void updateAdventureGameMode(double delteTime)
 void drawAdventureGameMode(double deltaTime)
 {
 	auto trg = gEnv->game.adventureData.sectors[gEnv->game.adventureData.currentSectorId];
-	
+
 	if (trg == NULL)
 		return;
 
 	// bg
 	if (gEnv->game.adventureData.bgImage != NULL)
 		gEnv->globalWindow.draw(*(gEnv->game.adventureData.bgImage));
-	
+
 
 	// Decorations
 
@@ -331,7 +331,7 @@ void drawAdventureGameMode(double deltaTime)
 
 	if (gEnv->game.player.HeavyUpdateTime > 0.250)
 	{
-		
+
 		gEnv->game.player.HeavyUpdateTime = 0;
 
 		float dist2 = 99999;
@@ -341,7 +341,7 @@ void drawAdventureGameMode(double deltaTime)
 		float x, y;
 		x = gEnv->game.player.cameraPosition.x + gEnv->graphics.windowSizeX * gEnv->game.adventureData.settingMapScale / 2;
 		y = gEnv->game.player.cameraPosition.y + gEnv->graphics.windowSizeY * gEnv->game.adventureData.settingMapScale / 2;
-		
+
 		for (int i(0); i < trg->markers.size(); i++)
 		{
 
@@ -365,7 +365,7 @@ void drawAdventureGameMode(double deltaTime)
 		if (dist2 < 100 * 100)
 		{
 			// draw marker panel
-			
+
 			if (!gEnv->game.ui.markerDraw)
 			{
 				int x = gEnv->game.player.shipPosition.x;
@@ -392,7 +392,7 @@ void drawAdventureGameMode(double deltaTime)
 			gEnv->game.ui.markerDraw = true;
 			// trg->markers[id]
 
-			
+
 
 		}
 		else
@@ -402,11 +402,28 @@ void drawAdventureGameMode(double deltaTime)
 				gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("eventMarker"));
 				gEnv->game.ui.markerDraw = false;
 			}
-		//	printf("TEST\n");
+			//	printf("TEST\n");
 
-			// no need to draw marker panel (markers too far)
+				// no need to draw marker panel (markers too far)
 		}
 
 	}
 
+	gEnv->game.adventureGUI.get<tgui::Panel>("minimap")->removeAllWidgets();
+	tgui::Button::Ptr but = tgui::Button::create();
+	but->setRenderer(gEnv->globalTheme.getRenderer("Button2"));
+	gEnv->game.adventureGUI.get<tgui::Panel>("minimap")->add(but);
+	but->setSize(15, 15);
+	but->setPosition("(&.width - width) / 2", "(&.height - height) / 2");
+
+	for (auto marker : trg->markers)
+	{
+		but = tgui::Button::create();
+		but->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+		but->setSize(15, 15);
+
+		tgui::Panel::Ptr lab = gEnv->game.adventureGUI.get<tgui::Panel>("minimap")->cast<tgui::Panel>();
+		but->setPosition(((marker->pos.x - gEnv->game.player.shipPosition.x) / 10) + lab->getSize().x / 2, ((marker->pos.y - gEnv->game.player.shipPosition.y) / 6.6f) + lab->getSize().y / 2);
+		gEnv->game.adventureGUI.get<tgui::Panel>("minimap")->add(but);
+	}
 }

@@ -60,6 +60,14 @@ void createAdventureUIButtons()
 	gEnv->game.player.ship->shield.current = 0;
 
 
+	//minimap
+
+	tgui::Panel::Ptr minimap = tgui::Panel::create();
+	minimap->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
+	minimap->setPosition(10, 700);
+	minimap->setSize(400, 300);
+	gEnv->game.adventureGUI.add(minimap, "minimap");
+
 	//create main interface panel
 
 	tgui::Panel::Ptr adventureUIPanel = tgui::Panel::create();

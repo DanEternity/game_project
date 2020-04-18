@@ -76,7 +76,7 @@ public:
 	Character(std::wstring name)
 	{
 		this->name = name;
-		this->characterClass = L"None";
+		this->characterClass = L"Noe";
 		this->characterRace = L"Human";
 		this->health.baseValue = 100;
 		slot.resize(7);

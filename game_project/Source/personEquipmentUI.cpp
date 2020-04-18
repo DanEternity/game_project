@@ -97,8 +97,8 @@ void BuildPersonSkillTree(int crewPersonNumber)
 {
 	tgui::Panel::Ptr mainPersonPanel = tgui::Panel::create();
 	mainPersonPanel->setRenderer(gEnv->globalTheme.getRenderer("Panel3"));
-	mainPersonPanel->setSize(400, 580);
-	mainPersonPanel->setPosition("1%", "1%");
+	mainPersonPanel->setSize(256, 589);
+	mainPersonPanel->setPosition(0, 0);
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(mainPersonPanel, "PersonFirstSkillTree" + std::to_string(crewPersonNumber));
 	mainPersonPanel->setVisible(false);
 	mainPersonPanel->setEnabled(false);
@@ -136,7 +136,7 @@ void BuildPersonSkillTree(int crewPersonNumber)
 	{
 		tgui::Label::Ptr label = tgui::Label::create();
 		label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-		label->setText("Tree level: " + std::to_string(i));
+		label->setText("Level: " + std::to_string(i));
 		label->setPosition(5, 70 + 60 * (i - 1));
 		label->setTextSize(20);
 		mainPersonPanel->add(label);
@@ -157,17 +157,17 @@ void BuildPersonSkillTree(int crewPersonNumber)
 				switch (rep)
 				{
 				case 1:
-					button->setPosition("(&.width - width) / 2 + 15", 70 + 60 * (i - 1));
+					button->setPosition("(&.width - width) / 2 + 25", 70 + 60 * (i - 1));
 					break;
 				case 2:
 					switch (rep2)
 					{
 					case 1:
-						button->setPosition("(&.width - width) / 3 + 15", 70 + 60 * (i - 1));
+						button->setPosition("(&.width - width) / 3 + 25", 70 + 60 * (i - 1));
 						rep2++;
 						break;
 					case 2:
-						button->setPosition("(&.width - width) / 3 * 2 + 15", 70 + 60 * (i - 1));
+						button->setPosition("(&.width - width) / 3 * 2 + 25", 70 + 60 * (i - 1));
 						break;
 					}
 					break;
@@ -175,15 +175,15 @@ void BuildPersonSkillTree(int crewPersonNumber)
 					switch (rep2)
 					{
 					case 1:
-						button->setPosition("(&.width - width) / 4 + 15", 70 + 60 * (i - 1));
+						button->setPosition("(&.width - width) / 4 + 25", 70 + 60 * (i - 1));
 						rep2++;
 						break;
 					case 2:
-						button->setPosition("(&.width - width) / 4 * 2 + 15", 70 + 60 * (i - 1));
+						button->setPosition("(&.width - width) / 4 * 2 + 25", 70 + 60 * (i - 1));
 						rep2++;
 						break;
 					case 3:
-						button->setPosition("(&.width - width) / 4 * 3 + 15", 70 + 60 * (i - 1));
+						button->setPosition("(&.width - width) / 4 * 3 + 25", 70 + 60 * (i - 1));
 						break;
 					}
 					break;
