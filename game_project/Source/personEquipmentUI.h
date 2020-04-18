@@ -14,6 +14,7 @@ void BuildSchemeRoles();
 void BuildPersonSchemeUI(int moduleSizeUI, int crewPersonNumber);
 void BuildStatPersonScreen(int crewPersonNumber);
 void BuildPersonSkillTree(int crewPersonNumber);
+void UpdatePersonSkillTree();
 void UpdateStatPersonScreen();
 void BuildPanelChangePersonState();
 void personUIElementWasClicked(const int id, tgui::Widget::Ptr widget, const std::string& signalName);

@@ -49,9 +49,12 @@ public:
 
 	bool haveRole = false;
 
-	int level;
+	int level = 2;
+	int skillPoints = 1;
 	float exp;
 	std::map<int, float> expToNextLevel;
+
+
 	Stat health;
 	Stat armor;
 	Stat shield;
@@ -124,11 +127,11 @@ public:
 			skill->effect->p_add = 30;
 			vct.push_back(skill);
 
-			skill = new PassiveSkill(L"+1000 hull", 3);
+			skill = new PassiveSkill(L"+6% hull", 3);
 			skill->effect = new StatModEffect();
 			skill->effect->targetType = targetType::ship;
 			skill->effect->statName = statNames::hull;
-			skill->effect->p_add = 1000;
+			skill->effect->p_mul = 0.06;
 			vct.push_back(skill);
 
 			skill = new PassiveSkill(L"+30 power supply", 3);

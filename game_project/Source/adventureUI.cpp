@@ -646,7 +646,9 @@ void disableAllAdventureUI()
 		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i))->setEnabled(false);
 		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i))->setVisible(false);
 		gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i))->setEnabled(false);
-		gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i))->setVisible(false);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i))->setVisible(false);		
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(i))->setEnabled(false);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(i))->setVisible(false);
 		
 	}
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setEnabled(false);

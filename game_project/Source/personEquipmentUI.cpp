@@ -103,6 +103,27 @@ void BuildPersonSkillTree(int crewPersonNumber)
 	mainPersonPanel->setVisible(false);
 	mainPersonPanel->setEnabled(false);
 
+	tgui::Label::Ptr lab = tgui::Label::create();
+	lab->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	lab->setText(gEnv->game.player.crew.characters[crewPersonNumber]->name);
+	lab->setPosition("(&.width - width) / 2", 10);
+	lab->setTextSize(20);
+	mainPersonPanel->add(lab);
+
+	lab = tgui::Label::create();
+	lab->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	lab->setText("Level: " + std::to_string(gEnv->game.player.crew.characters[crewPersonNumber]->level));
+	lab->setPosition("(&.width - width) / 4 - 20", 30);
+	lab->setTextSize(20);
+	mainPersonPanel->add(lab, "labSkillTreeLevel" + std::to_string(crewPersonNumber));
+
+	lab = tgui::Label::create();
+	lab->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	lab->setText("Skill points: " + std::to_string(gEnv->game.player.crew.characters[crewPersonNumber]->skillPoints));
+	lab->setPosition("(&.width - width) / 4 * 3 + 20", 30);
+	lab->setTextSize(20);
+	mainPersonPanel->add(lab,  "labSkillTreePoints" + std::to_string(crewPersonNumber));
+
 	Character *c = gEnv->game.player.crew.characters[crewPersonNumber];
 	std::wstring treeName = L"";
 	switch (c->classToInt(c->characterClass))
@@ -116,7 +137,7 @@ void BuildPersonSkillTree(int crewPersonNumber)
 		tgui::Label::Ptr label = tgui::Label::create();
 		label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
 		label->setText("Tree level: " + std::to_string(i));
-		label->setPosition(5, 20 + 60*(i-1));
+		label->setPosition(5, 70 + 60 * (i - 1));
 		label->setTextSize(20);
 		mainPersonPanel->add(label);
 		int rep = 0;
@@ -136,17 +157,17 @@ void BuildPersonSkillTree(int crewPersonNumber)
 				switch (rep)
 				{
 				case 1:
-					button->setPosition("(&.width - width) / 2 + 15", 10 + 60 * (i - 1));
+					button->setPosition("(&.width - width) / 2 + 15", 70 + 60 * (i - 1));
 					break;
 				case 2:
 					switch (rep2)
 					{
 					case 1:
-						button->setPosition("(&.width - width) / 3 + 15", 10 + 60 * (i - 1));
+						button->setPosition("(&.width - width) / 3 + 15", 70 + 60 * (i - 1));
 						rep2++;
 						break;
 					case 2:
-						button->setPosition("(&.width - width) / 3 * 2 + 15", 10 + 60 * (i - 1));
+						button->setPosition("(&.width - width) / 3 * 2 + 15", 70 + 60 * (i - 1));
 						break;
 					}
 					break;
@@ -154,15 +175,15 @@ void BuildPersonSkillTree(int crewPersonNumber)
 					switch (rep2)
 					{
 					case 1:
-						button->setPosition("(&.width - width) / 4 + 15", 10 + 60 * (i - 1));
+						button->setPosition("(&.width - width) / 4 + 15", 70 + 60 * (i - 1));
 						rep2++;
 						break;
 					case 2:
-						button->setPosition("(&.width - width) / 4 * 2 + 15", 10 + 60 * (i - 1));
+						button->setPosition("(&.width - width) / 4 * 2 + 15", 70 + 60 * (i - 1));
 						rep2++;
 						break;
 					case 3:
-						button->setPosition("(&.width - width) / 4 * 3 + 15", 10 + 60 * (i - 1));
+						button->setPosition("(&.width - width) / 4 * 3 + 15", 70 + 60 * (i - 1));
 						break;
 					}
 					break;
@@ -175,6 +196,15 @@ void BuildPersonSkillTree(int crewPersonNumber)
 				button->connect("MouseReleased", skillUp, &(*c), &(*j), str);
 			}
 		}
+	}
+}
+
+void UpdatePersonSkillTree()
+{
+	for (int i = 0; i < gEnv->game.player.crew.characters.size(); i++)
+	{
+		gEnv->game.adventureGUI.get<tgui::Label>("labSkillTreeLevel" + std::to_string(i))->setText("Level: " + std::to_string(gEnv->game.player.crew.characters[i]->level));
+		gEnv->game.adventureGUI.get<tgui::Label>("labSkillTreePoints" + std::to_string(i))->setText("Skill points: " + std::to_string(gEnv->game.player.crew.characters[i]->skillPoints));
 	}
 }
 
@@ -560,6 +590,8 @@ void skillUp(Character *c, PassiveSkill *p, std::wstring treeName, tgui::Widget:
 		{
 			
 	}*/
+	if (c->level < p->level || c->skillPoints == 0) return;
+
 	bool ok = true;
 	for (auto pp : c->skillTrees[treeName])
 	{
@@ -567,7 +599,18 @@ void skillUp(Character *c, PassiveSkill *p, std::wstring treeName, tgui::Widget:
 			ok = false;
 	}
 
-	if (!ok) return;
+	bool ok2 = false;
+	if (p->level == 1) ok2 = true;
+	else for (auto pp : c->skillTrees[treeName])
+	{
+		if (pp->level + 1 == p->level && pp != p)
+		{
+			if (pp->active)
+				ok2 = true;
+		}
+	}
+
+	if (!ok || !ok2) return;
 
 	p->active = true;
 	if (p->effect->targetType == targetType::ship)
@@ -578,6 +621,9 @@ void skillUp(Character *c, PassiveSkill *p, std::wstring treeName, tgui::Widget:
 	}
 	
 	widget->setRenderer(gEnv->globalTheme.getRenderer("Button2"));
+	c->skillPoints--;
+
+	UpdatePersonSkillTree();
 }
 
 void giveRoleFind(int id, int buttonId, tgui::Widget::Ptr widget, const std::string& signalName)
