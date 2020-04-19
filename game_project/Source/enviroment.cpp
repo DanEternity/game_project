@@ -1,7 +1,7 @@
 #include "enviroment.h"
 #include <windows.h>
 
-GlobalEnviroment * globalEnviroment = nullptr;
+GlobalEnviroment * globalEnviroment;
 
 void initEnviroment()
 {

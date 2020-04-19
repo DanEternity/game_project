@@ -3,7 +3,7 @@
 BaseObject * scriptUtil::getArgumentIntObject(std::wstring arg, ScriptDescriptor * sd, bool &error)
 {
 
-	error = false;
+	//error = false;
 	BaseObject * obj = NULL;
 
 	// check if src is const
@@ -64,7 +64,7 @@ int scriptUtil::getArgumentIntValue(std::wstring arg, ScriptDescriptor * sd, boo
 
 BaseObject * scriptUtil::getArgumentFloatObject(std::wstring arg, ScriptDescriptor * sd, bool & error)
 {
-	error = false;
+	//error = false;
 	BaseObject * obj = NULL;
 
 	// check if src is const
@@ -136,7 +136,7 @@ float scriptUtil::getArgumentFloatValue(std::wstring arg, ScriptDescriptor * sd,
 BaseObject * scriptUtil::getArgumentStringObject(std::wstring arg, ScriptDescriptor * sd, bool & error)
 {
 
-	error = false;
+	//error = false;
 	BaseObject * obj = NULL;
 
 	// check if src is const
@@ -206,6 +206,48 @@ std::wstring scriptUtil::getArgumentStringValue(std::wstring arg, ScriptDescript
 		delete(p);
 
 	return r;
+}
+
+BaseObject * scriptUtil::getArgumentObject(std::wstring arg, ScriptDescriptor * sd, RETURN_CODE & qcode)
+{
+
+	BaseObject * obj = NULL;
+
+	// check if src is const
+	if (arg.size() >= 1)
+	{
+		if (arg[0] != '$')
+		{
+			// value is const
+			auto code = convertConstToObject(arg, &obj);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				qcode = code;
+				return obj;
+			}
+		}
+		else
+		{
+			// get src object if not a const
+			auto code = getMemoryCell(arg, &obj, &sd->localMemory);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				qcode = code;
+				return obj;
+			}
+		}
+	}
+	else
+	{
+		// failed
+		// no source provided
+		qcode = memoryUtil::returnCodeStatus(memoryUtil::invalidSource & memoryUtil::error);
+		return obj;
+	}
+	qcode = memoryUtil::ok;
+	return obj;
 }
 
 targetType::TargetType scriptUtil::getFromStringTargetType(std::wstring name)

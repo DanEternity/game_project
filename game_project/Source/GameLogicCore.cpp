@@ -237,4 +237,53 @@ void LoadScriptTemplates()
 	p.mainHandler = scriptCompilerTemplates::mainHandler::GetFromPool;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
+	// StringConcat
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"STRINGCONCAT";
+	p.body = "\"$A\" \"$B\" \"$dest\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::StringConcat;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// CreateExternalTable
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"CREATEEXTERNALTABLE";
+	p.body = "\"$dest\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::CreateExternalTable;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// PutToExternalTable
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"PUTTOEXTERNALTABLE";
+	p.body = "\"$table\" \"$src\" \"$dest\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::PutToExternalTable;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// PutToExternalTable
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"PUTFROMEXTERNALTABLE";
+	p.body = "\"$table\" \"$src\" \"$dest\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::PutFromExternalTable;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// CreateMarker
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"CREATEMARKER";
+	p.body = "\"$dest\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::CreateMarker;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// AddMarkerToSector
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"ADDMARKERTOSECTOR";
+	p.body = "\"$src\" \"$dst\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::AddMarkerToSector;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// EditMarkerProperties
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"EDITMARKERPROPERTIES";
+	p.body = "\"$src\" \"$level\" \"$danger\" \"$posX\" \"$posY\" \"$label\" \"$desc\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::EditMarkerProperties;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
 }

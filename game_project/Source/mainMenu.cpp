@@ -212,6 +212,12 @@ void createMenuButtons()
 	testButton->setPosition({ "90%", "10%" });
 	testButton->setText(L"TEST SCRIPT");
 	testButton->connect("MouseReleased", testFunctionExecScript);
+
+	/////
+	//testButton->setEnabled(false);
+	//testButton->setVisible(false);
+	/////
+
 	//testButton->connect("MouseReleased", testFunctionCreateScript);
 	gEnv->globalGui.add(testButton);
 	/* Do not delete endregion */
@@ -325,7 +331,7 @@ void testFunctionExecScript()
 	//delete(c);
 
 	filename = gEnv->game.workDir;
-	filename += "\\resources\\scripts\\test\\test.esl";
+	filename += "\\resources\\scripts\\test\\TestProgress.esl";
 	c = new ScriptCompiler();
 	q = c->compileFile(filename, L"testMod");
 	delete(c);

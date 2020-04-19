@@ -117,6 +117,13 @@ private:
 	void p_processCreatePool(CreatePoolScript * command);
 	void p_processAddToPool(AddToPoolScript * command);
 	void p_processGetFromPool(GetFromPoolScript * command);
+	void p_processStringConcat(StringConcatScript * command);
+	void p_processCreateExternalTable(CreateExternalTableScript * command);
+	void p_processPutToExternalTable(PutToExternalTableScript * command);
+	void p_processPutFromExternalTable(PutFromExternalTableScript * command);
+	void p_processCreateMarker(CreateMarkerScript * command);
+	void p_processAddMarkerToSector(AddMarkerToSectorScript * command);
+	void p_processEditMarkerProperties(EditMarkerPropertiesScript * command);
 };
 
 extern ScriptSystem * scriptSystem;

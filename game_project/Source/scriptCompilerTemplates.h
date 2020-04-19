@@ -43,9 +43,18 @@ namespace scriptCompilerTemplates
 		BaseScript * CreateEquipmentItem(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * ApplyEffectToEquipment(CompilerCommandTemplateDataBuffer * buffer); // work
 		BaseScript * EditEquipmentProperties(CompilerCommandTemplateDataBuffer * buffer); // work // not finished
-		BaseScript * CreatePool(CompilerCommandTemplateDataBuffer * buffer);
-		BaseScript * AddToPool(CompilerCommandTemplateDataBuffer * buffer);
-		BaseScript * GetFromPool(CompilerCommandTemplateDataBuffer * buffer);
+		BaseScript * CreatePool(CompilerCommandTemplateDataBuffer * buffer); // work
+		BaseScript * AddToPool(CompilerCommandTemplateDataBuffer * buffer); // not fully testd // work
+		BaseScript * GetFromPool(CompilerCommandTemplateDataBuffer * buffer); // not fully tested // work
+		BaseScript * StringConcat(CompilerCommandTemplateDataBuffer * buffer); // work
+		BaseScript * CreateExternalTable(CompilerCommandTemplateDataBuffer * buffer); // work
+		BaseScript * PutToExternalTable(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * PutFromExternalTable(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * CreateMarker(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * AddMarkerToSector(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * EditMarkerProperties(CompilerCommandTemplateDataBuffer * buffer); // ?
+
+
 	}
 
 	namespace afterUpdateHandler 

@@ -242,6 +242,27 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::createPool:
 		p_processCreatePool(static_cast<CreatePoolScript*>(command));
 		break;
+	case scriptType::stringConcat:
+		p_processStringConcat(static_cast<StringConcatScript*>(command));
+		break;
+	case scriptType::createExternalTable:
+		p_processCreateExternalTable(static_cast<CreateExternalTableScript*>(command));
+		break;
+	case scriptType::putFromExternalTable:
+		p_processPutFromExternalTable(static_cast<PutFromExternalTableScript*>(command));
+		break;
+	case scriptType::putToExternalTable:
+		p_processPutToExternalTable(static_cast<PutToExternalTableScript*>(command));
+		break;
+	case scriptType::createMarker:
+		p_processCreateMarker(static_cast<CreateMarkerScript*>(command));
+		break;
+	case scriptType::addMarkerToSector:
+		p_processAddMarkerToSector(static_cast<AddMarkerToSectorScript*>(command));
+		break;
+	case scriptType::editMarkerProperties:
+		p_processEditMarkerProperties(static_cast<EditMarkerPropertiesScript*>(command));
+		break;
 	default:
 		printf("Debug: ScriptSystem Error! Script command has unknown type -> %i", sType);
 		break;
@@ -424,6 +445,9 @@ bool ScriptSystem::p_calculateComporator(ComparatorElement * comparator)
 
 	//	float l = _wtof(l_arg.c_str());
 	//	float r = _wtof(r_arg.c_str());
+
+		if (error)
+			return false;
 
 		if (op == L"==")
 		{
@@ -1854,7 +1878,7 @@ void ScriptSystem::p_processCreateResourceItem(CreateResourceItemScript * comman
 	ItemResource * obj = new ItemResource;
 	gEnv->objects.items[id] = obj;
 
-	bool error;
+	bool error = false;
 	
 	obj->name = scriptUtil::getArgumentStringValue(command->name, p_d, error);
 	obj->count = scriptUtil::getArgumentIntValue(command->count, p_d, error);
@@ -2165,6 +2189,270 @@ void ScriptSystem::p_processGetFromPool(GetFromPoolScript * command)
 
 	}
 
+
+}
+
+void ScriptSystem::p_processStringConcat(StringConcatScript * command)
+{
+
+	RETURN_CODE code;
+	bool error = false;
+
+	std::wstring srcA = scriptUtil::getArgumentStringValue(command->a, p_d, error);
+	std::wstring srcB = scriptUtil::getArgumentStringValue(command->b, p_d, error);
+
+	if (error)
+	{
+		// failed
+		return;
+	}
+
+	StringObject * res = new StringObject(srcA + srcB);
+	res->memoryControl = memoryControl::singleUse;
+
+	code = putMemoryCell(command->dest, res, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+
+}
+
+void ScriptSystem::p_processCreateExternalTable(CreateExternalTableScript * command)
+{
+
+	auto p = createExternalTable();
+
+	StringObject * res = new StringObject(p);
+	res->memoryControl = memoryControl::singleUse;
+	
+	auto code = putMemoryCell(command->dest, res, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+}
+
+void ScriptSystem::p_processPutToExternalTable(PutToExternalTableScript * command)
+{
+	
+	bool error = false;
+	auto t = scriptUtil::getArgumentStringValue(command->table, p_d, error);
+	if (error)
+	{
+		// failed
+		return;
+	}
+
+	std::wstring dst = command->dst;
+
+	dst = L"$EXT:" + t + L":" + dst;
+
+	std::wstring src = command->src;
+
+	BaseObject * obj = NULL;
+
+	// check if src is const
+	if (src.size() >= 1)
+	{
+		if (src[0] != '$')
+		{
+			// value is const
+			auto code = convertConstToObject(src, &obj);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+		}
+		else
+		{
+			// get src object if not a const
+			auto code = getMemoryCell(src, &obj, &p_d->localMemory);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+		}
+	}
+	else
+	{
+		// failed
+		// no source provided
+		return;
+	}
+
+	auto code = putMemoryCell(dst, obj, &p_d->localMemory);
+
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+}
+
+void ScriptSystem::p_processPutFromExternalTable(PutFromExternalTableScript * command)
+{
+
+	bool error = false;
+	auto t = scriptUtil::getArgumentStringValue(command->table, p_d, error);
+	if (error)
+	{
+		// failed
+		return;
+	}
+
+	std::wstring src = command->src;
+
+	src = L"$EXT:" + t + L":" + src;
+
+	std::wstring dst = command->dst;
+
+	BaseObject * obj = NULL;
+
+	// check if src is const
+	if (src.size() >= 1)
+	{
+		if (src[0] != '$')
+		{
+			// value is const
+			auto code = convertConstToObject(src, &obj);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+		}
+		else
+		{
+			// get src object if not a const
+			auto code = getMemoryCell(src, &obj, &p_d->localMemory);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+		}
+	}
+	else
+	{
+		// failed
+		// no source provided
+		return;
+	}
+
+	auto code = putMemoryCell(dst, obj, &p_d->localMemory);
+
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+}
+
+void ScriptSystem::p_processCreateMarker(CreateMarkerScript * command)
+{
+
+	MapMarker * obj = new MapMarker();
+
+	auto dst = command->dst;
+
+	auto code = putMemoryCell(dst, obj, &p_d->localMemory);
+
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+}
+
+void ScriptSystem::p_processAddMarkerToSector(AddMarkerToSectorScript * command)
+{
+
+	RETURN_CODE code;
+
+	auto objSrc = scriptUtil::getArgumentObject(command->src, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	auto objDest = scriptUtil::getArgumentObject(command->dst, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::mapMarker || objDest->objectType != objectType::mapSector)
+	{
+		// failed
+		return;
+	}
+
+	MapSector * p = static_cast<MapSector*>(objDest);
+	MapMarker * m = static_cast<MapMarker*>(objSrc);
+
+	p->markers.push_back(m);
+
+}
+
+void ScriptSystem::p_processEditMarkerProperties(EditMarkerPropertiesScript * command)
+{
+
+	RETURN_CODE code;
+
+	auto obj = scriptUtil::getArgumentObject(command->src, p_d, code);
+
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (obj->objectType != objectType::mapMarker)
+	{
+		// failed
+		return;
+	}
+
+	MapMarker * p = static_cast<MapMarker*>(obj);
+
+//	p->danger = command->danger;
+//	p->level = command->level;
+//	p->name = command->label;
+//	p->description = command->desc;
+//	p->pos.x = command->posX;
+//	p->pos.y = command->posY;
+
+	bool error = false;
+
+	int danger = scriptUtil::getArgumentIntValue(command->danger, p_d, error);
+	int level = scriptUtil::getArgumentIntValue(command->level, p_d, error);
+	float posX = scriptUtil::getArgumentFloatValue(command->posX, p_d, error);
+	float posY = scriptUtil::getArgumentFloatValue(command->posY, p_d, error);
+	
+	std::wstring label = scriptUtil::getArgumentStringValue(command->label, p_d, error);
+	std::wstring desc = scriptUtil::getArgumentStringValue(command->desc, p_d, error);
+
+	// error check
+	//if ()
+
+	p->danger = danger;
+	p->level = level;
+	p->pos.x = posX;
+	p->pos.y = posY;
+	p->name = label;
+	p->description = desc;
 
 }
 

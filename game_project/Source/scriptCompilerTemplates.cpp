@@ -405,6 +405,75 @@ BaseScript * scriptCompilerTemplates::mainHandler::GetFromPool(CompilerCommandTe
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::StringConcat(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new StringConcatScript();
+	p->dest = convertExtReferences(buffer, buffer->arg["$dest"]);
+	p->a = convertExtReferences(buffer, buffer->arg["$A"]);
+	p->b = convertExtReferences(buffer, buffer->arg["$B"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::CreateExternalTable(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new CreateExternalTableScript();
+	p->dest = convertExtReferences(buffer, buffer->arg["$dest"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::PutToExternalTable(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new PutToExternalTableScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dest"]);
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->table = convertExtReferences(buffer, buffer->arg["$table"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::PutFromExternalTable(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new PutFromExternalTableScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dest"]);
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->table = convertExtReferences(buffer, buffer->arg["$table"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::CreateMarker(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new CreateMarkerScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dest"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::AddMarkerToSector(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new AddMarkerToSectorScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::EditMarkerProperties(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new EditMarkerPropertiesScript();
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->level = convertExtReferences(buffer, buffer->arg["$level"]);
+	p->danger = convertExtReferences(buffer, buffer->arg["$danger"]);
+	p->posX = convertExtReferences(buffer, buffer->arg["$posX"]);
+	p->posY = convertExtReferences(buffer, buffer->arg["$posY"]);
+	p->label = convertExtReferences(buffer, buffer->arg["$label"]);
+	p->desc = convertExtReferences(buffer, buffer->arg["$desc"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);

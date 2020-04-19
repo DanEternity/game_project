@@ -25,6 +25,30 @@ Ariphmetic "$_rarity * 2.5" to "$_temp"
 Ariphmetic "$_pA + $_temp" to "$_pA"
 Ariphmetic "$_pA * $_qmod" to "$_pA"
 
+// hull param
+Ariphmetic "$_key * 43331" to "$_pB"
+Ariphmetic "$_pB % 10000" to "$_pB"
+Ariphmetic "$_pB / 10000" to "$_pB"
+Ariphmetic "$_pB * 50" to "$_pB"
+Ariphmetic "$_pB + 100" to "$_pB"
+Ariphmetic "$_level * 0.4" to "$_temp"
+Ariphmetic "$_pB + $_temp" to "$_pB"
+Ariphmetic "$_rarity * 2.5" to "$_temp"
+Ariphmetic "$_pB + $_temp" to "$_pB"
+Ariphmetic "$_pB * $_qmod" to "$_pB"
+
+// hull param
+Ariphmetic "$_key * 33331" to "$_pC"
+Ariphmetic "$_pC % 10000" to "$_pC"
+Ariphmetic "$_pC / 10000" to "$_pC"
+Ariphmetic "$_pC * 40" to "$_pC"
+Ariphmetic "$_pC + 80" to "$_pC"
+Ariphmetic "$_level * 0.4" to "$_temp"
+Ariphmetic "$_pC + $_temp" to "$_pC"
+Ariphmetic "$_rarity * 2.5" to "$_temp"
+Ariphmetic "$_pC + $_temp" to "$_pC"
+Ariphmetic "$_pC * $_qmod" to "$_pC"
+
 IfDoJump "$_q >= 1500" "@up3"
 IfDoJump "$_q >= 1300" "@up2"
 IfDoJump "$_q >= 1100" "@up1"
@@ -63,6 +87,12 @@ EditItemConstructableProperties "$_p" "$_key" "$_q" "$_qname"
 EditModuleProperties "$_p" "system" "core" "large" "0" "0" "1"
 
 CreateModStatEffect "$_effect" "ship" "powerSupply" "$_pA" "0" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+
+CreateModStatEffect "$_effect" "ship" "hull" "$_pB" "0" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+
+CreateModStatEffect "$_effect" "ship" "actionPoints" "$_pC" "0" "0" "0"
 ApplyEffectToSysModule "$_effect" "$_p"
 
 PutToPointer "$_p" "$_arg4"
