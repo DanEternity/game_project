@@ -20,6 +20,7 @@ namespace characterRole
 	enum Role
 	{
 		noneRole,
+		programmer,
 	};
 }
 
@@ -44,11 +45,16 @@ public:
 	// stats
 
 	std::map<statNames::StatName, Stat*> characterStats;
-	std::map<statNames::StatName, Stat*> statsForShip;
+	std::vector<StatModEffect*> effectsForShip;
 
-	int level;
+	bool haveRole = false;
+
+	int level = 2;
+	int skillPoints = 1;
 	float exp;
 	std::map<int, float> expToNextLevel;
+
+
 	Stat health;
 	Stat armor;
 	Stat shield;
@@ -70,7 +76,7 @@ public:
 	Character(std::wstring name)
 	{
 		this->name = name;
-		this->characterClass = L"None";
+		this->characterClass = L"Noe";
 		this->characterRace = L"Human";
 		this->health.baseValue = 100;
 		slot.resize(7);
@@ -118,6 +124,20 @@ public:
 			skill->effect = new StatModEffect();
 			skill->effect->targetType = targetType::character;
 			skill->effect->statName = statNames::characterHealth;
+			skill->effect->p_add = 30;
+			vct.push_back(skill);
+
+			skill = new PassiveSkill(L"+6% hull", 3);
+			skill->effect = new StatModEffect();
+			skill->effect->targetType = targetType::ship;
+			skill->effect->statName = statNames::hull;
+			skill->effect->p_mul = 0.06;
+			vct.push_back(skill);
+
+			skill = new PassiveSkill(L"+30 power supply", 3);
+			skill->effect = new StatModEffect();
+			skill->effect->targetType = targetType::ship;
+			skill->effect->statName = statNames::powerSupply;
 			skill->effect->p_add = 30;
 			vct.push_back(skill);
 

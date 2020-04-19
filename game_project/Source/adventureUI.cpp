@@ -60,6 +60,14 @@ void createAdventureUIButtons()
 	gEnv->game.player.ship->shield.current = 0;
 
 
+	//minimap
+
+	tgui::Panel::Ptr minimap = tgui::Panel::create();
+	minimap->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
+	minimap->setPosition(10, 700);
+	minimap->setSize(400, 300);
+	gEnv->game.adventureGUI.add(minimap, "minimap");
+
 	//create main interface panel
 
 	tgui::Panel::Ptr adventureUIPanel = tgui::Panel::create();
@@ -467,6 +475,7 @@ void createAdventureUIButtons()
 	//gEnv->game.player.crew->shipCrew[0]->personEquipment.resize(7, nullptr);
 
 	gEnv->game.player.crew.characters.push_back(new Character(L"Person 1"));
+	gEnv->game.player.crew.characters[0]->role = characterRole::programmer;
 
 	gEnv->game.player.crew.characters[0]->equipment[0] = new Equipment(L"Base Helmet", equipmentSlot::head);
 
@@ -645,7 +654,9 @@ void disableAllAdventureUI()
 		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i))->setEnabled(false);
 		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i))->setVisible(false);
 		gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i))->setEnabled(false);
-		gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i))->setVisible(false);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i))->setVisible(false);		
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(i))->setEnabled(false);
+		gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(i))->setVisible(false);
 		
 	}
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setEnabled(false);
