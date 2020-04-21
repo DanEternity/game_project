@@ -138,6 +138,9 @@
     <ClCompile Include="Source\characterManagement.cpp">
       <Filter>Adventure\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Source\map.cpp">
+      <Filter>Adventure\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\game.h">
@@ -334,6 +337,9 @@
     </ClInclude>
     <ClInclude Include="Source\poolObject.h">
       <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\map.h">
+      <Filter>Adventure\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

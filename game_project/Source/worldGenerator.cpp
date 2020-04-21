@@ -144,6 +144,7 @@ void startWorldGeneration()
 	//		vKey = it->second->key;
 	//}
 	//printf("%llu \n", vKey);
+	BuildMapUI();
 }
 
 void loadSectorPropertiesDB()

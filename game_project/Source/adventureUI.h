@@ -8,6 +8,7 @@
 #include "storageStuff.h"
 #include "LocaleLoader.h"
 #include "CraftUI.h"
+#include "map.h"
 
 void updateAdventureUI();
 void DrawAdventureUI();
