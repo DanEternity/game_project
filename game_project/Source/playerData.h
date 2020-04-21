@@ -35,6 +35,7 @@ namespace shipMenu {
 		storage,
 		stats,
 		hangar,
+		map
 	};
 
 }

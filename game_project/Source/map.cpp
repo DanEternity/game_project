@@ -7,7 +7,9 @@ void BuildMapUI()
 	panel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
 	panel->setPosition("(&.width - width) / 2", "(&.height - height) / 2");
 	panel->setSize("90%", "90%");
-	gEnv->game.adventureGUI.add(panel);
+	gEnv->game.adventureGUI.add(panel, "globalMapPanel");
+	panel->setVisible(false);
+	panel->setEnabled(false);
 	
 	for (auto sector : gEnv->game.adventureData.sectors)
 	{

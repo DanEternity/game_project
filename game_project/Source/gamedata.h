@@ -53,6 +53,7 @@ class AdventureUI
 {
 public:
 	bool isInventoryOpen = false;
+	bool isMapOpen = false;
 	bool adventureUIUpdateRequired;
 	bool adventureUIDrawRequired;
 	bool widgetDisable;
