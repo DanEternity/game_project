@@ -23,17 +23,15 @@ void startWorldGeneration()
 
 	AdnvetureData * a = &gEnv->game.adventureData;
 
-	// Load generation resources
 
-	loadSectorPropertiesDB();
 
 	// point generation
 
 	for (int i(0); i < maxGeneratedPoints; i++)
 	{
 
-		int x = getRand() % maxGalaxyRadius;
-		int y = getRand() % maxGalaxyRadius;
+		int x = (getRand() % (2*maxGalaxyRadius)) - maxGalaxyRadius;
+		int y = (getRand() % (2*maxGalaxyRadius)) - maxGalaxyRadius;
 
 		if ((x*x) + (y*y) > maxGalaxyRadius*maxGalaxyRadius)
 			continue;
@@ -45,9 +43,12 @@ void startWorldGeneration()
 
 		p->distance = sqrt((x*x) + (y*y));
 
-		p->key = getRand64();
+		//p->key = getRand64();
+		p->key = getRand();
 
-		a->sectors[std::to_string(p->key)] = p;
+		//a->sectors[std::to_string(p->key)] = p;
+
+		a->sectors[std::to_string(i)] = p;
 
 	}
 
@@ -133,17 +134,7 @@ void startWorldGeneration()
 		}
 
 	}
-
-	//auto it = a->sectors.end();
-	//it--;
-	//printf("%llu \n", it->second->key);
-	//uint64_t vKey = 0;
-	//for (auto it(a->sectors.begin()); it != a->sectors.end(); it++)
-	//{
-	//	if (vKey < it->second->key)
-	//		vKey = it->second->key;
-	//}
-	//printf("%llu \n", vKey);
+ 
 }
 
 void loadSectorPropertiesDB()
@@ -155,16 +146,108 @@ void loadSectorPropertiesDB()
 	
 	p = new MapSectorPropertyTemplate();
 	p->baseValue = 100;
-	p->srcName = "default";
+	p->srcName = L"default";
 	p->valueWeight = 100;
 	p->valueDistribution = 5000;
 	gEnv->game.adventureData.worldGeneratorData.sectorProperties[p->srcName] = p;
 
 	p = new MapSectorPropertyTemplate();
 	p->baseValue = 100;
-	p->srcName = "default2";
+	p->srcName = L"default2";
 	p->valueWeight = 1000;
 	p->valueDistribution = 5000;
 	gEnv->game.adventureData.worldGeneratorData.sectorProperties[p->srcName] = p;
+
+}
+
+void loadSectorTemplatesDB()
+{
+
+	SectorTemplate * p;
+
+	p = new SectorTemplate();
+	//p->required.push_back();
+	p->compatible.push_back(gEnv->game.adventureData.worldGeneratorData.sectorProperties[L"default"]);
+	p->compatible.push_back(gEnv->game.adventureData.worldGeneratorData.sectorProperties[L"default2"]);
+	p->filename = "\\resources\\scripts\\\World\\SectorTemplates\\Test2.esl";
+
+	gEnv->game.adventureData.worldGeneratorData.sectorTemplates.push_back(p);
+
+	p->script;
+}
+
+void worldGeneratorUpdate(double deltatime)
+{
+	
+	if (gEnv->game.adventureData.worldGeneratorData.task == "init")
+	{
+
+		// Load generation resources
+
+		loadSectorPropertiesDB();
+		loadSectorTemplatesDB();
+
+		//
+
+		gEnv->game.adventureData.worldGeneratorData.task = "loadTemplates";
+		
+		gEnv->game.adventureData.worldGeneratorData.sector = gEnv->game.adventureData.sectors.begin();
+		gEnv->game.adventureData.worldGeneratorData.templateId = 0;
+
+	}
+
+	if (gEnv->game.adventureData.worldGeneratorData.task == "loadTemplates")
+	{
+		
+		if (gEnv->game.adventureData.worldGeneratorData.templateId < gEnv->game.adventureData.worldGeneratorData.sectorTemplates.size())
+		{
+			auto p = gEnv->game.adventureData.worldGeneratorData.sectorTemplates[gEnv->game.adventureData.worldGeneratorData.templateId];
+
+			ScriptCompiler * c;
+			ScriptDescriptor * q;
+			std::string filename;
+
+			filename = gEnv->game.workDir;
+			filename += p->filename;
+			c = new ScriptCompiler();
+			q = c->compileFile(filename, p->familyId);
+			delete(c);
+
+			addScriptToQueue(q);
+
+			gEnv->game.adventureData.worldGeneratorData.templateId++;
+		}
+		else
+		{
+			startWorldGeneration();
+			gEnv->game.adventureData.worldGeneratorData.task = "processingSectors";
+		}
+
+	}
+
+	//if (gEnv->load)
+
+	if (gEnv->game.adventureData.worldGeneratorData.task == "processingSectors")
+	{
+
+
+		gEnv->game.adventureData.worldGeneratorData.task = "completed";
+	}
+
+
+	if (gEnv->game.adventureData.worldGeneratorData.task == "completed")
+	{
+		
+		gEnv->game.gameAdventureGUIRequiresUpdate = true;
+		gEnv->game.adventureUI.adventureUIDrawRequired = true;
+
+		gEnv->game.activeGameMode = gameMode::adventureMode;
+
+		gEnv->game.worldGeneratorRequiresUpdate = false;
+		
+		
+	}
+
+
 
 }

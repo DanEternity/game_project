@@ -335,6 +335,9 @@
     <ClInclude Include="Source\poolObject.h">
       <Filter>Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Source\sectorGeneratorTemplate.h">
+      <Filter>WorldGenerator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\Localization\ru_ru.txt">

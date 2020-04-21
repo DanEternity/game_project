@@ -30,6 +30,7 @@ public:
 	float settingMapScale = 2;
 
 	WorldGenerationData worldGeneratorData;
+	
 
 	sf::Sprite * bgImage = NULL;
 

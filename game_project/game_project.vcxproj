@@ -308,6 +308,7 @@
     <ClInclude Include="Source\scriptWorkflowUtility.h" />
     <ClInclude Include="Source\sectorData.h" />
     <ClInclude Include="Source\sectorDrawUtility.h" />
+    <ClInclude Include="Source\sectorGeneratorTemplate.h" />
     <ClInclude Include="Source\ship.h" />
     <ClInclude Include="Source\shipManagement.h" />
     <ClInclude Include="Source\shipModulesUI.h" />

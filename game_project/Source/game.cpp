@@ -6,6 +6,7 @@
 #include "mainMenu.h"
 #include "adventureModeCore.h"
 #include "adventureUI.h"
+#include "worldGenerator.h"
 
 void updateGameCycle(double deltaTime)
 {
@@ -77,7 +78,7 @@ void updateGameCycle(double deltaTime)
 
 	if (gEnv->game.worldGeneratorRequiresUpdate)
 	{
-
+		worldGeneratorUpdate(deltaTime);
 	}
 
 	/* End of cycle update */

@@ -249,13 +249,19 @@ void createMenuButtons()
 
 void startClick()
 {
-
+	/*
 	gEnv->game.gameAdventureGUIRequiresUpdate = true;
 	gEnv->game.adventureUI.adventureUIDrawRequired = true;
-	disableAllMainMenuWidgets();
+	
 	gEnv->game.activeGameMode = gameMode::adventureMode;
 
 	startWorldGeneration();
+	*/
+
+	disableAllMainMenuWidgets();
+	gEnv->game.activeGameMode = gameMode::gameGenerationMode;
+	gEnv->game.worldGeneratorRequiresUpdate = true;
+	gEnv->game.adventureData.worldGeneratorData.task = "init";
 
 }
 

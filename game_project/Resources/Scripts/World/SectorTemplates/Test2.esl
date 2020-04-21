@@ -1,0 +1,14 @@
+﻿// init section
+@init
+
+ChangeScriptEntryPoint "$self" "@start"
+Terminate
+
+
+// start section
+@start
+
+Put "0" to "$_test"
+
+Terminate
+

@@ -57,6 +57,11 @@ void preloadScripts()
 
 	// modules template
 	addScriptToPreloadQueue("\\resources\\scripts\\Items\\Modules\\1001_BasicReactor.esl", L"core");
+
+
+	// sector templates
+	// addScriptToPreloadQueue("\\resources\\scripts\\\World\\SectorTemplates\\Test2.esl", L"core");
+
 }
 
 void postLoad()
