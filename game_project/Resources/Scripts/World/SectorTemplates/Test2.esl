@@ -1,5 +1,12 @@
-﻿// init section
+﻿#ext "test"
+
+// init section
 @init
+
+ifdoJump "$EXT:test:test > 0" "@inc"
+Put "0" to "$EXT:test:test"
+@inc
+Ariphmetic "$EXT:test:test + 1" to "$EXT:test:test"
 
 ChangeScriptEntryPoint "$self" "@start"
 Terminate

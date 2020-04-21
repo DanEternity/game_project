@@ -31,6 +31,9 @@ public:
 	// FamilyId
 	std::wstring familyId;
 
+	// Weight // Appearance frequency 
+	int weight;
+
 	SectorTemplate()
 	{
 		this->memoryControl = memoryControl::fixed;

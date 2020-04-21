@@ -5,7 +5,7 @@ void startWorldGeneration()
 
 	// initiate generation parameters
 
-	const int maxGeneratedPoints = 1200;
+	const int maxGeneratedPoints = 120;
 	const int maxGalaxyRadius = 5000;
 	const int sectorPropertiesCountWeightRaw[12] = { 0, 10, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -181,6 +181,7 @@ void loadSectorTemplatesDB()
 	p->compatible.push_back(gEnv->game.adventureData.worldGeneratorData.sectorProperties[L"default"]);
 	p->compatible.push_back(gEnv->game.adventureData.worldGeneratorData.sectorProperties[L"default2"]);
 	p->filename = "\\resources\\scripts\\\World\\SectorTemplates\\Test2.esl";
+	p->weight = 100;
 
 	gEnv->game.adventureData.worldGeneratorData.sectorTemplates.push_back(p);
 
@@ -223,7 +224,7 @@ void worldGeneratorUpdate(double deltatime)
 			c = new ScriptCompiler();
 			q = c->compileFile(filename, p->familyId);
 			delete(c);
-
+			p->script = q;
 			addScriptToQueue(q);
 
 			gEnv->game.adventureData.worldGeneratorData.templateId++;
@@ -232,7 +233,23 @@ void worldGeneratorUpdate(double deltatime)
 		{
 			startWorldGeneration();
 			gEnv->game.adventureData.worldGeneratorData.task = "processingSectors";
+
+			gEnv->game.adventureData.worldGeneratorData.sector = gEnv->game.adventureData.sectors.begin();
+
 		}
+
+	}
+
+	if (gEnv->game.adventureData.worldGeneratorData.task == "completed")
+	{
+
+		gEnv->game.gameAdventureGUIRequiresUpdate = true;
+		gEnv->game.adventureUI.adventureUIDrawRequired = true;
+
+		gEnv->game.activeGameMode = gameMode::adventureMode;
+
+		gEnv->game.worldGeneratorRequiresUpdate = false;
+
 
 	}
 
@@ -242,23 +259,94 @@ void worldGeneratorUpdate(double deltatime)
 	{
 
 
-		gEnv->game.adventureData.worldGeneratorData.task = "completed";
+		if (gEnv->game.adventureData.worldGeneratorData.sector == gEnv->game.adventureData.sectors.end())
+			gEnv->game.adventureData.worldGeneratorData.task = "completed";
+		else
+		{
+			worldGeneratorProcessSector();
+			gEnv->game.adventureData.worldGeneratorData.sector++;
+		}
 	}
 
 
-	if (gEnv->game.adventureData.worldGeneratorData.task == "completed")
+
+
+
+}
+
+void worldGeneratorProcessSector()
+{
+
+	MapSector * p = gEnv->game.adventureData.worldGeneratorData.sector->second;
+
+	// suitable templates
+	std::map<int, SectorTemplate*> buffer; 
+	int totalWeight = 0;
+	
+
+	for (int i(0); i < gEnv->game.adventureData.worldGeneratorData.sectorTemplates.size(); i++)
 	{
-		
-		gEnv->game.gameAdventureGUIRequiresUpdate = true;
-		gEnv->game.adventureUI.adventureUIDrawRequired = true;
+		if (checkSectorTemplateCompability(p, gEnv->game.adventureData.worldGeneratorData.sectorTemplates[i]))
+		{
+			totalWeight += gEnv->game.adventureData.worldGeneratorData.sectorTemplates[i]->weight;
+			buffer[totalWeight] = gEnv->game.adventureData.worldGeneratorData.sectorTemplates[i];
+		}
+	}
 
-		gEnv->game.activeGameMode = gameMode::adventureMode;
+	if (buffer.size() == 0)
+	{
+		if (debugMode)
+		{
+			printf("(world generator) Error! No suitable templates for sector %s \n", gEnv->game.adventureData.worldGeneratorData.sector->first.c_str());
+		}
 
-		gEnv->game.worldGeneratorRequiresUpdate = false;
-		
-		
+		return;
+	}
+
+	int r = getRand();
+
+	r = r % totalWeight;
+
+	auto q = buffer.lower_bound(r);
+
+	addScriptToQueue(q->second->script);
+
+}
+
+bool checkSectorTemplateCompability(MapSector * s, SectorTemplate * t)
+{
+	
+	for (int i(0); i < t->required.size(); i++)
+	{
+		bool found = false;
+		for (auto it = s->vProperty.begin(); it != s->vProperty.end(); it++)
+		{
+			if (it->second == t->required[i])
+			{
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+			return false;
+	}
+
+	for (auto it = s->vProperty.begin(); it != s->vProperty.end(); it++)
+	{
+		bool found = false;
+
+		for (int i(0); i < t->compatible.size(); i++)
+		{
+			if (t->compatible[i] == it->second)
+			{
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+			return false;
 	}
 
 
-
+	return true;
 }

@@ -20,3 +20,5 @@ void loadSectorTemplatesDB();
 void worldGeneratorUpdate(double deltatime);
 
 void worldGeneratorProcessSector();
+
+bool checkSectorTemplateCompability(MapSector * s, SectorTemplate * t);
