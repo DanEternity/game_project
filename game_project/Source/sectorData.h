@@ -37,6 +37,8 @@ public:
 	MapSector()
 	{
 		this->objectType = objectType::mapSector;
+		this->memoryControl = memoryControl::fixed;
+		backgroundImage = L"";
 	}
 };
 

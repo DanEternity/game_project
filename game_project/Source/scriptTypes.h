@@ -55,6 +55,8 @@ namespace scriptType
 		editMarkerProperties,
 		editSectorProperties,
 		callCustom,
+		linkScriptToMarker,
+		setMarkerPosition,
 	};
 }
 
@@ -616,11 +618,39 @@ class CallCustomScript : public BaseScript
 public:
 
 	std::wstring categoryId;
+
 	std::wstring scriptId;
+
 	std::vector<std::wstring> arg;
 
 	CallCustomScript() : BaseScript()
 	{
 		this->scriptType = scriptType::callCustom;
+	}
+};
+
+class LinkScriptToMarkerScript : public BaseScript
+{
+public: 
+
+	std::wstring script;
+	std::wstring marker;
+
+	LinkScriptToMarkerScript() : BaseScript()
+	{
+		this->scriptType = scriptType::linkScriptToMarker;
+	}
+
+};
+
+class SetMarkerPositionScript : public BaseScript
+{
+public:
+	std::wstring src;
+	std::wstring x;
+	std::wstring y;
+	SetMarkerPositionScript() : BaseScript()
+	{
+		this->scriptType = scriptType::setMarkerPosition;
 	}
 };

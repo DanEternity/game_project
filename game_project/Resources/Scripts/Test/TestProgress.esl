@@ -1,6 +1,6 @@
-﻿#ext "test"
+﻿
 
-Text "Testing - no test   $EXT:test:test"
+Text "Testing - no test"
 
 CreateExternalTable "$_t"
 

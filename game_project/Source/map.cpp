@@ -17,6 +17,6 @@ void BuildMapUI()
 		but->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 		but->setSize(20, 20);
 		panel->add(but);
-		but->setPosition(sector.second->x / 10 + (but->getParent()->getSize().x / 2), sector.second->y / 15 + (but->getParent()->getSize().y / 2));
+		but->setPosition(sector.second->x / 8 + (but->getParent()->getSize().x / 2), sector.second->y / 8 + (but->getParent()->getSize().y / 2));
 	}
 }

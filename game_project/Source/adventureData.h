@@ -26,6 +26,8 @@ public:
 
 	std::string currentSectorId = "null";
 
+	bool isSectorLoaded = false;
+
 	// world to pixel coordinate conversion
 	float settingMapScale = 2;
 

@@ -4,6 +4,7 @@
 #include "scriptUtilsUI.h"
 #include "generationUtility.h"
 #include "scriptWorkflowUtility.h"
+#include "scriptCompiler.h"
 #include <stack>
 //#include "scriptDescriptor.h"
 
@@ -124,6 +125,9 @@ private:
 	void p_processCreateMarker(CreateMarkerScript * command);
 	void p_processAddMarkerToSector(AddMarkerToSectorScript * command);
 	void p_processEditMarkerProperties(EditMarkerPropertiesScript * command);
+	void p_processCallCustom(CallCustomScript * command);
+	void p_processLinkScriptToMarker(LinkScriptToMarkerScript * command);
+	void p_processSetMarkerPosition(SetMarkerPositionScript * command);
 };
 
 extern ScriptSystem * scriptSystem;

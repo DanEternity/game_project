@@ -474,6 +474,40 @@ BaseScript * scriptCompilerTemplates::mainHandler::EditMarkerProperties(Compiler
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::CallMarkerInitialization(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new CallCustomScript();
+	p->categoryId = L"SectorTemplate";
+	p->scriptId = convertExtReferences(buffer, buffer->arg["$path"]);
+	int variants = 0;
+	while (buffer->arg.find("$A" + std::to_string(variants + 1)) != buffer->arg.end())
+	{
+		variants++;
+		p->arg.push_back(convertExtReferences(buffer, buffer->arg["$A" + std::to_string(variants)]));
+	}
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::LinkScriptToMarker(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new LinkScriptToMarkerScript();
+	p->marker = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->script = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::SetMarkerPosition(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new SetMarkerPositionScript();
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->x = convertExtReferences(buffer, buffer->arg["$X"]);
+	p->y = convertExtReferences(buffer, buffer->arg["$Y"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);

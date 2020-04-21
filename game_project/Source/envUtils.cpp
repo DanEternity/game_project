@@ -217,3 +217,13 @@ void addScriptToPreloadQueue(std::string filename, std::wstring familyId)
 	q.familyId = familyId;
 	gEnv->game.loader.scriptFilenames.push_back(q);
 }
+
+bool addScriptToQueueWithMemory(ScriptDescriptor * sd)
+{
+	auto * p = new StackElement();
+	p->scriptId = sd;
+	p->returnPoint = sd->entryPoint;
+	p->localMemory = sd->localMemory;
+	gEnv->scripts.queue.push_back(p);
+	return true;
+}

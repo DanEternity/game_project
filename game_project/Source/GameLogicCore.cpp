@@ -286,4 +286,32 @@ void LoadScriptTemplates()
 	p.mainHandler = scriptCompilerTemplates::mainHandler::EditMarkerProperties;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
+	// CallMarkerInitialization
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"CALLMARKERINITIALIZATION";
+	p.body = "\"$path\" %\"$A\"%,;";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::CallMarkerInitialization;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// CallMarkerInitialization // SHORT VERSION
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"CALLMARKERINIT";
+	p.body = "\"$path\" %\"$A\"%,;";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::CallMarkerInitialization;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// LinkScriptToMarker
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"LINKSCRIPTTOMARKER";
+	p.body = "\"$src\" \"$dst\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::LinkScriptToMarker;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// SetMarkerPosition
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"SETMARKERPOSITION";
+	p.body = "\"$src\" \"$X\" \"$Y\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::SetMarkerPosition;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
 }

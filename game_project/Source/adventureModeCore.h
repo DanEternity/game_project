@@ -14,3 +14,5 @@
 void updateAdventureGameMode(double delteTime);
 
 void drawAdventureGameMode(double deltaTime);
+
+void loadSector();
