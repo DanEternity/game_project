@@ -56,6 +56,8 @@ namespace scriptCompilerTemplates
 		BaseScript * CallMarkerInitialization(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * LinkScriptToMarker(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * SetMarkerPosition(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * CreateDecoration(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * AddDecorationToSector(CompilerCommandTemplateDataBuffer * buffer); // ?
 
 	}
 

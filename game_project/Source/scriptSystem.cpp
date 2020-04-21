@@ -279,6 +279,12 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::setMarkerPosition:
 		p_processSetMarkerPosition(static_cast<SetMarkerPositionScript*>(command));
 		break;
+	case scriptType::createDecoration:
+		p_processCreateDecoration(static_cast<CreateDecorationScript*>(command));
+		break;
+	case scriptType::addDecorationToSector:
+		p_processAddDecorationToSector(static_cast<AddDecorationToSectorScript*>(command));
+		break;
 	default:
 		printf("Debug: ScriptSystem Error! Script command has unknown type -> %i", sType);
 		break;
@@ -2048,7 +2054,7 @@ void ScriptSystem::p_processCreatePool(CreatePoolScript * command)
 	PoolObject * obj = new PoolObject;
 	gEnv->objects.pools[id] = obj;
 
-	bool error;
+	bool error = false;
 	auto argCount = scriptUtil::getArgumentIntValue(command->count, p_d, error);
 	
 	obj->argCount = argCount;
@@ -2673,6 +2679,86 @@ void ScriptSystem::p_processSetMarkerPosition(SetMarkerPositionScript * command)
 
 	p->pos.x = posX;
 	p->pos.y = posY;
+
+
+}
+
+void ScriptSystem::p_processCreateDecoration(CreateDecorationScript * command)
+{
+
+	auto dst = command->dest;
+
+	// create item
+	// need to store in global item db
+
+	int id = gEnv->objects.nextDecor;
+	MapDecoration * obj = new MapDecoration;
+	gEnv->objects.decor[id] = obj;
+
+
+
+
+	bool error = false;
+	auto model = scriptUtil::getArgumentStringValue(command->model, p_d, error);
+	float sx = scriptUtil::getArgumentFloatValue(command->scaleX, p_d, error);
+	float sy = scriptUtil::getArgumentFloatValue(command->scaleY, p_d, error);
+	float r = scriptUtil::getArgumentFloatValue(command->rotation, p_d, error);
+	float x = scriptUtil::getArgumentFloatValue(command->posX, p_d, error);
+	float y = scriptUtil::getArgumentFloatValue(command->posY, p_d, error);
+
+	//std::wstring model;
+	//std::wstring scaleX;
+	//std::wstring scaleY;
+	//std::wstring rotation;
+	//std::wstring posX;
+	//std::wstring posY;
+
+	obj->model = model;
+	obj->scale.x = sx;
+	obj->scale.y = sy;
+	obj->rotation = r;
+	obj->pos.x = x;
+	obj->pos.y = y;
+
+	auto code = putMemoryCell(dst, obj, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+
+}
+
+void ScriptSystem::p_processAddDecorationToSector(AddDecorationToSectorScript * command)
+{
+
+	RETURN_CODE code;
+
+	auto objSrc = scriptUtil::getArgumentObject(command->src, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	auto objDest = scriptUtil::getArgumentObject(command->dst, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::mapDecoration || objDest->objectType != objectType::mapSector)
+	{
+		// failed
+		return;
+	}
+
+	MapSector * p = static_cast<MapSector*>(objDest);
+	MapDecoration * m = static_cast<MapDecoration*>(objSrc);
+
+	p->objects.push_back(m);
 
 
 }

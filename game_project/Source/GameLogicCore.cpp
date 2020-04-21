@@ -314,4 +314,18 @@ void LoadScriptTemplates()
 	p.mainHandler = scriptCompilerTemplates::mainHandler::SetMarkerPosition;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
+	// CreateDecoration
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"CREATEDECORATION";
+	p.body = "\"$dst\" \"$model\" \"$sX\" \"$sY\" \"$rotation\" \"$posX\" \"$posY\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::CreateDecoration;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// AddDecorationToSector
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"ADDDECORATIONTOSECTOR";
+	p.body = "\"$src\" \"$dst\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::AddDecorationToSector;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
 }

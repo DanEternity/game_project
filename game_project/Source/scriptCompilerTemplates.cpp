@@ -508,6 +508,30 @@ BaseScript * scriptCompilerTemplates::mainHandler::SetMarkerPosition(CompilerCom
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::CreateDecoration(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new CreateDecorationScript();
+	//p.body = "\"$dst\" \"$model\" \"$sX\" \"$sY\" \"$rotation\" \"$posX\" \"$posY\"";
+	p->dest = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->model = convertExtReferences(buffer, buffer->arg["$model"]);
+	p->scaleX = convertExtReferences(buffer, buffer->arg["$sX"]);
+	p->scaleY = convertExtReferences(buffer, buffer->arg["$sY"]);
+	p->rotation = convertExtReferences(buffer, buffer->arg["$rotation"]);
+	p->posX = convertExtReferences(buffer, buffer->arg["$posX"]);
+	p->posY = convertExtReferences(buffer, buffer->arg["$posY"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::AddDecorationToSector(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new AddDecorationToSectorScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);

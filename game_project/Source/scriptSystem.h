@@ -128,6 +128,8 @@ private:
 	void p_processCallCustom(CallCustomScript * command);
 	void p_processLinkScriptToMarker(LinkScriptToMarkerScript * command);
 	void p_processSetMarkerPosition(SetMarkerPositionScript * command);
+	void p_processCreateDecoration(CreateDecorationScript * command);
+	void p_processAddDecorationToSector(AddDecorationToSectorScript * command);
 };
 
 extern ScriptSystem * scriptSystem;

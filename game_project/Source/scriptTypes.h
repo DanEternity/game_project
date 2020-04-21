@@ -57,6 +57,8 @@ namespace scriptType
 		callCustom,
 		linkScriptToMarker,
 		setMarkerPosition,
+		createDecoration,
+		addDecorationToSector,
 	};
 }
 
@@ -652,5 +654,42 @@ public:
 	SetMarkerPositionScript() : BaseScript()
 	{
 		this->scriptType = scriptType::setMarkerPosition;
+	}
+};
+
+class CreateDecorationScript : public BaseScript
+{
+public:
+	
+	std::wstring dest;
+
+	std::wstring model;
+	std::wstring scaleX;
+	std::wstring scaleY;
+	std::wstring rotation;
+	std::wstring posX;
+	std::wstring posY;
+
+	//gEnv->game.adventureData.sectors["TEST"]->objects[1]->model = L"decorationSpaceDebris";
+	//gEnv->game.adventureData.sectors["TEST"]->objects[1]->scale = { 1,1 };
+	//gEnv->game.adventureData.sectors["TEST"]->objects[1]->rotation = 70;
+	//gEnv->game.adventureData.sectors["TEST"]->objects[1]->pos = { 2700, 300 };
+
+	CreateDecorationScript() : BaseScript()
+	{
+		this->scriptType = scriptType::createDecoration;
+	}
+};
+
+class AddDecorationToSectorScript : public BaseScript
+{
+public:
+
+	std::wstring src;
+	std::wstring dst;
+
+	AddDecorationToSectorScript() : BaseScript()
+	{
+		this->scriptType = scriptType::addDecorationToSector;
 	}
 };
