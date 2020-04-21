@@ -239,6 +239,7 @@
     <ClCompile Include="Source\loader.cpp" />
     <ClCompile Include="Source\LocaleLoader.cpp" />
     <ClCompile Include="Source\mainMenu.cpp" />
+    <ClCompile Include="Source\map.cpp" />
     <ClCompile Include="Source\menuOverlay.cpp" />
     <ClCompile Include="Source\personEquipmentUI.cpp" />
     <ClCompile Include="Source\preload.cpp" />
@@ -283,6 +284,7 @@
     <ClInclude Include="Source\LocaleLoader.h" />
     <ClInclude Include="Source\localization.h" />
     <ClInclude Include="Source\mainMenu.h" />
+    <ClInclude Include="Source\map.h" />
     <ClInclude Include="Source\mapObjectsData.h" />
     <ClInclude Include="Source\mapSectorPropertyTemplate.h" />
     <ClInclude Include="Source\menuData.h" />

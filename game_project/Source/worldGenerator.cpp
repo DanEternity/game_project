@@ -134,7 +134,18 @@ void startWorldGeneration()
 		}
 
 	}
- 
+
+	//auto it = a->sectors.end();
+	//it--;
+	//printf("%llu \n", it->second->key);
+	//uint64_t vKey = 0;
+	//for (auto it(a->sectors.begin()); it != a->sectors.end(); it++)
+	//{
+	//	if (vKey < it->second->key)
+	//		vKey = it->second->key;
+	//}
+	//printf("%llu \n", vKey);
+	BuildMapUI();
 }
 
 void loadSectorPropertiesDB()

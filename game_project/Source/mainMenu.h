@@ -11,6 +11,7 @@
 #include <fstream>
 #include <sstream>
 #include <codecvt>
+#include "map.h"
 
 //This file contains logic for main menu
 

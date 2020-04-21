@@ -9,6 +9,7 @@
 #include "generationUtility.h"
 #include "enviroment.h"
 #include "scriptCompiler.h"
+#include "map.h"
 
 void startWorldGeneration();
 
