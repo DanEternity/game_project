@@ -53,9 +53,9 @@ void updateAdventureGameMode(double delteTime)
 		
 		// testing markers
 
-		gEnv->game.adventureData.sectors["TEST"]->markers.push_back(new MapMarker({ 900,900 }));
+		gEnv->game.adventureData.sectors["TEST"]->markers.push_back(new MapMarker({ 400,400 }));
 		buildMarker(gEnv->game.adventureData.sectors["TEST"]->markers[0]);
-
+		gEnv->game.adventureData.sectors["TEST"]->markers[0]->name = L"Космические обломки";
 		ScriptCompiler * c;
 		ScriptDescriptor * q;
 		std::string filename;
@@ -67,8 +67,10 @@ void updateAdventureGameMode(double delteTime)
 
 		gEnv->game.adventureData.sectors["TEST"]->markers[0]->sd = q;
 
-		gEnv->game.adventureData.sectors["TEST"]->markers.push_back(new MapMarker({0 , 0 }));
+		gEnv->game.adventureData.sectors["TEST"]->markers.push_back(new MapMarker({0 , -350 }));
+		
 		buildMarker(gEnv->game.adventureData.sectors["TEST"]->markers[1]);
+		gEnv->game.adventureData.sectors["TEST"]->markers[1]->name = L"Небольшой гражданский корабль";
 		filename = gEnv->game.workDir;
 		filename += "\\resources\\scripts\\test\\shadowy_business_test.esl";
 		c = new ScriptCompiler();
@@ -79,6 +81,7 @@ void updateAdventureGameMode(double delteTime)
 
 		gEnv->game.adventureData.sectors["TEST"]->markers.push_back(new MapMarker({ 0 , 1100 }));
 		buildMarker(gEnv->game.adventureData.sectors["TEST"]->markers[2]);
+		gEnv->game.adventureData.sectors["TEST"]->markers[2]->name = L"Неопознанный сигнал";
 		filename = gEnv->game.workDir;
 		filename += "\\resources\\scripts\\test\\demoEvent01.esl";
 		c = new ScriptCompiler();
@@ -89,6 +92,7 @@ void updateAdventureGameMode(double delteTime)
 
 		gEnv->game.adventureData.sectors["TEST"]->markers.push_back(new MapMarker({ 2700 , 500 }));
 		buildMarker(gEnv->game.adventureData.sectors["TEST"]->markers[3]);
+		gEnv->game.adventureData.sectors["TEST"]->markers[3]->name = L"Обломки транспортного корабля";
 		filename = gEnv->game.workDir;
 		filename += "\\resources\\scripts\\test\\demoEvent02.esl";
 		c = new ScriptCompiler();
@@ -97,6 +101,18 @@ void updateAdventureGameMode(double delteTime)
 
 		gEnv->game.adventureData.sectors["TEST"]->markers[3]->sd = q;
 
+
+		gEnv->game.adventureData.sectors["TEST"]->markers.push_back(new MapMarker({ 1500 , -100 }));
+		buildMarker(gEnv->game.adventureData.sectors["TEST"]->markers[4]);
+		gEnv->game.adventureData.sectors["TEST"]->markers[4]->name = L"Поле астероидов";
+		filename = gEnv->game.workDir;
+		filename += "\\resources\\scripts\\test\\demoEvent04.esl";
+		c = new ScriptCompiler();
+		q = c->compileFile(filename, L"testMod");
+		delete(c);
+
+		gEnv->game.adventureData.sectors["TEST"]->markers[4]->sd = q;
+
 		
 	//	buildSprite(&gEnv->game.player.shipModel, L"shipBase");
 		buildSprite(&gEnv->game.player.shipModelIdle, L"shipBase");
@@ -104,6 +120,14 @@ void updateAdventureGameMode(double delteTime)
 		gEnv->game.player.shipModel = gEnv->game.player.shipModelIdle;
 
 		buildBackground(&gEnv->game.adventureData.bgImage, gEnv->game.adventureData.sectors["TEST"]->backgroundImage);
+
+		filename = gEnv->game.workDir;
+		filename += "\\resources\\scripts\\test\\demoEventIntro.esl";
+		c = new ScriptCompiler();
+		q = c->compileFile(filename, L"testMod");
+		delete(c);
+
+		//addScriptToQueue(q);
 		
 	}
 
@@ -383,10 +407,18 @@ void drawAdventureGameMode(double deltaTime)
 
 				tgui::Label::Ptr label = tgui::Label::create();
 				label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-				label->setText("Press Space to start event");
+				label->setText(trg->markers[id]->name);
 				label->setTextSize(18);
-				label->setPosition("(&.width - width) / 2", "75%");
+				label->setPosition("(&.width - width) / 2", "5%");
 				marker->add(label);
+
+
+				tgui::Label::Ptr label2 = tgui::Label::create();
+				label2->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+				label2->setText("Press Space to start event");
+				label2->setTextSize(18);
+				label2->setPosition("(&.width - width) / 2", "75%");
+				marker->add(label2);
 			}
 
 			gEnv->game.ui.markerDraw = true;

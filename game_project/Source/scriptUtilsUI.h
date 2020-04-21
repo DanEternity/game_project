@@ -48,7 +48,8 @@ public:
 	{
 		chooseButtons[id]->setText(text);
 		chooseButtons[id]->setEnabled(active);
-		chooseButtons[id]->setVisible(active);
+		//chooseButtons[id]->setVisible(active);
+		if (!chooseButtons[id]->isEnabled()) chooseButtons[id]->setRenderer(gEnv->globalTheme.getRenderer("Button2"));
 	}
 
 	void deleteButtons()

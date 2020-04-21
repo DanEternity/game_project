@@ -46,6 +46,15 @@ namespace scriptType
 		createPool,
 		addToPool,
 		getFromPool,
+		stringConcat,
+		createExternalTable,
+		putToExternalTable,
+		putFromExternalTable,
+		createMarker,
+		addMarkerToSector,
+		editMarkerProperties,
+		editSectorProperties,
+		callCustom,
 	};
 }
 
@@ -497,5 +506,121 @@ public:
 	GetFromPoolScript() : BaseScript()
 	{
 		this->scriptType = scriptType::getFromPool;
+	}
+};
+
+class StringConcatScript : public BaseScript
+{
+public:
+	std::wstring a;
+	std::wstring b;
+	std::wstring dest;
+
+	StringConcatScript() : BaseScript()
+	{
+		this->scriptType = scriptType::stringConcat;
+	}
+};
+
+class CreateExternalTableScript : public BaseScript
+{
+public:
+	std::wstring dest;
+	CreateExternalTableScript() : BaseScript()
+	{
+		this->scriptType = scriptType::createExternalTable;
+	}
+};
+
+class PutToExternalTableScript : public BaseScript
+{
+public:
+	std::wstring src;
+	std::wstring dst;
+	std::wstring table;
+	PutToExternalTableScript() : BaseScript()
+	{
+		this->scriptType = scriptType::putToExternalTable;
+	}
+};
+
+class PutFromExternalTableScript : public BaseScript
+{
+public:
+	std::wstring src;
+	std::wstring dst;
+	std::wstring table;
+	PutFromExternalTableScript() : BaseScript()
+	{
+		this->scriptType = scriptType::putFromExternalTable;
+	}
+};
+
+class CreateMarkerScript : public BaseScript
+{
+public:
+	std::wstring dst;
+	CreateMarkerScript() : BaseScript()
+	{
+		this->scriptType = scriptType::createMarker;
+	}
+};
+
+class AddMarkerToSectorScript : public BaseScript
+{
+public:
+	std::wstring src;
+	std::wstring dst;
+
+	AddMarkerToSectorScript() : BaseScript()
+	{
+		this->scriptType = scriptType::addMarkerToSector;
+	}
+};
+
+class EditMarkerPropertiesScript : public BaseScript
+{
+public:
+	std::wstring src;
+
+	std::wstring level;
+	std::wstring danger;
+
+	std::wstring label;
+	std::wstring desc;
+
+	std::wstring posX;
+	std::wstring posY;
+
+	EditMarkerPropertiesScript() : BaseScript()
+	{
+		this->scriptType = scriptType::editMarkerProperties;
+	}
+};
+
+class EditSectorPropertiesScript : public BaseScript
+{
+public:
+	std::wstring src;
+
+	// not finished
+
+	EditSectorPropertiesScript() : BaseScript()
+	{
+		this->scriptType = scriptType::editSectorProperties;
+	}
+};
+
+class CallCustomScript : public BaseScript
+{
+public:
+
+	std::wstring categoryId;
+	std::wstring scriptId;
+	std::vector<std::wstring> arg;
+
+	CallCustomScript() : BaseScript()
+	{
+		this->scriptType = scriptType::callCustom;
 	}
 };

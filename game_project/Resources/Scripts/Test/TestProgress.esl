@@ -1,0 +1,23 @@
+﻿Text "Testing - no test"
+
+CreateExternalTable "$_t"
+
+PutToExternalTable "$_t" "100" "test"
+
+PutFromExternalTable "$_t" "test" "$_100"
+
+Text "$_100"
+
+Terminate
+
+
+
+Choose "test choose" [false] "disabled variant" [@e], [true] "enabled variant" [@e], [true] "enabled variant" [@e];
+
+@e
+
+Choose "test choose" [true] "enabled variant" [@w], [true] "enabled variant" [@w], [true] "enabled variant" [@w];
+
+@w
+
+Terminate 
