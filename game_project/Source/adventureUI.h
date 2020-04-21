@@ -18,6 +18,8 @@ void createAdventureUIButtons();
 void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled);
 void updateCategoryFilters();
 
+void openMap();
+
 void disableAllAdventureUI();
 
 void showItemsReward(std::vector<Item*> items);

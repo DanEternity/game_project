@@ -183,6 +183,7 @@ void createAdventureUIButtons()
 	btn->setText("Map");
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	btn->connect("MouseReleased", openMap);
 	gEnv->game.adventureGUI.add(btn);
 
 	btn = tgui::Button::create();
@@ -191,7 +192,7 @@ void createAdventureUIButtons()
 	btn->setText("Characters");
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	btn->connect("MouseReleased", updateShipMenuUIState, shipMenu::crew, 0);
+	btn->connect("MouseReleased", updateShipMenuUIState, shipMenu::crew, 1);
 	gEnv->game.adventureGUI.add(btn);
 
 	btn = tgui::Button::create();
@@ -589,6 +590,19 @@ void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled) // whereCa
 	RebuildInventoryGridPanel();
 }
 
+void openMap()
+{
+	disableAllAdventureUI();
+	gEnv->game.adventureUI.isMapOpen = !gEnv->game.adventureUI.isMapOpen;
+	if (gEnv->game.adventureUI.isMapOpen)
+	{
+		gEnv->game.adventureGUI.get<tgui::Panel>("globalMapPanel")->setEnabled(true);
+		gEnv->game.adventureGUI.get<tgui::Panel>("globalMapPanel")->setVisible(true);
+	}
+
+
+}
+
 void updateCategoryFilters()
 {
 
@@ -673,6 +687,8 @@ void disableAllAdventureUI()
 	gEnv->game.adventureGUI.get<tgui::Panel>("PlanPanel")->setVisible(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("PanelChangePersonState")->setEnabled(false);
 	gEnv->game.adventureGUI.get<tgui::Panel>("PanelChangePersonState")->setVisible(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("globalMapPanel")->setEnabled(false);
+	gEnv->game.adventureGUI.get<tgui::Panel>("globalMapPanel")->setVisible(false);
 }
 
 
