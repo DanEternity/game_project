@@ -5,7 +5,7 @@ void startWorldGeneration()
 
 	// initiate generation parameters
 
-	const int maxGeneratedPoints = 120;
+	const int maxGeneratedPoints = 1;
 	const int maxGalaxyRadius = 5000;
 	const int sectorPropertiesCountWeightRaw[12] = { 0, 10, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -30,11 +30,38 @@ void startWorldGeneration()
 	for (int i(0); i < maxGeneratedPoints; i++)
 	{
 
-		int x = (getRand() % (2*maxGalaxyRadius)) - maxGalaxyRadius;
-		int y = (getRand() % (2*maxGalaxyRadius)) - maxGalaxyRadius;
+		//int x = (getRand() % (2*maxGalaxyRadius)) - maxGalaxyRadius;
+		//int y = (getRand() % (2*maxGalaxyRadius)) - maxGalaxyRadius;
 
-		if ((x*x) + (y*y) > maxGalaxyRadius*maxGalaxyRadius)
-			continue;
+		//if ((x*x) + (y*y) > maxGalaxyRadius*maxGalaxyRadius)
+		//	continue;
+		int x;
+		int y;
+
+		while (1)
+		{
+			x = (getRand() % (2*maxGalaxyRadius)) - maxGalaxyRadius;
+			y = (getRand() % (2*maxGalaxyRadius)) - maxGalaxyRadius;
+
+			if ((x*x) + (y*y) > maxGalaxyRadius*maxGalaxyRadius)
+				continue;
+
+			bool good = true;
+
+			for (auto it = a->sectors.begin(); it != a->sectors.end(); it++)
+			{
+				int dist2 = ((x - it->second->x) * (x - it->second->x)) + ((y - it->second->y) * (y - it->second->y));
+				if (dist2 < 10000)
+				{
+					good = false;
+					break;
+				}
+			}
+
+			if (good)
+				break;
+
+		}
 
 		MapSector * p = new MapSector();
 
@@ -238,38 +265,41 @@ void worldGeneratorUpdate(double deltatime)
 
 		}
 
+		return;
 	}
 
-	if (gEnv->game.adventureData.worldGeneratorData.task == "completed")
-	{
 
-		gEnv->game.gameAdventureGUIRequiresUpdate = true;
-		gEnv->game.adventureUI.adventureUIDrawRequired = true;
-
-		gEnv->game.activeGameMode = gameMode::adventureMode;
-
-		gEnv->game.worldGeneratorRequiresUpdate = false;
-
-
-	}
 
 	//if (gEnv->load)
 
-	if (gEnv->game.adventureData.worldGeneratorData.task == "processingSectors")
+	if (globalEnviroment->game.adventureData.worldGeneratorData.task == "processingSectors" &&  globalEnviroment->scripts.active == 0)
 	{
 
 
-		if (gEnv->game.adventureData.worldGeneratorData.sector == gEnv->game.adventureData.sectors.end())
-			gEnv->game.adventureData.worldGeneratorData.task = "completed";
+		if (globalEnviroment->game.adventureData.worldGeneratorData.sector == globalEnviroment->game.adventureData.sectors.end())
+			globalEnviroment->game.adventureData.worldGeneratorData.task = "completed";
 		else
 		{
 			worldGeneratorProcessSector();
-			gEnv->game.adventureData.worldGeneratorData.sector++;
+			globalEnviroment->game.adventureData.worldGeneratorData.sector++;
 		}
+
+		return;
 	}
 
 
+	if (globalEnviroment->game.adventureData.worldGeneratorData.task == "completed" && globalEnviroment->scripts.active == 0)
+	{
 
+		globalEnviroment->game.gameAdventureGUIRequiresUpdate = true;
+		globalEnviroment->game.adventureUI.adventureUIDrawRequired = true;
+
+		globalEnviroment->game.activeGameMode = gameMode::adventureMode;
+
+		globalEnviroment->game.worldGeneratorRequiresUpdate = false;
+
+
+	}
 
 
 }
@@ -308,8 +338,24 @@ void worldGeneratorProcessSector()
 	r = r % totalWeight;
 
 	auto q = buffer.lower_bound(r);
+	
+	// Calling script
 
-	addScriptToQueue(q->second->script);
+	q->second->script->localMemory.clear();
+	
+	auto code = putMemoryCell(L"$_sector", p, &q->second->script->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		if (debugMode)
+			printf("(world generator) Error! Cannot init script enviroment for sector %s \n", gEnv->game.adventureData.worldGeneratorData.sector->first.c_str());
+		return;
+	}
+
+	IntObject * pKey = new IntObject(p->key);
+
+	code = putMemoryCell(L"$_key", pKey, &q->second->script->localMemory);
+
+	addScriptToQueueWithMemory(q->second->script);
 
 }
 

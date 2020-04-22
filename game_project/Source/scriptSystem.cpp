@@ -30,6 +30,13 @@ void ScriptSystem::updateScriptEngine()
 		}
 
 	}
+	
+	if (p_s != p_sysStatus::idle)
+	{
+		gEnv->scripts.active = 2;
+	}
+	else
+		gEnv->scripts.active = std::max(0, gEnv->scripts.active - 1);
 
 }
 
@@ -262,6 +269,24 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 		break;
 	case scriptType::editMarkerProperties:
 		p_processEditMarkerProperties(static_cast<EditMarkerPropertiesScript*>(command));
+		break;
+	case scriptType::callCustom:
+		p_processCallCustom(static_cast<CallCustomScript*>(command));
+		break;
+	case scriptType::linkScriptToMarker:
+		p_processLinkScriptToMarker(static_cast<LinkScriptToMarkerScript*>(command));
+		break;
+	case scriptType::setMarkerPosition:
+		p_processSetMarkerPosition(static_cast<SetMarkerPositionScript*>(command));
+		break;
+	case scriptType::createDecoration:
+		p_processCreateDecoration(static_cast<CreateDecorationScript*>(command));
+		break;
+	case scriptType::addDecorationToSector:
+		p_processAddDecorationToSector(static_cast<AddDecorationToSectorScript*>(command));
+		break;
+	case scriptType::addBackgroundToSector:
+		p_processAddBackgroundToSector(static_cast<AddBackgroundToSectorScript*>(command));
 		break;
 	default:
 		printf("Debug: ScriptSystem Error! Script command has unknown type -> %i", sType);
@@ -2032,7 +2057,7 @@ void ScriptSystem::p_processCreatePool(CreatePoolScript * command)
 	PoolObject * obj = new PoolObject;
 	gEnv->objects.pools[id] = obj;
 
-	bool error;
+	bool error = false;
 	auto argCount = scriptUtil::getArgumentIntValue(command->count, p_d, error);
 	
 	obj->argCount = argCount;
@@ -2453,6 +2478,318 @@ void ScriptSystem::p_processEditMarkerProperties(EditMarkerPropertiesScript * co
 	p->pos.y = posY;
 	p->name = label;
 	p->description = desc;
+
+}
+
+void ScriptSystem::p_processCallCustom(CallCustomScript * command)
+{
+
+	if (command->categoryId == L"SectorTemplate")
+	{
+		// compiling and calling script
+
+		ScriptCompiler * c;
+		ScriptDescriptor * q;
+		std::string filename;
+
+		filename = gEnv->game.workDir;
+
+		for (int i(0); i<command->scriptId.size(); i++)
+		filename += command->scriptId[i];
+		c = new ScriptCompiler();
+
+		// I cannod define family id for sector template
+		// We probably need to sync groups somewhere esle
+
+		q = c->compileFile(filename, L"Undefined");
+		delete(c);
+
+		if (q == NULL)
+		{
+			// failed
+			return;
+		}
+
+		// Call code (Copied from Call)
+
+		BaseObject * destObject = q;
+
+		auto tp = destObject->objectType;
+
+		if (tp != objectType::scriptDescriptor)
+		{
+			if (debugMode)
+			{
+				wprintf(L"Error! Failed to call [%s] function. Invalid descriptor or adress not correct\n", command->scriptId.c_str());
+			}
+			// failed
+			return;
+		}
+
+		ScriptDescriptor * target = static_cast<ScriptDescriptor*>(destObject);
+		StackElement * t = new StackElement();
+		t->localMemory.clear();
+		RetContext * retContext = new RetContext();
+		auto extTable = createExternalTable();
+		//t->rContext = retContext;
+
+		retContext->linkTable = extTable;
+
+		for (int i(0); i < command->arg.size(); i++)
+		{
+
+			std::wstring eDest = L"$EXT:" + extTable + L":" + std::to_wstring(i);
+
+			if (command->arg[i].size() > 0)
+			{
+				if (command->arg[i][0] == '$')
+				{
+					retContext->srcVarLink.push_back(command->arg[i]);
+					BaseObject * qsrc = NULL;
+					auto code = getMemoryCell(command->arg[i], &qsrc, &p_d->localMemory);
+					if (code != memoryUtil::ok)
+					{
+						// Operation can be failed because we want to share a pointer to memory
+						// but not actual object. Thats mean that we cannot use actual object here
+
+						// So there shouldn't be return function
+
+						// failed
+						return;
+					}
+					code = putMemoryCell(eDest, qsrc, &p_d->localMemory);
+					if (code != memoryUtil::ok)
+					{
+						// failed
+						return;
+					}
+
+				}
+				else
+					retContext->srcVarLink.push_back(L"");
+			}
+			else
+				retContext->srcVarLink.push_back(L"");
+
+			StringObject * obj = new StringObject();
+			obj->memoryControl = memoryControl::free;
+			if (command->arg[i].size() > 0)
+			{
+				if (command->arg[i][0] == '$')
+				{
+					obj->value = eDest;
+				}
+				else
+					obj->value = command->arg[i];
+			}
+			else
+				obj->value = command->arg[i];
+			std::wstring ndst = L"$_arg" + std::to_wstring(i);
+			auto code = putMemoryCell(ndst, obj, &t->localMemory);
+			if (code != memoryUtil::ok)
+			{
+				// failed
+				return;
+			}
+		}
+
+		//target->localMemory;
+
+		if (debugMode)
+		{
+			wprintf(L"Calling a function [%s].\n", command->scriptId.c_str());
+		}
+
+		t->scriptId = target;
+
+		_CallFunction(t, target->entryPoint, retContext);
+
+	}
+
+}
+
+void ScriptSystem::p_processLinkScriptToMarker(LinkScriptToMarkerScript * command)
+{
+
+	BaseObject * src = NULL;
+	BaseObject * dst = NULL;
+
+	RETURN_CODE code;
+
+	src = scriptUtil::getArgumentObject(command->script, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+	dst = scriptUtil::getArgumentObject(command->marker, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (src->objectType != objectType::scriptDescriptor)
+	{
+		// failed
+		return;
+	}
+
+	if (dst->objectType != objectType::mapMarker)
+	{
+		// failed
+		return;
+	}
+
+	ScriptDescriptor * sd = static_cast<ScriptDescriptor *>(src);
+	MapMarker * mm = static_cast<MapMarker * >(dst);
+
+	mm->sd = sd;
+
+}
+
+void ScriptSystem::p_processSetMarkerPosition(SetMarkerPositionScript * command)
+{
+
+	RETURN_CODE code;
+
+	auto obj = scriptUtil::getArgumentObject(command->src, p_d, code);
+
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (obj->objectType != objectType::mapMarker)
+	{
+		// failed
+		return;
+	}
+
+	MapMarker * p = static_cast<MapMarker*>(obj);
+
+	bool error = false;
+
+
+	float posX = scriptUtil::getArgumentFloatValue(command->x, p_d, error);
+	float posY = scriptUtil::getArgumentFloatValue(command->y, p_d, error);
+
+
+	// error check
+	//if ()
+
+
+	p->pos.x = posX;
+	p->pos.y = posY;
+
+
+}
+
+void ScriptSystem::p_processCreateDecoration(CreateDecorationScript * command)
+{
+
+	auto dst = command->dest;
+
+	// create item
+	// need to store in global item db
+
+	int id = gEnv->objects.nextDecor;
+	MapDecoration * obj = new MapDecoration;
+	gEnv->objects.decor[id] = obj;
+
+
+
+
+	bool error = false;
+	auto model = scriptUtil::getArgumentStringValue(command->model, p_d, error);
+	float sx = scriptUtil::getArgumentFloatValue(command->scaleX, p_d, error);
+	float sy = scriptUtil::getArgumentFloatValue(command->scaleY, p_d, error);
+	float r = scriptUtil::getArgumentFloatValue(command->rotation, p_d, error);
+	float x = scriptUtil::getArgumentFloatValue(command->posX, p_d, error);
+	float y = scriptUtil::getArgumentFloatValue(command->posY, p_d, error);
+
+	//std::wstring model;
+	//std::wstring scaleX;
+	//std::wstring scaleY;
+	//std::wstring rotation;
+	//std::wstring posX;
+	//std::wstring posY;
+
+	obj->model = model;
+	obj->scale.x = sx;
+	obj->scale.y = sy;
+	obj->rotation = r;
+	obj->pos.x = x;
+	obj->pos.y = y;
+
+	auto code = putMemoryCell(dst, obj, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+
+}
+
+void ScriptSystem::p_processAddDecorationToSector(AddDecorationToSectorScript * command)
+{
+
+	RETURN_CODE code;
+
+	auto objSrc = scriptUtil::getArgumentObject(command->src, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	auto objDest = scriptUtil::getArgumentObject(command->dst, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::mapDecoration || objDest->objectType != objectType::mapSector)
+	{
+		// failed
+		return;
+	}
+
+	MapSector * p = static_cast<MapSector*>(objDest);
+	MapDecoration * m = static_cast<MapDecoration*>(objSrc);
+
+	p->objects.push_back(m);
+
+
+}
+
+void ScriptSystem::p_processAddBackgroundToSector(AddBackgroundToSectorScript * command)
+{
+
+	RETURN_CODE code;
+	bool error = false;
+
+	auto objSrc = scriptUtil::getArgumentStringValue(command->src, p_d, error);
+
+	auto objDest = scriptUtil::getArgumentObject(command->dst, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objDest->objectType != objectType::mapSector)
+	{
+		// failed
+		return;
+	}
+
+	MapSector * p = static_cast<MapSector*>(objDest);
+
+	p->backgroundImage = objSrc;
 
 }
 

@@ -1,12 +1,6 @@
-﻿#ext "test"
-
+﻿
 // init section
 @init
-
-ifdoJump "$EXT:test:test > 0" "@inc"
-Put "0" to "$EXT:test:test"
-@inc
-Ariphmetic "$EXT:test:test + 1" to "$EXT:test:test"
 
 ChangeScriptEntryPoint "$self" "@start"
 Terminate
@@ -15,7 +9,26 @@ Terminate
 // start section
 @start
 
-Put "0" to "$_test"
+CreateDecoration "$_d" "asteroidsSample" "1" "1" "45" "0" "0"
+AddDecorationToSector "$_d" "$_sector"
+AddBackgroundToSector "testBackgroundSpace" "$_sector"
+CreateMarker "$_marker"
+CallMarkerInit "\Resources\Scripts\World\MarkerTemplates\Basic\MarkerEvent01.esl" 
+"$_sector", "$_marker", "$_key";
+SetMarkerPosition "$_marker" "1000" "0"
+AddMarkerToSector "$_marker" "$_sector"
+
+CreateMarker "$_marker"
+CallMarkerInit "\Resources\Scripts\World\MarkerTemplates\Basic\MarkerEvent01.esl" 
+"$_sector", "$_marker", "$_key";
+SetMarkerPosition "$_marker" "1000" "1000"
+AddMarkerToSector "$_marker" "$_sector"
+
+CreateMarker "$_marker"
+CallMarkerInit "\Resources\Scripts\World\MarkerTemplates\Basic\MarkerEvent01.esl" 
+"$_sector", "$_marker", "$_key";
+SetMarkerPosition "$_marker" "0" "2000"
+AddMarkerToSector "$_marker" "$_sector"
 
 Terminate
 

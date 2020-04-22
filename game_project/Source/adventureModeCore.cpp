@@ -6,6 +6,7 @@ void updateAdventureGameMode(double delteTime)
 	//gEnv->game.adventureData.
 
 	// draw 
+	/*
 	if (gEnv->game.adventureData.currentSectorId == "null")
 	{
 		if (!debugMode)
@@ -130,7 +131,27 @@ void updateAdventureGameMode(double delteTime)
 		//addScriptToQueue(q);
 		
 	}
+	*/
 
+	if (gEnv->game.adventureData.currentSectorId == "null")
+	{
+		gEnv->game.adventureData.currentSectorId = gEnv->game.adventureData.sectors.begin()->first;
+		gEnv->game.adventureData.isSectorLoaded = false;
+		// debug
+		gEnv->game.gameCanPlayerMoveWASD = true;
+		gEnv->game.gameCanPlayerTriggerMarkers = true;
+		gEnv->game.player.cameraSpeed = 500;
+		buildSprite(&gEnv->game.player.shipModelIdle, L"shipBase");
+		buildSprite(&gEnv->game.player.shipModelMove, L"shipBaseMove");
+		gEnv->game.player.shipModel = gEnv->game.player.shipModelIdle;
+		//loadSector()
+	}
+
+	if (!gEnv->game.adventureData.isSectorLoaded)
+	{
+		loadSector();
+		gEnv->game.adventureData.isSectorLoaded = true;
+	}
 	auto trg = gEnv->game.adventureData.sectors[gEnv->game.adventureData.currentSectorId];
 	/*
 	// Decorations
@@ -316,6 +337,10 @@ void updateAdventureGameMode(double delteTime)
 
 void drawAdventureGameMode(double deltaTime)
 {
+	// cannot draw if not loaded
+	if (!gEnv->game.adventureData.isSectorLoaded)
+		return;
+
 	auto trg = gEnv->game.adventureData.sectors[gEnv->game.adventureData.currentSectorId];
 
 	if (trg == NULL)
@@ -458,4 +483,26 @@ void drawAdventureGameMode(double deltaTime)
 		but->setPosition(((marker->pos.x - gEnv->game.player.shipPosition.x) / 15) + lab->getSize().x / 2, ((marker->pos.y - gEnv->game.player.shipPosition.y) / 10) + lab->getSize().y / 2);
 		gEnv->game.adventureGUI.get<tgui::Panel>("minimap")->add(but);
 	}
+}
+
+void loadSector()
+{
+	//gEnv->game.adventureData.sectors[gEnv->game.adventureData.currentSectorId];
+	auto p = gEnv->game.adventureData.sectors[gEnv->game.adventureData.currentSectorId];
+	
+	for (int i(0); i < p->objects.size(); i++)
+	{
+		buildDecoration(p->objects[i]);
+	}
+
+	for (int i(0); i < p->markers.size(); i++)
+	{
+		buildMarker(p->markers[i]);
+	}
+
+	if (p->backgroundImage != L"")
+		buildBackground(&gEnv->game.adventureData.bgImage, p->backgroundImage);
+	
+	gEnv->game.player.cameraPosition.x = 0;
+	gEnv->game.player.cameraPosition.y = 0;
 }

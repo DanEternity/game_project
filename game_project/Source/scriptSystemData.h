@@ -45,4 +45,7 @@ public:
 	// Does game should handle script GUI events
 	bool scriptGuiEventsRequiresUpdate = false;
 
+	// Activity flag
+	int active = 0;
+
 };

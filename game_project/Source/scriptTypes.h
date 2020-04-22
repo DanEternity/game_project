@@ -55,6 +55,11 @@ namespace scriptType
 		editMarkerProperties,
 		editSectorProperties,
 		callCustom,
+		linkScriptToMarker,
+		setMarkerPosition,
+		createDecoration,
+		addDecorationToSector,
+		addBackgroundToSector,
 	};
 }
 
@@ -616,11 +621,89 @@ class CallCustomScript : public BaseScript
 public:
 
 	std::wstring categoryId;
+
 	std::wstring scriptId;
+
 	std::vector<std::wstring> arg;
 
 	CallCustomScript() : BaseScript()
 	{
 		this->scriptType = scriptType::callCustom;
+	}
+};
+
+class LinkScriptToMarkerScript : public BaseScript
+{
+public: 
+
+	std::wstring script;
+	std::wstring marker;
+
+	LinkScriptToMarkerScript() : BaseScript()
+	{
+		this->scriptType = scriptType::linkScriptToMarker;
+	}
+
+};
+
+class SetMarkerPositionScript : public BaseScript
+{
+public:
+	std::wstring src;
+	std::wstring x;
+	std::wstring y;
+	SetMarkerPositionScript() : BaseScript()
+	{
+		this->scriptType = scriptType::setMarkerPosition;
+	}
+};
+
+class CreateDecorationScript : public BaseScript
+{
+public:
+	
+	std::wstring dest;
+
+	std::wstring model;
+	std::wstring scaleX;
+	std::wstring scaleY;
+	std::wstring rotation;
+	std::wstring posX;
+	std::wstring posY;
+
+	//gEnv->game.adventureData.sectors["TEST"]->objects[1]->model = L"decorationSpaceDebris";
+	//gEnv->game.adventureData.sectors["TEST"]->objects[1]->scale = { 1,1 };
+	//gEnv->game.adventureData.sectors["TEST"]->objects[1]->rotation = 70;
+	//gEnv->game.adventureData.sectors["TEST"]->objects[1]->pos = { 2700, 300 };
+
+	CreateDecorationScript() : BaseScript()
+	{
+		this->scriptType = scriptType::createDecoration;
+	}
+};
+
+class AddDecorationToSectorScript : public BaseScript
+{
+public:
+
+	std::wstring src;
+	std::wstring dst;
+
+	AddDecorationToSectorScript() : BaseScript()
+	{
+		this->scriptType = scriptType::addDecorationToSector;
+	}
+};
+
+class AddBackgroundToSectorScript : public BaseScript
+{
+public:
+
+	std::wstring src;
+	std::wstring dst;
+
+	AddBackgroundToSectorScript() : BaseScript()
+	{
+		this->scriptType = scriptType::addBackgroundToSector;
 	}
 };

@@ -18,4 +18,7 @@ public:
 
 	int nextSkillId = 0;
 	std::map<int, PassiveSkill*> skills;
+
+	int nextDecor = 0;
+	std::map<int, MapDecoration*> decor;
 };
