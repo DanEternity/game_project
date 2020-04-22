@@ -59,6 +59,7 @@ namespace scriptType
 		setMarkerPosition,
 		createDecoration,
 		addDecorationToSector,
+		addBackgroundToSector,
 	};
 }
 
@@ -691,5 +692,18 @@ public:
 	AddDecorationToSectorScript() : BaseScript()
 	{
 		this->scriptType = scriptType::addDecorationToSector;
+	}
+};
+
+class AddBackgroundToSectorScript : public BaseScript
+{
+public:
+
+	std::wstring src;
+	std::wstring dst;
+
+	AddBackgroundToSectorScript() : BaseScript()
+	{
+		this->scriptType = scriptType::addBackgroundToSector;
 	}
 };

@@ -328,4 +328,10 @@ void LoadScriptTemplates()
 	p.mainHandler = scriptCompilerTemplates::mainHandler::AddDecorationToSector;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
+	// AddBackgroundToSector
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"ADDBACKGROUNDTOSECTOR";
+	p.body = "\"$src\" \"$dst\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::AddBackgroundToSector;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 }

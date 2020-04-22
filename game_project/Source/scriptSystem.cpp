@@ -285,6 +285,9 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::addDecorationToSector:
 		p_processAddDecorationToSector(static_cast<AddDecorationToSectorScript*>(command));
 		break;
+	case scriptType::addBackgroundToSector:
+		p_processAddBackgroundToSector(static_cast<AddBackgroundToSectorScript*>(command));
+		break;
 	default:
 		printf("Debug: ScriptSystem Error! Script command has unknown type -> %i", sType);
 		break;
@@ -2760,6 +2763,33 @@ void ScriptSystem::p_processAddDecorationToSector(AddDecorationToSectorScript * 
 
 	p->objects.push_back(m);
 
+
+}
+
+void ScriptSystem::p_processAddBackgroundToSector(AddBackgroundToSectorScript * command)
+{
+
+	RETURN_CODE code;
+	bool error = false;
+
+	auto objSrc = scriptUtil::getArgumentStringValue(command->src, p_d, error);
+
+	auto objDest = scriptUtil::getArgumentObject(command->dst, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objDest->objectType != objectType::mapSector)
+	{
+		// failed
+		return;
+	}
+
+	MapSector * p = static_cast<MapSector*>(objDest);
+
+	p->backgroundImage = objSrc;
 
 }
 

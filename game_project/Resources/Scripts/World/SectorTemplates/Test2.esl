@@ -11,7 +11,7 @@ Terminate
 
 CreateDecoration "$_d" "asteroidsSample" "1" "1" "45" "0" "0"
 AddDecorationToSector "$_d" "$_sector"
-
+AddBackgroundToSector "testBackgroundSpace" "$_sector"
 CreateMarker "$_marker"
 CallMarkerInit "\Resources\Scripts\World\MarkerTemplates\Basic\MarkerEvent01.esl" 
 "$_sector", "$_marker", "$_key";

@@ -58,7 +58,7 @@ namespace scriptCompilerTemplates
 		BaseScript * SetMarkerPosition(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * CreateDecoration(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * AddDecorationToSector(CompilerCommandTemplateDataBuffer * buffer); // ?
-
+		BaseScript * AddBackgroundToSector(CompilerCommandTemplateDataBuffer * buffer); // ?
 	}
 
 	namespace afterUpdateHandler 

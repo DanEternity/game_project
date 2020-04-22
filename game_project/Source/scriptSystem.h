@@ -130,6 +130,7 @@ private:
 	void p_processSetMarkerPosition(SetMarkerPositionScript * command);
 	void p_processCreateDecoration(CreateDecorationScript * command);
 	void p_processAddDecorationToSector(AddDecorationToSectorScript * command);
+	void p_processAddBackgroundToSector(AddBackgroundToSectorScript * command);
 };
 
 extern ScriptSystem * scriptSystem;
