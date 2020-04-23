@@ -43,6 +43,7 @@ void preloadModels()
 	createModelDescriptor(L"itemHyperdrive", "\\resources\\textures\\Items\\Hyperdrive.png");
 	createModelDescriptor(L"itemSystem", "\\resources\\textures\\Items\\System.png");
 	createModelDescriptor(L"itemDefault", "\\resources\\textures\\Items\\Standart.png");
+	createModelDescriptor(L"itemEmpty", "\\resources\\textures\\Items\\Empty.png");
 	//createModelDescriptor(L"fsfa", "fsaf", true);
 }
 

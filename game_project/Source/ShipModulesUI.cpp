@@ -70,7 +70,8 @@ void handleShipModulesPanelEvent(const int id, tgui::Widget::Ptr widget, const s
 				gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.ship->modules[id];
 				gEnv->game.player.ship->modules[id] = static_cast<Module*>(tmp);
 
-				widget->cast<tgui::Button>()->setText(gEnv->game.player.ship->modules[id]->name);
+				UpdateInventoryUI();
+				updateShipSchemeUI();
 
 				gEnv->game.player.pickedItemInvId = -1;
 				gEnv->game.player.pickedItem = NULL;
@@ -160,7 +161,7 @@ void rmPanelClickedShip(const int id, tgui::Widget::Ptr widget, const std::strin
 		}
 
 		tgui::Panel::Ptr panel = gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel");
-		panel->get<tgui::Button>("ShipSchemeModule" + std::to_string(id))->setText("");
+		updateShipSchemeUI();
 		gEnv->game.ui.rmWasClicked = false;
 		if (gEnv->game.ui.tempAddPanelClicked)
 		{
@@ -229,18 +230,8 @@ void rmPanelChoosenAdded(const int id, const int module_id, tgui::Widget::Ptr wi
 	gEnv->game.player.inventory[id] = gEnv->game.player.ship->modules[module_id];
 	gEnv->game.player.ship->modules[module_id] = temp;
 
-	tgui::Panel::Ptr panel = gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel");
-	tgui::Panel::Ptr panel2 = gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel");
-
-	if (gEnv->game.player.inventory[id] != NULL)
-		panel->get<tgui::Button>("InventoryCell" + std::to_string(id))->setText(gEnv->game.player.inventory[id]->name);
-	else
-		panel->get<tgui::Button>("InventoryCell" + std::to_string(id))->setText(L"");
-
-	if (gEnv->game.player.ship->modules[module_id] != NULL)
-		panel2->get<tgui::Button>("ShipSchemeModule" + std::to_string(module_id))->setText(gEnv->game.player.ship->modules[module_id]->name);
-	else
-		panel2->get<tgui::Button>("ShipSchemeModule" + std::to_string(module_id))->setText(L"");
+	updateShipSchemeUI();
+	UpdateInventoryUI();
 
 	gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
 	gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempAddPanel"));
@@ -458,11 +449,14 @@ void updateShipSchemeUI()
 {
 	for (int i(0); i < gEnv->game.player.ship->modules.size(); i++)
 	{
-		tgui::BitmapButton::Ptr btn = gEnv->game.adventureGUI.get<tgui::BitmapButton>("ShipSchemeModule" + std::to_string(i));
-		if (gEnv->game.player.ship->modules[i]->icon != nullptr)
-			btn->setImage(*gEnv->game.player.ship->modules[i]->icon);
-		else
-			btn->setImage(gEnv->modelDB[L"itemDefault"]->tex);
+		if (gEnv->game.player.ship->modules[i] != NULL)
+		{
+			tgui::BitmapButton::Ptr btn = gEnv->game.adventureGUI.get<tgui::BitmapButton>("ShipSchemeModule" + std::to_string(i));
+			if (gEnv->game.player.ship->modules[i]->icon != nullptr)
+				btn->setImage(*gEnv->game.player.ship->modules[i]->icon);
+			else
+				btn->setImage(gEnv->modelDB[L"itemDefault"]->tex);
+		}
 	}
 }
 

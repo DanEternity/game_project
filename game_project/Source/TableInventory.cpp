@@ -22,15 +22,13 @@ void BuildInventoryUI(int cellSize)
 		button->setPosition(5 + positionX * 50, 10 + positionY * 50);
 		button->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 
-		//tgui::Texture* tex = new tgui::Texture(gEnv->modelDB[L"butText"]->tex,sf::IntRect(0,0,45,40), sf::IntRect(0,0,45,40));
-		//button->setImage(*tex);
-
 		if (gEnv->game.player.inventory[i] != NULL)
-			button->setText(gEnv->game.player.inventory[i]->name);
-		else
-			button->setText(L"");
-
-
+		{
+			if (gEnv->game.player.inventory[i]->icon != nullptr)
+				button->setImage(*gEnv->game.player.inventory[i]->icon);
+			else button->setImage(gEnv->modelDB[L"itemDefault"]->tex);
+		}
+		else button->setImage(gEnv->modelDB[L"itemEmpty"]->tex);
 
 		button->connect("MouseReleased", IntentoryResponseSignal, number, std::string("ShipInventory"));
 		button->connect("RightMouseReleased", IntentoryResponseSignal, number, std::string("ShipInventory"));
@@ -55,9 +53,15 @@ void UpdateInventoryUI()
 {
 	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
 	{
+		tgui::BitmapButton::Ptr button = gEnv->game.adventureGUI.get<tgui::BitmapButton>("InventoryCell" + std::to_string(i));
+
 		if (gEnv->game.player.inventory[i] != NULL)
-			gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(i))->setText(gEnv->game.player.inventory[i]->name);
-		else gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(i))->setText("");
+		{
+			if (gEnv->game.player.inventory[i]->icon != nullptr)
+				button->setImage(*gEnv->game.player.inventory[i]->icon);
+			else button->setImage(gEnv->modelDB[L"itemDefault"]->tex);
+		}
+		else button->setImage(gEnv->modelDB[L"itemEmpty"]->tex);
 	}
 }
 
@@ -77,18 +81,7 @@ void IntentoryResponseSignal( int cellId, std::string inventoryId, tgui::Widget:
 
 
 			// update cell images
-			tgui::ScrollablePanel::Ptr panel = gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("inventoryPanel");
-
-			if (gEnv->game.player.inventory[cellId] != NULL)
-				panel->get<tgui::Button>("InventoryCell" + std::to_string(cellId))->setText(gEnv->game.player.inventory[cellId]->name);
-			else
-				panel->get<tgui::Button>("InventoryCell" + std::to_string(cellId))->setText(L"");
-
-			if (gEnv->game.player.inventory[gEnv->game.ui.selected] != NULL)
-				panel->get<tgui::Button>("InventoryCell" + std::to_string(gEnv->game.ui.selected))->setText(gEnv->game.player.inventory[gEnv->game.ui.selected]->name);
-			else
-				panel->get<tgui::Button>("InventoryCell" + std::to_string(gEnv->game.ui.selected))->setText(L"");
-
+		
 			gEnv->game.ui.selected = -1;
 			UpdateInventoryUI();
 			deleteAllInventoryTooltips();
@@ -242,19 +235,7 @@ void rmPanelChoosenInsert(const int id, const int item_id, int inventory, tgui::
 		gEnv->game.player.inventory[id] = gEnv->game.player.ship->modules[item_id];
 		gEnv->game.player.ship->modules[item_id] = temp;
 
-		tgui::Panel::Ptr panel = gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel");
-		tgui::Panel::Ptr panel2 = gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel");
-
-		if (gEnv->game.player.inventory[id] != NULL)
-			panel->get<tgui::Button>("InventoryCell" + std::to_string(id))->setText(gEnv->game.player.inventory[id]->name);
-		else
-			panel->get<tgui::Button>("InventoryCell" + std::to_string(id))->setText(L"");
-
-		if (gEnv->game.player.ship->modules[item_id] != NULL)
-			panel2->get<tgui::Button>("ShipSchemeModule" + std::to_string(item_id))->setText(gEnv->game.player.ship->modules[item_id]->name);
-		else
-			panel2->get<tgui::Button>("ShipSchemeModule" + std::to_string(item_id))->setText(L"");
-
+		updateShipSchemeUI();
 		UpdateInventoryUI();
 		deleteAllInventoryTooltips();
 
@@ -310,7 +291,7 @@ void CreateInventoryGridPanel(int length)
 		int positionX = i % length;
 		int positionY = i / length;
 		const int number = i;
-		tgui::Button::Ptr button = tgui::Button::create();
+		tgui::BitmapButton::Ptr button = tgui::BitmapButton::create();
 
 		scrollablePanel->add(button, "InventoryItem" + std::to_string(i));
 
@@ -406,21 +387,28 @@ void RebuildInventoryGridPanel()
 	for (int id(0); id < gEnv->game.player.inventory.size(); id++)
 	{	
 		if (id < gEnv->game.player.localInventory.size() && gEnv->game.player.localInventory[id] != -1)
-			gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->
-			setText(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]->name);
+		{
+			if (gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]->icon != nullptr)
+				gEnv->game.adventureGUI.get<tgui::BitmapButton>("InventoryItem" + std::to_string(id))->
+				setImage(*gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]->icon);
+			else
+				gEnv->game.adventureGUI.get<tgui::BitmapButton>("InventoryItem" + std::to_string(id))->
+				setImage(gEnv->modelDB[L"itemDefault"]->tex);
+		}
 		else
-			gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->
-			setText(L"");
+			gEnv->game.adventureGUI.get<tgui::BitmapButton>("InventoryItem" + std::to_string(id))->
+			setImage(gEnv->modelDB[L"itemEmpty"]->tex);
+
 		if (gEnv->game.player.localInventory.size() > id) {
 			if (gEnv->game.player.inventory[gEnv->game.player.localInventory[id]] != NULL)
 			{
 				switch (gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]->itemType)
 				{
 				case itemType::module:
-					gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->connect("MouseEntered", applyGridModuleTooltip, id);
+					gEnv->game.adventureGUI.get<tgui::BitmapButton>("InventoryItem" + std::to_string(id))->connect("MouseEntered", applyGridModuleTooltip, id);
 					break;
 				case itemType::equipment:
-					gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->connect("MouseEntered", applyGridEquipmentTooltip, id);
+					gEnv->game.adventureGUI.get<tgui::BitmapButton>("InventoryItem" + std::to_string(id))->connect("MouseEntered", applyGridEquipmentTooltip, id);
 					break;
 				}
 			}
