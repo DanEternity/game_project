@@ -449,14 +449,15 @@ void updateShipSchemeUI()
 {
 	for (int i(0); i < gEnv->game.player.ship->modules.size(); i++)
 	{
+		tgui::BitmapButton::Ptr btn = gEnv->game.adventureGUI.get<tgui::BitmapButton>("ShipSchemeModule" + std::to_string(i));
 		if (gEnv->game.player.ship->modules[i] != NULL)
 		{
-			tgui::BitmapButton::Ptr btn = gEnv->game.adventureGUI.get<tgui::BitmapButton>("ShipSchemeModule" + std::to_string(i));
 			if (gEnv->game.player.ship->modules[i]->icon != nullptr)
 				btn->setImage(*gEnv->game.player.ship->modules[i]->icon);
 			else
 				btn->setImage(gEnv->modelDB[L"itemDefault"]->tex);
 		}
+		else btn->setImage(gEnv->modelDB[L"itemEmpty"]->tex);
 	}
 }
 
