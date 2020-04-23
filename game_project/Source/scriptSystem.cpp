@@ -2849,6 +2849,8 @@ void ScriptSystem::p_processEquipModule(EquipModuleScript * command)
 	
 	s->modules[slotId] = objSrcModule;
 
+	updateShipSchemeUI();
+
 }
 
 extern ScriptSystem * scriptSystem = NULL;

@@ -236,6 +236,7 @@
     <ClCompile Include="Source\game.cpp" />
     <ClCompile Include="Source\GameLogicCore.cpp" />
     <ClCompile Include="Source\generationUtility.cpp" />
+    <ClCompile Include="Source\itemUtils.cpp" />
     <ClCompile Include="Source\loader.cpp" />
     <ClCompile Include="Source\LocaleLoader.cpp" />
     <ClCompile Include="Source\mainMenu.cpp" />
@@ -280,6 +281,7 @@
     <ClInclude Include="Source\graphics.h" />
     <ClInclude Include="Source\graphicsModel.h" />
     <ClInclude Include="Source\item.h" />
+    <ClInclude Include="Source\itemUtils.h" />
     <ClInclude Include="Source\loader.h" />
     <ClInclude Include="Source\LocaleLoader.h" />
     <ClInclude Include="Source\localization.h" />

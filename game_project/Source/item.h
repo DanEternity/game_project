@@ -129,6 +129,7 @@ public:
 		objectType = objectType::item;
 		itemType = itemType::null;
 		itemClass = "Not defined";
+		icon = NULL;
 	}
 };
 

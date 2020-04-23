@@ -455,7 +455,11 @@ void updateShipSchemeUI()
 			if (gEnv->game.player.ship->modules[i]->icon != nullptr)
 				btn->setImage(*gEnv->game.player.ship->modules[i]->icon);
 			else
-				btn->setImage(gEnv->modelDB[L"itemDefault"]->tex);
+			{
+				giveIconToItem(gEnv->game.player.ship->modules[i]);
+				btn->setImage(*gEnv->game.player.ship->modules[i]->icon);
+				//btn->setImage(gEnv->modelDB[L"itemDefault"]->tex);
+			}
 		}
 	}
 }

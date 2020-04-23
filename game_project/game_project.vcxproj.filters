@@ -141,6 +141,9 @@
     <ClCompile Include="Source\map.cpp">
       <Filter>Adventure\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\itemUtils.cpp">
+      <Filter>Adventure\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\game.h">
@@ -343,6 +346,9 @@
     </ClInclude>
     <ClInclude Include="Source\sectorGeneratorTemplate.h">
       <Filter>WorldGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\itemUtils.h">
+      <Filter>Adventure\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

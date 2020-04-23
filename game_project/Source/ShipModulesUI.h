@@ -3,6 +3,7 @@
 #include "enviroment.h"
 #include "item.h"
 #include "tableInventory.h"
+#include "itemUtils.h"
 /*
 class UIShipModules
 {

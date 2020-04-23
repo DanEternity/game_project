@@ -5,6 +5,7 @@
 #include "generationUtility.h"
 #include "scriptWorkflowUtility.h"
 #include "scriptCompiler.h"
+#include "shipModulesUI.h"
 #include <stack>
 //#include "scriptDescriptor.h"
 
