@@ -444,7 +444,6 @@ void createAdventureUIButtons()
 	gEnv->game.player.ship->modules[0]->itemType = itemType::module;
 	gEnv->game.player.ship->modules[0]->powerPriority = 0;
 
-
 	gEnv->game.player.ship->modules[1] = new Module();
 	gEnv->game.player.ship->modules[1]->name = L"roflanVebenya";
 	gEnv->game.player.ship->modules[1]->slot = moduleSlot::hyperdrive;
@@ -702,6 +701,32 @@ void createPauseMenu()
 	btn->setTextSize(22);
 	btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	gEnv->game.adventureGUI.add(btn);
+}
+
+void giveIconToItem(Item * item)
+{
+	switch (item->itemType)
+	{
+	case itemType::module:
+		switch (static_cast<Module*>(item)->slot)
+		{
+		case moduleSlot::ModuleSlotType::core:
+			item->icon = &gEnv->modelDB[L"itemCore"]->tex;
+			break;
+		case moduleSlot::ModuleSlotType::engine:
+			item->icon = &gEnv->modelDB[L"itemEngine"]->tex;
+			break;
+		case moduleSlot::ModuleSlotType::hyperdrive:
+			item->icon = &gEnv->modelDB[L"itemHyperdrive"]->tex;
+			break;
+		case moduleSlot::ModuleSlotType::system:
+			item->icon = &gEnv->modelDB[L"itemSystem"]->tex;
+			break;
+		default:
+			item->icon = &gEnv->modelDB[L"itemDefault"]->tex;
+		}
+		break;
+	}
 }
 
 void showItemsReward(std::vector<Item*> items)

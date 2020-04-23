@@ -17,7 +17,7 @@ void BuildMapUI()
 		but->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 		but->setSize(20, 20);
 		panel->add(but);
-		but->setPosition(sector.second->x / 10 + (but->getParent()->getSize().x / 2), sector.second->y / 15 + (but->getParent()->getSize().y / 2));
+		but->setPosition(sector.second->x / 8 + (but->getParent()->getSize().x / 2), sector.second->y / 8 + (but->getParent()->getSize().y / 2));
 		but->connect("MouseReleased", clickSector, sector.first);
 	}
 }
@@ -40,7 +40,6 @@ void clickSector(const std::string str, tgui::Widget::Ptr widget, const std::str
 		but->setText("Jump");
 		but->connect("MouseReleased", jumpSector, str);
 		gEnv->game.ui.rmWasClicked = true;
-		but->setPosition(sector.second->x / 8 + (but->getParent()->getSize().x / 2), sector.second->y / 8 + (but->getParent()->getSize().y / 2));
 	}
 	else
 	{

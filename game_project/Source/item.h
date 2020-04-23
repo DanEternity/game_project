@@ -123,6 +123,7 @@ public:
 	std::wstring name;
 	tgui::Panel::Ptr tooltipDescription; // Panel with description of module
 	bool tooltipWasCreated = false;
+	sf::Texture* icon;
 	Item()
 	{
 		objectType = objectType::item;

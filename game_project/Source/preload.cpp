@@ -35,6 +35,14 @@ void preloadModels()
 	createModelDescriptor(L"testBackgroundSpace", "\\resources\\textures\\World_Decorations\\spaceBG.jpg");
 	createModelDescriptor(L"decorationSpaceDebris", "\\resources\\textures\\World_Decorations\\spaceDebris01.png");
 	createModelDescriptor(L"decorationSpaceBeacon", "\\resources\\textures\\World_Decorations\\spaceBeacon01.png");
+
+
+	//Item textures
+	createModelDescriptor(L"itemEngine", "\\resources\\textures\\Items\\Engine.png");
+	createModelDescriptor(L"itemCore", "\\resources\\textures\\Items\\Core.png");
+	createModelDescriptor(L"itemHyperdrive", "\\resources\\textures\\Items\\Hyperdrive.png");
+	createModelDescriptor(L"itemSystem", "\\resources\\textures\\Items\\System.png");
+	createModelDescriptor(L"itemDefault", "\\resources\\textures\\Items\\Standart.png");
 	//createModelDescriptor(L"fsfa", "fsaf", true);
 }
 
