@@ -19,14 +19,21 @@ void BuildShipSchemeUI(int moduleSizeUI)
 	mainShipPanel->add(priorityButton, "priorityButton");
 	priorityButton->connect("MouseReleased", updateShipModulePriorityPanel);
 
+	auto engineTex = gEnv->modelDB[L"itemEngine"]->tex;
+	
 	for (int i(0); i < gEnv->game.player.ship->modules.size(); i++)
 	{
-		tgui::Button::Ptr btn = tgui::Button::create();
+		tgui::BitmapButton::Ptr btn = tgui::BitmapButton::create();
 		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 		btn->setSize(moduleSizeUI, moduleSizeUI);
 		btn->setPosition(25 + (i % 5) * 90 , 50 + (i / 5) * 80);
 		if (gEnv->game.player.ship->modules[i] != NULL)
-			btn->setText(gEnv->game.player.ship->modules[i]->name);
+		{
+			if (gEnv->game.player.ship->modules[i]->icon != nullptr)
+				btn->setImage(*gEnv->game.player.ship->modules[i]->icon);
+			else
+				btn->setImage(gEnv->modelDB[L"itemDefault"]->tex);
+		}
 		mainShipPanel->add(btn, "ShipSchemeModule" + std::to_string(i));
 		const int id = i;
 
@@ -444,6 +451,18 @@ void updateShipStatsScreen()
 		}
 		else
 			gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(i))->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+	}
+}
+
+void updateShipSchemeUI()
+{
+	for (int i(0); i < gEnv->game.player.ship->modules.size(); i++)
+	{
+		tgui::BitmapButton::Ptr btn = gEnv->game.adventureGUI.get<tgui::BitmapButton>("ShipSchemeModule" + std::to_string(i));
+		if (gEnv->game.player.ship->modules[i]->icon != nullptr)
+			btn->setImage(*gEnv->game.player.ship->modules[i]->icon);
+		else
+			btn->setImage(gEnv->modelDB[L"itemDefault"]->tex);
 	}
 }
 

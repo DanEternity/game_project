@@ -30,3 +30,5 @@ void closeRewardWindow();
 
 //
 void createPauseMenu();
+
+void giveIconToItem(Item* item);
