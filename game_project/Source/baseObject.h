@@ -21,6 +21,7 @@ namespace objectType {
 		pool,
 		skillObject,
 		sectorTemplate,
+		ship,
 	};
 
 } // namespace objectType

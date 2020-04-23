@@ -246,10 +246,12 @@ void createAdventureUIButtons()
 	bar->setRenderer(gEnv->globalTheme.getRenderer("ProgressBar"));
 	gEnv->game.adventureGUI.add(bar);
 	
-	// create some stuff in subPanel inventories
-
-	// create and fill inventories
 	gEnv->game.player.inventory.resize(50, nullptr);
+
+	// create some stuff in subPanel inventories
+	/*
+	// create and fill inventories
+	
 
 	Module * megaSuperModule = new Module(L"MegaKomp", moduleType::system, 
 										moduleSlot::ModuleSlotType::system,
@@ -411,7 +413,7 @@ void createAdventureUIButtons()
 	gEnv->game.player.inventory[5] = new Module();
 	static_cast<Module*>(gEnv->game.player.inventory[5])->slot = moduleSlot::engine;
 	gEnv->game.player.inventory[5]->name = L"roflanGorit";
-
+	*/
 	gEnv->game.player.inventory[0] = new Equipment();
 	gEnv->game.player.inventory[0]->name = L"roflanTelo";
 	static_cast<Equipment*>(gEnv->game.player.inventory[0])->equipmentSlotType = equipmentSlot::body;
@@ -434,9 +436,9 @@ void createAdventureUIButtons()
 	gEnv->game.player.ship->slots[6].type = moduleSlot::universal;
 	gEnv->game.player.ship->slots[7].type = moduleSlot::universal;
 	
+	gEnv->game.player.ship->modules.resize(8, nullptr);
 
-
-	/* INITIALIZE SHIP BASE MODULES */
+	/* INITIALIZE SHIP BASE MODULES */ /*
 	gEnv->game.player.ship->modules.resize(8, nullptr);
 	gEnv->game.player.ship->modules[0] = new Module();
 	gEnv->game.player.ship->modules[0]->name = L"roflanPomoika";
@@ -465,7 +467,7 @@ void createAdventureUIButtons()
 	gEnv->game.player.ship->modules[4]->slot = moduleSlot::primaryWeapon;
 	gEnv->game.player.ship->modules[4]->itemType = itemType::module;
 
-
+	*/
 
 	BuildShipSchemeUI(50);
 
@@ -548,7 +550,10 @@ void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled) // whereCa
 	switch (gEnv->game.player.shipMenu)
 	{
 	case shipMenu::ship:
+		updateShipValues(gEnv->game.player.ship);
 		updateShipStatsScreen();
+		//module
+		//UpdateInventoryUI();
 		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(true);
 		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(true);
 		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setEnabled(true);

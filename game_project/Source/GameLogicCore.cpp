@@ -334,4 +334,11 @@ void LoadScriptTemplates()
 	p.body = "\"$src\" \"$dst\"";
 	p.mainHandler = scriptCompilerTemplates::mainHandler::AddBackgroundToSector;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// EquipModule
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"EQUIPMODULE";
+	p.body = "\"$src\" \"$dst\" \"$slot\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::EquipModule;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 }

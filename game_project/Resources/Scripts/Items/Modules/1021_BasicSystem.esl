@@ -1,0 +1,148 @@
+﻿#import "core.ItemModule"
+#extLinkRename "core.ItemModule->db"
+
+// input
+// arg0  arg1    arg2    arg3    arg4
+// key, quality, level, rarity, destination
+// EXAMPLE: Call "$EXT:db:1001" "41234134" "1300" "5" "1" "$_res"
+
+PutFromPointer "$_arg0" to "$_key"
+PutFromPointer "$_arg1" to "$_q" // quality
+PutFromPointer "$_arg2" to "$_level" // level
+PutFromPointer "$_arg3" to "$_rarity" // rarity
+
+Ariphmetic "$_q / 1000" to "$_qmod" // multiplier 
+
+// energy supply param // NEGATIVE
+Ariphmetic "$_key * 44441" to "$_pA"
+Ariphmetic "$_pA % 10000" to "$_pA"
+Ariphmetic "$_pA / 10000" to "$_pA"
+Ariphmetic "$_pA * 5" to "$_pA"
+Ariphmetic "$_pA + 15" to "$_pA"
+Ariphmetic "$_level * 0.2" to "$_temp"
+Ariphmetic "$_pA + $_temp" to "$_pA"
+Ariphmetic "$_rarity * 0.5" to "$_temp"
+Ariphmetic "$_pA - $_temp" to "$_pA"
+Ariphmetic "$_pA / $_qmod" to "$_pA"
+
+// energy supply %param // positive
+Ariphmetic "$_key * 33331" to "$_pC"
+Ariphmetic "$_pC % 10000" to "$_pC"
+Ariphmetic "$_pC / 10000" to "$_pC"
+Ariphmetic "$_pC * 0.02" to "$_pC"
+Ariphmetic "$_pC + 0.05" to "$_pC"
+Ariphmetic "$_level * 0.001" to "$_temp"
+Ariphmetic "$_pC + $_temp" to "$_pC"
+Ariphmetic "$_rarity *0.005" to "$_temp"
+Ariphmetic "$_pC + $_temp" to "$_pC"
+Ariphmetic "$_pC * $_qmod" to "$_pC"
+
+// sensor power %param // positive
+Ariphmetic "$_key * 27731" to "$_pD"
+Ariphmetic "$_pD % 10000" to "$_pD"
+Ariphmetic "$_pD / 10000" to "$_pD"
+Ariphmetic "$_pD * 0.02" to "$_pD"
+Ariphmetic "$_pD + 0.05" to "$_pD"
+Ariphmetic "$_level * 0.001" to "$_temp"
+Ariphmetic "$_pD + $_temp" to "$_pD"
+Ariphmetic "$_rarity *0.005" to "$_temp"
+Ariphmetic "$_pD + $_temp" to "$_pD"
+Ariphmetic "$_pD * $_qmod" to "$_pD"
+
+// shield %param // positive
+Ariphmetic "$_key * 42731" to "$_pE"
+Ariphmetic "$_pE % 10000" to "$_pE"
+Ariphmetic "$_pE / 10000" to "$_pE"
+Ariphmetic "$_pE * 0.02" to "$_pE"
+Ariphmetic "$_pE + 0.05" to "$_pE"
+Ariphmetic "$_level * 0.001" to "$_temp"
+Ariphmetic "$_pE + $_temp" to "$_pE"
+Ariphmetic "$_rarity *0.005" to "$_temp"
+Ariphmetic "$_pE + $_temp" to "$_pE"
+Ariphmetic "$_pE * $_qmod" to "$_pE"
+
+// evasion %param // positive
+Ariphmetic "$_key * 31941" to "$_pF"
+Ariphmetic "$_pF % 10000" to "$_pF"
+Ariphmetic "$_pF / 10000" to "$_pF"
+Ariphmetic "$_pF * 0.02" to "$_pF"
+Ariphmetic "$_pF + 0.05" to "$_pF"
+Ariphmetic "$_level * 0.001" to "$_temp"
+Ariphmetic "$_pF + $_temp" to "$_pF"
+Ariphmetic "$_rarity *0.005" to "$_temp"
+Ariphmetic "$_pF + $_temp" to "$_pF"
+Ariphmetic "$_pF * $_qmod" to "$_pF"
+
+// huperdrive power %param // positive
+Ariphmetic "$_key * 21221" to "$_pI"
+Ariphmetic "$_pI % 10000" to "$_pI"
+Ariphmetic "$_pI / 10000" to "$_pI"
+Ariphmetic "$_pI * 0.02" to "$_pI"
+Ariphmetic "$_pI + 0.05" to "$_pI"
+Ariphmetic "$_level * 0.001" to "$_temp"
+Ariphmetic "$_pI + $_temp" to "$_pI"
+Ariphmetic "$_rarity *0.005" to "$_temp"
+Ariphmetic "$_pI + $_temp" to "$_pI"
+Ariphmetic "$_pI * $_qmod" to "$_pI"
+
+Put "Basic system" to "$_mname"
+
+IfDoJump "$_q >= 1500" "@up3"
+IfDoJump "$_q >= 1300" "@up2"
+IfDoJump "$_q >= 1100" "@up1"
+IfDoJump "$_q >= 900" "@normal"
+IfDoJump "$_q >= 750" "@bad"
+
+@broken
+Put "broken" to "$_qname"
+StringConcat "Broken " "$_mname" "$_mname"
+Jump "@next"
+@bad
+Put "bad" to "$_qname"
+StringConcat "Defective " "$_mname" "$_mname"
+Jump "@next"
+@normal
+Put "normal" to "$_qname"
+Jump "@next"
+@up1
+Put "upgrade1" to "$_qname"
+StringConcat "$_mname" "+" "$_mname"
+Jump "@next"
+@up2
+Put "upgrade2" to "$_qname"
+StringConcat "$_mname" "++" "$_mname"
+Jump "@next"
+@up3
+Put "legendary" to "$_qname"
+StringConcat "$_mname" "★" "$_mname"
+Jump "@next"
+
+@next
+CreateSysModule "$_p" "My_module" 
+EditItemProperties "$_p" "$_level" "$_rarity" "1021" "none" "$_mname"
+EditItemConstructableProperties "$_p" "$_key" "$_q" "$_qname"
+EditModuleProperties "$_p" "system" "system" "large" "$_pA" "0" "2"
+
+
+CreateModStatEffect "$_effect" "ship" "powerSupply" "0" "$_pC" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+
+CreateModStatEffect "$_effect" "ship" "sensorPower" "0" "$_pD" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+
+CreateModStatEffect "$_effect" "ship" "shield" "0" "$_pE" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+
+CreateModStatEffect "$_effect" "ship" "evasion" "0" "$_pF" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+
+CreateModStatEffect "$_effect" "ship" "hyperDrivePower" "0" "$_pI" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+
+
+PutToPointer "$_p" "$_arg4"
+
+// End section
+Terminate
+
+#registerFunction "$EXT:db:1021"

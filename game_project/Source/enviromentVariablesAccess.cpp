@@ -21,6 +21,12 @@ BaseObject * _getEnviromentVariable(uint32_t hash)
 	case getHash(L"money"):
 	case getHash(L"Money"):
 		return new IntObject(gEnv->game.player.money);
+
+
+	case getHash(L"playerShip"):
+	case getHash(L"PlayerShip"):
+		return gEnv->game.player.ship;
+
 	default:
 		break;
 	}

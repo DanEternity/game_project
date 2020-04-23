@@ -60,6 +60,7 @@ namespace scriptType
 		createDecoration,
 		addDecorationToSector,
 		addBackgroundToSector,
+		equipModule,
 	};
 }
 
@@ -705,5 +706,19 @@ public:
 	AddBackgroundToSectorScript() : BaseScript()
 	{
 		this->scriptType = scriptType::addBackgroundToSector;
+	}
+};
+
+class EquipModuleScript : public BaseScript
+{
+public:
+
+	std::wstring src;
+	std::wstring dst;
+	std::wstring slotId; 
+
+	EquipModuleScript() : BaseScript()
+	{
+		this->scriptType = scriptType::equipModule;
 	}
 };

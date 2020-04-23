@@ -288,6 +288,9 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::addBackgroundToSector:
 		p_processAddBackgroundToSector(static_cast<AddBackgroundToSectorScript*>(command));
 		break;
+	case scriptType::equipModule:
+		p_processEquipModule(static_cast<EquipModuleScript*>(command));
+		break;
 	default:
 		printf("Debug: ScriptSystem Error! Script command has unknown type -> %i", sType);
 		break;
@@ -2790,6 +2793,61 @@ void ScriptSystem::p_processAddBackgroundToSector(AddBackgroundToSectorScript * 
 	MapSector * p = static_cast<MapSector*>(objDest);
 
 	p->backgroundImage = objSrc;
+
+}
+
+void ScriptSystem::p_processEquipModule(EquipModuleScript * command)
+{
+
+	RETURN_CODE code;
+
+	auto objSrc = scriptUtil::getArgumentObject(command->src, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	auto objDest = scriptUtil::getArgumentObject(command->dst, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+	bool error = false;
+	int slotId = scriptUtil::getArgumentIntValue(command->slotId, p_d, error);
+	if (error)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::item || objDest->objectType != objectType::ship)
+	{
+		// failed
+		return;
+	}
+
+	Item * objSrcItem = static_cast<Item*> (objSrc);
+
+	if (objSrcItem->itemType != itemType::module)
+	{
+		// failed
+		return;
+	}
+
+
+	Module * objSrcModule = static_cast<Module*> (objSrc);
+
+	Ship * s = static_cast<Ship*> (objDest);
+
+	if (slotId >= s->modules.size())
+	{
+		// failed
+		return;
+	}
+	
+	s->modules[slotId] = objSrcModule;
 
 }
 

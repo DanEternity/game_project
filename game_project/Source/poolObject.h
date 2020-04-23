@@ -45,6 +45,7 @@ public:
 	PoolDataCell * GetRandomObject(int key)
 	{
 		key *= 131797;
+		key = std::abs(key);
 		key = key % totalWeight;
 		auto r = data.lower_bound(key);
 		return r->second;

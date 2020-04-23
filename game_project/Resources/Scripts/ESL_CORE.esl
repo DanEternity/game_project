@@ -6,6 +6,7 @@
 #ext "ItemResource" 
 #ext "ItemModule"
 #ext "ItemEquipment"
+#ext "RewardPool"
 
 
 

@@ -1,0 +1,20 @@
+﻿#import "core.ItemModule"
+#extLinkRename "core.ItemModule->dbMod"
+
+Put "0" "$_res"
+Call "$EXT:dbMod:1001" "1234", "1000", "1", "1", "$_res";
+EquipModule "$_res" "$playerShip" "0"
+
+Put "0" "$_res"
+Call "$EXT:dbMod:1031" "1234", "1000", "1", "1", "$_res";
+EquipModule "$_res" "$playerShip" "1"
+
+Put "0" "$_res"
+Call "$EXT:dbMod:1011" "1234", "1000", "1", "1", "$_res";
+EquipModule "$_res" "$playerShip" "2"
+
+Put "0" "$_res"
+Call "$EXT:dbMod:1021" "1234", "1000", "1", "1", "$_res";
+EquipModule "$_res" "$playerShip" "3"
+
+Terminate 
