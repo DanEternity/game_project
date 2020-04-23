@@ -145,6 +145,19 @@ void updateAdventureGameMode(double delteTime)
 		buildSprite(&gEnv->game.player.shipModelMove, L"shipBaseMove");
 		gEnv->game.player.shipModel = gEnv->game.player.shipModelIdle;
 		//loadSector()
+
+		// init ship and inventory
+		ScriptCompiler * c;
+		ScriptDescriptor * q;
+		std::string filename;
+		filename = gEnv->game.workDir;
+		filename += "\\resources\\scripts\\test\\playerShipInit.esl";
+		c = new ScriptCompiler();
+		q = c->compileFile(filename, L"testMod");
+		delete(c);
+
+		addScriptToQueue(q);
+
 	}
 
 	if (!gEnv->game.adventureData.isSectorLoaded)

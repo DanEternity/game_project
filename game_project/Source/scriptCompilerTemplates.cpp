@@ -541,6 +541,16 @@ BaseScript * scriptCompilerTemplates::mainHandler::AddBackgroundToSector(Compile
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::EquipModule(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new EquipModuleScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->slotId = convertExtReferences(buffer, buffer->arg["$slot"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);

@@ -131,6 +131,7 @@ private:
 	void p_processCreateDecoration(CreateDecorationScript * command);
 	void p_processAddDecorationToSector(AddDecorationToSectorScript * command);
 	void p_processAddBackgroundToSector(AddBackgroundToSectorScript * command);
+	void p_processEquipModule(EquipModuleScript * command);
 };
 
 extern ScriptSystem * scriptSystem;

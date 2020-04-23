@@ -1,0 +1,118 @@
+﻿#import "core.ItemModule"
+#extLinkRename "core.ItemModule->db"
+
+// input
+// arg0  arg1    arg2    arg3    arg4
+// key, quality, level, rarity, destination
+// EXAMPLE: Call "$EXT:db:1001" "41234134" "1300" "5" "1" "$_res"
+
+PutFromPointer "$_arg0" to "$_key"
+PutFromPointer "$_arg1" to "$_q" // quality
+PutFromPointer "$_arg2" to "$_level" // level
+PutFromPointer "$_arg3" to "$_rarity" // rarity
+
+Ariphmetic "$_q / 1000" to "$_qmod" // multiplier 
+
+// energy supply param // NEGATIVE
+Ariphmetic "$_key * 44441" to "$_pA"
+Ariphmetic "$_pA % 10000" to "$_pA"
+Ariphmetic "$_pA / 10000" to "$_pA"
+Ariphmetic "$_pA * 5" to "$_pA"
+Ariphmetic "$_pA + 65" to "$_pA"
+Ariphmetic "$_level * 0.2" to "$_temp"
+Ariphmetic "$_pA + $_temp" to "$_pA"
+Ariphmetic "$_rarity * 0.5" to "$_temp"
+Ariphmetic "$_pA - $_temp" to "$_pA"
+Ariphmetic "$_pA / $_qmod" to "$_pA"
+
+// hyperdrive power param // positive
+Ariphmetic "$_key * 33331" to "$_pC"
+Ariphmetic "$_pC % 10000" to "$_pC"
+Ariphmetic "$_pC / 10000" to "$_pC"
+Ariphmetic "$_pC * 10" to "$_pC"
+Ariphmetic "$_pC + 40" to "$_pC"
+Ariphmetic "$_level * 0.4" to "$_temp"
+Ariphmetic "$_pC + $_temp" to "$_pC"
+Ariphmetic "$_rarity * 2.5" to "$_temp"
+Ariphmetic "$_pC + $_temp" to "$_pC"
+Ariphmetic "$_pC * $_qmod" to "$_pC"
+
+// hyperdrive tier param // positive -- not standart -- do not copy
+Ariphmetic "$_key * 27731" to "$_pD"
+Ariphmetic "$_pD % 10000" to "$_pD"
+Ariphmetic "$_pD / 10000" to "$_pD"
+Ariphmetic "$_pD * 0" to "$_pD"
+Ariphmetic "$_pD + 1.2" to "$_pD"
+Ariphmetic "$_level * 0.001" to "$_temp"
+Ariphmetic "$_pD + $_temp" to "$_pD"
+Ariphmetic "$_rarity * 0" to "$_temp"
+Ariphmetic "$_pD + $_temp" to "$_pD"
+Ariphmetic "$_pD * $_qmod" to "$_pD"
+
+// hyperdrive fuel efficiency param // positive
+Ariphmetic "$_key * 42881" to "$_p3"
+Ariphmetic "$_p3 % 10000" to "$_p3"
+Ariphmetic "$_p3 / 10000" to "$_p3"
+Ariphmetic "$_p3 * 5" to "$_p3"
+Ariphmetic "$_p3 + 40" to "$_p3"
+Ariphmetic "$_level * 0.01" to "$_temp"
+Ariphmetic "$_p3 + $_temp" to "$_p3"
+Ariphmetic "$_rarity * 1" to "$_temp"
+Ariphmetic "$_p3 + $_temp" to "$_p3"
+Ariphmetic "$_p3 * $_qmod" to "$_p3"
+
+
+Put "Basic hyperdrive" to "$_mname"
+
+IfDoJump "$_q >= 1500" "@up3"
+IfDoJump "$_q >= 1300" "@up2"
+IfDoJump "$_q >= 1100" "@up1"
+IfDoJump "$_q >= 900" "@normal"
+IfDoJump "$_q >= 750" "@bad"
+
+@broken
+Put "broken" to "$_qname"
+StringConcat "Broken " "$_mname" "$_mname"
+Jump "@next"
+@bad
+Put "bad" to "$_qname"
+StringConcat "Defective " "$_mname" "$_mname"
+Jump "@next"
+@normal
+Put "normal" to "$_qname"
+Jump "@next"
+@up1
+Put "upgrade1" to "$_qname"
+StringConcat "$_mname" "+" "$_mname"
+Jump "@next"
+@up2
+Put "upgrade2" to "$_qname"
+StringConcat "$_mname" "++" "$_mname"
+Jump "@next"
+@up3
+Put "legendary" to "$_qname"
+StringConcat "$_mname" "★" "$_mname"
+Jump "@next"
+
+@next
+CreateSysModule "$_p" "My_module" 
+EditItemProperties "$_p" "$_level" "$_rarity" "1031" "none" "$_mname"
+EditItemConstructableProperties "$_p" "$_key" "$_q" "$_qname"
+EditModuleProperties "$_p" "system" "hyperdrive" "large" "$_pA" "0" "5"
+
+
+CreateModStatEffect "$_effect" "ship" "hyperDrivePower" "$_pC" "0" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+
+CreateModStatEffect "$_effect" "ship" "hyperDriveTier" "$_pD" "0" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+
+CreateModStatEffect "$_effect" "ship" "hyperDriveFuelEfficiency" "$_p3" "0" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+
+PutToPointer "$_p" "$_arg4"
+
+// End section
+Terminate
+
+#registerFunction "$EXT:db:1031"

@@ -13,7 +13,7 @@ PutFromPointer "$_arg3" to "$_rarity" // rarity
 
 Ariphmetic "$_q / 1000" to "$_qmod" // multiplier 
 
-// energy supply param
+// energy supply param // positive
 Ariphmetic "$_key * 44441" to "$_pA"
 Ariphmetic "$_pA % 10000" to "$_pA"
 Ariphmetic "$_pA / 10000" to "$_pA"
@@ -25,7 +25,19 @@ Ariphmetic "$_rarity * 2.5" to "$_temp"
 Ariphmetic "$_pA + $_temp" to "$_pA"
 Ariphmetic "$_pA * $_qmod" to "$_pA"
 
-// hull param
+// high energy supply param // positive
+Ariphmetic "$_key * 12441" to "$_pF"
+Ariphmetic "$_pF % 10000" to "$_pF"
+Ariphmetic "$_pF / 10000" to "$_pF"
+Ariphmetic "$_pF * 0.4" to "$_pF"
+Ariphmetic "$_pF + 1" to "$_pF"
+Ariphmetic "$_level * 0.04" to "$_temp"
+Ariphmetic "$_pF + $_temp" to "$_pF"
+Ariphmetic "$_rarity * 0.08" to "$_temp"
+Ariphmetic "$_pF + $_temp" to "$_pF"
+Ariphmetic "$_pF * $_qmod" to "$_pF"
+
+// hull param // positive
 Ariphmetic "$_key * 43331" to "$_pB"
 Ariphmetic "$_pB % 10000" to "$_pB"
 Ariphmetic "$_pB / 10000" to "$_pB"
@@ -37,7 +49,7 @@ Ariphmetic "$_rarity * 2.5" to "$_temp"
 Ariphmetic "$_pB + $_temp" to "$_pB"
 Ariphmetic "$_pB * $_qmod" to "$_pB"
 
-// hull param
+// action points param // positive
 Ariphmetic "$_key * 33331" to "$_pC"
 Ariphmetic "$_pC % 10000" to "$_pC"
 Ariphmetic "$_pC / 10000" to "$_pC"
@@ -49,6 +61,20 @@ Ariphmetic "$_rarity * 2.5" to "$_temp"
 Ariphmetic "$_pC + $_temp" to "$_pC"
 Ariphmetic "$_pC * $_qmod" to "$_pC"
 
+// stealth param // negative
+Ariphmetic "$_key * 38891" to "$_pD"
+Ariphmetic "$_pD % 10000" to "$_pD"
+Ariphmetic "$_pD / 10000" to "$_pD"
+Ariphmetic "$_pD * 20" to "$_pD"
+Ariphmetic "$_pD + 45" to "$_pD"
+Ariphmetic "$_level * 1.1" to "$_temp"
+Ariphmetic "$_pD + $_temp" to "$_pD"
+Ariphmetic "$_rarity * 2" to "$_temp"
+Ariphmetic "$_pD - $_temp" to "$_pD"
+Ariphmetic "$_pD / $_qmod" to "$_pD"
+
+Put "Basic reactor" to "$_mname"
+
 IfDoJump "$_q >= 1500" "@up3"
 IfDoJump "$_q >= 1300" "@up2"
 IfDoJump "$_q >= 1100" "@up1"
@@ -57,27 +83,26 @@ IfDoJump "$_q >= 750" "@bad"
 
 @broken
 Put "broken" to "$_qname"
-Put "Broken Basic reactor" to "$_mname"
+StringConcat "Broken " "$_mname" "$_mname"
 Jump "@next"
 @bad
 Put "bad" to "$_qname"
-Put "Defective Basic reactor" to "$_mname"
+StringConcat "Defective " "$_mname" "$_mname"
 Jump "@next"
 @normal
 Put "normal" to "$_qname"
-Put "Basic reactor" to "$_mname"
 Jump "@next"
 @up1
 Put "upgrade1" to "$_qname"
-Put "Basic reactor+" to "$_mname"
+StringConcat "$_mname" "+" "$_mname"
 Jump "@next"
 @up2
 Put "upgrade2" to "$_qname"
-Put "Basic reactor++" to "$_mname"
+StringConcat "$_mname" "++" "$_mname"
 Jump "@next"
 @up3
 Put "legendary" to "$_qname"
-Put "Basic reactor★" to "$_mname"
+StringConcat "$_mname" "★" "$_mname"
 Jump "@next"
 
 @next
@@ -89,10 +114,16 @@ EditModuleProperties "$_p" "system" "core" "large" "0" "0" "1"
 CreateModStatEffect "$_effect" "ship" "powerSupply" "$_pA" "0" "0" "0"
 ApplyEffectToSysModule "$_effect" "$_p"
 
+CreateModStatEffect "$_effect" "ship" "highPowerSupply" "$_pF" "0" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+
 CreateModStatEffect "$_effect" "ship" "hull" "$_pB" "0" "0" "0"
 ApplyEffectToSysModule "$_effect" "$_p"
 
 CreateModStatEffect "$_effect" "ship" "actionPoints" "$_pC" "0" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+
+CreateModStatEffect "$_effect" "ship" "stealth" "0" "0" "$_pD" "0"
 ApplyEffectToSysModule "$_effect" "$_p"
 
 PutToPointer "$_p" "$_arg4"

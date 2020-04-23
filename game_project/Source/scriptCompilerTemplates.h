@@ -59,6 +59,7 @@ namespace scriptCompilerTemplates
 		BaseScript * CreateDecoration(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * AddDecorationToSector(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * AddBackgroundToSector(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * EquipModule(CompilerCommandTemplateDataBuffer * buffer); // ?
 	}
 
 	namespace afterUpdateHandler 

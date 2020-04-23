@@ -76,6 +76,9 @@ public:
 	Ship()
 	{
 
+		this->memoryControl = memoryControl::fixed;
+		this->objectType = objectType::ship;
+
 		shipStats[statNames::powerSupply] = &powerSupply;
 		shipStats[statNames::highPowerSupply] = &highPowerSupply;
 		shipStats[statNames::actionPoints] = &actionPoints;

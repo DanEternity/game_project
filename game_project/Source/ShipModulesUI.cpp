@@ -475,26 +475,29 @@ void createShipModulePriorityPanel()
 		tgui::Label::Ptr label = tgui::Label::create();
 		label->setTextSize(20);
 		label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-		switch (i)
+		if (gEnv->game.player.ship->modules[i] != NULL)
 		{
-		case 0:
-			label->setText(GetString("Core") + L" (" + std::to_wstring(gEnv->game.player.ship->modules[i]->powerPriority) + L")");
-			break;
-		case 1:
-			label->setText(GetString("Hyperdrive") + L" (" + std::to_wstring(gEnv->game.player.ship->modules[i]->powerPriority) + L")");
-			break;
-		case 2:
-			label->setText(GetString("Engine") + L" (" + std::to_wstring(gEnv->game.player.ship->modules[i]->powerPriority) + L")");
-			break;
-		case 3:
-			label->setText(GetString("System") + L" (" + std::to_wstring(gEnv->game.player.ship->modules[i]->powerPriority) + L")");
-			break;
-		case 4:
-			label->setText(GetString("Primary weapon") + L" (" + std::to_wstring(gEnv->game.player.ship->modules[i]->powerPriority) + L")");
-			break;
-		default:
-			break;
-		};
+			switch (i)
+			{
+			case 0:
+				label->setText(GetString("Core") + L" (" + std::to_wstring(gEnv->game.player.ship->modules[i]->powerPriority) + L")");
+				break;
+			case 1:
+				label->setText(GetString("Hyperdrive") + L" (" + std::to_wstring(gEnv->game.player.ship->modules[i]->powerPriority) + L")");
+				break;
+			case 2:
+				label->setText(GetString("Engine") + L" (" + std::to_wstring(gEnv->game.player.ship->modules[i]->powerPriority) + L")");
+				break;
+			case 3:
+				label->setText(GetString("System") + L" (" + std::to_wstring(gEnv->game.player.ship->modules[i]->powerPriority) + L")");
+				break;
+			case 4:
+				label->setText(GetString("Primary weapon") + L" (" + std::to_wstring(gEnv->game.player.ship->modules[i]->powerPriority) + L")");
+				break;
+			default:
+				break;
+			};
+		}
 		label->setPosition("(&.width - width) / 2", 20 + i*60);
 		priorityPanel->add(label, "labelModulePriority" + std::to_string(i));
 		if (i != 0)
