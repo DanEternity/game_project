@@ -318,8 +318,16 @@ void updateAdventureGameMode(double delteTime)
 		}
 		if (gEnv->game.player.mouseWheelDelta != 0)
 		{
-			if (gEnv->game.ui.mapScale > 0 && gEnv->game.ui.mapScale < 99)
-				gEnv->game.ui.mapScale -= gEnv->game.player.mouseWheelDelta;
+			if (gEnv->game.player.mouseWheelDelta < 0)
+			{
+				if (gEnv->game.ui.mapScale < 20)
+					gEnv->game.ui.mapScale -= gEnv->game.player.mouseWheelDelta;
+			}
+			else if (gEnv->game.player.mouseWheelDelta > 0)
+			{
+				if (gEnv->game.ui.mapScale > 2)
+					gEnv->game.ui.mapScale -= gEnv->game.player.mouseWheelDelta;
+			}
 			gEnv->game.ui.mapUpdateRequired = true;
 		}
 		UpdateMapUI();
