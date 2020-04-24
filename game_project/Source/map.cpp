@@ -82,14 +82,14 @@ void UpdateMapUI()
 		for (auto sector : gEnv->game.adventureData.sectors)
 		{
 			tgui::Button::Ptr but = gEnv->game.adventureGUI.get<tgui::Button>("globalMapSectorButton" + std::to_string(i));
-			but->setPosition(sector.second->x / 8 + (but->getParent()->getSize().x / 2) + gEnv->game.ui.mapBiasX, sector.second->y / 8 + (but->getParent()->getSize().y / 2) + gEnv->game.ui.mapBiasY);
+			but->setPosition(sector.second->x / gEnv->game.ui.mapScale + (but->getParent()->getSize().x / 2) + gEnv->game.ui.mapBiasX, sector.second->y / gEnv->game.ui.mapScale + (but->getParent()->getSize().y / 2) + gEnv->game.ui.mapBiasY);
 			i++;
-			gEnv->game.ui.mapUpdateRequired = false;
 		}
 		if (gEnv->game.ui.rmWasClicked)
 		{
 			tgui::Panel::Ptr panel = gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel");
 			panel->setPosition(panel->getPosition().x + gEnv->game.ui.mapBiasX, panel->getPosition().y + gEnv->game.ui.mapBiasY);
 		}
+		gEnv->game.ui.mapUpdateRequired = false;
 	}
 }

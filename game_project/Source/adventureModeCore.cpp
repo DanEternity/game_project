@@ -295,25 +295,30 @@ void updateAdventureGameMode(double delteTime)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
-			gEnv->game.ui.mapBiasX -= 1;
+			gEnv->game.ui.mapBiasX += 1;
 			gEnv->game.ui.mapUpdateRequired = true;
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
-			gEnv->game.ui.mapBiasX += 1;
+			gEnv->game.ui.mapBiasX -= 1;
 			gEnv->game.ui.mapUpdateRequired = true;
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		{
-			gEnv->game.ui.mapBiasY -= 1;
+			gEnv->game.ui.mapBiasY += 1;
 			gEnv->game.ui.mapUpdateRequired = true;
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
-			gEnv->game.ui.mapBiasY += 1;
+			gEnv->game.ui.mapBiasY -= 1;
+			gEnv->game.ui.mapUpdateRequired = true;
+		}
+		if (gEnv->game.player.mouseWheelDelta != 0)
+		{
+			gEnv->game.ui.mapScale -= gEnv->game.player.mouseWheelDelta;
 			gEnv->game.ui.mapUpdateRequired = true;
 		}
 		UpdateMapUI();
