@@ -26,4 +26,7 @@ public:
 	bool adventureMenuActive = false;
 	PUIState::personUIstate puistate = PUIState::personUIstate::defaultState;
 
+	float mapBiasX = 0, mapBiasY = 0;
+	bool mapUpdateRequired = false;
+
 };

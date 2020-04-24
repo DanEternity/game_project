@@ -537,6 +537,7 @@ void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled) // whereCa
 	gEnv->game.ui.puistate = PUIState::defaultState;
 	if (whereCalled == 0)
 	{
+		gEnv->game.player.shipMenu = shipMenu::null;
 		gEnv->game.adventureUI.isInventoryOpen = !gEnv->game.adventureUI.isInventoryOpen;
 	}
 	if (!gEnv->game.adventureUI.isInventoryOpen)
@@ -600,10 +601,11 @@ void openMap()
 	gEnv->game.adventureUI.isMapOpen = !gEnv->game.adventureUI.isMapOpen;
 	if (gEnv->game.adventureUI.isMapOpen)
 	{
+		gEnv->game.player.shipMenu = shipMenu::map;
 		gEnv->game.adventureGUI.get<tgui::Panel>("globalMapPanel")->setEnabled(true);
 		gEnv->game.adventureGUI.get<tgui::Panel>("globalMapPanel")->setVisible(true);
 	}
-
+	else gEnv->game.player.shipMenu = shipMenu::null;
 
 }
 
