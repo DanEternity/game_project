@@ -71,9 +71,12 @@ void jumpSector(const std::string str, tgui::Widget::Ptr widget, const std::stri
 	gEnv->game.adventureGUI.get<tgui::Panel>("globalMapPanel")->remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
 	gEnv->game.ui.rmWasClicked = false;
 
-	//Dan write code here
-	//
-	//
+	// Jump to sector
+	gEnv->game.adventureData.currentSectorId = str;
+	gEnv->game.adventureData.isSectorLoaded = false;
+	gEnv->game.player.cameraPosition.x = 0;
+	gEnv->game.player.cameraPosition.y = 0;
+	printf("info: Jumping to sector %s\n", str.c_str());
 }
 
 void UpdateMapUI()
