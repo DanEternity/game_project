@@ -7,3 +7,7 @@ void clickSector(const std::string str, tgui::Widget::Ptr widget, const std::str
 void jumpSector(const std::string str, tgui::Widget::Ptr widget, const std::string& signalName);
 void UpdateMapUI();
 
+
+void openMap();
+
+void disableAllAdventureUI();
