@@ -19,12 +19,13 @@ void BuildMapUI()
 		but->setSize(20, 20);
 		panel->add(but, "globalMapSectorButton" + std::to_string(i));
 		but->setPosition(sector.second->x / 8 + (but->getParent()->getSize().x / 2), sector.second->y / 8 + (but->getParent()->getSize().y / 2));
-		but->connect("MouseReleased", clickSector, sector.first);
+		const int id = i;
+		but->connect("MouseReleased", clickSector, sector.first, id);
 		i++;
 	}
 }
 
-void clickSector(const std::string str, tgui::Widget::Ptr widget, const std::string& signalName)
+void clickSector(const std::string str, const int id, tgui::Widget::Ptr widget, const std::string& signalName)
 {
 	if (!gEnv->game.ui.rmWasClicked)
 	{
@@ -61,6 +62,7 @@ void clickSector(const std::string str, tgui::Widget::Ptr widget, const std::str
 		but->setText("Jump");
 		but->connect("MouseReleased", jumpSector, str);
 	}
+	gEnv->game.ui.sectorNumberRightPanel = id;
 }
 
 void jumpSector(const std::string str, tgui::Widget::Ptr widget, const std::string& signalName)
@@ -82,13 +84,15 @@ void UpdateMapUI()
 		for (auto sector : gEnv->game.adventureData.sectors)
 		{
 			tgui::Button::Ptr but = gEnv->game.adventureGUI.get<tgui::Button>("globalMapSectorButton" + std::to_string(i));
-			but->setPosition(sector.second->x / gEnv->game.ui.mapScale + (but->getParent()->getSize().x / 2) + gEnv->game.ui.mapBiasX, sector.second->y / gEnv->game.ui.mapScale + (but->getParent()->getSize().y / 2) + gEnv->game.ui.mapBiasY);
+			int x = sector.second->x / gEnv->game.ui.mapScale + (but->getParent()->getSize().x / 2) + gEnv->game.ui.mapBiasX;
+			int y = sector.second->y / gEnv->game.ui.mapScale + (but->getParent()->getSize().y / 2) + gEnv->game.ui.mapBiasY;
+			but->setPosition(x, y);
+			if (i == gEnv->game.ui.sectorNumberRightPanel && gEnv->game.ui.rmWasClicked)
+			{
+				tgui::Panel::Ptr panel = gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel");
+				panel->setPosition(x+20,y+20);
+			}
 			i++;
-		}
-		if (gEnv->game.ui.rmWasClicked)
-		{
-			tgui::Panel::Ptr panel = gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel");
-			panel->setPosition(panel->getPosition().x + gEnv->game.ui.mapBiasX, panel->getPosition().y + gEnv->game.ui.mapBiasY);
 		}
 		gEnv->game.ui.mapUpdateRequired = false;
 	}
