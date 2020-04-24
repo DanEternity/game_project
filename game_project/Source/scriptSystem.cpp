@@ -1686,6 +1686,7 @@ void ScriptSystem::p_processPutItemToPlayerInventory(PutItemToPlayerInventoryScr
 		{
 			// successful
 			gEnv->game.player.inventory[i] = static_cast<Item*>(objSrc);
+			giveIconToItem(gEnv->game.player.inventory[i]);
 			return;
 		}
 

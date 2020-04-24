@@ -63,7 +63,11 @@ Put "0" "$_res"
 Call "$_link" "$_sum", "$_res";
 PutItemToPlayerInventory "$_res"
 
+ChangeScriptEntryPoint "$self" "@alt"
+Terminate
 
+@alt
+Text "Here is nothing but star dust..."
 Terminate
 
 Put "0" "$_res"

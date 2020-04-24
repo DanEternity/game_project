@@ -543,6 +543,8 @@ void drawAdventureGameMode(double deltaTime)
 
 void loadSector()
 {
+	printf("info: Loading sector data...\n");
+
 	//gEnv->game.adventureData.sectors[gEnv->game.adventureData.currentSectorId];
 	auto p = gEnv->game.adventureData.sectors[gEnv->game.adventureData.currentSectorId];
 	
