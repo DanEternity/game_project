@@ -243,6 +243,7 @@
     <ClCompile Include="Source\map.cpp" />
     <ClCompile Include="Source\menuOverlay.cpp" />
     <ClCompile Include="Source\personEquipmentUI.cpp" />
+    <ClCompile Include="Source\postUpdate.cpp" />
     <ClCompile Include="Source\preload.cpp" />
     <ClCompile Include="Source\scriptCompiler.cpp" />
     <ClCompile Include="Source\scriptCompilerTemplates.cpp" />
@@ -298,6 +299,7 @@
     <ClInclude Include="Source\plan.h" />
     <ClInclude Include="Source\playerData.h" />
     <ClInclude Include="Source\poolObject.h" />
+    <ClInclude Include="Source\postUpdate.h" />
     <ClInclude Include="Source\preload.h" />
     <ClInclude Include="Source\scriptCompiler.h" />
     <ClInclude Include="Source\scriptCompilerTemplates.h" />

@@ -17,4 +17,10 @@ void handleUIEvents(sf::Event & event)
 	{
 		gEnv->game.adventureGUI.handleEvent(event);
 	}
+
+	if (event.type == sf::Event::MouseWheelMoved)
+	{
+		gEnv->game.player.mouseWheelDelta = event.mouseWheel.delta;
+	}
+
 }

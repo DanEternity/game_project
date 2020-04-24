@@ -5,6 +5,7 @@
 #include "Source\game.h"
 #include "Source\preload.h"
 #include "Source\uiEventHandlers.h"
+#include "Source\postUpdate.h"
 
 int main()
 {
@@ -61,6 +62,10 @@ int main()
 
 		// Display frame
 		gEnv->globalWindow.display();
+
+		// Post update
+		postUpdate();
+
 	}
 
 	return 0;

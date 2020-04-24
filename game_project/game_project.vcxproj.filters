@@ -144,6 +144,9 @@
     <ClCompile Include="Source\itemUtils.cpp">
       <Filter>Adventure\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\postUpdate.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\game.h">
@@ -349,6 +352,9 @@
     </ClInclude>
     <ClInclude Include="Source\itemUtils.h">
       <Filter>Adventure\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\postUpdate.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -88,4 +88,7 @@ public:
 
 	int money = 0;
 
+	// controls
+	float mouseWheelDelta = 0;
+
 };
