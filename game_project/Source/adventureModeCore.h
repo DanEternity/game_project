@@ -3,7 +3,7 @@
 #include "enviroment.h"
 #include "sectorDrawUtility.h"
 #include "scriptCompiler.h"
-
+#include "map.h"
 //
 // This file contain primary functions of adventure gamemode
 //

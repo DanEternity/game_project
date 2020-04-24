@@ -185,7 +185,7 @@ void updateAdventureGameMode(double delteTime)
 	
 	// update
 
-	if (gEnv->game.gameCanPlayerMoveWASD)
+	if (gEnv->game.gameCanPlayerMoveWASD && gEnv->game.player.shipMenu == shipMenu::null)
 	{
 		sf::Vector2f qMove = sf::Vector2f(0, 0);
 		gEnv->game.player.PlayerShipMoving = false;
@@ -289,6 +289,34 @@ void updateAdventureGameMode(double delteTime)
 		}
 		gEnv->game.player.cameraPosition.x += qMove.x * delteTime * gEnv->game.player.cameraSpeed / gEnv->game.adventureData.settingMapScale;
 		gEnv->game.player.cameraPosition.y += qMove.y * delteTime * gEnv->game.player.cameraSpeed / gEnv->game.adventureData.settingMapScale;
+	}
+
+	else if (gEnv->game.player.shipMenu == shipMenu::map)
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		{
+			gEnv->game.ui.mapBiasX -= 1;
+			gEnv->game.ui.mapUpdateRequired = true;
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		{
+			gEnv->game.ui.mapBiasX += 1;
+			gEnv->game.ui.mapUpdateRequired = true;
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		{
+			gEnv->game.ui.mapBiasY -= 1;
+			gEnv->game.ui.mapUpdateRequired = true;
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		{
+			gEnv->game.ui.mapBiasY += 1;
+			gEnv->game.ui.mapUpdateRequired = true;
+		}
+		UpdateMapUI();
 	}
 
 	if (gEnv->game.gameCanPlayerTriggerMarkers)
@@ -496,6 +524,7 @@ void drawAdventureGameMode(double deltaTime)
 		but->setPosition(((marker->pos.x - gEnv->game.player.shipPosition.x) / 15) + lab->getSize().x / 2, ((marker->pos.y - gEnv->game.player.shipPosition.y) / 10) + lab->getSize().y / 2);
 		gEnv->game.adventureGUI.get<tgui::Panel>("minimap")->add(but);
 	}
+
 }
 
 void loadSector()
