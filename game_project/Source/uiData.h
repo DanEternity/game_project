@@ -30,4 +30,6 @@ public:
 	float mapScale = 8;
 	bool mapUpdateRequired = false;
 
+	int sectorNumberRightPanel;
+
 };
