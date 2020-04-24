@@ -4,6 +4,10 @@
 
 #import "core.ItemResource"
 #extLinkRename "core.ItemResource->dbRes"
+
+#import "core.RewardPool"
+#extLinkRename "core.RewardPool->dbReward"
+
 // init section
 @init
 PutFromPointer "$_arg2" to "$EXT:local:key"
@@ -12,36 +16,6 @@ ChangeScriptEntryPoint "$self" "@start"
 PutFromPointer "$_arg1" "$_marker"
 LinkScriptToMarker "$self" to "$_marker"
 EditMarkerProperties "$_marker" "10" "5" "500" "500" "Test event" "Some info"
-
-
-CreatePool "$EXT:local:rewardPool" "2"
-AddToPool "$EXT:local:rewardPool" "100" "$EXT:dbMod:1001", "1000";
-AddToPool "$EXT:local:rewardPool" "100" "$EXT:dbMod:1011", "1000";
-AddToPool "$EXT:local:rewardPool" "100" "$EXT:dbMod:1021", "1000";
-AddToPool "$EXT:local:rewardPool" "100" "$EXT:dbMod:1031", "1000";
-AddToPool "$EXT:local:rewardPool" "100" "$EXT:dbMod:1041", "1000";
-AddToPool "$EXT:local:rewardPool" "50" "$EXT:dbMod:1001", "1100";
-AddToPool "$EXT:local:rewardPool" "50" "$EXT:dbMod:1011", "1100";
-AddToPool "$EXT:local:rewardPool" "50" "$EXT:dbMod:1021", "1100";
-AddToPool "$EXT:local:rewardPool" "50" "$EXT:dbMod:1031", "1100";
-AddToPool "$EXT:local:rewardPool" "50" "$EXT:dbMod:1041", "1100";
-AddToPool "$EXT:local:rewardPool" "10" "$EXT:dbMod:1001", "1300";
-AddToPool "$EXT:local:rewardPool" "10" "$EXT:dbMod:1011", "1300";
-AddToPool "$EXT:local:rewardPool" "10" "$EXT:dbMod:1021", "1300";
-AddToPool "$EXT:local:rewardPool" "10" "$EXT:dbMod:1031", "1300";
-AddToPool "$EXT:local:rewardPool" "10" "$EXT:dbMod:1041", "1300";
-
-
-CreatePool "$EXT:local:rewardPool2" "3"
-AddToPool "$EXT:local:rewardPool2" "100" "$EXT:dbRes:101", "10", "5";
-AddToPool "$EXT:local:rewardPool2" "100" "$EXT:dbRes:111", "10", "5";
-AddToPool "$EXT:local:rewardPool2" "100" "$EXT:dbRes:121", "10", "5";
-AddToPool "$EXT:local:rewardPool2" "50" "$EXT:dbRes:101", "15", "5";
-AddToPool "$EXT:local:rewardPool2" "50" "$EXT:dbRes:111", "15", "5";
-AddToPool "$EXT:local:rewardPool2" "50" "$EXT:dbRes:121", "15", "5";
-AddToPool "$EXT:local:rewardPool2" "20" "$EXT:dbRes:101", "25", "10";
-AddToPool "$EXT:local:rewardPool2" "20" "$EXT:dbRes:111", "25", "10";
-AddToPool "$EXT:local:rewardPool2" "20" "$EXT:dbRes:121", "25", "10";
 Terminate 
 
 // start section
@@ -49,19 +23,13 @@ Terminate
 
 Text "This is a test event created with key $EXT:local:key "
 
-GetFromPool "$EXT:local:rewardPool" "$EXT:local:key" "$_link", "$_quality";
 
-Put "0" "$_res"
-Call "$_link" "$EXT:local:key", "$_quality", "5", "1", "$_res";
+Put "0" to "$_res"
+
+Call "$EXT:dbReward:lvl1-5CommonModule" "$EXT:local:key", "$_res";
+
 PutItemToPlayerInventory "$_res"
 
-GetFromPool "$EXT:local:rewardPool2" "$EXT:local:key" "$_link", "$_base", "$_range";
-Ariphmetic "$EXT:local:key % $_range" to "$_sum"
-Ariphmetic "$_sum + $_base" to "$_sum"
-
-Put "0" "$_res"
-Call "$_link" "$_sum", "$_res";
-PutItemToPlayerInventory "$_res"
 
 ChangeScriptEntryPoint "$self" "@alt"
 Terminate
@@ -69,7 +37,3 @@ Terminate
 @alt
 Text "Here is nothing but star dust..."
 Terminate
-
-Put "0" "$_res"
-Call "$EXT:dbMod:1031" "$EXT:local:key", "1300", "5", "1", "$_res";
-PutItemToPlayerInventory "$_res"

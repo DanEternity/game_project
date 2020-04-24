@@ -1,0 +1,83 @@
+﻿#extLocal "local"
+#import "core.ItemModule"
+#extLinkRename "core.ItemModule->dbMod"
+
+#import "core.ItemResource"
+#extLinkRename "core.ItemResource->dbRes"
+
+#import "core.RewardPool"
+#extLinkRename "core.RewardPool->dbReward"
+
+// init section
+@init
+CreatePool "$EXT:local:rewardPool" "4"
+// pool, weight, item_generator, quality, level, rarity
+// level 1
+AddToPool "$EXT:local:rewardPool" "100" "$EXT:dbMod:1001", "1000", "1", "1";
+AddToPool "$EXT:local:rewardPool" "100" "$EXT:dbMod:1011", "1000", "1", "1";
+AddToPool "$EXT:local:rewardPool" "100" "$EXT:dbMod:1021", "1000", "1", "1";
+AddToPool "$EXT:local:rewardPool" "100" "$EXT:dbMod:1031", "1000", "1", "1";
+AddToPool "$EXT:local:rewardPool" "100" "$EXT:dbMod:1041", "1000", "1", "1";
+// level 2
+AddToPool "$EXT:local:rewardPool" "90" "$EXT:dbMod:1001", "1000", "2", "1";
+AddToPool "$EXT:local:rewardPool" "90" "$EXT:dbMod:1011", "1000", "2", "1";
+AddToPool "$EXT:local:rewardPool" "90" "$EXT:dbMod:1021", "1000", "2", "1";
+AddToPool "$EXT:local:rewardPool" "90" "$EXT:dbMod:1031", "1000", "2", "1";
+AddToPool "$EXT:local:rewardPool" "90" "$EXT:dbMod:1041", "1000", "2", "1";
+// level 3
+AddToPool "$EXT:local:rewardPool" "80" "$EXT:dbMod:1001", "1000", "3", "1";
+AddToPool "$EXT:local:rewardPool" "80" "$EXT:dbMod:1011", "1000", "3", "1";
+AddToPool "$EXT:local:rewardPool" "80" "$EXT:dbMod:1021", "1000", "3", "1";
+AddToPool "$EXT:local:rewardPool" "80" "$EXT:dbMod:1031", "1000", "3", "1";
+AddToPool "$EXT:local:rewardPool" "80" "$EXT:dbMod:1041", "1000", "3", "1";
+// level 3 and 10% quality
+AddToPool "$EXT:local:rewardPool" "40" "$EXT:dbMod:1001", "1100", "3", "1";
+AddToPool "$EXT:local:rewardPool" "40" "$EXT:dbMod:1011", "1100", "3", "1";
+AddToPool "$EXT:local:rewardPool" "40" "$EXT:dbMod:1021", "1100", "3", "1";
+AddToPool "$EXT:local:rewardPool" "40" "$EXT:dbMod:1031", "1100", "3", "1";
+AddToPool "$EXT:local:rewardPool" "40" "$EXT:dbMod:1041", "1100", "3", "1";
+// level 4
+AddToPool "$EXT:local:rewardPool" "50" "$EXT:dbMod:1001", "1000", "4", "1";
+AddToPool "$EXT:local:rewardPool" "50" "$EXT:dbMod:1011", "1000", "4", "1";
+AddToPool "$EXT:local:rewardPool" "50" "$EXT:dbMod:1021", "1000", "4", "1";
+AddToPool "$EXT:local:rewardPool" "50" "$EXT:dbMod:1031", "1000", "4", "1";
+AddToPool "$EXT:local:rewardPool" "50" "$EXT:dbMod:1041", "1000", "4", "1";
+// level 5 and rarity 2
+AddToPool "$EXT:local:rewardPool" "20" "$EXT:dbMod:1001", "1000", "5", "2";
+AddToPool "$EXT:local:rewardPool" "20" "$EXT:dbMod:1011", "1000", "5", "2";
+AddToPool "$EXT:local:rewardPool" "20" "$EXT:dbMod:1021", "1000", "5", "2";
+AddToPool "$EXT:local:rewardPool" "20" "$EXT:dbMod:1031", "1000", "5", "2";
+AddToPool "$EXT:local:rewardPool" "20" "$EXT:dbMod:1041", "1000", "5", "2";
+// level 5 and rarity 2 and 10% quality
+AddToPool "$EXT:local:rewardPool" "10" "$EXT:dbMod:1001", "1100", "5", "2";
+AddToPool "$EXT:local:rewardPool" "10" "$EXT:dbMod:1011", "1100", "5", "2";
+AddToPool "$EXT:local:rewardPool" "10" "$EXT:dbMod:1021", "1100", "5", "2";
+AddToPool "$EXT:local:rewardPool" "10" "$EXT:dbMod:1031", "1100", "5", "2";
+AddToPool "$EXT:local:rewardPool" "10" "$EXT:dbMod:1041", "1100", "5", "2";
+// level 3 and -10% quality (bad)
+AddToPool "$EXT:local:rewardPool" "40" "$EXT:dbMod:1001", "900", "3", "1";
+AddToPool "$EXT:local:rewardPool" "40" "$EXT:dbMod:1011", "900", "3", "1";
+AddToPool "$EXT:local:rewardPool" "40" "$EXT:dbMod:1021", "900", "3", "1";
+AddToPool "$EXT:local:rewardPool" "40" "$EXT:dbMod:1031", "900", "3", "1";
+AddToPool "$EXT:local:rewardPool" "40" "$EXT:dbMod:1041", "900", "3", "1";
+
+
+
+ChangeScriptEntryPoint "$self" "@start"
+//Terminate 
+
+// start section
+@start
+// input: key
+
+PutFromPointer "$_arg0" "$_key"
+GetFromPool "$EXT:local:rewardPool" "$_key" "$_link", "$_quality", "$_level", "$_rarity";
+
+Put "0" "$_res"
+Call "$_link" "$_key", "$_quality", "$_level", "$_rarity", "$_res";
+
+PutToPointer "$_res" "$_arg1"
+Terminate
+
+#registerFunction "$EXT:dbReward:lvl1-5CommonModule"
+

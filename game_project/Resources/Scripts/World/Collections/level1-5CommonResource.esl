@@ -1,0 +1,48 @@
+﻿#extLocal "local"
+#import "core.ItemModule"
+#extLinkRename "core.ItemModule->dbMod"
+
+#import "core.ItemResource"
+#extLinkRename "core.ItemResource->dbRes"
+
+#import "core.RewardPool"
+#extLinkRename "core.RewardPool->dbReward"
+
+// init section
+@init
+CreatePool "$EXT:local:rewardPool" "4"
+AddToPool "$EXT:local:rewardPool" "100" "$EXT:dbMod:1001", "1000", "1", "1";
+AddToPool "$EXT:local:rewardPool" "100" "$EXT:dbMod:1011", "1000", "1", "1";
+AddToPool "$EXT:local:rewardPool" "100" "$EXT:dbMod:1021", "1000", "1", "1";
+AddToPool "$EXT:local:rewardPool" "100" "$EXT:dbMod:1031", "1000", "1", "1";
+AddToPool "$EXT:local:rewardPool" "100" "$EXT:dbMod:1041", "1000", "1", "1";
+
+ChangeScriptEntryPoint "$self" "@start"
+//Terminate 
+
+// start section
+@start
+// input: key
+
+PutFromPointer "$_arg0" "$_key"
+GetFromPool "$EXT:local:rewardPool" "$_key" "$_link", "$_quality", "$_level", "$_rarity";
+
+Put "0" "$_res"
+Call "$_link" "$EXT:local:key", "$_quality", "$_level", "$_rarity", "$_res";
+
+PutToPointer "$_res" "$_arg1"
+Terminate
+
+
+
+
+CreatePool "$EXT:local:rewardPool2" "3"
+AddToPool "$EXT:local:rewardPool2" "100" "$EXT:dbRes:101", "10", "5";
+AddToPool "$EXT:local:rewardPool2" "100" "$EXT:dbRes:111", "10", "5";
+AddToPool "$EXT:local:rewardPool2" "100" "$EXT:dbRes:121", "10", "5";
+AddToPool "$EXT:local:rewardPool2" "50" "$EXT:dbRes:101", "15", "5";
+AddToPool "$EXT:local:rewardPool2" "50" "$EXT:dbRes:111", "15", "5";
+AddToPool "$EXT:local:rewardPool2" "50" "$EXT:dbRes:121", "15", "5";
+AddToPool "$EXT:local:rewardPool2" "20" "$EXT:dbRes:101", "25", "10";
+AddToPool "$EXT:local:rewardPool2" "20" "$EXT:dbRes:111", "25", "10";
+AddToPool "$EXT:local:rewardPool2" "20" "$EXT:dbRes:121", "25", "10";

@@ -73,6 +73,9 @@ void preloadScripts()
 	// sector templates
 	// addScriptToPreloadQueue("\\resources\\scripts\\\World\\SectorTemplates\\Test2.esl", L"core");
 
+	// collections
+
+	addScriptToPreloadQueue("\\resources\\scripts\\World\\Collections\\level1-5CommonModule.esl", L"core");
 }
 
 void postLoad()
