@@ -5,7 +5,7 @@ void startWorldGeneration()
 
 	// initiate generation parameters
 
-	const int maxGeneratedPoints = 1;
+	const int maxGeneratedPoints = 20;
 	const int maxGalaxyRadius = 5000;
 	const int sectorPropertiesCountWeightRaw[12] = { 0, 10, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
