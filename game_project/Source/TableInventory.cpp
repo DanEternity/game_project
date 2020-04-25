@@ -18,7 +18,7 @@ void BuildInventoryUI(int cellSize)
 
 		scrollablePanel->add(button, "InventoryCell"+ std::to_string(i));
 
-		button->setSize(45, 40);
+		button->setSize(50, 50);
 		button->setPosition(5 + positionX * 50, 10 + positionY * 50);
 		button->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 
