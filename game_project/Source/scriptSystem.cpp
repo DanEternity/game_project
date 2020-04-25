@@ -291,6 +291,9 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::equipModule:
 		p_processEquipModule(static_cast<EquipModuleScript*>(command));
 		break;
+	case scriptType::abs:
+		p_processAbs(static_cast<AbsScript*>(command));
+		break;
 	default:
 		printf("Debug: ScriptSystem Error! Script command has unknown type -> %i", sType);
 		break;
@@ -2851,6 +2854,45 @@ void ScriptSystem::p_processEquipModule(EquipModuleScript * command)
 	s->modules[slotId] = objSrcModule;
 
 	updateShipSchemeUI();
+
+}
+
+void ScriptSystem::p_processAbs(AbsScript * command)
+{
+
+	RETURN_CODE code;
+
+	auto objSrc = scriptUtil::getArgumentObject(command->src, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType == objectType::integer)
+	{
+		IntObject * p = static_cast<IntObject*>(objSrc);
+		int arg = p->value;
+		IntObject * t = new IntObject(abs(arg));
+		t->memoryControl = memoryControl::singleUse;
+		code = putMemoryCell(command->dst, t, &p_d->localMemory);
+	}
+	else
+	{
+		if (objSrc->objectType == objectType::real)
+		{
+			FloatObject * p = static_cast<FloatObject*>(objSrc);
+			float arg = p->value;
+			FloatObject * t = new FloatObject(abs(arg));
+			t->memoryControl = memoryControl::singleUse;
+			code = putMemoryCell(command->dst, t, &p_d->localMemory);
+		}
+		else
+		{
+			// failed
+			return;
+		}
+	}
 
 }
 

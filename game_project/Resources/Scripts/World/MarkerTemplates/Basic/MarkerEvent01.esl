@@ -27,7 +27,9 @@ Text "This is a test event created with key $EXT:local:key "
 Put "0" to "$_res"
 
 Call "$EXT:dbReward:lvl1-5CommonModule" "$EXT:local:key", "$_res";
+PutItemToPlayerInventory "$_res"
 
+Call "$EXT:dbReward:lvl1-5CommonResource" "$EXT:local:key", "$_res";
 PutItemToPlayerInventory "$_res"
 
 

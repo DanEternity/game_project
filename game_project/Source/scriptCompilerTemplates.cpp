@@ -551,6 +551,15 @@ BaseScript * scriptCompilerTemplates::mainHandler::EquipModule(CompilerCommandTe
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::Abs(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new AbsScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);

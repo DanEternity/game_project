@@ -76,6 +76,7 @@ void preloadScripts()
 	// collections
 
 	addScriptToPreloadQueue("\\resources\\scripts\\World\\Collections\\level1-5CommonModule.esl", L"core");
+	addScriptToPreloadQueue("\\resources\\scripts\\World\\Collections\\level1-5CommonResource.esl", L"core");
 }
 
 void postLoad()

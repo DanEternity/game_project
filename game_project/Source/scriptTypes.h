@@ -61,6 +61,7 @@ namespace scriptType
 		addDecorationToSector,
 		addBackgroundToSector,
 		equipModule,
+		abs,
 	};
 }
 
@@ -720,5 +721,17 @@ public:
 	EquipModuleScript() : BaseScript()
 	{
 		this->scriptType = scriptType::equipModule;
+	}
+};
+
+class AbsScript : public BaseScript
+{
+public:
+	std::wstring src;
+	std::wstring dst;
+
+	AbsScript() : BaseScript()
+	{
+		this->scriptType = scriptType::abs;
 	}
 };
