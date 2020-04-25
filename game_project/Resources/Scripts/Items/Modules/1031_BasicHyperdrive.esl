@@ -15,6 +15,7 @@ Ariphmetic "$_q / 1000" to "$_qmod" // multiplier
 
 // energy supply param // NEGATIVE
 Ariphmetic "$_key * 44441" to "$_pA"
+Abs "$_pA" to "$_pA"
 Ariphmetic "$_pA % 10000" to "$_pA"
 Ariphmetic "$_pA / 10000" to "$_pA"
 Ariphmetic "$_pA * 5" to "$_pA"
@@ -27,6 +28,7 @@ Ariphmetic "$_pA / $_qmod" to "$_pA"
 
 // hyperdrive power param // positive
 Ariphmetic "$_key * 33331" to "$_pC"
+Abs "$_pC" to "$_pC"
 Ariphmetic "$_pC % 10000" to "$_pC"
 Ariphmetic "$_pC / 10000" to "$_pC"
 Ariphmetic "$_pC * 10" to "$_pC"
@@ -39,6 +41,7 @@ Ariphmetic "$_pC * $_qmod" to "$_pC"
 
 // hyperdrive tier param // positive -- not standart -- do not copy
 Ariphmetic "$_key * 27731" to "$_pD"
+Abs "$_pD" to "$_pD"
 Ariphmetic "$_pD % 10000" to "$_pD"
 Ariphmetic "$_pD / 10000" to "$_pD"
 Ariphmetic "$_pD * 0" to "$_pD"
@@ -51,6 +54,7 @@ Ariphmetic "$_pD * $_qmod" to "$_pD"
 
 // hyperdrive fuel efficiency param // positive
 Ariphmetic "$_key * 42881" to "$_p3"
+Abs "$_p3" to "$_p3"
 Ariphmetic "$_p3 % 10000" to "$_p3"
 Ariphmetic "$_p3 / 10000" to "$_p3"
 Ariphmetic "$_p3 * 5" to "$_p3"

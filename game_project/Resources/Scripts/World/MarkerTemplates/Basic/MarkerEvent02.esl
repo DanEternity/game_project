@@ -15,22 +15,25 @@ PutFromPointer "$_arg2" to "$EXT:local:key"
 ChangeScriptEntryPoint "$self" "@start" 
 PutFromPointer "$_arg1" "$_marker"
 LinkScriptToMarker "$self" to "$_marker"
-EditMarkerProperties "$_marker" "10" "5" "500" "500" "Test event" "Some info"
+EditMarkerProperties "$_marker" "10" "5" "500" "500" "Test signal event" "Some info"
 Terminate 
 
 // start section
 @start
 
 Text "This is a test event created with key $EXT:local:key "
-
+GetShipStat "$playerShip" "sensorPower" "$_sensor"
+IfDoJump "$_sensor > 35" "@yes"
+Text "Your sensors detects some strange emission, but seems their power is not enough to find the source"
+Terminate
+@yes
 
 Put "0" to "$_res"
 
 Call "$EXT:dbReward:lvl1-5CommonModule" "$EXT:local:key", "$_res";
 PutItemToPlayerInventory "$_res"
 
-Call "$EXT:dbReward:lvl1-5CommonResource" "$EXT:local:key", "$_res";
-PutItemToPlayerInventory "$_res"
+Text "You find an old ship module"
 
 
 ChangeScriptEntryPoint "$self" "@alt"

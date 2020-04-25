@@ -341,4 +341,33 @@ void LoadScriptTemplates()
 	p.body = "\"$src\" \"$dst\" \"$slot\"";
 	p.mainHandler = scriptCompilerTemplates::mainHandler::EquipModule;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// Abs
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"ABS";
+	p.body = "\"$src\" \"$dst\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::Abs;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// GetShipStat
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"GETSHIPSTAT";
+	p.body = "\"$src\" \"$statName\" \"$dst\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::GetShipStat;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// GetResourceCountFromPlayerInventory
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"GETRESOURCECOUNTFROMPLAYERINVENTORY";
+	p.body = "\"$resId\" \"$dst\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::GetResourceCountFromPlayerInventory;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// RemoveResourcesFromPlayerInventory
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"REMOVERESOURCESFROMPLAYERINVENTORY";
+	p.body = "\"$resId\" \"$count\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::RemoveResourcesFromPlayerInventory;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
 }

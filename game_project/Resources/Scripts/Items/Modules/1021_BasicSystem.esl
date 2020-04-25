@@ -15,6 +15,7 @@ Ariphmetic "$_q / 1000" to "$_qmod" // multiplier
 
 // energy supply param // NEGATIVE
 Ariphmetic "$_key * 44441" to "$_pA"
+Abs "$_pA" to "$_pA"
 Ariphmetic "$_pA % 10000" to "$_pA"
 Ariphmetic "$_pA / 10000" to "$_pA"
 Ariphmetic "$_pA * 5" to "$_pA"
@@ -27,6 +28,7 @@ Ariphmetic "$_pA / $_qmod" to "$_pA"
 
 // energy supply %param // positive
 Ariphmetic "$_key * 33331" to "$_pC"
+Abs "$_pC" to "$_pC"
 Ariphmetic "$_pC % 10000" to "$_pC"
 Ariphmetic "$_pC / 10000" to "$_pC"
 Ariphmetic "$_pC * 0.02" to "$_pC"
@@ -39,6 +41,7 @@ Ariphmetic "$_pC * $_qmod" to "$_pC"
 
 // sensor power %param // positive
 Ariphmetic "$_key * 27731" to "$_pD"
+Abs "$_pD" to "$_pD"
 Ariphmetic "$_pD % 10000" to "$_pD"
 Ariphmetic "$_pD / 10000" to "$_pD"
 Ariphmetic "$_pD * 0.02" to "$_pD"
@@ -51,6 +54,7 @@ Ariphmetic "$_pD * $_qmod" to "$_pD"
 
 // shield %param // positive
 Ariphmetic "$_key * 42731" to "$_pE"
+Abs "$_pE" to "$_pE"
 Ariphmetic "$_pE % 10000" to "$_pE"
 Ariphmetic "$_pE / 10000" to "$_pE"
 Ariphmetic "$_pE * 0.02" to "$_pE"
@@ -63,6 +67,7 @@ Ariphmetic "$_pE * $_qmod" to "$_pE"
 
 // evasion %param // positive
 Ariphmetic "$_key * 31941" to "$_pF"
+Abs "$_pF" to "$_pF"
 Ariphmetic "$_pF % 10000" to "$_pF"
 Ariphmetic "$_pF / 10000" to "$_pF"
 Ariphmetic "$_pF * 0.02" to "$_pF"
@@ -75,6 +80,7 @@ Ariphmetic "$_pF * $_qmod" to "$_pF"
 
 // huperdrive power %param // positive
 Ariphmetic "$_key * 21221" to "$_pI"
+Abs "$_pI" to "$_pI"
 Ariphmetic "$_pI % 10000" to "$_pI"
 Ariphmetic "$_pI / 10000" to "$_pI"
 Ariphmetic "$_pI * 0.02" to "$_pI"

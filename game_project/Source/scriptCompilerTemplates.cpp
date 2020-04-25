@@ -551,6 +551,43 @@ BaseScript * scriptCompilerTemplates::mainHandler::EquipModule(CompilerCommandTe
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::Abs(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new AbsScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::GetShipStat(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new GetShipStatScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->statName = convertExtReferences(buffer, buffer->arg["$statName"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::GetResourceCountFromPlayerInventory(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new GetResourceCountFromPlayerInventoryScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->resId = convertExtReferences(buffer, buffer->arg["$resId"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::RemoveResourcesFromPlayerInventory(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new RemoveResourcesFromPlayerInventoryScript();
+	p->resCount = convertExtReferences(buffer, buffer->arg["$count"]);
+	p->resId = convertExtReferences(buffer, buffer->arg["$resId"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);
