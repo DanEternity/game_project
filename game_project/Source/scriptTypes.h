@@ -62,6 +62,9 @@ namespace scriptType
 		addBackgroundToSector,
 		equipModule,
 		abs,
+		getShipStat,
+		getResourceCountFromPlayerInventory,
+		removeResourcesFromPlayerInventory,
 	};
 }
 
@@ -734,4 +737,42 @@ public:
 	{
 		this->scriptType = scriptType::abs;
 	}
+};
+
+class GetShipStatScript : public BaseScript
+{
+public:
+	std::wstring src;
+	std::wstring statName;
+	std::wstring dst;
+
+	GetShipStatScript() : BaseScript()
+	{
+		this->scriptType = scriptType::getShipStat;
+	}
+};
+
+class GetResourceCountFromPlayerInventoryScript : public BaseScript
+{
+public:
+	std::wstring resId;
+	std::wstring dst;
+	GetResourceCountFromPlayerInventoryScript() : BaseScript()
+	{
+		this->scriptType = scriptType::getResourceCountFromPlayerInventory;
+	}
+};
+
+class RemoveResourcesFromPlayerInventoryScript : public BaseScript
+{
+public:
+	// this script will not actually check do player have such amount of resources
+	std::wstring resId;
+	std::wstring resCount; // can exceed 64 or other resource limit, multiple stacks will be deleted
+
+	RemoveResourcesFromPlayerInventoryScript() : BaseScript()
+	{
+		this->scriptType = scriptType::removeResourcesFromPlayerInventory;
+	}
+
 };

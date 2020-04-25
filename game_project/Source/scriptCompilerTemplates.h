@@ -61,6 +61,9 @@ namespace scriptCompilerTemplates
 		BaseScript * AddBackgroundToSector(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * EquipModule(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * Abs(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * GetShipStat(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * GetResourceCountFromPlayerInventory(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * RemoveResourcesFromPlayerInventory(CompilerCommandTemplateDataBuffer * buffer); // ?
 	}
 
 	namespace afterUpdateHandler 

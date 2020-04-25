@@ -134,6 +134,9 @@ private:
 	void p_processAddBackgroundToSector(AddBackgroundToSectorScript * command);
 	void p_processEquipModule(EquipModuleScript * command);
 	void p_processAbs(AbsScript * command);
+	void p_processGetShipStat(GetShipStatScript * command);
+	void p_processGetResourceCountFromPlayerInventory(GetResourceCountFromPlayerInventoryScript * command);
+	void p_processRemoveResourcesFromPlayerInventory(RemoveResourcesFromPlayerInventoryScript * command);
 };
 
 extern ScriptSystem * scriptSystem;

@@ -294,6 +294,15 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::abs:
 		p_processAbs(static_cast<AbsScript*>(command));
 		break;
+	case scriptType::getShipStat:
+		p_processGetShipStat(static_cast<GetShipStatScript*>(command));
+		break;
+	case scriptType::getResourceCountFromPlayerInventory:
+		p_processGetResourceCountFromPlayerInventory(static_cast<GetResourceCountFromPlayerInventoryScript*>(command));
+		break;
+	case scriptType::removeResourcesFromPlayerInventory:
+		p_processRemoveResourcesFromPlayerInventory(static_cast<RemoveResourcesFromPlayerInventoryScript*>(command));
+		break;
 	default:
 		printf("Debug: ScriptSystem Error! Script command has unknown type -> %i", sType);
 		break;
@@ -1684,6 +1693,64 @@ void ScriptSystem::p_processPutItemToPlayerInventory(PutItemToPlayerInventoryScr
 		return;
 	}
 
+	Item * p = static_cast<Item*>(objSrc);
+	if (p->itemType == itemType::resource)
+	{
+		ItemResource * res = static_cast<ItemResource*>(objSrc);
+
+		// finding existing stacks
+
+		for (int i(0); i<gEnv->game.player.inventory.size(); i++)
+			if (gEnv->game.player.inventory[i] != NULL)
+				if (gEnv->game.player.inventory[i]->itemType == itemType::resource)
+				{
+					ItemResource * pick = static_cast<ItemResource*>(gEnv->game.player.inventory[i]);
+					if (pick->itemId == res->itemId)
+					{
+						if (pick->maxCount - pick->count >= res->count)
+						{
+							pick->count += res->count;
+							if (pick->tooltipWasCreated)
+							{
+								if (pick->tooltipDescription->getParent() != NULL)
+									pick->tooltipDescription->getParent()->remove(pick->tooltipDescription);
+								pick->tooltipDescription.reset();
+								pick->tooltipDescription = tgui::Panel::create();
+								pick->tooltipWasCreated = false;
+							}
+							delete res;
+							return;
+						}
+						else
+						{
+							res->count -= (pick->maxCount - pick->count);
+							pick->count = pick->maxCount;
+							if (pick->tooltipWasCreated)
+							{
+								if (pick->tooltipDescription->getParent() != NULL)
+									pick->tooltipDescription->getParent()->remove(pick->tooltipDescription);
+								pick->tooltipDescription.reset();
+								pick->tooltipDescription = tgui::Panel::create();
+								pick->tooltipWasCreated = false;
+							}
+						}
+					}
+				}
+
+
+		for (int i(0); i<gEnv->game.player.inventory.size(); i++)
+			if (gEnv->game.player.inventory[i] == NULL)
+			{
+				// successful
+				gEnv->game.player.inventory[i] = static_cast<Item*>(objSrc);
+				giveIconToItem(gEnv->game.player.inventory[i]);
+				return;
+			}
+
+		// failed 
+		return;
+	}
+
 	for (int i(0); i<gEnv->game.player.inventory.size(); i++)
 		if (gEnv->game.player.inventory[i] == NULL)
 		{
@@ -2893,6 +2960,139 @@ void ScriptSystem::p_processAbs(AbsScript * command)
 			return;
 		}
 	}
+
+}
+
+void ScriptSystem::p_processGetShipStat(GetShipStatScript * command)
+{
+
+	RETURN_CODE code;
+	bool error = false;
+
+	auto objSrc = scriptUtil::getArgumentObject(command->src, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	std::wstring t = scriptUtil::getArgumentStringValue(command->statName, p_d, error);
+	if (error)
+	{
+		// failed
+		return;
+	}
+
+	auto p = scriptUtil::getFromStringStatName(t);
+
+	if (objSrc->objectType != objectType::ship)
+	{
+		// failed
+		return;
+	}
+
+	Ship * s = static_cast<Ship*>(objSrc);
+
+	if (s->shipStats.find(p) == s->shipStats.end())
+	{
+		// failed
+		return;
+	}
+
+	FloatObject * res = new FloatObject(s->shipStats[p]->total);
+
+	code = putMemoryCell(command->dst, res, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+}
+
+void ScriptSystem::p_processGetResourceCountFromPlayerInventory(GetResourceCountFromPlayerInventoryScript * command)
+{
+
+	bool error = false;
+
+	int id = scriptUtil::getArgumentIntValue(command->resId, p_d, error);
+
+	if (error)
+	{
+		// failed
+		return;
+	}
+
+	int count = 0;
+
+	for (int i(0); i < gEnv->game.player.inventory.size(); i++)
+	{
+		if (gEnv->game.player.inventory[i] == NULL)
+			continue;
+		
+		if (gEnv->game.player.inventory[i]->itemType == itemType::resource)
+		{
+			ItemResource * p = static_cast<ItemResource *>(gEnv->game.player.inventory[i]);
+			if (p->itemId == id)
+				count += p->count;
+		}
+	}
+
+	IntObject * r = new IntObject(count);
+	r->memoryControl = memoryControl::singleUse;
+
+	auto code = putMemoryCell(command->dst, r, &p_d->localMemory);
+
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+
+}
+
+void ScriptSystem::p_processRemoveResourcesFromPlayerInventory(RemoveResourcesFromPlayerInventoryScript * command)
+{
+
+	bool error = false;
+
+	int id = scriptUtil::getArgumentIntValue(command->resId, p_d, error);
+	int count = scriptUtil::getArgumentIntValue(command->resCount, p_d, error);
+
+	if (error)
+	{
+		// failed
+		return;
+	}
+
+	// remove items
+
+	for (int i(0); i < gEnv->game.player.inventory.size(); i++)
+	{
+		if (gEnv->game.player.inventory[i] == NULL)
+			continue;
+		if (gEnv->game.player.inventory[i]->itemType == itemType::resource)
+		{
+			ItemResource * p = static_cast<ItemResource *>(gEnv->game.player.inventory[i]);
+			if (p->itemId != id)
+				continue;
+			if (p->count > count)
+			{
+				p->count -= count;
+			}
+			else
+			{
+				count -= p->count;
+				delete p;
+				gEnv->game.player.inventory[i] = NULL;
+			}
+		}
+	}
+
+	// Info
+
+	// You can use Remove ... "101" "9999999"    to remove all resources of some type (example 101 = iron)
 
 }
 
