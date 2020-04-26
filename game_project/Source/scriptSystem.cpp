@@ -3080,6 +3080,14 @@ void ScriptSystem::p_processRemoveResourcesFromPlayerInventory(RemoveResourcesFr
 			if (p->count > count)
 			{
 				p->count -= count;
+				if (p->tooltipWasCreated)
+				{
+					if (p->tooltipDescription->getParent() != NULL)
+						p->tooltipDescription->getParent()->remove(p->tooltipDescription);
+					p->tooltipDescription.reset();
+					p->tooltipDescription = tgui::Panel::create();
+					p->tooltipWasCreated = false;
+				}
 			}
 			else
 			{

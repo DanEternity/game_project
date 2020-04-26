@@ -86,5 +86,28 @@ CallMarkerInit "\Resources\Scripts\World\MarkerTemplates\Basic\MarkerEvent01.esl
 SetMarkerPosition "$_marker" "$_x" "$_y"
 AddMarkerToSector "$_marker" "$_sector"
 
+Random "$_key"
+Ariphmetic "$_key % 100" to "$_check"
+IfDoJump "$_check < 75" "@end"
+ 
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_x"
+Ariphmetic "$_x - 1000" to "$_x"
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_y"
+Ariphmetic "$_y - 1000" to "$_y"
+
+
+CreateMarker "$_marker"
+CallMarkerInit "\Resources\Scripts\World\MarkerTemplates\Basic\MarkerEvent03.esl" 
+"$_sector", "$_marker", "$_key";
+SetMarkerPosition "$_marker" "$_x" "$_y"
+AddMarkerToSector "$_marker" "$_sector"
+
+CreateDecoration "$_d" "decorationSpaceBeacon" "1" "1" "0" "$_x" "$_y"
+AddDecorationToSector "$_d" "$_sector"
+
+
+@end
 Terminate
 

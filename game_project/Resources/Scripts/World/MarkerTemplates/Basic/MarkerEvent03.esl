@@ -1,0 +1,58 @@
+﻿#extLocal "local"
+#import "core.ItemModule"
+#extLinkRename "core.ItemModule->dbMod"
+
+#import "core.ItemResource"
+#extLinkRename "core.ItemResource->dbRes"
+
+#import "core.RewardPool"
+#extLinkRename "core.RewardPool->dbReward"
+
+// init section
+@init
+PutFromPointer "$_arg2" to "$EXT:local:key"
+
+ChangeScriptEntryPoint "$self" "@start" 
+PutFromPointer "$_arg1" "$_marker"
+LinkScriptToMarker "$self" to "$_marker"
+EditMarkerProperties "$_marker" "10" "5" "500" "500" "Trading station" "Some info"
+
+Put "2" to "$EXT:local:stock"
+
+Terminate 
+
+// start section
+@start
+
+Text "This is a test event created with key $EXT:local:key "
+
+Text "You see an automatic uranium trading station."
+
+@trade
+IfDoJump "$EXT:local:stock == 0" "@out_of_stock"
+GetResourceCountFromPlayerInventory "101" "$_iron"
+GetResourceCountFromPlayerInventory "111" "$_copper"
+
+Choose "Exchange resources?" 
+[$_iron >= 40]"40 iron -> 10 uranium"[@e1],[$_copper >= 40]"40 copper -> 10 uranium"[@e2],[true]"Exit"[@end];
+@e1
+Ariphmetic "$EXT:local:stock - 1" to "$EXT:local:stock"
+RemoveResourcesFromPlayerInventory "101" "40"
+Put "0" "$_res"
+Call "$EXT:dbRes:121" "10", "$_res";
+PutItemToPlayerInventory "$_res"
+Jump "@trade"
+
+@e2
+Ariphmetic "$EXT:local:stock - 1" to "$EXT:local:stock"
+RemoveResourcesFromPlayerInventory "111" "40"
+Put "0" "$_res"
+Call "$EXT:dbRes:121" "10", "$_res";
+PutItemToPlayerInventory "$_res"
+Jump "@trade"
+
+@out_of_stock
+Text "Station: Uranium is out of stock. Come back later."
+
+@end
+Terminate
