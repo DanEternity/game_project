@@ -298,6 +298,9 @@ void worldGeneratorUpdate(double deltatime)
 
 		globalEnviroment->game.worldGeneratorRequiresUpdate = false;
 
+		// Setup start
+
+		SetupAdventureStart();
 
 	}
 
@@ -395,4 +398,16 @@ bool checkSectorTemplateCompability(MapSector * s, SectorTemplate * t)
 
 
 	return true;
+}
+
+void SetupAdventureStart()
+{
+	auto cptn = new Character(L"Captain");
+	gEnv->game.player.crew.characters.push_back(cptn);
+	cptn->role = characterRole::captain;
+	gEnv->game.player.captain = cptn;
+	BuildPersonSchemeUI(50, 2);
+	BuildStatPersonScreen(2);
+	BuildPersonSkillTree(2);
+
 }

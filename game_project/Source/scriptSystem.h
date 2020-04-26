@@ -137,6 +137,7 @@ private:
 	void p_processGetShipStat(GetShipStatScript * command);
 	void p_processGetResourceCountFromPlayerInventory(GetResourceCountFromPlayerInventoryScript * command);
 	void p_processRemoveResourcesFromPlayerInventory(RemoveResourcesFromPlayerInventoryScript * command);
+	void p_processGlobalVariableModifier(GlobalVariableModifierScript * command);
 };
 
 extern ScriptSystem * scriptSystem;

@@ -477,7 +477,7 @@ void createAdventureUIButtons()
 	//gEnv->game.player.crew->shipCrew[0]->personEquipment.resize(7, nullptr);
 
 	gEnv->game.player.crew.characters.push_back(new Character(L"Person 1"));
-	gEnv->game.player.crew.characters[0]->role = characterRole::programmer;
+	gEnv->game.player.crew.characters[0]->role = characterRole::noneRole;
 
 	gEnv->game.player.crew.characters[0]->equipment[0] = new Equipment(L"Base Helmet", equipmentSlot::head);
 

@@ -34,7 +34,10 @@ GetResourceCountFromPlayerInventory "101" "$_iron"
 GetResourceCountFromPlayerInventory "111" "$_copper"
 
 Choose "Exchange resources?" 
-[$_iron >= 40]"40 iron -> 10 uranium"[@e1],[$_copper >= 40]"40 copper -> 10 uranium"[@e2],[true]"Exit"[@end];
+[$_iron >= 40]"40 iron -> 10 uranium"[@e1],
+[$_copper >= 40]"40 copper -> 10 uranium"[@e2],
+[$money >= 100]"100 money -> 10 uranium"[@e3],
+[true]"Exit"[@end];
 @e1
 Ariphmetic "$EXT:local:stock - 1" to "$EXT:local:stock"
 RemoveResourcesFromPlayerInventory "101" "40"
@@ -46,6 +49,14 @@ Jump "@trade"
 @e2
 Ariphmetic "$EXT:local:stock - 1" to "$EXT:local:stock"
 RemoveResourcesFromPlayerInventory "111" "40"
+Put "0" "$_res"
+Call "$EXT:dbRes:121" "10", "$_res";
+PutItemToPlayerInventory "$_res"
+Jump "@trade"
+
+@e3
+Ariphmetic "$EXT:local:stock - 1" to "$EXT:local:stock"
+RemoveMoney "100"
 Put "0" "$_res"
 Call "$EXT:dbRes:121" "10", "$_res";
 PutItemToPlayerInventory "$_res"

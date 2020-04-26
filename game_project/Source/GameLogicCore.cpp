@@ -370,4 +370,17 @@ void LoadScriptTemplates()
 	p.mainHandler = scriptCompilerTemplates::mainHandler::RemoveResourcesFromPlayerInventory;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
+	// AddMoney
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"ADDMONEY";
+	p.body = "\"$count\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::AddMoney;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// RemoveMoney
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"REMOVEMONEY";
+	p.body = "\"$count\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::RemoveMoney;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 }

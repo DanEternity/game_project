@@ -112,7 +112,7 @@ public:
 
 		characterPosition.resize(4, nullptr);
 		characterRoleSlots.resize(4, characterRole::noneRole);
-		characterRoleSlots[1] = characterRole::programmer;
+		characterRoleSlots[1] = characterRole::noneRole;
 		
 	}
 

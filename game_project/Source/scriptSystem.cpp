@@ -303,6 +303,9 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::removeResourcesFromPlayerInventory:
 		p_processRemoveResourcesFromPlayerInventory(static_cast<RemoveResourcesFromPlayerInventoryScript*>(command));
 		break;
+	case scriptType::globalVariableModifier:
+		p_processGlobalVariableModifier(static_cast<GlobalVariableModifierScript*>(command));
+		break;
 	default:
 		printf("Debug: ScriptSystem Error! Script command has unknown type -> %i", sType);
 		break;
@@ -3103,5 +3106,44 @@ void ScriptSystem::p_processRemoveResourcesFromPlayerInventory(RemoveResourcesFr
 	// You can use Remove ... "101" "9999999"    to remove all resources of some type (example 101 = iron)
 
 }
+
+void ScriptSystem::p_processGlobalVariableModifier(GlobalVariableModifierScript * command)
+{
+
+	std::wstring dst = command->dst;
+
+	if (dst == L"money")
+	{
+
+		bool error = false;
+		int m = scriptUtil::getArgumentIntValue(command->src, p_d, error);
+		if (error)
+		{
+			// failed
+			return;
+		}
+
+		if (command->action == L"add")
+		{
+			gEnv->game.player.money += m;
+			return;
+		}
+
+		if (command->action == L"remove")
+		{
+			gEnv->game.player.money -= m;
+			return;
+		}
+
+		if (command->action == L"set")
+		{
+			gEnv->game.player.money = m;
+			return;
+		}
+	}
+
+}
+
+
 
 extern ScriptSystem * scriptSystem = NULL;

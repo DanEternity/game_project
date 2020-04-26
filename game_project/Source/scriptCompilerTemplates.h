@@ -64,6 +64,8 @@ namespace scriptCompilerTemplates
 		BaseScript * GetShipStat(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * GetResourceCountFromPlayerInventory(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * RemoveResourcesFromPlayerInventory(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * AddMoney(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * RemoveMoney(CompilerCommandTemplateDataBuffer * buffer); // ?
 	}
 
 	namespace afterUpdateHandler 

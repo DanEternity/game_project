@@ -32,6 +32,7 @@ PutItemToPlayerInventory "$_res"
 Call "$EXT:dbReward:lvl1-5CommonResource" "$EXT:local:key", "$_res";
 PutItemToPlayerInventory "$_res"
 
+AddMoney "100"
 
 ChangeScriptEntryPoint "$self" "@alt"
 Terminate

@@ -20,7 +20,8 @@ namespace characterRole
 	enum Role
 	{
 		noneRole,
-		programmer,
+		captain,
+
 	};
 }
 

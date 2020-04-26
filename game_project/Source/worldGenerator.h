@@ -9,6 +9,7 @@
 #include "generationUtility.h"
 #include "enviroment.h"
 #include "scriptCompiler.h"
+#include "adventureUI.h"
 #include "map.h"
 
 void startWorldGeneration();
@@ -22,3 +23,5 @@ void worldGeneratorUpdate(double deltatime);
 void worldGeneratorProcessSector();
 
 bool checkSectorTemplateCompability(MapSector * s, SectorTemplate * t);
+
+void SetupAdventureStart();

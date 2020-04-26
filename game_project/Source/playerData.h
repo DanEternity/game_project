@@ -64,6 +64,7 @@ public:
 	bool PlayerShipMoving = false;
 	float shipAngle = 0;
 	CrewData crew;
+	Character * captain;
 	
 	// Adventure ship position on sector (world coord)
 	sf::Vector2f shipPosition = { 0, 0 };

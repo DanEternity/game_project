@@ -65,6 +65,7 @@ namespace scriptType
 		getShipStat,
 		getResourceCountFromPlayerInventory,
 		removeResourcesFromPlayerInventory,
+		globalVariableModifier,
 	};
 }
 
@@ -775,4 +776,17 @@ public:
 		this->scriptType = scriptType::removeResourcesFromPlayerInventory;
 	}
 
+};
+
+class GlobalVariableModifierScript : public BaseScript
+{
+public:
+	std::wstring src;
+	std::wstring dst;
+	std::wstring action;
+
+	GlobalVariableModifierScript() : BaseScript()
+	{
+		this->scriptType = scriptType::globalVariableModifier;
+	}
 };

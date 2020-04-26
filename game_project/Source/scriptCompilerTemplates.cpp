@@ -588,6 +588,26 @@ BaseScript * scriptCompilerTemplates::mainHandler::RemoveResourcesFromPlayerInve
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::AddMoney(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new GlobalVariableModifierScript();
+	p->src = convertExtReferences(buffer, buffer->arg["$count"]);
+	p->dst = L"money";
+	p->action = L"add";
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::RemoveMoney(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new GlobalVariableModifierScript();
+	p->src = convertExtReferences(buffer, buffer->arg["$count"]);
+	p->dst = L"money";
+	p->action = L"remove";
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);
