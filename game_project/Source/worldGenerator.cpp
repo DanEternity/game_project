@@ -402,12 +402,65 @@ bool checkSectorTemplateCompability(MapSector * s, SectorTemplate * t)
 
 void SetupAdventureStart()
 {
+	/* INITIALIZE INVENTORY */
+
+	gEnv->game.player.inventory.resize(50, nullptr);
+
+	gEnv->game.player.inventory[0] = new Equipment();
+	gEnv->game.player.inventory[0]->name = L"roflanTelo";
+	static_cast<Equipment*>(gEnv->game.player.inventory[0])->equipmentSlotType = equipmentSlot::body;
+
+	gEnv->game.player.inventory[11] = new Equipment();
+	gEnv->game.player.inventory[11]->name = L"roflanBody";
+	static_cast<Equipment*>(gEnv->game.player.inventory[11])->equipmentSlotType = equipmentSlot::body;
+
+	BuildInventoryUI(9);
+
+	/* INITIALIZE SHIP SLOTS */
+
+	gEnv->game.player.ship->slots.resize(8, moduleSlot::ModuleSlot());
+	gEnv->game.player.ship->slots[0].type = moduleSlot::core;
+	gEnv->game.player.ship->slots[1].type = moduleSlot::hyperdrive;
+	gEnv->game.player.ship->slots[2].type = moduleSlot::engine;
+	gEnv->game.player.ship->slots[3].type = moduleSlot::system;
+	gEnv->game.player.ship->slots[4].type = moduleSlot::primaryWeapon;
+	gEnv->game.player.ship->slots[5].type = moduleSlot::universal;
+	gEnv->game.player.ship->slots[6].type = moduleSlot::universal;
+	gEnv->game.player.ship->slots[7].type = moduleSlot::universal;
+
+	gEnv->game.player.ship->modules.resize(8, nullptr);
+
+	BuildShipSchemeUI(50);
+
+	/* INITIALIZE BASE PERSONS */
+
 	auto cptn = new Character(L"Captain");
 	gEnv->game.player.crew.characters.push_back(cptn);
-	cptn->role = characterRole::captain;
 	gEnv->game.player.captain = cptn;
+	
+	gEnv->game.player.crew.characters.push_back(new Character(L"Person 1"));
+	gEnv->game.player.crew.characters.push_back(new Character(L"Person 2"));
+	
+	BuildSchemeChooseCharacter();
+	BuildSchemeRoles();
+
+	BuildPersonSchemeUI(50, 0);
+	BuildStatPersonScreen(0);
+	BuildPersonSkillTree(0);
+
+	BuildPersonSchemeUI(50, 1);
+	BuildStatPersonScreen(1);
+	BuildPersonSkillTree(1);
+
 	BuildPersonSchemeUI(50, 2);
 	BuildStatPersonScreen(2);
 	BuildPersonSkillTree(2);
 
+	BuildPanelChangePersonState();
+
+	giveRoleCaptain(cptn, 0);
+
+	/* CREATE GRID PANEL */
+
+	CreateInventoryGridPanel(10);
 }

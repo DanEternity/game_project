@@ -641,7 +641,7 @@ void giveRoleFind(int id, int buttonId, tgui::Widget::Ptr widget, const std::str
 		int count = 0;
 		for (int i = 0; i < gEnv->game.player.crew.characters.size(); i++)
 		{
-			if (gEnv->game.player.crew.characters[i]->role == gEnv->game.player.ship->characterRoleSlots[id] && !gEnv->game.player.crew.characters[i]->haveRole)
+			if (!gEnv->game.player.crew.characters[i]->haveRole)
 			{
 				tgui::Button::Ptr but = tgui::Button::create();
 				but->setSize(120, 30);
@@ -691,9 +691,21 @@ void giveRole(Character *c, int buttonId, tgui::Widget::Ptr widget, const std::s
 
 		gEnv->game.adventureGUI.get<tgui::Button>("buttonChangeRole" + std::to_string(buttonId))->setText(c->name);
 		c->haveRole = true;
+		c->role = gEnv->game.player.ship->characterRoleSlots[buttonId];
 		gEnv->game.player.ship->characterPosition[buttonId] = c;
 
 		updateShipValues(gEnv->game.player.ship);
 		updateShipStatsScreen();
 	}
+}
+
+void giveRoleCaptain(Character *c, int buttonId)
+{
+	gEnv->game.adventureGUI.get<tgui::Button>("buttonChangeRole" + std::to_string(buttonId))->setText(c->name);
+	c->haveRole = true;
+	c->role = gEnv->game.player.ship->characterRoleSlots[buttonId];
+	gEnv->game.player.ship->characterPosition[buttonId] = c;
+
+	updateShipValues(gEnv->game.player.ship);
+	updateShipStatsScreen();
 }
