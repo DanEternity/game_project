@@ -435,28 +435,16 @@ void SetupAdventureStart()
 	/* INITIALIZE BASE PERSONS */
 
 	auto cptn = new Character(L"Captain");
-	gEnv->game.player.crew.characters.push_back(cptn);
 	gEnv->game.player.captain = cptn;
-	
-	gEnv->game.player.crew.characters.push_back(new Character(L"Person 1"));
-	gEnv->game.player.crew.characters.push_back(new Character(L"Person 2"));
-	
+
 	BuildSchemeChooseCharacter();
 	BuildSchemeRoles();
-
-	BuildPersonSchemeUI(50, 0);
-	BuildStatPersonScreen(0);
-	BuildPersonSkillTree(0);
-
-	BuildPersonSchemeUI(50, 1);
-	BuildStatPersonScreen(1);
-	BuildPersonSkillTree(1);
-
-	BuildPersonSchemeUI(50, 2);
-	BuildStatPersonScreen(2);
-	BuildPersonSkillTree(2);
-
 	BuildPanelChangePersonState();
+
+	registerPlayerCharacter(cptn);
+	registerPlayerCharacter(new Character(L"Person 1"));
+	registerPlayerCharacter(new Character(L"Person 2"));
+
 
 	giveRoleCaptain(cptn, 0);
 

@@ -709,3 +709,14 @@ void giveRoleCaptain(Character *c, int buttonId)
 	updateShipValues(gEnv->game.player.ship);
 	updateShipStatsScreen();
 }
+
+void registerPlayerCharacter(Character *c)
+{
+	int id = gEnv->game.ui.characterPlayerCount++;
+	gEnv->game.player.crew.characters.push_back(c);
+	BuildPersonSchemeUI(50, id);
+	BuildStatPersonScreen(id);
+	BuildPersonSkillTree(id);
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->remove(gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel"));
+	BuildSchemeChooseCharacter();
+}
