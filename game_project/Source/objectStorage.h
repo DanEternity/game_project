@@ -21,4 +21,7 @@ public:
 
 	int nextDecor = 0;
 	std::map<int, MapDecoration*> decor;
+
+	int nextCharId = 0;
+	std::map<int, Character*> characters;
 };

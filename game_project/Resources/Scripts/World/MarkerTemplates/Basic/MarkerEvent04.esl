@@ -15,7 +15,9 @@ PutFromPointer "$_arg2" to "$EXT:local:key"
 ChangeScriptEntryPoint "$self" "@start" 
 PutFromPointer "$_arg1" "$_marker"
 LinkScriptToMarker "$self" to "$_marker"
-EditMarkerProperties "$_marker" "10" "5" "500" "500" "Test event" "Some info"
+EditMarkerProperties "$_marker" "10" "5" "500" "500" "Trading station" "Some info"
+
+
 Terminate 
 
 // start section
@@ -23,19 +25,16 @@ Terminate
 
 Text "This is a test event created with key $EXT:local:key "
 
-Put "0" to "$_res"
+Text "You see a damaged star beacon. Would you try to hack it?"
+GetCharacterStat "$captain" "characterScience" "$_int"
+Choose "Hack it?" [true]"Yeah"[@not_ok],[$_int >= 15]"Bad idea, lets move on"[@ok];
+@not_ok
+Text "You trying to hack beacon system, but trigger it self defence weapons. Prepare to fight."
 
-Call "$EXT:dbReward:lvl1-5CommonModule" "$EXT:local:key", "$_res";
-PutItemToPlayerInventory "$_res"
-
-Call "$EXT:dbReward:lvl1-5CommonResource" "$EXT:local:key", "$_res";
-PutItemToPlayerInventory "$_res"
-
-AddMoney "100"
-
+@ok
 ChangeScriptEntryPoint "$self" "@alt"
 Terminate
 
 @alt
-Text "Here is nothing but star dust..."
+Text "Here is damaged star beacon. It is completely useless."
 Terminate

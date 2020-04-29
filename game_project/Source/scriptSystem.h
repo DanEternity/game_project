@@ -5,7 +5,9 @@
 #include "generationUtility.h"
 #include "scriptWorkflowUtility.h"
 #include "scriptCompiler.h"
+#include "characterManagement.h"
 #include "shipModulesUI.h"
+#include "personEquipmentUI.h"
 #include <stack>
 //#include "scriptDescriptor.h"
 
@@ -138,6 +140,10 @@ private:
 	void p_processGetResourceCountFromPlayerInventory(GetResourceCountFromPlayerInventoryScript * command);
 	void p_processRemoveResourcesFromPlayerInventory(RemoveResourcesFromPlayerInventoryScript * command);
 	void p_processGlobalVariableModifier(GlobalVariableModifierScript * command);
+	void p_processGetCharacterStat(GetCharacterStatScript * command);
+	void p_processInitCharacterStats(InitCharacterStatsScript * command);
+	void p_processCreateCharacter(CreateCharacterScript * command);
+	void p_processAddCharacterToPlayerCrew(AddCharacterToPlayerCrewScript * command);
 };
 
 extern ScriptSystem * scriptSystem;

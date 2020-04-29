@@ -16,12 +16,15 @@ public:
 		this->objectType = objectType::integer;
 	}
 
-	IntObject(int value)
+	IntObject(int value, bool temp = false)
 	{
 		BaseObject();
 		this->objectType = objectType::integer;
 		this->value = value;
+		if (temp)
+			this->memoryControl = memoryControl::singleUse;
 	}
+
 };
 
 class StringObject : public BaseObject

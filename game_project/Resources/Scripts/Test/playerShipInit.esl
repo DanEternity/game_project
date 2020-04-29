@@ -17,4 +17,32 @@ Put "0" "$_res"
 Call "$EXT:dbMod:1021" "1234", "1000", "1", "1", "$_res";
 EquipModule "$_res" "$playerShip" "3"
 
+
+Put "100" to "$_health"
+Put "0" to "$_armor"
+Put "0" to "$_shield"
+Put "0" to "$_block"
+
+Put "0" to "$_resist"
+Put "0" to "$_shieldReg"
+
+Put "3" to "$_actionPoints"
+Put "100" to "$_energy"
+Put "5" to "$_energyReg"
+
+Put "10" to "$_initiative"
+
+Put "10" to "$_combat"
+Put "15" to "$_science"
+Put "10" to "$_adaptation"
+Put "10" to "$_reflexes"
+Put "10" to "$_perception"
+Put "10" to "$_engineerig"
+
+Put "0" to "$_social"
+
+InitCharacterStats "$captain" "$_health" "$_armor" "$_shield" "$_block" 
+"$_resist" "$_shieldReg" "$_actionPoints" "$_energy" "$_energyReg" "$_initiative" 
+"$_combat" "$_science" "$_adaptation" "$_reflexes" "$_engineerig" "$_perception" "$_social"
+
 Terminate 

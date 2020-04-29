@@ -66,6 +66,10 @@ namespace scriptType
 		getResourceCountFromPlayerInventory,
 		removeResourcesFromPlayerInventory,
 		globalVariableModifier,
+		getCharacterStat,
+		initCharacterStats,
+		createCharacter,
+		addCharacterToPlayerCrew,
 	};
 }
 
@@ -788,5 +792,84 @@ public:
 	GlobalVariableModifierScript() : BaseScript()
 	{
 		this->scriptType = scriptType::globalVariableModifier;
+	}
+};
+
+class GetCharacterStatScript : public BaseScript
+{
+public:
+	std::wstring src;
+	std::wstring statName;
+	std::wstring dst;
+
+	GetCharacterStatScript() : BaseScript()
+	{
+		this->scriptType = scriptType::getCharacterStat;
+	}
+};
+
+class InitCharacterStatsScript : public BaseScript
+{
+public:
+
+	std::wstring src;
+
+	std::wstring health;
+	std::wstring armor;
+	std::wstring shield;
+	std::wstring block;
+
+	std::wstring resist;
+	std::wstring ShieldReg;
+
+	std::wstring actionPoints;
+	std::wstring energy;
+	std::wstring energyReg;
+
+	std::wstring initiative;
+
+	std::wstring Combat;
+	std::wstring Science;
+	std::wstring Adaptation;
+	std::wstring Reflexes;
+	std::wstring Engineering;
+	std::wstring Perception;
+
+	std::wstring Social;
+
+	InitCharacterStatsScript() : BaseScript()
+	{
+		this->scriptType = scriptType::initCharacterStats;
+	}
+};
+
+class CreateCharacterScript : public BaseScript
+{
+public:
+
+	std::wstring dst;
+	std::wstring charName;
+	std::wstring charRace;
+	std::wstring charClass;
+
+	// can be L"NULL"
+	std::wstring charAspect;
+
+	CreateCharacterScript() : BaseScript()
+	{
+		this->scriptType = scriptType::createCharacter;
+	}
+
+};
+
+class AddCharacterToPlayerCrewScript : public BaseScript
+{
+public:
+
+	std::wstring src;
+
+	AddCharacterToPlayerCrewScript() : BaseScript()
+	{
+		this->scriptType = scriptType::addCharacterToPlayerCrew;
 	}
 };

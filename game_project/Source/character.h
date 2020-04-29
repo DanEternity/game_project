@@ -11,7 +11,7 @@ namespace characterAspect
 {
 	enum Aspect
 	{
-		noneAspect,
+		noneAspect = 0,
 	};
 }
 
@@ -70,12 +70,23 @@ public:
 
 	Stat initiative;
 
+	Stat Combat;
+	Stat Science;
+	Stat Adaptation;
+	Stat Reflexes;
+	Stat Engineering;
+	Stat Perception;
+
+	Stat Social;
+
 	// skill tree stuff
 
 	std::map<std::wstring, std::vector<PassiveSkill*>> skillTrees;
 
 	Character(std::wstring name)
 	{
+		this->objectType = objectType::character;
+		this->memoryControl = memoryControl::fixed;
 		this->name = name;
 		this->characterClass = L"Noe";
 		this->characterRace = L"Human";
@@ -99,6 +110,16 @@ public:
 		characterStats[statNames::characterEnergy] = &energy;
 		characterStats[statNames::characterEnergyReg] = &energyReg;
 		characterStats[statNames::characterInitiative] = &initiative;
+
+		characterStats[statNames::characterCombat] = &Combat;
+		characterStats[statNames::characterScience] = &Science;
+		characterStats[statNames::characterAdaptation] = &Adaptation;
+		characterStats[statNames::characterReflexes] = &Reflexes;
+		characterStats[statNames::characterEngineering] = &Engineering;
+		characterStats[statNames::characterPerception] = &Perception;
+
+		characterStats[statNames::characterSocial] = &Social;
+
 
 		equipment.resize(7, nullptr);
 

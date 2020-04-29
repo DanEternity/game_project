@@ -608,6 +608,60 @@ BaseScript * scriptCompilerTemplates::mainHandler::RemoveMoney(CompilerCommandTe
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::GetCharacterStat(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new GetCharacterStatScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->statName = convertExtReferences(buffer, buffer->arg["$statName"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::InitCharacterStats(CompilerCommandTemplateDataBuffer * buffer)
+{
+	//	p.body = "\"$src\" \"$health\" \"$armor\" \"shield\" \"$block\" \"$resist\" \"$shieldReg\" \"$actionPoints\" \"$energy\" \"$energy\" \"$initiative\" 
+	// \"$combat\" \"$science\" \"$adaptation\" \"$reflexes\" \"$engineerig\" \"$perception\"";
+
+	auto p = new InitCharacterStatsScript();
+
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+
+	p->health = convertExtReferences(buffer, buffer->arg["$health"]);
+	/* ... */
+	p->Combat = convertExtReferences(buffer, buffer->arg["$combat"]);
+	p->Science = convertExtReferences(buffer, buffer->arg["$science"]);
+	p->Adaptation = convertExtReferences(buffer, buffer->arg["$adaptation"]);
+	p->Reflexes = convertExtReferences(buffer, buffer->arg["$reflexes"]);
+	p->Engineering = convertExtReferences(buffer, buffer->arg["$engineerig"]);
+	p->Perception = convertExtReferences(buffer, buffer->arg["$perception"]);
+
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::CreateCharacter(CompilerCommandTemplateDataBuffer * buffer)
+{
+	
+	auto p = new CreateCharacterScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->charName = convertExtReferences(buffer, buffer->arg["$name"]);
+	p->charClass = convertExtReferences(buffer, buffer->arg["$class"]);
+	p->charRace = convertExtReferences(buffer, buffer->arg["$race"]);
+	p->charAspect = convertExtReferences(buffer, buffer->arg["$aspect"]);
+	p->commandId = buffer->commandId;
+	return p;
+
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::AddCharacterToPlayerCrew(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new AddCharacterToPlayerCrewScript();
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);

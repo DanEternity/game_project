@@ -66,6 +66,10 @@ namespace scriptCompilerTemplates
 		BaseScript * RemoveResourcesFromPlayerInventory(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * AddMoney(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * RemoveMoney(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * GetCharacterStat(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * InitCharacterStats(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * CreateCharacter(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * AddCharacterToPlayerCrew(CompilerCommandTemplateDataBuffer * buffer); // ?
 	}
 
 	namespace afterUpdateHandler 

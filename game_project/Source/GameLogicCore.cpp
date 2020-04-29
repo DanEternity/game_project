@@ -383,4 +383,33 @@ void LoadScriptTemplates()
 	p.body = "\"$count\"";
 	p.mainHandler = scriptCompilerTemplates::mainHandler::RemoveMoney;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// GetCharacterStat
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"GETCHARACTERSTAT";
+	p.body = "\"$src\" \"$statName\" \"$dst\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::GetCharacterStat;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// InitCharacterStats
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"INITCHARACTERSTATS";
+	p.body = "\"$src\" \"$health\" \"$armor\" \"$shield\" \"$block\" \"$resist\" \"$shieldReg\" \"$actionPoints\" \"$energy\" \"$energyReg\" \"$initiative\" \"$combat\" \"$science\" \"$adaptation\" \"$reflexes\" \"$engineerig\" \"$perception\" \"$social\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::InitCharacterStats;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// CreateCharacter
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"CREATECHARACTER";
+	p.body = "\"$dst\" \"$name\" \"$race\" \"$class\" \"$aspect\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::CreateCharacter;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// AddCharacterToPlayerCrew
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"ADDCHARACTERTOPLAYERCREW";
+	p.body = "\"$src\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::AddCharacterToPlayerCrew;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
 }

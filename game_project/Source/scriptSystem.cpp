@@ -306,6 +306,18 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::globalVariableModifier:
 		p_processGlobalVariableModifier(static_cast<GlobalVariableModifierScript*>(command));
 		break;
+	case scriptType::getCharacterStat:
+		p_processGetCharacterStat(static_cast<GetCharacterStatScript*>(command));
+		break;
+	case scriptType::initCharacterStats:
+		p_processInitCharacterStats(static_cast<InitCharacterStatsScript*>(command));
+		break;
+	case scriptType::createCharacter:
+		p_processCreateCharacter(static_cast<CreateCharacterScript*>(command));
+		break;
+	case scriptType::addCharacterToPlayerCrew:
+		p_processAddCharacterToPlayerCrew(static_cast<AddCharacterToPlayerCrewScript*>(command));
+		break;
 	default:
 		printf("Debug: ScriptSystem Error! Script command has unknown type -> %i", sType);
 		break;
@@ -2130,7 +2142,7 @@ void ScriptSystem::p_processCreatePool(CreatePoolScript * command)
 	// create item
 	// need to store in global item db
 
-	int id = gEnv->objects.nextPoolId;
+	int id = gEnv->objects.nextPoolId++;
 	PoolObject * obj = new PoolObject;
 	gEnv->objects.pools[id] = obj;
 
@@ -2771,7 +2783,7 @@ void ScriptSystem::p_processCreateDecoration(CreateDecorationScript * command)
 	// create item
 	// need to store in global item db
 
-	int id = gEnv->objects.nextDecor;
+	int id = gEnv->objects.nextDecor++;
 	MapDecoration * obj = new MapDecoration;
 	gEnv->objects.decor[id] = obj;
 
@@ -3141,6 +3153,169 @@ void ScriptSystem::p_processGlobalVariableModifier(GlobalVariableModifierScript 
 			return;
 		}
 	}
+
+}
+
+void ScriptSystem::p_processGetCharacterStat(GetCharacterStatScript * command)
+{
+
+
+	RETURN_CODE code;
+	bool error = false;
+
+	auto objSrc = scriptUtil::getArgumentObject(command->src, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	std::wstring t = scriptUtil::getArgumentStringValue(command->statName, p_d, error);
+	if (error)
+	{
+		// failed
+		return;
+	}
+
+	auto p = scriptUtil::getFromStringStatName(t);
+
+	if (objSrc->objectType != objectType::character)
+	{
+		// failed
+		return;
+	}
+
+	Character * s = static_cast<Character*>(objSrc);
+
+	if (s->characterStats.find(p) == s->characterStats.end())
+	{
+		// failed
+		return;
+	}
+
+	FloatObject * res = new FloatObject(s->characterStats[p]->total);
+
+	code = putMemoryCell(command->dst, res, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+}
+
+void ScriptSystem::p_processInitCharacterStats(InitCharacterStatsScript * command)
+{
+
+	RETURN_CODE code;
+	bool error = false;
+
+	auto objSrc = scriptUtil::getArgumentObject(command->src, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::character)
+	{
+		// failed
+		return;
+	}
+
+	Character * p = static_cast<Character*>(objSrc);
+
+	//bool error = false;
+
+	float pSci = scriptUtil::getArgumentFloatValue(command->Science, p_d, error);
+	float pCom = scriptUtil::getArgumentFloatValue(command->Combat, p_d, error);
+	float pAda = scriptUtil::getArgumentFloatValue(command->Adaptation, p_d, error);
+	float pPer = scriptUtil::getArgumentFloatValue(command->Perception, p_d, error);
+	float pEng = scriptUtil::getArgumentFloatValue(command->Engineering, p_d, error);
+
+	if (error)
+	{
+		// failed
+		return;
+	}
+
+	p->Science.baseValue = pSci;
+	p->Combat.baseValue = pCom;
+	p->Adaptation.baseValue = pAda;
+	p->Perception.baseValue = pPer;
+	p->Engineering.baseValue = pEng;
+
+
+	updateCharacterStats(p);
+}
+
+void ScriptSystem::p_processCreateCharacter(CreateCharacterScript * command)
+{
+
+
+	auto dst = command->dst;
+
+	bool error = false;
+
+	std::wstring pName = scriptUtil::getArgumentStringValue(command->charName, p_d, error);
+
+	std::wstring pRace = scriptUtil::getArgumentStringValue(command->charName, p_d, error);
+	std::wstring pClass = scriptUtil::getArgumentStringValue(command->charName, p_d, error);
+	std::wstring pAspect = scriptUtil::getArgumentStringValue(command->charName, p_d, error);
+
+	if (error)
+	{
+		// failed
+		return;
+	}
+		
+
+	// create item
+	// need to store in global item db
+
+	int id = gEnv->objects.nextCharId++;
+	Character * obj = new Character(pName);
+	gEnv->objects.characters[id] = obj;
+
+	obj->characterRace = pRace;
+	obj->characterClass = pClass;
+	// we do not have Aspect mechanics yet
+	obj->aspect = characterAspect::Aspect();
+
+	auto code = putMemoryCell(dst, obj, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+}
+
+void ScriptSystem::p_processAddCharacterToPlayerCrew(AddCharacterToPlayerCrewScript * command)
+{
+	RETURN_CODE code;
+	auto obj = scriptUtil::getArgumentObject(command->src, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (obj->objectType != objectType::character)
+	{
+		// failed
+		return;
+	}
+
+	Character * p = static_cast<Character *>(obj);
+
+	gEnv->game.player.crew.characters.push_back(p);
+
+	int id = gEnv->game.player.crew.characters.size() - 1;
+	
+	BuildPersonSchemeUI(50, id);
+	BuildStatPersonScreen(id);
+	BuildPersonSkillTree(id);
 
 }
 

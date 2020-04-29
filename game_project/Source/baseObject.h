@@ -22,6 +22,7 @@ namespace objectType {
 		skillObject,
 		sectorTemplate,
 		ship,
+		character,
 	};
 
 } // namespace objectType

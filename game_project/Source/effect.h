@@ -75,6 +75,15 @@ namespace statNames {
 		characterEnergyReg,
 		characterInitiative,
 
+		characterCombat,
+		characterScience,
+		characterAdaptation,
+		characterReflexes,
+		characterEngineering,
+		characterPerception,
+
+		characterSocial,
+
 	};
 
 }

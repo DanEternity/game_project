@@ -409,6 +409,14 @@ statNames::StatName scriptUtil::getFromStringStatName(std::wstring name)
 	if (name == L"characterEnergyReg") { return statNames::characterEnergyReg; }
 	if (name == L"characterInitiative") { return statNames::characterInitiative; }
 
+	if (name == L"characterCombat") { return statNames::characterCombat; }
+	if (name == L"characterScience") { return statNames::characterScience; }
+	if (name == L"characterAdaptation") { return statNames::characterAdaptation; }
+	if (name == L"characterReflexes") { return statNames::characterReflexes; }
+	if (name == L"characterEngineering") { return statNames::characterEngineering; }
+	if (name == L"characterPerception") { return statNames::characterPerception; }
+
+	if (name == L"characterSocial") { return statNames::characterHealth; }
 
 
 	return statNames::null;
