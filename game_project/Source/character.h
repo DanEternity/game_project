@@ -55,7 +55,6 @@ public:
 	float exp;
 	std::map<int, float> expToNextLevel;
 
-
 	Stat health;
 	Stat armor;
 	Stat shield;

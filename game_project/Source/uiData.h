@@ -32,4 +32,6 @@ public:
 
 	int sectorNumberRightPanel;
 
+	int characterPlayerCount = 0;
+
 };
