@@ -3259,9 +3259,9 @@ void ScriptSystem::p_processCreateCharacter(CreateCharacterScript * command)
 
 	std::wstring pName = scriptUtil::getArgumentStringValue(command->charName, p_d, error);
 
-	std::wstring pRace = scriptUtil::getArgumentStringValue(command->charName, p_d, error);
-	std::wstring pClass = scriptUtil::getArgumentStringValue(command->charName, p_d, error);
-	std::wstring pAspect = scriptUtil::getArgumentStringValue(command->charName, p_d, error);
+	std::wstring pRace = scriptUtil::getArgumentStringValue(command->charRace, p_d, error);
+	std::wstring pClass = scriptUtil::getArgumentStringValue(command->charClass, p_d, error);
+	std::wstring pAspect = scriptUtil::getArgumentStringValue(command->charAspect, p_d, error);
 
 	if (error)
 	{
@@ -3309,13 +3309,15 @@ void ScriptSystem::p_processAddCharacterToPlayerCrew(AddCharacterToPlayerCrewScr
 
 	Character * p = static_cast<Character *>(obj);
 
-	gEnv->game.player.crew.characters.push_back(p);
+	//gEnv->game.player.crew.characters.push_back(p);
 
-	int id = gEnv->game.player.crew.characters.size() - 1;
+	//int id = gEnv->game.player.crew.characters.size() - 1;
 	
-	BuildPersonSchemeUI(50, id);
-	BuildStatPersonScreen(id);
-	BuildPersonSkillTree(id);
+	//BuildPersonSchemeUI(50, id);
+	//BuildStatPersonScreen(id);
+	//BuildPersonSkillTree(id);
+
+	registerPlayerCharacter(p);
 
 }
 
