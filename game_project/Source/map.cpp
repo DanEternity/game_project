@@ -3,24 +3,18 @@
 
 void BuildMapUI()
 {
-	tgui::Panel::Ptr panel = tgui::Panel::create();
-	panel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-	panel->setPosition("(&.width - width) / 2", "(&.height - height) / 2");
-	panel->setSize("90%", "90%");
-	gEnv->game.adventureGUI.add(panel, "globalMapPanel");
-	panel->setVisible(false);
-	panel->setEnabled(false);
+	gEnv->game.adventureGUI.add(createWidget(WidgetType::Panel, "Panel", "90%", "90%", "(&.width - width) / 2", "(&.height - height) / 2", false), "globalMapPanel");
 	
 	int i = 0;
 	for (auto sector : gEnv->game.adventureData.sectors)
 	{
-		tgui::Button::Ptr but = tgui::Button::create();
-		but->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-		but->setSize(20, 20);
-		panel->add(but, "globalMapSectorButton" + std::to_string(i));
-		but->setPosition(sector.second->x / 8 + (but->getParent()->getSize().x / 2), sector.second->y / 8 + (but->getParent()->getSize().y / 2));
 		const int id = i;
-		but->connect("MouseReleased", clickSector, sector.first, id);
+		tgui::Panel::Ptr pan = gEnv->game.adventureGUI.get<tgui::Panel>("globalMapPanel")->cast<tgui::Panel>();
+
+		pan->add(createWidget(WidgetType::Button, "Button", "20", "20",
+			std::to_string(sector.second->x / 8 + (pan->getSize().x / 2)), std::to_string(sector.second->y / 8 + (pan->getSize().y / 2))), "globalMapSectorButton" + std::to_string(i));
+
+		gEnv->game.adventureGUI.get<tgui::Button>("globalMapSectorButton" + std::to_string(i))->connect("MouseReleased", clickSector, sector.first, id);
 		i++;
 	}
 }
@@ -29,17 +23,11 @@ void clickSector(const std::string str, const int id, tgui::Widget::Ptr widget, 
 {
 	if (!gEnv->game.ui.rmWasClicked)
 	{
-		tgui::Panel::Ptr panel = tgui::Panel::create();
-		panel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-		gEnv->game.adventureGUI.get<tgui::Panel>("globalMapPanel")->add(panel, "tempRightPanel");
-		panel->setPosition(widget->getPosition().x + 20, widget->getPosition().y + 20);
-		panel->setSize(120, 30);
+		gEnv->game.adventureGUI.get<tgui::Panel>("globalMapPanel")->add(createWidget(WidgetType::Panel, "Panel", "120", "30", std::to_string(widget->getPosition().x + 20), std::to_string(widget->getPosition().y + 20)), "tempRightPanel");
 
-		tgui::Button::Ptr but = tgui::Button::create();
-		but->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-		but->setSize(120, 30);
-		panel->add(but);
-		but->setPosition(0, 0);
+
+		tgui::Button::Ptr but = createWidget(WidgetType::Button, "Button", "120", "30", "0", "0")->cast<tgui::Button>();
+		gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->add(but);
 		but->setText("Jump");
 		but->connect("MouseReleased", jumpSector, str);
 		gEnv->game.ui.rmWasClicked = true;
@@ -48,17 +36,10 @@ void clickSector(const std::string str, const int id, tgui::Widget::Ptr widget, 
 	{
 		gEnv->game.adventureGUI.get<tgui::Panel>("globalMapPanel")->remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
 
-		tgui::Panel::Ptr panel = tgui::Panel::create();
-		panel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-		gEnv->game.adventureGUI.get<tgui::Panel>("globalMapPanel")->add(panel, "tempRightPanel");
-		panel->setPosition(widget->getPosition().x + 20, widget->getPosition().y + 20);
-		panel->setSize(120, 30);
+		gEnv->game.adventureGUI.get<tgui::Panel>("globalMapPanel")->add(createWidget(WidgetType::Panel, "Panel", "120", "30", std::to_string(widget->getPosition().x + 20), std::to_string(widget->getPosition().y + 20)), "tempRightPanel");
 
-		tgui::Button::Ptr but = tgui::Button::create();
-		but->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-		but->setSize(120, 30);
-		panel->add(but);
-		but->setPosition(0, 0);
+		tgui::Button::Ptr but = createWidget(WidgetType::Button, "Button", "120", "30", "0", "0")->cast<tgui::Button>();
+		gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->add(but);
 		but->setText("Jump");
 		but->connect("MouseReleased", jumpSector, str);
 	}
@@ -79,8 +60,6 @@ void jumpSector(const std::string str, tgui::Widget::Ptr widget, const std::stri
 	printf("info: Jumping to sector %s\n", str.c_str());
 
 	openMap();
-
-	
 }
 
 void UpdateMapUI()
@@ -108,6 +87,7 @@ void UpdateMapUI()
 void openMap()
 {
 	disableAllAdventureUI();
+	gEnv->game.adventureUI.isInventoryOpen = false;
 	gEnv->game.adventureUI.isMapOpen = !gEnv->game.adventureUI.isMapOpen;
 	if (gEnv->game.adventureUI.isMapOpen)
 	{
@@ -117,41 +97,4 @@ void openMap()
 	}
 	else gEnv->game.player.shipMenu = shipMenu::null;
 
-}
-void disableAllAdventureUI()
-{
-	gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel")->setEnabled(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel")->setVisible(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setEnabled(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->setVisible(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setEnabled(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel")->setVisible(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setEnabled(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->setVisible(false);
-	for (int i = 0; i < gEnv->game.player.crew.characters.size(); i++)
-	{
-		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i))->setEnabled(false);
-		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i))->setVisible(false);
-		gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i))->setEnabled(false);
-		gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i))->setVisible(false);
-		gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(i))->setEnabled(false);
-		gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(i))->setVisible(false);
-
-	}
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setEnabled(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->setVisible(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setEnabled(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->setVisible(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setEnabled(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->setVisible(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->setEnabled(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->setVisible(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->setEnabled(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->setVisible(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("PlanPanel")->setEnabled(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("PlanPanel")->setVisible(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("PanelChangePersonState")->setEnabled(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("PanelChangePersonState")->setVisible(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("globalMapPanel")->setEnabled(false);
-	gEnv->game.adventureGUI.get<tgui::Panel>("globalMapPanel")->setVisible(false);
 }

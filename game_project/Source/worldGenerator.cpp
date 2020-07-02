@@ -5,7 +5,7 @@ void startWorldGeneration()
 
 	// initiate generation parameters
 
-	const int maxGeneratedPoints = 20;
+	const int maxGeneratedPoints = 2;
 	const int maxGalaxyRadius = 5000;
 	const int sectorPropertiesCountWeightRaw[12] = { 0, 10, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -409,10 +409,12 @@ void SetupAdventureStart()
 	gEnv->game.player.inventory[0] = new Equipment();
 	gEnv->game.player.inventory[0]->name = L"roflanTelo";
 	static_cast<Equipment*>(gEnv->game.player.inventory[0])->equipmentSlotType = equipmentSlot::body;
+	giveIconToItem(gEnv->game.player.inventory[0]);
 
 	gEnv->game.player.inventory[11] = new Equipment();
 	gEnv->game.player.inventory[11]->name = L"roflanBody";
 	static_cast<Equipment*>(gEnv->game.player.inventory[11])->equipmentSlotType = equipmentSlot::body;
+	giveIconToItem(gEnv->game.player.inventory[11]);
 
 	BuildInventoryUI(9);
 

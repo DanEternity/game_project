@@ -23,5 +23,9 @@ void giveIconToItem(Item * item)
 			item->icon = &gEnv->modelDB[L"itemDefault"]->tex;
 		}
 		break;
+	case itemType::equipment:
+		default:
+			item->icon = &gEnv->modelDB[L"itemDefault"]->tex;
+		break;
 	}
 }

@@ -1,10 +1,6 @@
 #pragma once
 
-#include "enviroment.h"
-#include "Item.h"
-#include "shipManagement.h"
-#include "shipModulesUI.h"
-#include "LocaleLoader.h"
+#include "InventoryHandlers.h"
 /*
 class InventoryItem;
 class TableInventory;
@@ -38,12 +34,6 @@ void InventoryItemClicked(TableInventory* inv, InventoryItem *item, tgui::Widget
 
 
 void BuildInventoryUI(int cellSize);
-void UpdateInventoryUI();
-void DeleteInventoryUI();
-void IntentoryResponseSignal(int cellId, std::string inventoryId, tgui::Widget::Ptr widget, const std::string & signalName);
-void rmPanelClickedInventory(const int id, tgui::Widget::Ptr widget, const std::string& signalName);
-void rmPanelChoosenInsert(const int id, const int item_id, int inventory, tgui::Widget::Ptr widget, const std::string& signalName);
-
 
 // filtered inventory grid
 
@@ -57,7 +47,7 @@ void ApplyDefaultFilterToInventoryPanel();
 void filterSearchFieldChanged(tgui::Widget::Ptr widget, const std::string& signalName);
 void filterCategoryFieldChanged(tgui::Widget::Ptr widget, const std::string& signalName);
 
-void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, const std::string& signalName);
+
 
 
 void createModuleTooltip(Module * m);

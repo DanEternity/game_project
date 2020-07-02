@@ -4,6 +4,8 @@
 // This file contain ui variables
 //
 
+#include <string>
+
 namespace PUIState{
 	enum personUIstate
 	{
@@ -33,5 +35,4 @@ public:
 	int sectorNumberRightPanel;
 
 	int characterPlayerCount = 0;
-
 };

@@ -2,6 +2,7 @@
 
 #include "enviroment.h"
 #include "plan.h"
+#include "UIExtensions.h"
 
 void BuildPlanPanel();
 void DeletePlanPanel();

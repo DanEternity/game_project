@@ -295,25 +295,25 @@ void updateAdventureGameMode(double delteTime)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
-			gEnv->game.ui.mapBiasX += 1;
+			gEnv->game.ui.mapBiasX += 2;
 			gEnv->game.ui.mapUpdateRequired = true;
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
-			gEnv->game.ui.mapBiasX -= 1;
+			gEnv->game.ui.mapBiasX -= 2;
 			gEnv->game.ui.mapUpdateRequired = true;
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		{
-			gEnv->game.ui.mapBiasY += 1;
+			gEnv->game.ui.mapBiasY += 2;
 			gEnv->game.ui.mapUpdateRequired = true;
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
-			gEnv->game.ui.mapBiasY -= 1;
+			gEnv->game.ui.mapBiasY -= 2;
 			gEnv->game.ui.mapUpdateRequired = true;
 		}
 		if (gEnv->game.player.mouseWheelDelta != 0)
@@ -387,7 +387,10 @@ void updateAdventureGameMode(double delteTime)
 
 		}
 	}
-
+	if (gEnv->game.player.pickedItem != NULL)
+	{
+		gEnv->game.adventureGUI.get<tgui::BitmapButton>("pickedItemMouse")->setPosition(sf::Mouse().getPosition().x, sf::Mouse().getPosition().y);
+	}
 }
 
 void drawAdventureGameMode(double deltaTime)

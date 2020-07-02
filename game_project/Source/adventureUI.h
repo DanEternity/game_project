@@ -9,6 +9,7 @@
 #include "LocaleLoader.h"
 #include "CraftUI.h"
 #include "map.h"
+#include "UIExtensions.h"
 
 void updateAdventureUI();
 void DrawAdventureUI();
@@ -27,4 +28,5 @@ void closeRewardWindow();
 
 //
 void createPauseMenu();
+void disableAllAdventureUI();
 

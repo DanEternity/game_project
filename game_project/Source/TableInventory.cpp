@@ -2,25 +2,18 @@
 
 void BuildInventoryUI(int cellSize)
 {
+	if (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("inventoryPanel") != nullptr)
+		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("inventoryPanel")->removeAllWidgets();
+	else gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::ScrollablePanel, "Panel3", "520", "200", "5%", "15%", false), "inventoryPanel");
 
-	tgui::ScrollablePanel::Ptr scrollablePanel = tgui::ScrollablePanel::create();
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(scrollablePanel, "inventoryPanel");
-	scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
-	scrollablePanel->setPosition("5%", "15%");
-	scrollablePanel->setSize(520, 200);
 	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
 	{
 
 		int positionX = i % cellSize;
 		int positionY = i / cellSize;
 		const int number = i;
-		tgui::BitmapButton::Ptr button = tgui::BitmapButton::create();
-
-		scrollablePanel->add(button, "InventoryCell"+ std::to_string(i));
-
-		button->setSize(50, 50);
-		button->setPosition(5 + positionX * 50, 10 + positionY * 50);
-		button->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+		tgui::BitmapButton::Ptr button = createWidget(WidgetType::BitmapButton, "Button", "50", "50", std::to_string(5+ positionX * 50), std::to_string(10 + positionY * 50))->cast<tgui::BitmapButton>();
+		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("inventoryPanel")->add(button, "InventoryCell"+ std::to_string(i));
 
 		if (gEnv->game.player.inventory[i] != NULL)
 		{
@@ -30,288 +23,32 @@ void BuildInventoryUI(int cellSize)
 		}
 		else button->setImage(gEnv->modelDB[L"itemEmpty"]->tex);
 
-		button->connect("MouseReleased", IntentoryResponseSignal, number, std::string("ShipInventory"));
-		button->connect("RightMouseReleased", IntentoryResponseSignal, number, std::string("ShipInventory"));
+		button->connect("MouseReleased", InventoryResponseSignal, number, std::string("ShipInventory"));
+		button->connect("RightMouseReleased", InventoryResponseSignal, number, std::string("ShipInventory"));
 		button->connect("MouseEntered", applyStorageTooltip, i);
-
-		//auto tooltop = tgui::Panel::create();
-		//tooltop->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-		//tooltop->setSize(500, 100);
-		//tgui::Button::Ptr but = tgui::Button::create();
-		//but->setSize(9, 50);
-		//but->setPosition(50, 50);
-		//but->setText("O");
-		//but->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-		//tooltop->add(but);
-		//button->setToolTip(tooltop);
-	}
-	scrollablePanel->setEnabled(false);
-	scrollablePanel->setVisible(false);
-}
-
-void UpdateInventoryUI()
-{
-	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
-	{
-		tgui::BitmapButton::Ptr button = gEnv->game.adventureGUI.get<tgui::BitmapButton>("InventoryCell" + std::to_string(i));
-
-		if (gEnv->game.player.inventory[i] != NULL)
-		{
-			if (gEnv->game.player.inventory[i]->icon != nullptr)
-				button->setImage(*gEnv->game.player.inventory[i]->icon);
-			else button->setImage(gEnv->modelDB[L"itemDefault"]->tex);
-		}
-		else button->setImage(gEnv->modelDB[L"itemEmpty"]->tex);
 	}
 }
 
-void DeleteInventoryUI()
-{
-}
-
-void IntentoryResponseSignal( int cellId, std::string inventoryId, tgui::Widget::Ptr widget, const std::string & signalName)
-{
-	if (signalName == "MouseReleased")
-	{
-		if (gEnv->game.ui.selected != -1)
-		{
-			// swap
-
-			std::swap(gEnv->game.player.inventory[cellId], gEnv->game.player.inventory[gEnv->game.ui.selected]);
-
-
-			// update cell images
-		
-			gEnv->game.ui.selected = -1;
-			UpdateInventoryUI();
-			deleteAllInventoryTooltips();
-		}
-		else
-		{
-
-			if (gEnv->game.player.inventory[cellId] != NULL)
-			{
-				gEnv->game.ui.selected = cellId;
-			}
-		}
-	}
-	else if (signalName == "RightMouseReleased" && !gEnv->game.ui.rmWasClicked)
-	{
-		tgui::Panel::Ptr temp = tgui::Panel::create();
-		temp->setSize(100, 90);
-		int x = sf::Mouse::getPosition(gEnv->globalWindow).x;
-		int y = sf::Mouse::getPosition(gEnv->globalWindow).y - 5;
-		temp->setPosition(x, y);
-		temp->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-		gEnv->game.adventureGUI.add(temp, "tempRightPanel");
-		gEnv->game.ui.rmWasClicked = true;
-
-		const int id = cellId;
-
-		tgui::Button::Ptr btn = tgui::Button::create();
-
-		btn = tgui::Button::create();
-		temp->add(btn);
-		btn->setSize(107, 31);
-		btn->setPosition(0, 0);
-		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-		btn->setText(L"Install into");
-		btn->connect("MouseReleased", rmPanelClickedInventory, id);
-
-		btn = tgui::Button::create();
-		temp->add(btn);
-		btn->setSize(107, 31);
-		btn->setPosition(0, 30);
-		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-		btn->setText(L"Delete");
-		btn->connect("MouseReleased", rmPanelClickedInventory, id);
-
-		btn = tgui::Button::create();
-		temp->add(btn);
-		btn->setSize(107, 31);
-		btn->setPosition(0, 60);
-		btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-		btn->setText(L"Cancel");
-		btn->connect("MouseReleased", rmPanelClickedInventory, id);
-	}
-}
-
-void rmPanelClickedInventory(const int id, tgui::Widget::Ptr widget, const std::string& signalName)
-{
-	if (widget->cast<tgui::Button>()->getText() == L"Cancel")
-	{
-		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
-		gEnv->game.ui.rmWasClicked = false;
-		if (gEnv->game.ui.tempAddPanelClicked)
-		{
-			gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempAddPanel"));
-			gEnv->game.ui.tempAddPanelClicked = false;
-		}
-	}
-	else if (widget->cast<tgui::Button>()->getText() == L"Delete")
-	{
-
-	}
-	else if (widget->cast<tgui::Button>()->getText() == L"Install into")
-	{
-		if (gEnv->game.player.inventory[id]->itemType == itemType::module)
-		{
-			gEnv->game.ui.tempAddPanelClicked = true;
-			int goodItemsCount = 0;
-			tgui::Button::Ptr btn;
-			tgui::Panel::Ptr panel = tgui::Panel::create();
-			for (int i(0); i < gEnv->game.player.ship->slots.size(); i++)
-			{
-				if (static_cast<Module*>(gEnv->game.player.inventory[id])->slot == gEnv->game.player.ship->slots[i].type)
-				{
-					btn = tgui::Button::create();
-					btn->setSize(187, 31);
-					btn->setPosition(0, 30 * goodItemsCount);
-					btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-					btn->setText(L"Insert instead: " + gEnv->game.player.ship->modules[i]->name);
-					const int num = i;
-					btn->connect("MouseReleased", rmPanelChoosenInsert, id, num, 0);
-					panel->add(btn);
-					goodItemsCount++;
-				}
-			}
-			if (goodItemsCount != 0)
-			{
-				panel->setSize(180, 30 * goodItemsCount);
-				auto pos = gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->getPosition();
-				pos.x += 100;
-				panel->setPosition(pos);
-				panel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-				gEnv->game.adventureGUI.add(panel, "tempAddPanel");
-			}
-			else
-				gEnv->game.ui.tempAddPanelClicked = false;
-		}
-		else if (gEnv->game.player.inventory[id]->itemType == itemType::equipment)
-		{
-			gEnv->game.ui.tempAddPanelClicked = true;
-			int goodItemsCount = 0;
-			tgui::Button::Ptr btn;
-			tgui::Panel::Ptr panel = tgui::Panel::create();
-			for (int i(0); i < gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->slot.size(); i++)
-			{
-				if (static_cast<Equipment*>(gEnv->game.player.inventory[id])->equipmentSlotType == gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->slot[i])
-				{
-					btn = tgui::Button::create();
-					btn->setSize(187, 31);
-					btn->setPosition(0, 30 * goodItemsCount);
-					btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-					if (gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[i] != NULL)
-						btn->setText(L"Insert instead: " + gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[i]->name);
-					else btn->setText(L"Insert instead: Empty");
-					const int num = i;
-					btn->connect("MouseReleased", rmPanelChoosenInsert, id, num, 1);
-					panel->add(btn);
-					goodItemsCount++;
-				}
-			}
-			if (goodItemsCount != 0)
-			{
-				panel->setSize(180, 30 * goodItemsCount);
-				auto pos = gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->getPosition();
-				pos.x += 100;
-				panel->setPosition(pos);
-				panel->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
-				gEnv->game.adventureGUI.add(panel, "tempAddPanel");
-			}
-			else
-				gEnv->game.ui.tempAddPanelClicked = false;
-		}
-	}
-}
-
-void rmPanelChoosenInsert(const int id, const int item_id, int inventory, tgui::Widget::Ptr widget, const std::string& signalName)
-{
-	if (inventory == 0)
-	{
-		gEnv->game.ui.tempAddPanelClicked = true;
-		Module* temp = static_cast<Module*>(gEnv->game.player.inventory[id]);
-
-		gEnv->game.player.inventory[id] = gEnv->game.player.ship->modules[item_id];
-		gEnv->game.player.ship->modules[item_id] = temp;
-
-		updateShipSchemeUI();
-		UpdateInventoryUI();
-		deleteAllInventoryTooltips();
-
-		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
-		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempAddPanel"));
-		gEnv->game.ui.rmWasClicked = false;
-		gEnv->game.ui.tempAddPanelClicked = false;
-	}
-	else if (inventory == 1)
-	{
-		gEnv->game.ui.tempAddPanelClicked = true;
-		Equipment* temp = static_cast<Equipment*>(gEnv->game.player.inventory[id]);
-
-		gEnv->game.player.inventory[id] = gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[item_id];
-		gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[item_id] = temp;
-
-		tgui::Panel::Ptr panel = gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel");
-		tgui::Panel::Ptr panel2 = gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel");
-
-		if (gEnv->game.player.inventory[id] != NULL)
-			panel->get<tgui::Button>("InventoryCell" + std::to_string(id))->setText(gEnv->game.player.inventory[id]->name);
-		else
-			panel->get<tgui::Button>("InventoryCell" + std::to_string(id))->setText(L"");
-
-		if (gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[item_id] != NULL)
-			panel2->get<tgui::Button>("Person" + std::to_string(gEnv->game.ui.activeOpenPersonWindow) + "Equip" + std::to_string(item_id))->setText(gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[item_id]->name);
-		else
-			panel2->get<tgui::Button>("Person" + std::to_string(gEnv->game.ui.activeOpenPersonWindow) + "Equip" + std::to_string(item_id))->setText(L"");
-
-		UpdateInventoryUI();
-		deleteAllInventoryTooltips();
-
-		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
-		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempAddPanel"));
-		gEnv->game.ui.rmWasClicked = false;
-		gEnv->game.ui.tempAddPanelClicked = false;
-	}
-}
 
 void CreateInventoryGridPanel(int length)
 {
-
-	tgui::ScrollablePanel::Ptr scrollablePanel = tgui::ScrollablePanel::create();
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->add(scrollablePanel, "inventoryGridPanel");
-	scrollablePanel->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
-	scrollablePanel->setPosition("3%", "25%");
-	scrollablePanel->setSize(520, 140);
-
-
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel")->add(createWidget(WidgetType::ScrollablePanel, "Panel2", "520", "140", "3%", "25%"), "inventoryGridPanel");
 	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
 	{
-
 		int positionX = i % length;
 		int positionY = i / length;
 		const int number = i;
-		tgui::BitmapButton::Ptr button = tgui::BitmapButton::create();
-
-		scrollablePanel->add(button, "InventoryItem" + std::to_string(i));
-
-		button->setSize(45, 40);
-		button->setPosition(5 + positionX * 50, 10 + positionY * 50);
-		button->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-
+		tgui::BitmapButton::Ptr button = createWidget(WidgetType::BitmapButton, "Button", "45", "40", std::to_string(5 + positionX * 50), std::to_string(10 + positionY * 50))->cast<tgui::BitmapButton>();
+		gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel")->add(button, "InventoryItem" + std::to_string(i));
 		button->setText(L"");
-
 		button->connect("MouseReleased", InventoryGridPanelEventHandler, number);
 		button->connect("RightMouseReleased", InventoryGridPanelEventHandler, number);
 	}
-
 }
 
 void RebuildInventoryGridPanel()
 {
-
 	gEnv->game.player.localInventory.clear();
-
 	// apply category filter
 	//gEnv->game.player.inventoryFilter.searchString = L"Ebalo";
 	//
@@ -319,14 +56,9 @@ void RebuildInventoryGridPanel()
 	{
 		if (gEnv->game.player.inventory[id] != NULL)
 		{
-
 			// compare to filter
-			//
-
 			auto p = gEnv->game.player.inventory[id];
-
 			//if (p->itemType in filter.itemTypes && p->name in filter.nameSeacrh)
-
 			bool filter_ok = true;
 			IntventoryFilter* filter = &gEnv->game.player.inventoryFilter;
 			
@@ -382,7 +114,7 @@ void RebuildInventoryGridPanel()
 		}
 	}
 
-	UpdateInventoryUI();
+	BuildInventoryUI(9);
 	deleteAllGridTooltips();
 	for (int id(0); id < gEnv->game.player.inventory.size(); id++)
 	{	
@@ -487,59 +219,9 @@ void filterCategoryFieldChanged(tgui::Widget::Ptr widget, const std::string & si
 		gEnv->game.player.inventoryFilter.moduleSlotType.insert(moduleSlot::universal);
 	}
 
-	
-
-
 	// currently do nothing because not all windows are completed
 	ApplyDefaultFilterToInventoryPanel();
-
 	RebuildInventoryGridPanel();
-
-}
-
-void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, const std::string & signalName)
-{
-	if (signalName == "MouseReleased")
-	{
-		// handle left click
-		if (gEnv->game.player.pickedItem == NULL)
-		{
-			if ( id < gEnv->game.player.localInventory.size() && gEnv->game.player.localInventory[id] != -1)
-				if (gEnv->game.player.inventory[gEnv->game.player.localInventory[id]] != NULL)
-				{
-					gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->setRenderer(gEnv->globalTheme.getRenderer("Button2"));
-					gEnv->game.player.pickedItem = gEnv->game.player.inventory[gEnv->game.player.localInventory[id]];
-					gEnv->game.player.pickedLocalInventory = id;
-					gEnv->game.player.pickedItemInvId = gEnv->game.player.localInventory[id];
-					return;
-				}
-		}
-		else
-		{
-			// swap items if can
-			if (id < gEnv->game.player.localInventory.size() && gEnv->game.player.localInventory[id] != -1)
-				if (gEnv->game.player.inventory[gEnv->game.player.localInventory[id]] != NULL)
-				{
-					gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(gEnv->game.player.pickedLocalInventory))->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-					std::swap(
-						gEnv->game.player.inventory[gEnv->game.player.localInventory[id]], 
-						gEnv->game.player.inventory[gEnv->game.player.localInventory[gEnv->game.player.pickedLocalInventory]]);
-
-					gEnv->game.player.pickedLocalInventory = -1;
-					gEnv->game.player.pickedItem = NULL;
-					RebuildInventoryGridPanel();
-					return;
-
-				}
-		}
-	}
-
-	if (signalName == "RightMouseReleased")
-	{
-		// handle right click
-		
-	}
-
 }
 
 void createModuleTooltip(Module * m)
@@ -547,63 +229,45 @@ void createModuleTooltip(Module * m)
 	m->tooltipDescription->setSize(300, 250 + m->effects.size() * 30);
 	m->tooltipDescription->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
 
-	tgui::Button::Ptr button = tgui::Button::create();
-	button->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	button->setPosition(0, 0);
-	button->setSize(300, 30);
+	tgui::Button::Ptr button = createWidget(WidgetType::Button, "Button", "300", "30", "0", "0")->cast<tgui::Button>();
 	button->setText(m->name);
 	m->tooltipDescription->add(button, "nameButtonTooltip");
 
-	tgui::Label::Ptr label = tgui::Label::create();
-	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label->setPosition("(&.width - width) / 2", 30);
-	label->setText("Module");
-	label->setTextSize(18);
-	m->tooltipDescription->add(label);
-
-	tgui::Label::Ptr label2 = tgui::Label::create();
-	label2->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label2->setPosition("(&.width - width) / 4 - 20", 60);
-	label2->setText(L"Level: " + std::to_wstring(m->level));
-	label2->setTextSize(18);
-	m->tooltipDescription->add(label2);
-
-	tgui::Label::Ptr label3 = tgui::Label::create();
-	label3->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label3->setPosition("(&.width - width) / 4 * 3", 60);
-	label3->setText(L"Rarity: " + std::to_wstring(m->rarity));
-	label3->setTextSize(18);
-	m->tooltipDescription->add(label3);
+	std::string render = "Label";
+	m->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(30), 18, L"Module"));
+	m->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 4 - 20", std::to_string(60), 18, L"Level: " + std::to_wstring(m->level)));
+	m->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 4 * 3", std::to_string(60), 18, L"Rarity: " + std::to_wstring(m->rarity)));
 
 	tgui::Label::Ptr label4 = tgui::Label::create();
 	label4->setRenderer(gEnv->globalTheme.getRenderer("Label"));
 	label4->setPosition("(&.width - width) / 2", 90);
+	std::wstring text = L"";
 	switch (m->slot)
 	{
 	case moduleSlot::core:
-		label4->setText("Slot type: Core");
+		text = L"Slot type: Core";
 		break;
 	case moduleSlot::hyperdrive:
-		label4->setText("Slot type: Hyperdrive");
+		text = L"Slot type: Hyperdrive";
 		break;
 	case moduleSlot::engine:
-		label4->setText("Slot type: Engine");
+		text = L"Slot type: Engine";
 		break;
 	case moduleSlot::system:
-		label4->setText("Slot type: System");
+		text = L"Slot type: System";
 		break;
 	case moduleSlot::primaryWeapon:
-		label4->setText("Slot type: Primary Weapon");
+		text = L"Slot type: Primary Weapon";
 		break;
 	case moduleSlot::secondaryWeapon:
-		label4->setText("Slot type: Secondary Weapon");
+		text = L"Slot type: Secondary Weapon";
 		break;
 	case moduleSlot::universal:
-		label4->setText("Slot type: Universal");
+		text = L"Slot type: Universal";
 		break;
 	}
 	label4->setTextSize(18);
-	m->tooltipDescription->add(label4);
+	m->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(90), 18, text));
 
 
 	tgui::Label::Ptr label5 = tgui::Label::create();
@@ -705,10 +369,8 @@ void createModuleTooltip(Module * m)
 		if (static_cast<StatModEffect*>(i)->p_negMul != 0)
 			str += L"-" + std::to_wstring((int)(static_cast<StatModEffect*>(i)->p_negMul * 100)) + L"% ";
 
-		if (!first)
-			label5->setText(label5->getText() + str + L"\n");
-		else 
-			label5->setText(str + L"\n");
+		if (!first) label5->setText(label5->getText() + str + L"\n");
+		else label5->setText(str + L"\n");
 		first = false;
 		str = L"";
 	}
@@ -719,26 +381,12 @@ void createResourseTooltip(ItemResource * r)
 	r->tooltipDescription->setSize(300, 100);
 	r->tooltipDescription->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
 
-	tgui::Button::Ptr button = tgui::Button::create();
-	button->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	button->setPosition(0, 0);
-	button->setSize(300, 30);
+	tgui::Button::Ptr button = createWidget(WidgetType::Button, "Button", "300", "30", "0", "0")->cast<tgui::Button>();
 	button->setText(r->name);
 	r->tooltipDescription->add(button, "nameButtonTooltip");
 
-	tgui::Label::Ptr label = tgui::Label::create();
-	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label->setPosition("(&.width - width) / 2", 30);
-	label->setText("Level " + std::to_string(r->level));
-	label->setTextSize(18);
-	r->tooltipDescription->add(label);
-
-	tgui::Label::Ptr label2 = tgui::Label::create();
-	label2->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label2->setPosition("(&.width - width) / 2", 60);
-	label2->setText(L"Count: " + std::to_wstring(r->count) + L"/" + std::to_wstring(r->maxCount));
-	label2->setTextSize(18);
-	r->tooltipDescription->add(label2);
+	r->tooltipDescription->add(createWidgetLabel("Label", "(&.width - width) / 2", std::to_string(30), 18, L"Level " + std::to_wstring(r->level)));
+	r->tooltipDescription->add(createWidgetLabel("Label", "(&.width - width) / 2", std::to_string(60), 18, L"Count: " + std::to_wstring(r->count) + L"/" + std::to_wstring(r->maxCount)));
 }
 
 void createEquipmentTooltip(Equipment* e)
@@ -746,56 +394,34 @@ void createEquipmentTooltip(Equipment* e)
 	e->tooltipDescription->setSize(300, 250 + e->effects.size() * 30);
 	e->tooltipDescription->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
 
-	tgui::Button::Ptr button = tgui::Button::create();
-	button->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	button->setPosition(0, 0);
-	button->setSize(300, 30);
+	tgui::Button::Ptr button = createWidget(WidgetType::Button, "Button", "300", "30", "0", "0")->cast<tgui::Button>();
 	button->setText(e->name);
 	e->tooltipDescription->add(button, "nameButtonTooltip");
 
-	tgui::Label::Ptr label = tgui::Label::create();
-	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label->setPosition("(&.width - width) / 2", 30);
-	label->setText("Equipment");
-	label->setTextSize(18);
-	e->tooltipDescription->add(label);
+	std::string render = "Label";
+	e->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(30), 18, L"Equipment"));
+	e->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 4 - 20", std::to_string(60), 18, L"Level: " + std::to_wstring(e->level)));
+	e->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 4 * 3", std::to_string(60), 18, L"Rarity: " + std::to_wstring(e->rarity)));
 
-	tgui::Label::Ptr label2 = tgui::Label::create();
-	label2->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label2->setPosition("(&.width - width) / 4 - 20", 60);
-	label2->setText(L"Level: " + std::to_wstring(e->level));
-	label2->setTextSize(18);
-	e->tooltipDescription->add(label2);
-
-	tgui::Label::Ptr label3 = tgui::Label::create();
-	label3->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label3->setPosition("(&.width - width) / 4 * 3", 60);
-	label3->setText(L"Rarity: " + std::to_wstring(e->rarity));
-	label3->setTextSize(18);
-	e->tooltipDescription->add(label3);
-
-	tgui::Label::Ptr label4 = tgui::Label::create();
-	label4->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label4->setPosition("(&.width - width) / 2", 90);
+	std::wstring text = L"";
 	switch (e->equipmentSlotType)
 	{
 	case equipmentSlot::head:
-		label4->setText("Slot type: Helmet");
+		text = L"Slot type: Helmet";
 		break;
 	case equipmentSlot::arms:
-		label4->setText("Slot type: Arms");
+		text = L"Slot type: Arms";
 		break;
 	case equipmentSlot::body:
-		label4->setText("Slot type: Body");
+		text = L"Slot type: Body";
 		break;
 	case equipmentSlot::legs:
-		label4->setText("Slot type: Legs");
+		text = L"Slot type: Legs";
 		break;
 	case equipmentSlot::universal:
-		label4->setText("Slot type: Universal");
+		text = L"Slot type: Universal";
 	}
-	label4->setTextSize(18);
-	e->tooltipDescription->add(label4);
+	e->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(90), 18, text));
 
 
 	tgui::Label::Ptr label5 = tgui::Label::create();
@@ -864,7 +490,6 @@ void deleteAllInventoryTooltips()
 	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
 	{
 		gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(i))->setToolTip(NULL);
-		//gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(i))->disconnectAll("MouseEntered");
 	}
 }
 
@@ -873,7 +498,6 @@ void deleteAllGridTooltips()
 	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
 	{
 		gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(i))->setToolTip(NULL);
-		//gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(i))->disconnectAll("MouseEntered");
 	}
 }
 
