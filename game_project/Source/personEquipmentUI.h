@@ -26,6 +26,8 @@ void giveRoleFind(int id, int buttonId, tgui::Widget::Ptr widget, const std::str
 void giveRole(Character *c, int buttonId, tgui::Widget::Ptr widget, const std::string& signalName);
 void giveRoleCaptain(Character *c, int buttonId);
 void registerPlayerCharacter(Character *c);
+void unregisterPlayerCharacter(int id);
+
 
 void applyEquipmentTooltipPersonUI(int id);
 void deleteAllTooltipsPersonUI();

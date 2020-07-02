@@ -12,7 +12,7 @@ void InventoryResponseSignal(int cellId, std::string inventoryId, tgui::Widget::
 		{
 			if (gEnv->game.player.inventory[cellId] != NULL)
 			{
-				gEnv->game.adventureGUI.add(createWidget(WidgetType::BitmapButton, "Button", std::to_string(45), std::to_string(45), std::to_string(sf::Mouse().getPosition().x), std::to_string(sf::Mouse().getPosition().y)), "pickedItemMouse");
+				gEnv->game.adventureGUI.add(createWidget(WidgetType::BitmapButton, "Button", std::to_string(45), std::to_string(45), std::to_string(sf::Mouse::getPosition(gEnv->globalWindow).x), std::to_string(sf::Mouse().getPosition(gEnv->globalWindow).y - 5)), "pickedItemMouse");
 				gEnv->game.adventureGUI.get<tgui::BitmapButton>("pickedItemMouse")->setImage(*gEnv->game.player.inventory[cellId]->icon);
 				gEnv->game.player.pickedItem = gEnv->game.player.inventory[cellId];
 				gEnv->game.player.pickedItemInvId = cellId;
@@ -212,7 +212,7 @@ void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, cons
 			if (id < gEnv->game.player.localInventory.size() && gEnv->game.player.localInventory[id] != -1)
 				if (gEnv->game.player.inventory[gEnv->game.player.localInventory[id]] != NULL)
 				{
-					gEnv->game.adventureGUI.add(createWidget(WidgetType::BitmapButton, "Button", std::to_string(45), std::to_string(45), std::to_string(sf::Mouse().getPosition().x), std::to_string(sf::Mouse().getPosition().y)), "pickedItemMouse");
+					gEnv->game.adventureGUI.add(createWidget(WidgetType::BitmapButton, "Button", std::to_string(45), std::to_string(45), std::to_string(sf::Mouse::getPosition(gEnv->globalWindow).x), std::to_string(sf::Mouse::getPosition(gEnv->globalWindow).y - 5)), "pickedItemMouse");
 					gEnv->game.adventureGUI.get<tgui::BitmapButton>("pickedItemMouse")->setImage(*gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]->icon);
 					gEnv->game.player.pickedItem = gEnv->game.player.inventory[gEnv->game.player.localInventory[id]];
 					gEnv->game.player.pickedLocalInventory = id;

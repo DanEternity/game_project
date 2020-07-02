@@ -389,7 +389,7 @@ void updateAdventureGameMode(double delteTime)
 	}
 	if (gEnv->game.player.pickedItem != NULL)
 	{
-		gEnv->game.adventureGUI.get<tgui::BitmapButton>("pickedItemMouse")->setPosition(sf::Mouse().getPosition().x, sf::Mouse().getPosition().y);
+		gEnv->game.adventureGUI.get<tgui::BitmapButton>("pickedItemMouse")->setPosition(std::to_string(sf::Mouse::getPosition(gEnv->globalWindow).x + 10), std::to_string(sf::Mouse().getPosition(gEnv->globalWindow).y - 5));
 	}
 }
 

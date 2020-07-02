@@ -418,6 +418,20 @@ void SetupAdventureStart()
 
 	BuildInventoryUI(9);
 
+	gEnv->game.player.inventory[20] = new ItemResource();
+	gEnv->game.player.inventory[20]->itemId = -10;
+	gEnv->game.player.inventory[20]->name = L"TestResource";
+	static_cast<ItemResource*>(gEnv->game.player.inventory[20])->count = 40;
+	static_cast<ItemResource*>(gEnv->game.player.inventory[20])->maxCount = 64;
+	giveIconToItem(gEnv->game.player.inventory[20]);
+
+	gEnv->game.player.inventory[21] = new ItemResource();
+	gEnv->game.player.inventory[21]->itemId = -10;
+	gEnv->game.player.inventory[21]->name = L"TestResource";
+	static_cast<ItemResource*>(gEnv->game.player.inventory[21])->count = 40;
+	static_cast<ItemResource*>(gEnv->game.player.inventory[21])->maxCount = 64;
+	giveIconToItem(gEnv->game.player.inventory[21]);
+
 	/* INITIALIZE SHIP SLOTS */
 
 	gEnv->game.player.ship->slots.resize(8, moduleSlot::ModuleSlot());
@@ -447,6 +461,7 @@ void SetupAdventureStart()
 	registerPlayerCharacter(new Character(L"Person 1"));
 	registerPlayerCharacter(new Character(L"Person 2"));
 
+	
 
 	giveRoleCaptain(cptn, 0);
 

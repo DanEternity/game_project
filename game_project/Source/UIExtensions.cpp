@@ -55,8 +55,31 @@ void swapElements(TargetInventory::targetInventory target, int id)
 	switch (target)
 	{
 	case TargetInventory::tableInventory:
-		if (gEnv->game.player.inventory[id] != NULL) gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.inventory[id];
-		else gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = NULL;
+		if (gEnv->game.player.inventory[id] != NULL)
+		{
+			if ((gEnv->game.player.inventory[id]->itemType == itemType::resource && gEnv->game.player.pickedItem->itemType == itemType::resource)
+				&& (gEnv->game.player.inventory[id]->itemId == gEnv->game.player.pickedItem->itemId))
+			{
+				if (static_cast<ItemResource*>(gEnv->game.player.inventory[id])->count + static_cast<ItemResource*>(gEnv->game.player.pickedItem)->count <= 64)
+				{
+					static_cast<ItemResource*>(gEnv->game.player.inventory[id])->count += static_cast<ItemResource*>(gEnv->game.player.pickedItem)->count;
+				}
+				else {
+					gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.pickedItem;
+					static_cast<ItemResource*>(gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId])->count -= (64 - static_cast<ItemResource*>(gEnv->game.player.inventory[id])->count);
+					static_cast<ItemResource*>(gEnv->game.player.inventory[id])->count = 64;
+
+					gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId]->tooltipDescription = tgui::Panel::create();
+					gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(gEnv->game.player.pickedItemInvId))->setToolTip(NULL);
+					gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId]->tooltipWasCreated = false;
+				}
+				gEnv->game.player.inventory[id]->tooltipDescription = tgui::Panel::create();
+				gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(id))->setToolTip(NULL);
+				gEnv->game.player.inventory[id]->tooltipWasCreated = false;
+				break;
+			}
+			gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.inventory[id];
+		}
 		gEnv->game.player.inventory[id] = gEnv->game.player.pickedItem;
 		break;
 	case TargetInventory::gridPanel:
