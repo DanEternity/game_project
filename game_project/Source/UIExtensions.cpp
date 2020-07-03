@@ -52,11 +52,14 @@ void swapElements(TargetInventory::targetInventory target, int id)
 {
 	Module* p_module;
 	Equipment* e_equip;
+	bool flagCantPlace = false;
 	switch (target)
 	{
 	case TargetInventory::tableInventory:
+		//Если мы помещаем в слот где есть другой итем место
 		if (gEnv->game.player.inventory[id] != NULL)
 		{
+			//Если это ресурс того же типа
 			if ((gEnv->game.player.inventory[id]->itemType == itemType::resource && gEnv->game.player.pickedItem->itemType == itemType::resource)
 				&& (gEnv->game.player.inventory[id]->itemId == gEnv->game.player.pickedItem->itemId))
 			{
@@ -76,11 +79,39 @@ void swapElements(TargetInventory::targetInventory target, int id)
 				gEnv->game.player.inventory[id]->tooltipDescription = tgui::Panel::create();
 				gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(id))->setToolTip(NULL);
 				gEnv->game.player.inventory[id]->tooltipWasCreated = false;
+				if (gEnv->game.ui.shiftedItem && !gEnv->game.ui.shiftedItemTakedAll)
+				{
+					gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId]->tooltipDescription = tgui::Panel::create();
+					gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(gEnv->game.player.pickedItemInvId))->setToolTip(NULL);
+					gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId]->tooltipWasCreated = false;
+				}
 				break;
 			}
-			gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.inventory[id];
+			// Если там другой ресурс или предмет и мы не брали предмет с шифта
+			if (gEnv->game.player.pickedItemInvId != -1 && !gEnv->game.ui.shiftedItem)
+				gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.inventory[id];
+			// Если мы взяли предмет с шифта и пытаемся положить в предмет другого типа
+			else if (gEnv->game.player.pickedItemInvId != -1 && gEnv->game.ui.shiftedItem)
+			{
+				flagCantPlace = true;
+				break;
+			}
 		}
-		gEnv->game.player.inventory[id] = gEnv->game.player.pickedItem;
+		// Если в слоте куда кладем ничего нет
+		if (gEnv->game.player.pickedItemInvId != -1)
+		{
+			gEnv->game.player.inventory[id] = gEnv->game.player.pickedItem;
+			gEnv->game.player.inventory[id]->tooltipDescription = tgui::Panel::create();
+			gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(id))->setToolTip(NULL);
+			gEnv->game.player.inventory[id]->tooltipWasCreated = false;
+		}
+		// Если мы брали с шифта, обновляем то место, откуда брали
+		if (gEnv->game.ui.shiftedItem && !gEnv->game.ui.shiftedItemTakedAll)
+		{
+			gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId]->tooltipDescription = tgui::Panel::create();
+			gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(gEnv->game.player.pickedItemInvId))->setToolTip(NULL);
+			gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId]->tooltipWasCreated = false;
+		}
 		break;
 	case TargetInventory::gridPanel:
 		if (gEnv->game.player.pickedLocalInventory != -1)
@@ -127,11 +158,17 @@ void swapElements(TargetInventory::targetInventory target, int id)
 		break;
 	}
 
-	gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::BitmapButton>("pickedItemMouse"));
-	gEnv->game.player.pickedItem = NULL;
-	gEnv->game.player.pickedItemInvId = -1;
-	gEnv->game.player.pickedLocalInventory = -1;
-	rebuildAll();
+	if (!flagCantPlace)
+	{
+		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::BitmapButton>("pickedItemMouse"));
+		gEnv->game.player.pickedItem = NULL;
+		gEnv->game.player.pickedItemInvId = -1;
+		gEnv->game.player.pickedLocalInventory = -1;
+		gEnv->game.ui.shiftedItem = false;
+		gEnv->game.ui.shiftedItemStartId = -1;
+		gEnv->game.ui.shiftedItemTakedAll = false;
+		rebuildAll();
+	}
 }
 
 void rebuildAll()

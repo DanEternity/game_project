@@ -386,7 +386,7 @@ void createResourseTooltip(ItemResource * r)
 	r->tooltipDescription->add(button, "nameButtonTooltip");
 
 	r->tooltipDescription->add(createWidgetLabel("Label", "(&.width - width) / 2", std::to_string(30), 18, L"Level " + std::to_wstring(r->level)));
-	r->tooltipDescription->add(createWidgetLabel("Label", "(&.width - width) / 2", std::to_string(60), 18, L"Count: " + std::to_wstring(r->count) + L"/" + std::to_wstring(r->maxCount)));
+	r->tooltipDescription->add(createWidgetLabel("Label", "(&.width - width) / 2", std::to_string(60), 18, L"Count: " + std::to_wstring(r->count) + L"/" + std::to_wstring(r->maxCount)), "resourceCount");
 }
 
 void createEquipmentTooltip(Equipment* e)

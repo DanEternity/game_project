@@ -25,6 +25,8 @@ public:
 	bool rmWasClicked = false, tempAddPanelClicked = false;
 	bool markerDraw = false;
 	int activeOpenPersonWindow = 0;
+	bool shiftedItem = false, shiftedItemTakedAll = false;
+	int shiftedItemStartId = -1;
 	bool adventureMenuActive = false;
 	PUIState::personUIstate puistate = PUIState::personUIstate::defaultState;
 

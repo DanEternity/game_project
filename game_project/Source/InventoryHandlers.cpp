@@ -4,9 +4,61 @@ void InventoryResponseSignal(int cellId, std::string inventoryId, tgui::Widget::
 {
 	if (signalName == "MouseReleased")
 	{
-		if (gEnv->game.player.pickedItem != NULL)
+		if (gEnv->game.player.pickedItem != NULL && !sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
 		{
 			swapElements(TargetInventory::tableInventory, cellId);
+		}
+		else if (gEnv->game.player.inventory[cellId] != NULL && gEnv->game.player.inventory[cellId]->itemType == itemType::resource && sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+		{
+			if (gEnv->game.player.pickedItem != NULL)
+			{
+				if (gEnv->game.player.inventory[cellId]->itemId == gEnv->game.player.pickedItem->itemId)
+				{
+					if (static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->count != 0 && gEnv->game.ui.shiftedItemStartId == cellId)
+					{
+						static_cast<ItemResource*>(gEnv->game.player.pickedItem)->count++;
+						static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->count--; 
+						gEnv->game.player.inventory[cellId]->tooltipDescription->get<tgui::Label>("resourceCount")->setText(
+							L"Count: " + std::to_wstring(static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->count) + L"/" + std::to_wstring(static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->maxCount));
+
+						if (static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->count == 0)
+						{
+							gEnv->game.player.inventory[cellId] = NULL;
+							gEnv->game.ui.shiftedItemTakedAll = true;
+							rebuildAll();
+						}
+					}
+				}
+			}
+			else
+			{
+
+				ItemResource* temp = new ItemResource();
+				temp->itemId = static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->itemId;
+				temp->name = static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->name;
+				temp->count = 1;
+				temp->maxCount = static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->maxCount;
+				giveIconToItem(temp);
+
+				gEnv->game.player.pickedItem = temp;
+				gEnv->game.player.pickedItemInvId = cellId;
+				static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->count--;
+				gEnv->game.adventureGUI.add(createWidget(WidgetType::BitmapButton, "Button", std::to_string(45), std::to_string(45), std::to_string(sf::Mouse::getPosition(gEnv->globalWindow).x), std::to_string(sf::Mouse().getPosition(gEnv->globalWindow).y - 5)), "pickedItemMouse");
+				gEnv->game.adventureGUI.get<tgui::BitmapButton>("pickedItemMouse")->setImage(*gEnv->game.player.inventory[cellId]->icon);
+
+				gEnv->game.ui.shiftedItem = true;
+				gEnv->game.ui.shiftedItemStartId = cellId;
+
+				gEnv->game.player.inventory[cellId]->tooltipDescription->get<tgui::Label>("resourceCount")->setText(
+					L"Count: " + std::to_wstring(static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->count) + L"/" + std::to_wstring(static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->maxCount));
+
+				if (static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->count == 0)
+				{
+					gEnv->game.player.inventory[cellId] = NULL;
+					gEnv->game.ui.shiftedItemTakedAll = true;
+					rebuildAll();
+				}
+			}
 		}
 		else
 		{
@@ -20,6 +72,7 @@ void InventoryResponseSignal(int cellId, std::string inventoryId, tgui::Widget::
 				rebuildAll();
 			}
 		}
+		
 	}
 	else if (signalName == "RightMouseReleased" && !gEnv->game.ui.rmWasClicked)
 	{
@@ -242,6 +295,7 @@ void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, cons
 				}
 			}
 		}
+	}
 	if (signalName == "RightMouseReleased")
 	{
 
