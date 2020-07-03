@@ -10,7 +10,14 @@ void personUIElementWasClicked(const int id, tgui::Widget::Ptr widget, const std
 		{
 			swapElements(TargetInventory::personPanel, id);
 		}
-		//else gEnv->game.ui.selected
+		else if (gEnv->game.player.pickedItem == NULL && gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id] != NULL)
+		{
+			gEnv->game.adventureGUI.add(createWidget(WidgetType::BitmapButton, "Button", std::to_string(45), std::to_string(45), std::to_string(sf::Mouse::getPosition(gEnv->globalWindow).x), std::to_string(sf::Mouse::getPosition(gEnv->globalWindow).y - 5)), "pickedItemMouse");
+			gEnv->game.adventureGUI.get<tgui::BitmapButton>("pickedItemMouse")->setImage(*gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id]->icon);
+			gEnv->game.player.pickedItem = gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id];
+			gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id] = NULL;
+			rebuildAll();
+		}
 	}
 	else if (signalName == "RightMouseReleased" && !gEnv->game.ui.rmWasClicked)
 	{

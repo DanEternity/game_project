@@ -476,6 +476,7 @@ void unregisterPlayerCharacter(int id)
 		for (int i = 0; i < temp.size(); i++)
 			registerPlayerCharacter(temp[i]);
 
+		gEnv->game.ui.activeOpenPersonWindow = 0;
 		BuildSchemeRoles();
 		BuildSchemeChooseCharacter();
 	}

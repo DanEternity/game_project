@@ -83,9 +83,15 @@ void swapElements(TargetInventory::targetInventory target, int id)
 		gEnv->game.player.inventory[id] = gEnv->game.player.pickedItem;
 		break;
 	case TargetInventory::gridPanel:
-		std::swap(
-			gEnv->game.player.inventory[gEnv->game.player.localInventory[id]],
-			gEnv->game.player.inventory[gEnv->game.player.localInventory[gEnv->game.player.pickedLocalInventory]]);
+		if (gEnv->game.player.pickedLocalInventory != -1)
+		{
+			gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.inventory[id];
+			gEnv->game.player.inventory[id] = gEnv->game.player.pickedItem;
+		}
+		else
+		{
+			gEnv->game.player.inventory[id] = gEnv->game.player.pickedItem;
+		}
 		break;
 	case TargetInventory::shipPanel:
 		p_module = static_cast<Module*>(gEnv->game.player.pickedItem);
@@ -98,10 +104,24 @@ void swapElements(TargetInventory::targetInventory target, int id)
 		break;
 	case TargetInventory::personPanel:
 		e_equip = static_cast<Equipment*>(gEnv->game.player.pickedItem);
-		if (gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->slot[id] == e_equip->equipmentSlotType)
+		if (gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->slot[id] == e_equip->equipmentSlotType && gEnv->game.player.pickedLocalInventory != -1)
 		{
 			gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id];
 			gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id] = e_equip;
+		}
+		else if (gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->slot[id] == e_equip->equipmentSlotType && gEnv->game.player.pickedLocalInventory == -1)
+		{
+			gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id] = e_equip;
+		}
+		else if (gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->slot[id] != e_equip->equipmentSlotType && gEnv->game.player.pickedLocalInventory == -1)
+		{
+			for (int i = 0; i < gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment.size(); i++)
+			{
+				if (gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->slot[i] == e_equip->equipmentSlotType)
+				{
+					gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[i] = e_equip;
+				}
+			}
 		}
 		else gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.pickedItem;
 		break;
@@ -109,8 +129,8 @@ void swapElements(TargetInventory::targetInventory target, int id)
 
 	gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::BitmapButton>("pickedItemMouse"));
 	gEnv->game.player.pickedItem = NULL;
-	gEnv->game.player.pickedItemInvId = NULL;
-	gEnv->game.player.pickedLocalInventory = NULL;
+	gEnv->game.player.pickedItemInvId = -1;
+	gEnv->game.player.pickedLocalInventory = -1;
 	rebuildAll();
 }
 
