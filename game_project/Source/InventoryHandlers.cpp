@@ -48,9 +48,11 @@ void InventoryResponseSignal(int cellId, std::string inventoryId, tgui::Widget::
 
 				gEnv->game.ui.shiftedItem = true;
 				gEnv->game.ui.shiftedItemStartId = cellId;
+				tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
 
 				gEnv->game.player.inventory[cellId]->tooltipDescription->get<tgui::Label>("resourceCount")->setText(
 					L"Count: " + std::to_wstring(static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->count) + L"/" + std::to_wstring(static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->maxCount));
+				
 
 				if (static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->count == 0)
 				{

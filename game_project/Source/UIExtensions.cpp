@@ -67,6 +67,17 @@ void swapElements(TargetInventory::targetInventory target, int id)
 				{
 					static_cast<ItemResource*>(gEnv->game.player.inventory[id])->count += static_cast<ItemResource*>(gEnv->game.player.pickedItem)->count;
 				}
+				else if (gEnv->game.ui.shiftedItem && !gEnv->game.ui.shiftedItemTakedAll)
+				{
+					static_cast<ItemResource*>(gEnv->game.player.pickedItem)->count -= (64 - static_cast<ItemResource*>(gEnv->game.player.inventory[id])->count);
+					static_cast<ItemResource*>(gEnv->game.player.inventory[gEnv->game.ui.shiftedItemStartId])->count += static_cast<ItemResource*>(gEnv->game.player.pickedItem)->count;
+					static_cast<ItemResource*>(gEnv->game.player.inventory[id])->count = 64;
+				}
+				else if (gEnv->game.ui.shiftedItem && gEnv->game.ui.shiftedItemTakedAll)
+				{
+					flagCantPlace = true;
+					break;
+				}
 				else {
 					gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.pickedItem;
 					static_cast<ItemResource*>(gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId])->count -= (64 - static_cast<ItemResource*>(gEnv->game.player.inventory[id])->count);
