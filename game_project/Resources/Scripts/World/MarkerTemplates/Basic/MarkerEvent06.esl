@@ -1,0 +1,82 @@
+﻿#extLocal "local"
+#import "core.ItemModule"
+#extLinkRename "core.ItemModule->dbMod"
+
+#import "core.ItemResource"
+#extLinkRename "core.ItemResource->dbRes"
+
+#import "core.RewardPool"
+#extLinkRename "core.RewardPool->dbReward"
+
+// init section
+@init
+PutFromPointer "$_arg2" to "$EXT:local:key"
+
+ChangeScriptEntryPoint "$self" "@start" 
+PutFromPointer "$_arg1" "$_marker"
+LinkScriptToMarker "$self" to "$_marker"
+EditMarkerProperties "$_marker" "10" "5" "500" "500" "Unknown signal" "Something dangerous"
+
+
+Terminate 
+
+// start section
+@start
+
+Text "This is a test event created with key $EXT:local:key "
+
+Choose "Someone try to contact with you. Reply to him?" [true]"Yes"[@tobipizda],[true]"No"[@fight];
+
+@tobipizda
+GetCharacterStat "$captain" "characterSocial" "$_soc"
+Choose "Unknown person want to take all your items" [true]"Give him all items"[@loseitems],[$_soc >= 10]"Ask who are you talking to"[@dialog];
+
+@dialog
+GetShipStat "$ship" "sensorPower" "$_senspow"
+GetShipStat "$ship" "additionalWeaponAccuracy" "$_accuracy"
+IfDoJump "$_senspow < 50" "@fight"
+Choose "Unknown person keeps silent" [$_senspow > 90]"Scan him"[@scan"],[$_accuracy > 2]"Attack him"[@fight],[$_soc > 30]"Join us!"[@join];
+
+@scan
+ChangeScriptEntryPoint "$self" "@exit"
+
+@join
+Put "100" to "$_health"
+Put "0" to "$_armor"
+Put "0" to "$_shield"
+Put "0" to "$_block"
+
+Put "0" to "$_resist"
+Put "0" to "$_shieldReg"
+
+Put "3" to "$_actionPoints"
+Put "100" to "$_energy"
+Put "5" to "$_energyReg"
+
+Put "10" to "$_initiative"
+
+Put "10" to "$_combat"
+Put "15" to "$_science"
+Put "10" to "$_adaptation"
+Put "10" to "$_reflexes"
+Put "10" to "$_perception"
+Put "10" to "$_engineerig"
+
+Put "0" to "$_social"
+
+CreateCharacter "$_char" "QWERTY QWERTY" "Human" "Engineer" "NULL"
+
+InitCharacterStats "$_char" "$_health" "$_armor" "$_shield" "$_block" 
+"$_resist" "$_shieldReg" "$_actionPoints" "$_energy" "$_energyReg" "$_initiative" 
+"$_combat" "$_science" "$_adaptation" "$_reflexes" "$_engineerig" "$_perception" "$_social"
+
+AddCharacterToPlayerCrew "$_char"
+ChangeScriptEntryPoint "$self" "@exit"
+
+@fight
+Text "Your ship was attacked by unknown ship"
+ChangeScriptEntryPoint "$self" "@exit"
+
+@exit
+Text "Nothing else here"
+Terminate

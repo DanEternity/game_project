@@ -404,7 +404,7 @@ void SetupAdventureStart()
 {
 	/* INITIALIZE INVENTORY */
 
-	gEnv->game.player.inventory.resize(50, nullptr);
+	gEnv->game.player.inventory.resize(54, nullptr);
 
 	gEnv->game.player.inventory[0] = new Equipment();
 	gEnv->game.player.inventory[0]->name = L"roflanTelo";
@@ -417,6 +417,7 @@ void SetupAdventureStart()
 	giveIconToItem(gEnv->game.player.inventory[11]);
 
 	BuildInventoryUI(9);
+	createShopPanel();
 
 	gEnv->game.player.inventory[20] = new ItemResource();
 	gEnv->game.player.inventory[20]->itemId = -10;

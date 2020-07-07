@@ -42,6 +42,13 @@ tgui::Label::Ptr createWidgetLabel(std::string render, std::string posX, std::st
 	return label;
 }
 
+void updateInventoryCell(int id)
+{
+	gEnv->game.player.inventory[id]->tooltipDescription = tgui::Panel::create();
+	gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(id))->setToolTip(NULL);
+	gEnv->game.player.inventory[id]->tooltipWasCreated = false;
+}
+
 void enableWidget(tgui::Widget::Ptr widget, bool enable)
 {
 	widget->setEnabled(enable);
@@ -83,18 +90,12 @@ void swapElements(TargetInventory::targetInventory target, int id)
 					static_cast<ItemResource*>(gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId])->count -= (64 - static_cast<ItemResource*>(gEnv->game.player.inventory[id])->count);
 					static_cast<ItemResource*>(gEnv->game.player.inventory[id])->count = 64;
 
-					gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId]->tooltipDescription = tgui::Panel::create();
-					gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(gEnv->game.player.pickedItemInvId))->setToolTip(NULL);
-					gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId]->tooltipWasCreated = false;
+					updateInventoryCell(gEnv->game.player.pickedItemInvId);
 				}
-				gEnv->game.player.inventory[id]->tooltipDescription = tgui::Panel::create();
-				gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(id))->setToolTip(NULL);
-				gEnv->game.player.inventory[id]->tooltipWasCreated = false;
+				updateInventoryCell(id);
 				if (gEnv->game.ui.shiftedItem && !gEnv->game.ui.shiftedItemTakedAll)
 				{
-					gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId]->tooltipDescription = tgui::Panel::create();
-					gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(gEnv->game.player.pickedItemInvId))->setToolTip(NULL);
-					gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId]->tooltipWasCreated = false;
+					updateInventoryCell(gEnv->game.player.pickedItemInvId);
 				}
 				break;
 			}
@@ -112,16 +113,12 @@ void swapElements(TargetInventory::targetInventory target, int id)
 		if (gEnv->game.player.pickedItemInvId != -1)
 		{
 			gEnv->game.player.inventory[id] = gEnv->game.player.pickedItem;
-			gEnv->game.player.inventory[id]->tooltipDescription = tgui::Panel::create();
-			gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(id))->setToolTip(NULL);
-			gEnv->game.player.inventory[id]->tooltipWasCreated = false;
+			updateInventoryCell(id);
 		}
 		// Если мы брали с шифта, обновляем то место, откуда брали
 		if (gEnv->game.ui.shiftedItem && !gEnv->game.ui.shiftedItemTakedAll)
 		{
-			gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId]->tooltipDescription = tgui::Panel::create();
-			gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(gEnv->game.player.pickedItemInvId))->setToolTip(NULL);
-			gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId]->tooltipWasCreated = false;
+			updateInventoryCell(id);
 		}
 		break;
 	case TargetInventory::gridPanel:

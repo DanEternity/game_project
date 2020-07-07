@@ -32,7 +32,6 @@ void InventoryResponseSignal(int cellId, std::string inventoryId, tgui::Widget::
 			}
 			else
 			{
-
 				ItemResource* temp = new ItemResource();
 				temp->itemId = static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->itemId;
 				temp->name = static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->name;

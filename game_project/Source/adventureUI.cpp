@@ -1,8 +1,5 @@
 #include "adventureUI.h"
 
-
-
-
 void updateAdventureUI()
 {
 	if (gEnv->game.adventureUI.adventureUIDrawRequired)
@@ -36,7 +33,6 @@ void disableAllAdventureUIWidgets()
 
 void createAdventureUIButtons()
 {
-
 	gEnv->game.player.ship = new Ship();
 
 	gEnv->game.player.ship->hull.baseValue = 500;
@@ -77,43 +73,43 @@ void createAdventureUIButtons()
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->add(btn);
 	btn->setText("Ship");
 	btn->setTextSize(22);
-	btn->connect("MouseReleased", updateShipMenuUIState, shipMenu::ship, 1);
+	btn->connect("MouseReleased", updateShipMenuUIState, shipMenu::ship, 1, false);
 
 	btn = createWidget(WidgetType::BitmapButton, "Button", "140", "50", "198", "90%")->cast<tgui::BitmapButton>();
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->add(btn);
 	btn->setText("Lab");
 	btn->setTextSize(22);
-	btn->connect("MouseReleased", updateShipMenuUIState, shipMenu::lab, 1);
+	btn->connect("MouseReleased", updateShipMenuUIState, shipMenu::lab, 1, false);
 
 	btn = createWidget(WidgetType::BitmapButton, "Button", "140", "50", "361", "90%")->cast<tgui::BitmapButton>();
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->add(btn, "playerUIcrew");
 	btn->setText("Crew");
 	btn->setTextSize(22);
-	btn->connect("MouseReleased", updateShipMenuUIState, shipMenu::crew, 1);
+	btn->connect("MouseReleased", updateShipMenuUIState, shipMenu::crew, 1, false);
 
 	btn = createWidget(WidgetType::BitmapButton, "Button", "140", "50", "524", "90%")->cast<tgui::BitmapButton>();
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->add(btn, "playerUIcraft");
 	btn->setText("Craft");
 	btn->setTextSize(22);
-	btn->connect("MouseReleased", updateShipMenuUIState, shipMenu::craft, 1);
+	btn->connect("MouseReleased", updateShipMenuUIState, shipMenu::craft, 1, false);
 
 	btn = createWidget(WidgetType::BitmapButton, "Button", "140", "50", "687", "90%")->cast<tgui::BitmapButton>();
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->add(btn, "playerUIstorage");
 	btn->setText("Storage");
 	btn->setTextSize(22);
-	btn->connect("MouseReleased", updateShipMenuUIState, shipMenu::storage, 1);
+	btn->connect("MouseReleased", updateShipMenuUIState, shipMenu::storage, 1, false);
 
 	btn = createWidget(WidgetType::BitmapButton, "Button", "140", "50", "850", "90%")->cast<tgui::BitmapButton>();
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->add(btn, "playerUImainStats");
 	btn->setText("Stats");
 	btn->setTextSize(22);
-	btn->connect("MouseReleased", updateShipMenuUIState, shipMenu::stats, 1);
+	btn->connect("MouseReleased", updateShipMenuUIState, shipMenu::stats, 1, false);
 
 	btn = createWidget(WidgetType::BitmapButton, "Button", "140", "50", "1013", "90%")->cast<tgui::BitmapButton>();
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->add(btn, "playerUIhangar");
 	btn->setText("Hangar");
 	btn->setTextSize(22);
-	btn->connect("MouseReleased", updateShipMenuUIState, shipMenu::hangar, 1);
+	btn->connect("MouseReleased", updateShipMenuUIState, shipMenu::hangar, 1, false);
 
 	//create buttons and some other stuff on main adventure interface
 
@@ -131,7 +127,7 @@ void createAdventureUIButtons()
 	btn = createWidget(WidgetType::BitmapButton, "Button", "120", "120", "1800", "960")->cast<tgui::BitmapButton>();
 	btn->setText("Ship");
 	btn->setTextSize(22);
-	btn->connect("MouseReleased", updateShipMenuUIState, shipMenu::ship, 0);
+	btn->connect("MouseReleased", updateShipMenuUIState, shipMenu::ship, 0, false);
 	gEnv->game.adventureGUI.add(btn);
 
 	btn = createWidget(WidgetType::BitmapButton, "Button", "120", "120", "1800", "0")->cast<tgui::BitmapButton>();
@@ -181,27 +177,66 @@ void createAdventureUIButtons()
 
 
 
-void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled) // whereCalled - 0 для кнопок в нижнем левом углу экрана, 1 для кнопок на панели интерфейса
+void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled, bool openShop) // whereCalled - 0 для кнопок в нижнем правом углу экрана, 1 для кнопок на панели интерфейса
 {
 	if (gEnv->game.adventureGUI.get<tgui::BitmapButton>("pickedItemMouse") != NULL) gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::BitmapButton>("pickedItemMouse"));
-	if (gEnv->game.player.pickedItem != NULL)
+	if (gEnv->game.player.pickedItem != NULL && !gEnv->game.ui.shiftedItem)
 	{
 		gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.pickedItem;
 	}
+	else if (gEnv->game.player.pickedItem != NULL && gEnv->game.ui.shiftedItem)
+	{
+		if (gEnv->game.ui.shiftedItemTakedAll)
+		{
+			gEnv->game.player.inventory[gEnv->game.ui.shiftedItemStartId] = gEnv->game.player.pickedItem;
+		}
+		else
+		{
+			static_cast<ItemResource*>(gEnv->game.player.inventory[gEnv->game.ui.shiftedItemStartId])->count += static_cast<ItemResource*>(gEnv->game.player.pickedItem)->count;
+			updateInventoryCell(gEnv->game.player.pickedItemInvId);
+		}
+	}
 	gEnv->game.player.pickedItem = NULL;
-	gEnv->game.player.pickedItemInvId = NULL;
-	gEnv->game.player.pickedLocalInventory = NULL;
+	gEnv->game.player.pickedItemInvId = -1;
+	gEnv->game.player.pickedLocalInventory = -1;
 	disableAllAdventureUI();
 	if (whereCalled == 0)
 	{
 		gEnv->game.player.shipMenu = shipMenu::null;
 		gEnv->game.adventureUI.isInventoryOpen = !gEnv->game.adventureUI.isInventoryOpen;
 	}
-	if (!gEnv->game.adventureUI.isInventoryOpen)
+	if (!gEnv->game.adventureUI.isInventoryOpen && !openShop)
 		return;
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel"), true);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel"), true);
 	gEnv->game.player.shipMenu = state;
+
+	// TEST CODE FOR SHOP
+	Shop *p = new Shop();
+
+	ItemResource* res = new ItemResource();
+	res->itemId = -10;
+	res->name = L"TestResource";
+	res->count = 20;
+	res->maxCount = 64;
+	giveIconToItem(res);
+	ItemResource* resPrice = new ItemResource();
+	resPrice->itemId = -9;
+	resPrice->name = L"TestResource2";
+	resPrice->count = 30;
+	resPrice->maxCount = 64;
+	giveIconToItem(resPrice);
+	p->addItemToShop(resPrice, res, 100);
+	p->addItemToShop(res, resPrice, 100);
+	p->addItemToShop(res, resPrice, 100);
+	p->addItemToShop(res, resPrice, 100);
+
+	/*Module* module = new Module(L"Omega komp for 300$ bucks", moduleType::system, 
+		moduleSlot::core, moduleSlot::ModuleSlotSize::medium);
+	StatModEffect * sme = new StatModEffect(targetType::ship, statNames::hull, -100, 0, 0, 0);
+	module->effects.push_back(sme);*/
+	
+
 	switch (gEnv->game.player.shipMenu)
 	{
 	case shipMenu::ship:
@@ -224,6 +259,7 @@ void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled) // whereCa
 		ChangePersonPanelsState(gEnv->game.ui.puistate);
 		break;
 	case shipMenu::hangar:
+		buildShop(p);
 		break;
 	case shipMenu::lab:
 		break;
@@ -231,6 +267,7 @@ void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled) // whereCa
 		break;
 	case shipMenu::storage:
 		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel"), true);
+		if (openShop) enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("adventureShop"), true);
 		break;
 	case shipMenu::null:
 		break;
@@ -263,6 +300,7 @@ void disableAllAdventureUI()
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("PlanPanel"), false);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("PanelChangePersonState"), false);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("globalMapPanel"), false);
+	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("adventureShop"), false);
 }
 
 void updateCategoryFilters()
@@ -277,6 +315,7 @@ void updateCategoryFilters()
 
 	p->addItem(GetString("No filter"), "No filter");
 	p->setSelectedItem(GetString("No filter"));
+	
 
 
 	switch (t)
@@ -303,6 +342,7 @@ void updateCategoryFilters()
 	case shipMenu::stats:
 		break;
 	case shipMenu::hangar:
+
 		break;
 	default:
 		break;

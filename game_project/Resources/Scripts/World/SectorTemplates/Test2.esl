@@ -21,6 +21,19 @@ Ariphmetic "$_w % 2000" to "$_y"
 Ariphmetic "$_y - 1000" to "$_y"
 
 CreateMarker "$_marker"
+CallMarkerInit "\Resources\Scripts\World\MarkerTemplates\Basic\MarkerEvent06.esl" 
+"$_sector", "$_marker", "$_key";
+SetMarkerPosition "$_marker" "$_x" "$_y"
+AddMarkerToSector "$_marker" "$_sector"
+
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_x"
+Ariphmetic "$_x - 1000" to "$_x"
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_y"
+Ariphmetic "$_y - 1000" to "$_y"
+
+CreateMarker "$_marker"
 CallMarkerInit "\Resources\Scripts\World\MarkerTemplates\Basic\MarkerEvent02.esl" 
 "$_sector", "$_marker", "$_key";
 SetMarkerPosition "$_marker" "$_x" "$_y"

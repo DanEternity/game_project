@@ -10,13 +10,14 @@
 #include "CraftUI.h"
 #include "map.h"
 #include "UIExtensions.h"
+#include "Shop.h"
 
 void updateAdventureUI();
 void DrawAdventureUI();
 void disableAllAdventureUIWidgets();
 void createAdventureUIButtons();
 
-void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled);
+void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled, bool openShop = false);
 void updateCategoryFilters();
 
 

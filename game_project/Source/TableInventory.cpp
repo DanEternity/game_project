@@ -4,7 +4,7 @@ void BuildInventoryUI(int cellSize)
 {
 	if (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("inventoryPanel") != nullptr)
 		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("inventoryPanel")->removeAllWidgets();
-	else gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::ScrollablePanel, "Panel3", "520", "200", "5%", "15%", false), "inventoryPanel");
+	else gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::ScrollablePanel, "Panel3", "45%", "60%", "1%", "1%", false), "inventoryPanel");
 
 	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
 	{
@@ -12,7 +12,7 @@ void BuildInventoryUI(int cellSize)
 		int positionX = i % cellSize;
 		int positionY = i / cellSize;
 		const int number = i;
-		tgui::BitmapButton::Ptr button = createWidget(WidgetType::BitmapButton, "Button", "50", "50", std::to_string(5+ positionX * 50), std::to_string(10 + positionY * 50))->cast<tgui::BitmapButton>();
+		tgui::BitmapButton::Ptr button = createWidget(WidgetType::BitmapButton, "Button", "50", "50", std::to_string(10 + positionX * 55), std::to_string(10 + positionY * 55))->cast<tgui::BitmapButton>();
 		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("inventoryPanel")->add(button, "InventoryCell"+ std::to_string(i));
 
 		if (gEnv->game.player.inventory[i] != NULL)

@@ -165,6 +165,9 @@
     <ClCompile Include="Source\PersonHandlers.cpp">
       <Filter>Adventure\UI\Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Shop.cpp">
+      <Filter>Adventure\UI\General</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\game.h">
@@ -385,6 +388,12 @@
     </ClInclude>
     <ClInclude Include="Source\adventureUI.h">
       <Filter>Adventure\UI\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shop.h">
+      <Filter>Adventure\UI\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\shopClass.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
