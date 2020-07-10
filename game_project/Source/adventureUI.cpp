@@ -227,9 +227,16 @@ void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled, bool openS
 	resPrice->maxCount = 64;
 	giveIconToItem(resPrice);
 	p->addItemToShop(resPrice, res, 100);
-	p->addItemToShop(res, resPrice, 100);
-	p->addItemToShop(res, resPrice, 100);
-	p->addItemToShop(res, resPrice, 100);
+
+	Equipment *eq = new Equipment();
+	eq->name = L"teloShop";
+	eq->equipmentSlotType = equipmentSlot::body;
+	giveIconToItem(eq);
+
+	Character *ch = new Character(L"Shop Character");
+	ch->equipment[1] = eq;
+	p->addCrewToShop(ch, 100);
+	p->addCrewToShop(new Character(L"Shop Character2"), 200);
 
 	/*Module* module = new Module(L"Omega komp for 300$ bucks", moduleType::system, 
 		moduleSlot::core, moduleSlot::ModuleSlotSize::medium);

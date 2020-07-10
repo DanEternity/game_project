@@ -87,7 +87,7 @@ public:
 		this->objectType = objectType::character;
 		this->memoryControl = memoryControl::fixed;
 		this->name = name;
-		this->characterClass = L"Noe";
+		this->characterClass = L"None";
 		this->characterRace = L"Human";
 		this->health.baseValue = 100;
 		slot.resize(7);
