@@ -38,7 +38,7 @@ namespace TargetInventory
 /// <param name="posY"> Position Y of widget to his parent </param>
 /// <param name="enabled"> Is widget enabled after creation. True on default </param>
 tgui::Widget::Ptr createWidget(WidgetType::widgetType type, std::string render, std::string sizeX, std::string sizeY, std::string posX, std::string posY, bool enabled = true);
-tgui::Label::Ptr createWidgetLabel(std::string render, std::string posX, std::string posY, int textSize, std::wstring text);
+tgui::Label::Ptr createWidgetLabel(std::string render, std::string posX, std::string posY, int textSize, std::wstring text, bool enabled = true);
 void updateInventoryCell(int id);
 
 void enableWidget(tgui::Widget::Ptr widget, bool enable);

@@ -21,7 +21,7 @@ void UpdateStatPersonScreen();
 void BuildPanelChangePersonState();
 void ChangeActiveCharacter(int id);
 void ChangePersonPanelsState(PUIState::personUIstate state);
-void skillUp(Character *c, PassiveSkill *p, std::wstring treeName, tgui::Widget::Ptr widget, const std::string& signalName);
+void skillUp(Character *c, PassiveSkill *p, int treeNumber, tgui::Widget::Ptr widget, const std::string& signalName);
 void giveRoleFind(int id, int buttonId, tgui::Widget::Ptr widget, const std::string& signalName);
 void giveRole(Character *c, int buttonId, tgui::Widget::Ptr widget, const std::string& signalName);
 void giveRoleCaptain(Character *c, int buttonId);

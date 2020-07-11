@@ -5,8 +5,8 @@ void BuildSchemeChooseCharacter()
 	tgui::Panel::Ptr pan = gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel");
 	if (pan != nullptr)
 		gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->remove(gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel"));
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::Panel, "Panel3", "300", "580", "73%", "1%"), "choosePersonPanel");
-
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::Panel, "Panel3", "300", "580", "73%", "1%", false), "choosePersonPanel");
+	if (gEnv->game.player.shipMenu == shipMenu::crew) enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel"), true);
 	
 
 	for (int i = 0; i < gEnv->game.player.crew.characters.size(); i++)
@@ -81,7 +81,10 @@ void BuildStatPersonScreen(int crewPersonNumber)
 
 void BuildPersonSkillTree(int crewPersonNumber)
 {
-	tgui::Panel::Ptr mainPersonPanel = createWidget(WidgetType::Panel, "Panel3", "256", "589", "0", "0", false)->cast<tgui::Panel>();
+	tgui::Panel::Ptr mainPersonPanel = createWidget(WidgetType::Panel, "Panel3", "100%", "10%", "0", "0", false)->cast<tgui::Panel>();
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(mainPersonPanel, "NamePointsPanel" + std::to_string(crewPersonNumber));
+
+	tgui::Panel::Ptr mainPersonPanel2 = createWidget(WidgetType::Panel, "Panel3", "25%", "90%", "0", "10%", false)->cast<tgui::Panel>();
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(mainPersonPanel, "PersonFirstSkillTree" + std::to_string(crewPersonNumber));
 
 	tgui::Label::Ptr lab = createWidget(WidgetType::Label, "Label", "0", "0", "(&.width - width) / 2", "10")->cast<tgui::Label>();
@@ -100,12 +103,6 @@ void BuildPersonSkillTree(int crewPersonNumber)
 	mainPersonPanel->add(lab,  "labSkillTreePoints" + std::to_string(crewPersonNumber));
 
 	Character *c = gEnv->game.player.crew.characters[crewPersonNumber];
-	std::wstring treeName = L"";
-	switch (c->classToInt(c->characterClass))
-	{
-	case 0:
-		treeName = L"classicTree";
-	}
 
 	for (int i = 1; i <= 5; i++)
 	{
@@ -114,15 +111,15 @@ void BuildPersonSkillTree(int crewPersonNumber)
 		label->setText("Level: " + std::to_string(i));
 		label->setPosition(5, 70 + 60 * (i - 1));
 		label->setTextSize(20);
-		mainPersonPanel->add(label);
+		mainPersonPanel2->add(label);
 		int rep = 0;
-		for (auto j : c->skillTrees[treeName])
+		for (auto j : c->skillTrees[0])
 		{
 			if (i == j->level)
 				rep++;
 		}
 		int rep2 = 1;
-		for (auto j : c->skillTrees[treeName])
+		for (auto j : c->skillTrees[0])
 		{
 			if (i == j->level)
 			{
@@ -163,12 +160,10 @@ void BuildPersonSkillTree(int crewPersonNumber)
 					}
 					break;
 				}
-				mainPersonPanel->add(button);
+				mainPersonPanel2->add(button);
 				button->setText(j->name);
 
-				const std::wstring str = treeName;
-
-				button->connect("MouseReleased", skillUp, &(*c), &(*j), str);
+				button->connect("MouseReleased", skillUp, &(*c), &(*j), 0);
 			}
 		}
 	}
@@ -284,6 +279,7 @@ void ChangePersonPanelsState(PUIState::personUIstate state)
 		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i)), false);
 		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i)), false);
 		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(i)), false);
+		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("NamePointsPanel" + std::to_string(i)), false);
 	}
 	switch (state)
 	{
@@ -304,24 +300,19 @@ void ChangePersonPanelsState(PUIState::personUIstate state)
 	case PUIState::skillTreeState:
 		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("PanelChangePersonState"), true);
 		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(gEnv->game.ui.activeOpenPersonWindow)), true);
+		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("NamePointsPanel" + std::to_string(gEnv->game.ui.activeOpenPersonWindow)), true);
 		break;
 	case PUIState::battleAbilitiesState:
 		break;
 	}
 }
 
-void skillUp(Character *c, PassiveSkill *p, std::wstring treeName, tgui::Widget::Ptr widget, const std::string& signalName)
+void skillUp(Character *c, PassiveSkill *p, int treeNumber, tgui::Widget::Ptr widget, const std::string& signalName)
 {
-	/*for (auto j : c->skillTrees[treeName])
-	{
-		if (i == j->level)
-		{
-			
-	}*/
 	if (c->level < p->level || c->skillPoints == 0) return;
 
 	bool ok = true;
-	for (auto pp : c->skillTrees[treeName])
+	for (auto pp : c->skillTrees[treeNumber])
 	{
 		if ((pp->level == p->level) && (pp->active == true))
 			ok = false;
@@ -329,7 +320,7 @@ void skillUp(Character *c, PassiveSkill *p, std::wstring treeName, tgui::Widget:
 
 	bool ok2 = false;
 	if (p->level == 1) ok2 = true;
-	else for (auto pp : c->skillTrees[treeName])
+	else for (auto pp : c->skillTrees[treeNumber])
 	{
 		if (pp->level + 1 == p->level && pp != p)
 		{
@@ -451,6 +442,8 @@ void unregisterPlayerCharacter(int id)
 			gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i))->removeAllWidgets();
 			gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->remove(gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i)));
 
+			gEnv->game.adventureGUI.get<tgui::Panel>("NamePointsPanel" + std::to_string(i))->removeAllWidgets();
+			gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->remove(gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(i)));
 			gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(i))->removeAllWidgets();
 			gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->remove(gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(i)));
 		}

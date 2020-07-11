@@ -49,13 +49,18 @@ void buildShop(Shop* p)
 	gEnv->game.adventureGUI.get<tgui::Panel>("iternalShopModEquipPanel")->add(createWidget(WidgetType::ScrollablePanel, "ScrollablePanel", "100%", "35%", "0", "51%"), "shopEquipments");
 	gEnv->game.adventureGUI.get<tgui::Panel>("iternalShopCrewPanel")->add(createWidget(WidgetType::ScrollablePanel, "Panel", "100%", "40%", "0", "0%"), "shopCharacters");
 	gEnv->game.adventureGUI.get<tgui::Panel>("iternalShopCrewPanel")->add(createWidget(WidgetType::ScrollablePanel, "ScrollablePanel", "100%", "60%", "0", "40%"), "shopCharacterStats");
+	
+	tgui::BitmapButton::Ptr crewbut = createWidget(WidgetType::BitmapButton, "Button", "30%", "5%", "(&.width - width) / 2", "86%", false)->cast<tgui::BitmapButton>();
+	gEnv->game.adventureGUI.get<tgui::Panel>("iternalShopCrewPanel")->add(crewbut, "buyCharacterButton");
+	crewbut->setText(L"Buy this character");
+	crewbut->connect("MouseReleased", buyCrew);
 
-	tgui::Button::Ptr sellButton = createWidget(WidgetType::Button, "Button", "10%", "&.width * 0.1", "2%", "80%")->cast<tgui::Button>();
+	tgui::Button::Ptr sellButton = createWidget(WidgetType::Button, "Button", "7%", "&.width * 0.07", "2%", "83%")->cast<tgui::Button>();
 	gEnv->game.adventureGUI.get<tgui::Panel>("adventureShop")->add(sellButton);
 	sellButton->connect("MouseEntered", sellItem);
 	sellButton->connect("MouseReleased", sellItem);
 	sellButton->connect("MouseLeft", sellItem);
-	gEnv->game.adventureGUI.get<tgui::Panel>("adventureShop")->add(createWidgetLabel("Label", "13%", "83%", 18, L"Place cursor with item to the box to see item price"), "sellItemLabel");
+	gEnv->game.adventureGUI.get<tgui::Panel>("adventureShop")->add(createWidgetLabel("Label", "10%", "85%", 18, L"Place cursor with item to the box to see item price"), "sellItemLabel");
 
 	//resource panel
 	std::string shopNumber = "0";
@@ -185,7 +190,7 @@ void buildShop(Shop* p)
 		for (int j = 0; j < p->characters[i].first->equipment.size(); j++) if (p->characters[i].first->equipment[j] != NULL) flag = true;
 		if (!flag) itemsString += L"Character dont have equipment";
 
-		tgui::Label::Ptr itemsLab = createWidgetLabel("Label","1%","4%", 18, itemsString);
+		tgui::Label::Ptr itemsLab = createWidgetLabel("Label","1%","4%", 20, itemsString);
 		enableWidget(itemsLab, false);
 		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopCharacterStats")->add(itemsLab, "charItemsLab" + std::to_string(i));
 
@@ -200,6 +205,7 @@ void buildShop(Shop* p)
 				but2->setImage(*p->characters[i].first->equipment[j]->icon);
 			}
 		}
+		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopCharacterStats")->add(createWidgetLabel("Label", "1%", "20%", 20, L"Class: " + p->characters[i].first->characterClass, false), "shopClassLabel" + std::to_string(i));
 
 	}
 
@@ -381,12 +387,22 @@ void crewClick(int id, Character *c)
 	{
 		enableWidget(widgets[i], false);
 	}
+	enableWidget(gEnv->game.adventureGUI.get<tgui::BitmapButton>("buyCharacterButton"), true);
 
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Label>("charItemsLab" + std::to_string(id)), true);
+	enableWidget(gEnv->game.adventureGUI.get<tgui::Label>("shopClassLabel" + std::to_string(id)), true);
+
 	for (int i = 0, k = 0; i < c->equipment.size(); i++)
 	{
 		if (c->equipment[i] != NULL) enableWidget(gEnv->game.adventureGUI.get<tgui::BitmapButton>("char" + std::to_string(id) + "EquipButton" + std::to_string(i)), true);
 	}
+
+	gEnv->game.ui.choosenShopCharacter = c;
+}
+
+void buyCrew()
+{
+	registerPlayerCharacter(gEnv->game.ui.choosenShopCharacter);
 }
 
 void removeShop()

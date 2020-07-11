@@ -278,11 +278,24 @@ void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, cons
 		else if (gEnv->game.player.pickedItem != NULL && gEnv->game.player.pickedLocalInventory != -1)
 		{
 			if (id < gEnv->game.player.localInventory.size() && gEnv->game.player.localInventory[id] != -1)
+			{
 				if (gEnv->game.player.inventory[gEnv->game.player.localInventory[id]] != NULL)
 				{
 					swapElements(TargetInventory::gridPanel, gEnv->game.player.localInventory[id]);
 					return;
 				}
+			}
+			else
+			{
+				for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
+				{
+					if (gEnv->game.player.inventory[i] == NULL)
+					{
+						swapElements(TargetInventory::gridPanel, i);
+						break;
+					}
+				}
+			}
 		}
 		else if (gEnv->game.player.pickedItem != NULL && gEnv->game.player.pickedLocalInventory == -1)
 		{

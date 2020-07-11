@@ -32,13 +32,15 @@ tgui::Widget::Ptr createWidget(WidgetType::widgetType type, std::string render, 
 	return widget;
 }
 
-tgui::Label::Ptr createWidgetLabel(std::string render, std::string posX, std::string posY, int textSize, std::wstring text)
+tgui::Label::Ptr createWidgetLabel(std::string render, std::string posX, std::string posY, int textSize, std::wstring text, bool enabled)
 {
 	tgui::Label::Ptr label = tgui::Label::create();
 	label->setRenderer(gEnv->globalTheme.getRenderer(render));
 	label->setPosition(posX, posY);
 	label->setText(text);
 	label->setTextSize(textSize);
+	label->setEnabled(enabled);
+	label->setVisible(enabled);
 	return label;
 }
 

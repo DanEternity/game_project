@@ -27,6 +27,8 @@ namespace characterRole
 
 class Character : public BaseObject
 {
+private:
+	int treeCount = 0;
 public:
 
 	// common information
@@ -80,7 +82,7 @@ public:
 
 	// skill tree stuff
 
-	std::map<std::wstring, std::vector<PassiveSkill*>> skillTrees;
+	std::map<int, std::vector<PassiveSkill*>> skillTrees;
 
 	Character(std::wstring name)
 	{
@@ -122,49 +124,44 @@ public:
 
 		equipment.resize(7, nullptr);
 
-		switch (classToInt(characterClass))
+		std::vector<std::wstring> names;
+		names.push_back(L"+10hp");
+		names.push_back(L"+20hp");
+		names.push_back(L"+30hp");
+		names.push_back(L"+6%hull");
+		names.push_back(L"+30powersupply");
+		std::vector<int> skillLevels;
+		skillLevels.push_back(1);
+		skillLevels.push_back(1);
+		skillLevels.push_back(2);
+		skillLevels.push_back(3);
+		skillLevels.push_back(3);
+		std::vector<StatModEffect*> effects;
+		effects.push_back(new StatModEffect(targetType::character, statNames::characterHealth, 10, 0, 0, 0));
+		effects.push_back(new StatModEffect(targetType::character, statNames::characterHealth, 20, 0, 0, 0));
+		effects.push_back(new StatModEffect(targetType::character, statNames::characterHealth, 30, 0, 0, 0));
+		effects.push_back(new StatModEffect(targetType::ship, statNames::hull, 0, 0.06, 0, 0));
+		effects.push_back(new StatModEffect(targetType::ship, statNames::powerSupply, 30, 0, 0, 0));
+
+		createNewTree(addPassives(names, skillLevels, effects));
+	}
+
+	void createNewTree(std::vector<PassiveSkill*> passives)
+	{
+		skillTrees[treeCount++] = passives;
+	}
+
+	std::vector<PassiveSkill*> addPassives(std::vector<std::wstring> names, std::vector<int> levels, std::vector<StatModEffect*> effects)
+	{
+		std::vector<PassiveSkill*> vct;
+		if (names.size() != effects.size()) return vct;
+		for (int i = 0; i < names.size(); i++)
 		{
-		case 0:
-			std::vector<PassiveSkill*> vct;
-
-			PassiveSkill* skill = new PassiveSkill(L"+10 hp", 1);
-			skill->effect = new StatModEffect();
-			skill->effect->targetType = targetType::character;
-			skill->effect->statName = statNames::characterHealth;
-			skill->effect->p_add = 10;
+			PassiveSkill* skill = new PassiveSkill(names[i], levels[i]);
+			skill->effect = effects[i];
 			vct.push_back(skill);
-
-			skill = new PassiveSkill(L"+20 hp", 1);
-			skill->effect = new StatModEffect();
-			skill->effect->targetType = targetType::character;
-			skill->effect->statName = statNames::characterHealth;
-			skill->effect->p_add = 20;
-			vct.push_back(skill);
-
-			skill = new PassiveSkill(L"+30 hp", 2);
-			skill->effect = new StatModEffect();
-			skill->effect->targetType = targetType::character;
-			skill->effect->statName = statNames::characterHealth;
-			skill->effect->p_add = 30;
-			vct.push_back(skill);
-
-			skill = new PassiveSkill(L"+6% hull", 3);
-			skill->effect = new StatModEffect();
-			skill->effect->targetType = targetType::ship;
-			skill->effect->statName = statNames::hull;
-			skill->effect->p_mul = 0.06;
-			vct.push_back(skill);
-
-			skill = new PassiveSkill(L"+30 power supply", 3);
-			skill->effect = new StatModEffect();
-			skill->effect->targetType = targetType::ship;
-			skill->effect->statName = statNames::powerSupply;
-			skill->effect->p_add = 30;
-			vct.push_back(skill);
-
-			skillTrees[L"classicTree"] = vct;
-			break;
 		}
+		return vct;
 	}
 
 	int classToInt(std::wstring persClass)
@@ -173,3 +170,49 @@ public:
 			return 0;
 	}
 };
+
+//// TEST CODE FOR BASE SKILL TREE
+
+/*switch (classToInt(characterClass))
+{
+case 0:
+std::vector<PassiveSkill*> vct;
+
+PassiveSkill* skill = new PassiveSkill(L"+10 hp", 1);
+skill->effect = new StatModEffect();
+skill->effect->targetType = targetType::character;
+skill->effect->statName = statNames::characterHealth;
+skill->effect->p_add = 10;
+vct.push_back(skill);
+
+skill = new PassiveSkill(L"+20 hp", 1);
+skill->effect = new StatModEffect();
+skill->effect->targetType = targetType::character;
+skill->effect->statName = statNames::characterHealth;
+skill->effect->p_add = 20;
+vct.push_back(skill);
+
+skill = new PassiveSkill(L"+30 hp", 2);
+skill->effect = new StatModEffect();
+skill->effect->targetType = targetType::character;
+skill->effect->statName = statNames::characterHealth;
+skill->effect->p_add = 30;
+vct.push_back(skill);
+
+skill = new PassiveSkill(L"+6% hull", 3);
+skill->effect = new StatModEffect();
+skill->effect->targetType = targetType::ship;
+skill->effect->statName = statNames::hull;
+skill->effect->p_mul = 0.06;
+vct.push_back(skill);
+
+skill = new PassiveSkill(L"+30 power supply", 3);
+skill->effect = new StatModEffect();
+skill->effect->targetType = targetType::ship;
+skill->effect->statName = statNames::powerSupply;
+skill->effect->p_add = 30;
+vct.push_back(skill);
+
+skillTrees[0] = vct;
+break;
+}*/

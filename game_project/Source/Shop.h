@@ -18,6 +18,7 @@ void buyItem(int id, std::string shopNumber, Item* product, int price);
 void sellItem(tgui::Widget::Ptr widget, const std::string& signalName);
 
 void crewClick(int id, Character *c);
+void buyCrew();
 
 void applyShopTooltip(Item* i, tgui::Widget::Ptr widget, const std::string& signalName);
 

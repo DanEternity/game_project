@@ -37,4 +37,6 @@ public:
 	int sectorNumberRightPanel;
 
 	int characterPlayerCount = 0;
+
+	Character* choosenShopCharacter;
 };

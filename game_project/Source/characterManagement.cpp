@@ -43,16 +43,7 @@ void collectEquipment(Character * c)
 		applyCharEquipmentEffects(c, m);
 
 	}
-
-
-		std::wstring treeName = L"";
-		switch (c->classToInt(c->characterClass))
-		{
-		case 0:
-			treeName = L"classicTree";
-		}
-
-		for (auto p : c->skillTrees[treeName])
+		for (auto p : c->skillTrees[0])
 		{
 			if (p->active == true && p->effect->targetType == targetType::character)
 			{
