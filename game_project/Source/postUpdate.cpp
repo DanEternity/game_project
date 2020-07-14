@@ -4,5 +4,4 @@ void postUpdate()
 {
 
 	gEnv->game.player.mouseWheelDelta = 0;
-
 }

@@ -5,7 +5,7 @@ void startWorldGeneration()
 
 	// initiate generation parameters
 
-	const int maxGeneratedPoints = 20;
+	const int maxGeneratedPoints = 2;
 	const int maxGalaxyRadius = 5000;
 	const int sectorPropertiesCountWeightRaw[12] = { 0, 10, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -404,17 +404,34 @@ void SetupAdventureStart()
 {
 	/* INITIALIZE INVENTORY */
 
-	gEnv->game.player.inventory.resize(50, nullptr);
+	gEnv->game.player.inventory.resize(54, nullptr);
 
 	gEnv->game.player.inventory[0] = new Equipment();
 	gEnv->game.player.inventory[0]->name = L"roflanTelo";
 	static_cast<Equipment*>(gEnv->game.player.inventory[0])->equipmentSlotType = equipmentSlot::body;
+	giveIconToItem(gEnv->game.player.inventory[0]);
 
 	gEnv->game.player.inventory[11] = new Equipment();
 	gEnv->game.player.inventory[11]->name = L"roflanBody";
 	static_cast<Equipment*>(gEnv->game.player.inventory[11])->equipmentSlotType = equipmentSlot::body;
+	giveIconToItem(gEnv->game.player.inventory[11]);
 
 	BuildInventoryUI(9);
+	createShopPanel();
+
+	gEnv->game.player.inventory[20] = new ItemResource();
+	gEnv->game.player.inventory[20]->itemId = -10;
+	gEnv->game.player.inventory[20]->name = L"TestResource";
+	static_cast<ItemResource*>(gEnv->game.player.inventory[20])->count = 40;
+	static_cast<ItemResource*>(gEnv->game.player.inventory[20])->maxCount = 64;
+	giveIconToItem(gEnv->game.player.inventory[20]);
+
+	gEnv->game.player.inventory[21] = new ItemResource();
+	gEnv->game.player.inventory[21]->itemId = -10;
+	gEnv->game.player.inventory[21]->name = L"TestResource";
+	static_cast<ItemResource*>(gEnv->game.player.inventory[21])->count = 40;
+	static_cast<ItemResource*>(gEnv->game.player.inventory[21])->maxCount = 64;
+	giveIconToItem(gEnv->game.player.inventory[21]);
 
 	/* INITIALIZE SHIP SLOTS */
 
@@ -445,6 +462,7 @@ void SetupAdventureStart()
 	registerPlayerCharacter(new Character(L"Person 1"));
 	registerPlayerCharacter(new Character(L"Person 2"));
 
+	
 
 	giveRoleCaptain(cptn, 0);
 

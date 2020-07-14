@@ -8,6 +8,8 @@
 #include "LocaleLoader.h"
 #include "characterManagement.h"
 #include "tableInventory.h"
+#include "UIExtensions.h"
+#include "PersonHandlers.h"
 
 void BuildSchemeChooseCharacter();
 void BuildSchemeRoles();
@@ -17,13 +19,15 @@ void BuildPersonSkillTree(int crewPersonNumber);
 void UpdatePersonSkillTree();
 void UpdateStatPersonScreen();
 void BuildPanelChangePersonState();
-void personUIElementWasClicked(const int id, tgui::Widget::Ptr widget, const std::string& signalName);
-void rmPanelClickedPerson(const int id, tgui::Widget::Ptr widget, const std::string& signalName);
-void rmPanelChoosenAddedPerson(const int id, const int module_id, tgui::Widget::Ptr widget, const std::string& signalName);
 void ChangeActiveCharacter(int id);
 void ChangePersonPanelsState(PUIState::personUIstate state);
-void skillUp(Character *c, PassiveSkill *p, std::wstring treeName, tgui::Widget::Ptr widget, const std::string& signalName);
+void skillUp(Character *c, PassiveSkill *p, int treeNumber, tgui::Widget::Ptr widget, const std::string& signalName);
 void giveRoleFind(int id, int buttonId, tgui::Widget::Ptr widget, const std::string& signalName);
 void giveRole(Character *c, int buttonId, tgui::Widget::Ptr widget, const std::string& signalName);
 void giveRoleCaptain(Character *c, int buttonId);
 void registerPlayerCharacter(Character *c);
+void unregisterPlayerCharacter(int id);
+
+
+void applyEquipmentTooltipPersonUI(int id);
+void deleteAllTooltipsPersonUI();

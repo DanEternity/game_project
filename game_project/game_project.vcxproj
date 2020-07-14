@@ -236,6 +236,7 @@
     <ClCompile Include="Source\game.cpp" />
     <ClCompile Include="Source\GameLogicCore.cpp" />
     <ClCompile Include="Source\generationUtility.cpp" />
+    <ClCompile Include="Source\InventoryHandlers.cpp" />
     <ClCompile Include="Source\itemUtils.cpp" />
     <ClCompile Include="Source\loader.cpp" />
     <ClCompile Include="Source\LocaleLoader.cpp" />
@@ -243,6 +244,7 @@
     <ClCompile Include="Source\map.cpp" />
     <ClCompile Include="Source\menuOverlay.cpp" />
     <ClCompile Include="Source\personEquipmentUI.cpp" />
+    <ClCompile Include="Source\PersonHandlers.cpp" />
     <ClCompile Include="Source\postUpdate.cpp" />
     <ClCompile Include="Source\preload.cpp" />
     <ClCompile Include="Source\scriptCompiler.cpp" />
@@ -253,10 +255,13 @@
     <ClCompile Include="Source\scriptUtilsUI.cpp" />
     <ClCompile Include="Source\scriptWorkflowUtility.cpp" />
     <ClCompile Include="Source\sectorDrawUtility.cpp" />
+    <ClCompile Include="Source\ShipHandlers.cpp" />
     <ClCompile Include="Source\shipManagement.cpp" />
     <ClCompile Include="Source\shipModulesUI.cpp" />
+    <ClCompile Include="Source\Shop.cpp" />
     <ClCompile Include="Source\tableInventory.cpp" />
     <ClCompile Include="Source\uiEventHandlers.cpp" />
+    <ClCompile Include="Source\UIExtensions.cpp" />
     <ClCompile Include="Source\worldGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -281,6 +286,7 @@
     <ClInclude Include="Source\generationUtility.h" />
     <ClInclude Include="Source\graphics.h" />
     <ClInclude Include="Source\graphicsModel.h" />
+    <ClInclude Include="Source\InventoryHandlers.h" />
     <ClInclude Include="Source\item.h" />
     <ClInclude Include="Source\itemUtils.h" />
     <ClInclude Include="Source\loader.h" />
@@ -296,6 +302,7 @@
     <ClInclude Include="Source\objectStorage.h" />
     <ClInclude Include="Source\passiveSkill.h" />
     <ClInclude Include="Source\personEquipmentUI.h" />
+    <ClInclude Include="Source\PersonHandlers.h" />
     <ClInclude Include="Source\plan.h" />
     <ClInclude Include="Source\playerData.h" />
     <ClInclude Include="Source\poolObject.h" />
@@ -316,13 +323,17 @@
     <ClInclude Include="Source\sectorDrawUtility.h" />
     <ClInclude Include="Source\sectorGeneratorTemplate.h" />
     <ClInclude Include="Source\ship.h" />
+    <ClInclude Include="Source\ShipHandlers.h" />
     <ClInclude Include="Source\shipManagement.h" />
     <ClInclude Include="Source\shipModulesUI.h" />
+    <ClInclude Include="Source\Shop.h" />
+    <ClInclude Include="Source\shopClass.h" />
     <ClInclude Include="Source\stat.h" />
     <ClInclude Include="Source\stringHashGenerator.h" />
     <ClInclude Include="Source\tableInventory.h" />
     <ClInclude Include="Source\uiData.h" />
     <ClInclude Include="Source\uiEventHandlers.h" />
+    <ClInclude Include="Source\UIExtensions.h" />
     <ClInclude Include="Source\valueObjects.h" />
     <ClInclude Include="Source\worldGenerator.h" />
     <ClInclude Include="Source\worldGeneratorData.h" />

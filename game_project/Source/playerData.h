@@ -87,7 +87,7 @@ public:
 
 	// stats
 
-	int money = 0;
+	int money = 200;
 
 	// controls
 	float mouseWheelDelta = 0;
