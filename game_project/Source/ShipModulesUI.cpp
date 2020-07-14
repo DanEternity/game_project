@@ -54,7 +54,9 @@ void buildShipStats()
 	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Hull regeneration") + L": " + std::to_wstring((int)gEnv->game.player.ship->hullReg.total))), "shipStatHullReg");
 	y += 20;
 	//Hull resist to damgage
-	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Hull resist to damage") + L": " + std::to_wstring((int)gEnv->game.player.ship->hullResist.total))), "shipStatHullResist");
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Hull resist to damage") + L": " + std::to_wstring((int)gEnv->game.player.ship->hullResistPhysical.total))), "shipStatHullResistPhysical");
+	y += 20;
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Hull resist to damage") + L": " + std::to_wstring((int)gEnv->game.player.ship->hullResistEnergy.total))), "shipStatHullResistEnergy");
 	y += 20;
 	//Hull structure stability
 	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Hull structure stability") + L": "+ std::to_wstring((int)gEnv->game.player.ship->hullStructureStability.total))), "shipStatHullStructureStability");
@@ -63,7 +65,9 @@ void buildShipStats()
 	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield regeneration") + L": " + std::to_wstring((int)gEnv->game.player.ship->shieldReg.total))), "shipStatShieldRegeneration");
 	y += 20;
 	//Shield resist to damage
-	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield resist to damage") + L": " + std::to_wstring((int)gEnv->game.player.ship->shieldResist.total))), "shipStatShieldResist");
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield resist to damage") + L": " + std::to_wstring((int)gEnv->game.player.ship->shieldResistPhysical.total))), "shipStatShieldResistPhysical");
+	y += 20;
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield resist to damage") + L": " + std::to_wstring((int)gEnv->game.player.ship->shieldResistEnergy.total))), "shipStatShieldResistEnergy");
 	y += 20;
 	//Shield structure stability
 	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield structure stability") + L": " + std::to_wstring((int)gEnv->game.player.ship->shieldStructureStability.total))), "shipStatShieldStructureStability");
