@@ -614,8 +614,8 @@ void createModuleTooltip(Module * m)
 
 	std::wstring str = L"";
 	bool first = true;
-	str += L"Usage Power Supply: " + std::to_wstring((int)(static_cast<Module*>(m)->powerSupply)) + L"\n";
-	str += L"Usage High Power Supply: " + std::to_wstring((int)(static_cast<Module*>(m)->highPowerSupply)) + L"\n\n";
+	str += L"Usage Power Supply: " + std::to_wstring((int)(static_cast<Module*>(m)->powerSupply.total)) + L"\n";
+	str += L"Usage High Power Supply: " + std::to_wstring((int)(static_cast<Module*>(m)->highPowerSupply.total)) + L"\n\n";
 	for (auto i : static_cast<Module*>(m)->effects)
 	{
 		switch (static_cast<StatModEffect*>(i)->statName)
@@ -641,8 +641,11 @@ void createModuleTooltip(Module * m)
 		case statNames::hullReg:
 			str += GetString("Hull regeneration") + L" ";
 			break;
-		case statNames::hullResist:
-			str += GetString("Hull resist") + L" ";
+		case statNames::hullResistPhysical:
+			str += GetString("Hull physical resist") + L" ";
+			break;
+		case statNames::hullResistEnergy:
+			str += GetString("Hull energy resist") + L" ";
 			break;
 		case statNames::hullStructureStability:
 			str += GetString("Hull structure stability") + L" ";
@@ -680,8 +683,11 @@ void createModuleTooltip(Module * m)
 		case statNames::shieldReg:
 			str += GetString("Shield regeneration") + L" ";
 			break;
-		case statNames::shieldResist:
-			str += GetString("Shield resist") + L" ";
+		case statNames::shieldResistPhysical:
+			str += GetString("Shield physical resist") + L" ";
+			break;
+		case statNames::shieldResistEnergy:
+			str += GetString("Shield energy resist") + L" ";
 			break;
 		case statNames::shieldStructureStability:
 			str += GetString("Shield structure stability") + L" ";

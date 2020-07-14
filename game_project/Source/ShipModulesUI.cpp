@@ -323,11 +323,27 @@ void buildShipStats()
 
 	label = tgui::Label::create();
 	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label->setText(GetString("Hull resist to damage") + L": "
-		+ std::to_wstring((int)gEnv->game.player.ship->hullResist.total));
+	label->setText(GetString("Hull resist physical") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->hullResistPhysical.total)
+		+ L" ("
+		+ std::to_wstring(gEnv->game.player.ship->hullResistPhysical.total/(100 + gEnv->game.player.ship->hullResistPhysical.total))
+		+ L")");
 	label->setPosition(5, y);
 	label->setTextSize(18);
-	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label, "shipStatHullResist");
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label, "shipStatHullResistPhysical");
+
+	y += 20;
+
+	label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setText(GetString("Hull resist energy") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->hullResistEnergy.total)
+		+ L" ("
+		+ std::to_wstring(gEnv->game.player.ship->hullResistEnergy.total / (100 + gEnv->game.player.ship->hullResistEnergy.total))
+		+ L")");
+	label->setPosition(5, y);
+	label->setTextSize(18);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label, "shipStatHullResistEnergy");
 
 	y += 20;
 
@@ -353,11 +369,27 @@ void buildShipStats()
 
 	label = tgui::Label::create();
 	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label->setText(GetString("Shield resist to damage") + L": "
-		+ std::to_wstring((int)gEnv->game.player.ship->shieldResist.total));
+	label->setText(GetString("Shield resist physical") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->shieldResistPhysical.total)
+		+L" ("
+		+ std::to_wstring(gEnv->game.player.ship->shieldResistPhysical.total / (100 + gEnv->game.player.ship->shieldResistPhysical.total))
+		+ L")");
 	label->setPosition(5, y);
 	label->setTextSize(18);
-	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label, "shipStatShieldResist");
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label, "shipStatShieldResistPhysical");
+
+	y += 20;
+
+	label = tgui::Label::create();
+	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label->setText(GetString("Shield resist energy") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->shieldResistEnergy.total)
+		+ L" ("
+		+ std::to_wstring(gEnv->game.player.ship->shieldResistEnergy.total / (100 + gEnv->game.player.ship->shieldResistEnergy.total))
+		+ L")");
+	label->setPosition(5, y);
+	label->setTextSize(18);
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(label, "shipStatShieldResistEnergy");
 
 	y += 20;
 
@@ -412,9 +444,19 @@ void updateShipStatsScreen()
 	label->setText(GetString("Hull regeneration") + L": "
 		+ std::to_wstring((int)gEnv->game.player.ship->hullReg.total));
 
-	label = gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->get("shipStatHullResist")->cast<tgui::Label>();
-	label->setText(GetString("Hull resist to damage") + L": "
-		+ std::to_wstring((int)gEnv->game.player.ship->hullResist.total));
+	label = gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->get("shipStatHullResistPhysical")->cast<tgui::Label>();
+	label->setText(GetString("Hull resist physical") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->hullResistPhysical.total)
+		+ L" ("
+		+ std::to_wstring(gEnv->game.player.ship->hullResistPhysical.total / (100 + gEnv->game.player.ship->hullResistPhysical.total))
+		+ L")");
+
+	label = gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->get("shipStatHullResistEnergy")->cast<tgui::Label>();
+	label->setText(GetString("Hull resist energy") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->hullResistEnergy.total)
+		+ L" ("
+		+ std::to_wstring(gEnv->game.player.ship->hullResistEnergy.total / (100 + gEnv->game.player.ship->hullResistEnergy.total))
+		+ L")");
 
 	label = gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->get("shipStatHullStructureStability")->cast<tgui::Label>();
 	label->setText(GetString("Hull structure stability") + L": "
@@ -424,9 +466,19 @@ void updateShipStatsScreen()
 	label->setText(GetString("Shield regeneration") + L": "
 		+ std::to_wstring((int)gEnv->game.player.ship->shieldReg.total));
 
-	label = gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->get("shipStatShieldResist")->cast<tgui::Label>();
-	label->setText(GetString("Shield resist to damage") + L": "
-		+ std::to_wstring((int)gEnv->game.player.ship->shieldResist.total));
+	label = gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->get("shipStatShieldResistPhysical")->cast<tgui::Label>();
+	label->setText(GetString("Shield resist physical") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->shieldResistPhysical.total)
+		+ L" ("
+		+ std::to_wstring(gEnv->game.player.ship->shieldResistPhysical.total / (100 + gEnv->game.player.ship->shieldResistPhysical.total))
+		+ L")");
+
+	label = gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->get("shipStatShieldResistEnergy")->cast<tgui::Label>();
+	label->setText(GetString("Shield resist energy") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->shieldResistEnergy.total)
+		+ L" ("
+		+ std::to_wstring(gEnv->game.player.ship->shieldResistEnergy.total / (100 + gEnv->game.player.ship->shieldResistEnergy.total))
+		+ L")");
 
 	label = gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->get("shipStatShieldStructureStability")->cast<tgui::Label>();
 	label->setText(GetString("Shield structure stability") + L": "
@@ -659,8 +711,8 @@ void createModuleTooltipShipUI(Module * m)
 	std::wstring str = L"";
 	bool first = true;
 
-	str += L"Usage Power Supply: " + std::to_wstring((int)(static_cast<Module*>(m)->powerSupply)) + L"\n";
-	str += L"Usage High Power Supply: " + std::to_wstring((int)(static_cast<Module*>(m)->highPowerSupply)) + L"\n\n";
+	str += L"Usage Power Supply: " + std::to_wstring((int)(static_cast<Module*>(m)->powerSupply.total)) + L"\n";
+	str += L"Usage High Power Supply: " + std::to_wstring((int)(static_cast<Module*>(m)->highPowerSupply.total)) + L"\n\n";
 	for (auto i : static_cast<Module*>(m)->effects)
 	{
 		switch (static_cast<StatModEffect*>(i)->statName)
@@ -686,8 +738,11 @@ void createModuleTooltipShipUI(Module * m)
 		case statNames::hullReg:
 			str += GetString("Hull regeneration") + L" ";
 			break;
-		case statNames::hullResist:
-			str += GetString("Hull resist") + L" ";
+		case statNames::hullResistPhysical:
+			str += GetString("Hull physical resist") + L" ";
+			break;
+		case statNames::hullResistEnergy:
+			str += GetString("Hull energy resist") + L" ";
 			break;
 		case statNames::hullStructureStability:
 			str += GetString("Hull structure stability") + L" ";
@@ -725,8 +780,11 @@ void createModuleTooltipShipUI(Module * m)
 		case statNames::shieldReg:
 			str += GetString("Shield regeneration") + L" ";
 			break;
-		case statNames::shieldResist:
-			str += GetString("Shield resist") + L" ";
+		case statNames::shieldResistPhysical:
+			str += GetString("Shield physical resist") + L" ";
+			break;
+		case statNames::shieldResistEnergy:
+			str += GetString("Shield energy resist") + L" ";
 			break;
 		case statNames::shieldStructureStability:
 			str += GetString("Shield structure stability") + L" ";
