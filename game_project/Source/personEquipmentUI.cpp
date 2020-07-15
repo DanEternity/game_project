@@ -81,11 +81,8 @@ void BuildStatPersonScreen(int crewPersonNumber)
 
 void BuildPersonSkillTree(int crewPersonNumber)
 {
-	tgui::Panel::Ptr mainPersonPanel = createWidget(WidgetType::Panel, "Panel3", "100%", "10%", "0", "0", false)->cast<tgui::Panel>();
+	tgui::Panel::Ptr mainPersonPanel = createWidget(WidgetType::Panel, "Panel3", "85%", "10%", "0", "0", false)->cast<tgui::Panel>();
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(mainPersonPanel, "NamePointsPanel" + std::to_string(crewPersonNumber));
-
-	tgui::Panel::Ptr mainPersonPanel2 = createWidget(WidgetType::Panel, "Panel3", "25%", "90%", "0", "10%", false)->cast<tgui::Panel>();
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(mainPersonPanel, "PersonFirstSkillTree" + std::to_string(crewPersonNumber));
 
 	tgui::Label::Ptr lab = createWidget(WidgetType::Label, "Label", "0", "0", "(&.width - width) / 2", "10")->cast<tgui::Label>();
 	lab->setText(gEnv->game.player.crew.characters[crewPersonNumber]->name);
@@ -104,12 +101,16 @@ void BuildPersonSkillTree(int crewPersonNumber)
 
 	Character *c = gEnv->game.player.crew.characters[crewPersonNumber];
 
+	tgui::Panel::Ptr mainPersonPanel2 = createWidget(WidgetType::Panel, "Panel3", "25%", "90%", "0", "10%", false)->cast<tgui::Panel>();
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(mainPersonPanel2, "PersonFirstSkillTree" + std::to_string(crewPersonNumber));
+
 	for (int i = 1; i <= 5; i++)
 	{
 		tgui::Label::Ptr label = tgui::Label::create();
 		label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
 		label->setText("Level: " + std::to_string(i));
-		label->setPosition(5, 70 + 60 * (i - 1));
+		int posy = gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(crewPersonNumber))->getSize().y * 0.15 * i + gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(crewPersonNumber))->getSize().y * 0.05;
+		label->setPosition("1%", posy);
 		label->setTextSize(20);
 		mainPersonPanel2->add(label);
 		int rep = 0;
@@ -129,17 +130,17 @@ void BuildPersonSkillTree(int crewPersonNumber)
 				switch (rep)
 				{
 				case 1:
-					button->setPosition("(&.width - width) / 2 + 25", 70 + 60 * (i - 1));
+					button->setPosition("(&.width - width) / 2 + 25", posy);
 					break;
 				case 2:
 					switch (rep2)
 					{
 					case 1:
-						button->setPosition("(&.width - width) / 3 + 25", 70 + 60 * (i - 1));
+						button->setPosition("(&.width - width) / 3 + 25", posy);
 						rep2++;
 						break;
 					case 2:
-						button->setPosition("(&.width - width) / 3 * 2 + 25", 70 + 60 * (i - 1));
+						button->setPosition("(&.width - width) / 3 * 2 + 25", posy);
 						break;
 					}
 					break;
@@ -147,15 +148,15 @@ void BuildPersonSkillTree(int crewPersonNumber)
 					switch (rep2)
 					{
 					case 1:
-						button->setPosition("(&.width - width) / 4 + 25", 70 + 60 * (i - 1));
+						button->setPosition("(&.width - width) / 4 + 25", posy);
 						rep2++;
 						break;
 					case 2:
-						button->setPosition("(&.width - width) / 4 * 2 + 25", 70 + 60 * (i - 1));
+						button->setPosition("(&.width - width) / 4 * 2 + 25", posy);
 						rep2++;
 						break;
 					case 3:
-						button->setPosition("(&.width - width) / 4 * 3 + 25", 70 + 60 * (i - 1));
+						button->setPosition("(&.width - width) / 4 * 3 + 25", posy);
 						break;
 					}
 					break;
@@ -243,7 +244,7 @@ void UpdateStatPersonScreen()
 void BuildPanelChangePersonState()
 {
 
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::Panel, "Panel", "150", "580", "1% + 1010", "1%", false), "PanelChangePersonState");
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::Panel, "Panel", "15%", "100%", "1% + 1010", "1%", false), "PanelChangePersonState");
 
 	tgui::Button::Ptr button = createWidget(WidgetType::Button, "Button", "180", "200", "-15", "0")->cast<tgui::Button>();
 	button->setText("Inventory");
@@ -443,7 +444,7 @@ void unregisterPlayerCharacter(int id)
 			gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->remove(gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i)));
 
 			gEnv->game.adventureGUI.get<tgui::Panel>("NamePointsPanel" + std::to_string(i))->removeAllWidgets();
-			gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->remove(gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(i)));
+			gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->remove(gEnv->game.adventureGUI.get<tgui::Panel>("NamePointsPanel" + std::to_string(i)));
 			gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(i))->removeAllWidgets();
 			gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->remove(gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(i)));
 		}
