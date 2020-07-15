@@ -44,6 +44,7 @@ void preloadModels()
 	createModelDescriptor(L"itemSystem", "\\resources\\textures\\Items\\System.png");
 	createModelDescriptor(L"itemDefault", "\\resources\\textures\\Items\\Standart.png");
 	createModelDescriptor(L"itemEmpty", "\\resources\\textures\\Items\\Empty.png");
+	createModelDescriptor(L"noEnergy", "\\resources\\textures\\Items\\noEnergy.png");
 	//createModelDescriptor(L"fsfa", "fsaf", true);
 }
 

@@ -36,52 +36,57 @@ void buildShipStats()
 	std::string render = "Label";
 	int y = 5;
 	//Hull
-	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render,"5",std::to_string(y), 18, (GetString("Hull") + L": " + std::to_wstring((int)gEnv->game.player.ship->hull.current) + L"/" + std::to_wstring((int)gEnv->game.player.ship->hull.total))), "shipStatHull");
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Hull") + L": " + std::to_wstring((int)gEnv->game.player.ship->hull.current) + L"/" + std::to_wstring((int)gEnv->game.player.ship->hull.total) + L" (+" + std::to_wstring((int)gEnv->game.player.ship->hullReg.total) + L" / round; NONE / day)")), "shipStatHull");
 	y += 20;
 	//Shield
-	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield") + L": "+ std::to_wstring((int)gEnv->game.player.ship->shield.current)+ L"/"+ std::to_wstring((int)gEnv->game.player.ship->shield.total))), "shipStatShield");
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield") + L": " + std::to_wstring((int)gEnv->game.player.ship->shield.current) + L"/" + std::to_wstring((int)gEnv->game.player.ship->shield.total) + L" (+" + std::to_wstring((int)gEnv->game.player.ship->shieldReg.total) + L" / round; NONE / day)")), "shipStatShield");
 	y += 20;
 	//Power Supply
-	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Power supply") + L": "+ std::to_wstring((int)gEnv->game.player.ship->powerSupply.current)+ L"/"+ std::to_wstring((int)gEnv->game.player.ship->powerSupply.total))), "shipStatPowerSupply");
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Energy used") + L": "+ std::to_wstring((int)gEnv->game.player.ship->powerSupply.current)+ L"/"+ std::to_wstring((int)gEnv->game.player.ship->powerSupply.total))), "shipStatPowerSupply");
 	y += 20;
 	//High Power Supply
-	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("High power supply") + L": "+ std::to_wstring((int)gEnv->game.player.ship->highPowerSupply.current)+ L"/"+ std::to_wstring((int)gEnv->game.player.ship->highPowerSupply.total))), "shipStatHighPowerSupply");
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("High energy limit used") + L": "+ std::to_wstring((int)gEnv->game.player.ship->highPowerSupply.current)+ L"/"+ std::to_wstring((int)gEnv->game.player.ship->highPowerSupply.total))), "shipStatHighPowerSupply");
 	y += 20;
 	//Battle Action Points
-	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Action points in battle") + L": " + std::to_wstring((int)gEnv->game.player.ship->actionPoints.current) + L"/" + std::to_wstring((int)gEnv->game.player.ship->actionPoints.total))), "shipStatActionPoints");
-	y += 20;
-	//Hull regeneration
-	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Hull regeneration") + L": " + std::to_wstring((int)gEnv->game.player.ship->hullReg.total))), "shipStatHullReg");
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Action points in battle") + L": " +  std::to_wstring((int)gEnv->game.player.ship->actionPoints.total))), "shipStatActionPoints");
 	y += 20;
 	//Hull resist to damgage
-	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Hull resist to damage") + L": " + std::to_wstring((int)gEnv->game.player.ship->hullResistPhysical.total))), "shipStatHullResistPhysical");
-	y += 20;
-	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Hull resist to damage") + L": " + std::to_wstring((int)gEnv->game.player.ship->hullResistEnergy.total))), "shipStatHullResistEnergy");
-	y += 20;
-	//Hull structure stability
-	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Hull structure stability") + L": "+ std::to_wstring((int)gEnv->game.player.ship->hullStructureStability.total))), "shipStatHullStructureStability");
-	y += 20;
-	//Shield regeneration
-	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield regeneration") + L": " + std::to_wstring((int)gEnv->game.player.ship->shieldReg.total))), "shipStatShieldRegeneration");
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Hull resistance") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->hullResistPhysical.total)
+		+ L"/" + std::to_wstring((int)gEnv->game.player.ship->hullResistEnergy.total)
+		+ L"/" + std::to_wstring((int)gEnv->game.player.ship->hullStructureStability.total)
+		+ L" (Physical: "
+		+ std::to_wstring((int)gEnv->game.player.ship->hullResistPhysical.total != 0 ? (int)((gEnv->game.player.ship->hullResistPhysical.total / (gEnv->game.player.ship->hullResistPhysical.total + 100)) * 100) : 0)
+		+ L"%; Energy: " 
+		+ std::to_wstring((int)gEnv->game.player.ship->hullResistEnergy.total != 0 ? (int)((gEnv->game.player.ship->hullResistEnergy.total / (gEnv->game.player.ship->hullResistEnergy.total + 100)) * 100) : 0)
+		+ L"%; Crit: " 
+		+ std::to_wstring((int)gEnv->game.player.ship->hullStructureStability.total != 0 ? (int)((gEnv->game.player.ship->hullStructureStability.total / (gEnv->game.player.ship->hullStructureStability.total + 100)) * 100) : 0)
+		+ L"%)")), "shipStatHullResist");
 	y += 20;
 	//Shield resist to damage
-	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield resist to damage") + L": " + std::to_wstring((int)gEnv->game.player.ship->shieldResistPhysical.total))), "shipStatShieldResistPhysical");
+	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield resistance") + L": "
+		+ std::to_wstring((int)gEnv->game.player.ship->shieldResistPhysical.total)
+		+ L"/" + std::to_wstring((int)gEnv->game.player.ship->shieldResistEnergy.total)
+		+ L"/" + std::to_wstring((int)gEnv->game.player.ship->shieldStructureStability.total)
+		+ L" (Physical: "
+		+ std::to_wstring((int)gEnv->game.player.ship->shieldResistPhysical.total != 0 ? (int)((gEnv->game.player.ship->shieldResistPhysical.total / (gEnv->game.player.ship->shieldResistPhysical.total + 100)) * 100) : 0)
+		+ L"%; Energy: "
+		+ std::to_wstring((int)gEnv->game.player.ship->shieldResistEnergy.total != 0 ? (int)((gEnv->game.player.ship->shieldResistEnergy.total / (gEnv->game.player.ship->shieldResistEnergy.total + 100)) * 100) : 0)
+		+ L"%; Crit: "
+		+ std::to_wstring((int)gEnv->game.player.ship->shieldStructureStability.total != 0 ? (int)((gEnv->game.player.ship->shieldStructureStability.total / (gEnv->game.player.ship->shieldStructureStability.total + 100)) * 100) : 0)
+		+ L"%)")), "shipStatShieldResistPhysical");
 	y += 20;
-	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield resist to damage") + L": " + std::to_wstring((int)gEnv->game.player.ship->shieldResistEnergy.total))), "shipStatShieldResistEnergy");
-	y += 20;
-	//Shield structure stability
-	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield structure stability") + L": " + std::to_wstring((int)gEnv->game.player.ship->shieldStructureStability.total))), "shipStatShieldStructureStability");
 
 	for (int i(0); i < gEnv->game.player.ship->modules.size(); i++)
 	{
 		if (gEnv->game.player.ship->modules[i] != NULL) {
-			if (!gEnv->game.player.ship->modules[i]->online)
-				gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(i))->setRenderer(gEnv->globalTheme.getRenderer("Button2"));
+			if (gEnv->game.player.ship->modules[i]->online)
+				gEnv->game.adventureGUI.get<tgui::BitmapButton>("ShipSchemeModule" + std::to_string(i))->setImage(*gEnv->game.player.ship->modules[i]->icon);
 			else
-				gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(i))->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+				gEnv->game.adventureGUI.get<tgui::BitmapButton>("ShipSchemeModule" + std::to_string(i))->setImage(gEnv->modelDB[L"noEnergy"]->tex);
 		}
 		else
-			gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(i))->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+			gEnv->game.adventureGUI.get<tgui::BitmapButton>("ShipSchemeModule" + std::to_string(i))->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	}
 }
 

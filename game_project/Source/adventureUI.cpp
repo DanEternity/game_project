@@ -55,6 +55,9 @@ void createAdventureUIButtons()
 	gEnv->game.player.ship->shield.total = 0;
 	gEnv->game.player.ship->shield.current = 0;
 
+	gEnv->game.player.ship->hullResistEnergy.baseValue = 100;
+	gEnv->game.player.ship->hullResistEnergy.total = 100;
+	gEnv->game.player.ship->hullResistEnergy.current = 100;
 
 	//minimap
 
@@ -65,7 +68,7 @@ void createAdventureUIButtons()
 	gEnv->game.adventureGUI.add(createWidget(WidgetType::Panel, "Panel", "1200", "675", "20%", "15%", false), "playerUIMainPanel");
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel")->add(createWidget(WidgetType::Panel, "Panel2","1176","590","1%","1%", false),"playerUISubPanel");
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::Panel, "Panel3", "600", "200", "1%", "65%", false), "playerUIGridSubPanel");
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::ScrollablePanel, "Panel3", "450", "570", "60%", "2%", false), "shipStatsPanel");
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::ScrollablePanel, "Panel3", "43%", "570", "55%", "2%", false), "shipStatsPanel");
 
 	// create buttons on main interface panel
 
