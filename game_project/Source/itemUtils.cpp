@@ -5,6 +5,7 @@ void giveIconToItem(Item * item)
 	switch (item->itemType)
 	{
 	case itemType::module:
+		static_cast<Module*>(item)->CalcPowerSupply(); // this souldn't be called there, but there are no special place to handle this // Its probably a temporal solution.
 		switch (static_cast<Module*>(item)->slot)
 		{
 		case moduleSlot::ModuleSlotType::core:

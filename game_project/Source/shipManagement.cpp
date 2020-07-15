@@ -29,11 +29,13 @@ void clearStats(Ship * p)
 
 					   // defence stats
 	p->hull.clear();
-	p->hullResist.clear();
+	p->hullResistPhysical.clear();
+	p->hullResistEnergy.clear();
 	p->hullReg.clear();
 	p->hullStructureStability.clear();
 	p->shield.clear();
-	p->shieldResist.clear();
+	p->shieldResistPhysical.clear();
+	p->shieldResistEnergy.clear();
 	p->shieldReg.clear();
 	p->shieldStructureStability.clear();
 
@@ -165,6 +167,9 @@ void collectModules(Ship * p)
 			continue;
 
 		m->online = false; // disable all by default then boot one by one
+
+		m->CalcPowerSupply();
+
 	}
 
 	//for (int i(0); i < p->modules.size(); i++)
@@ -222,8 +227,8 @@ void collectModules(Ship * p)
 				{
 					
 					m->online = true;
-					p->powerSupply.current += m->powerSupply;
-					p->highPowerSupply.current += m->highPowerSupply;
+					p->powerSupply.current += m->powerSupply.total;
+					p->highPowerSupply.current += m->highPowerSupply.total;
 
 					applySysModuleEffects(p, m);
 
@@ -247,7 +252,7 @@ void collectModules(Ship * p)
 
 		if (m->slot == moduleSlot::hyperdrive)
 		{
-			if (p->powerSupply.total >= m->powerSupply && p->highPowerSupply.total >= m->highPowerSupply)
+			if (p->powerSupply.total >= m->powerSupply.total && p->highPowerSupply.total >= m->highPowerSupply.total)
 			{
 				
 				m->online = true;
@@ -321,8 +326,8 @@ bool checkRequirements(Ship * p, Module * m)
 
 	bool check = true;
 
-	if (!(p->powerSupply.total - p->powerSupply.current >= m->powerSupply
-		&& p->highPowerSupply.total - p->highPowerSupply.current >= m->highPowerSupply))
+	if (!(p->powerSupply.total - p->powerSupply.current >= m->powerSupply.total
+		&& p->highPowerSupply.total - p->highPowerSupply.current >= m->highPowerSupply.total))
 	{
 		return false;
 	}

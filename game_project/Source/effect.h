@@ -25,7 +25,7 @@ namespace statNames {
 	// it may not work for specific objects and should be ignored then
 
 	enum StatName {
-		
+
 		null = 0,
 
 
@@ -35,11 +35,13 @@ namespace statNames {
 
 		// defence stats
 		hull,
-		hullResist,
+		hullResistPhysical,
+		hullResistEnergy,
 		hullReg,
 		hullStructureStability,
 		shield,
-		shieldResist,
+		shieldResistPhysical,
+		shieldResistEnergy,
 		shieldReg,
 		shieldStructureStability,
 
@@ -84,6 +86,43 @@ namespace statNames {
 
 		characterSocial,
 
+		// weapon module stat
+
+		weaponFullCooldown,
+		weaponActivationsLimit,
+		weaponActivationsPartial,
+		weaponPartialCooldown,
+
+		weaponActivationsRemainingPartial,
+		weaponActivationsRemainingFull,
+
+		weaponBaseDamage,
+		weaponProjectilesAmount,
+
+		weaponOptimalDistance,
+		weaponAccuracy,
+		weaponDamagePenalty,
+		weaponAccuracyPenalty,
+
+		weaponResistanceIgnoreHullFlat,
+		weaponResistanceIgnoreHullPercent,
+
+		weaponResistanceIgnoreShieldFlat,
+		weaponResistanceIgnoreShieldPercent,
+
+		weaponCriticalChanceHull,
+		weaponCriticalDamageHull,
+
+		weaponCriticalChanceShield,
+		weaponCriticalDamageShield,
+
+		weaponWeaponAmmoMax,
+
+		// module
+
+		modulePowerConsumption,
+		moduleHighPowerConsumption,
+
 	};
 
 }
@@ -93,6 +132,7 @@ namespace targetType {
 	enum TargetType {
 		ship,
 		character,
+		module,
 	};
 
 }

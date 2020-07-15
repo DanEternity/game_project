@@ -43,11 +43,13 @@ public:
 	
 	// defence stats
 	Stat hull;
-	Stat hullResist;
+	Stat hullResistPhysical;
+	Stat hullResistEnergy;
 	Stat hullReg;
 	Stat hullStructureStability;
 	Stat shield;
-	Stat shieldResist;
+	Stat shieldResistPhysical;
+	Stat shieldResistEnergy;
 	Stat shieldReg;
 	Stat shieldStructureStability;
 
@@ -84,12 +86,14 @@ public:
 		shipStats[statNames::actionPoints] = &actionPoints;
 
 		shipStats[statNames::hull] = &hull;
-		shipStats[statNames::hullResist] = &hullResist;
+		shipStats[statNames::hullResistPhysical] = &hullResistPhysical;
+		shipStats[statNames::hullResistEnergy] = &hullResistEnergy;
 		shipStats[statNames::hullReg] = &hullReg;
 		shipStats[statNames::hullStructureStability] = &hullStructureStability;
 
 		shipStats[statNames::shield] = &shield;
-		shipStats[statNames::shieldResist] = &shieldResist;
+		shipStats[statNames::shieldResistPhysical] = &shieldResistPhysical;
+		shipStats[statNames::shieldResistEnergy] = &shieldResistEnergy;
 		shipStats[statNames::shieldReg] = &shieldReg;
 		shipStats[statNames::shieldStructureStability] = &shieldStructureStability;
 

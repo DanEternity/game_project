@@ -1865,8 +1865,8 @@ void ScriptSystem::p_processEditModuleProperties(EditModulePropertiesScript * co
 		return;
 	}
 
-	p->powerSupply = powerSupply;
-	p->highPowerSupply = powerHighSupply;
+	p->powerSupply.baseValue = powerSupply;
+	p->highPowerSupply.baseValue = powerHighSupply;
 	p->powerPriority = powerPriority;
 
 	// Type

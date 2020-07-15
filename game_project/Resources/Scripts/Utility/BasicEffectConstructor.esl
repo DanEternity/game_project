@@ -1,0 +1,70 @@
+﻿#import "core.PropertiesCollection"
+#extLinkRename "core.PropertiesCollection->db"
+#extLocal "local"
+@init
+
+CreatePool "$EXT:local:pool" "9"
+
+// type 1
+// Flat stat, one stat (left)
+
+AddToPool "$EXT:local:pool" "100" "1", "1", "hull", "50", "20",
+"0", "0", "0", "0";
+AddToPool "$EXT:local:pool" "100" "1", "1", "actionPoints", "10", "6",
+"0", "0", "0", "0";
+
+// Type 2
+// Base stat modifier, one stat (left) 
+
+AddToPool "$EXT:local:pool" "100" "2", "2", "powerSupply", "15", "5",
+"0", "0", "0", "0";
+
+// Type 3
+// Flat stat, two stats 
+
+// Type 4
+// Base stat modifier, two stats. Usually one stat is good other bad
+// Example: +40% damage, +50% power consumption
+
+AddToPool "$EXT:local:pool" "100" "4", "2", "powerSupply", "30", "5",
+"2", "stealth", "20", "5";
+
+changeScriptEntryPoint "$self" "@start"
+@start
+
+// INPUT: key, rarity, destType, EffectParam1, destName1, destCount1,
+// EffectParam2, destName2, destCount2,
+
+PutFromPointer "$_arg0" to "$_key"
+PutFromPointer "$_arg1" to "$_rarity"
+
+GetFromPool "$EXT:local:pool" "$_key" "$_type", "$_param1" "$_name1", "$_base1", 
+"$_delta1", "$_param1", "$_name1", "$_base1", "$_delta1";
+
+Ariphmetic "$_key * 14444" to "$_key1"
+Abs "$_key1" to "$_key1"
+Ariphmetic "$_key1 % 10000" to "$_key1"
+Ariphmetic "$_key1 / 10000" to "$_key1"
+Ariphmetic "$_delta1 * $_key1" to "$_delta1"
+Ariphmetic "$_base1 + $_delta1" to "$_base1"
+
+
+Ariphmetic "$_key * 37777" to "$_key2"
+Abs "$_key2" to "$_key2"
+Ariphmetic "$_key2 % 10000" to "$_key2"
+Ariphmetic "$_key2 / 10000" to "$_key2"
+Ariphmetic "$_delta1 * $_key1" to "$_delta2"
+Ariphmetic "$_base2 + $_delta2" to "$_base2"
+
+PutToPointer "$_type" to "$_arg2"
+PutToPointer "$_param1" to "$_arg3"
+PutToPointer "$_name1" to "$_arg4"
+PutToPointer "$_base1" to "$_arg5"
+PutToPointer "$_param2" to "$_arg6"
+PutToPointer "$_name2" to "$_arg7"
+PutToPointer "$_base2" to "$_arg8"
+
+// End section
+Terminate
+
+#registerFunction "$EXT:db:1001"

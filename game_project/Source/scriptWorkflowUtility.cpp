@@ -376,11 +376,13 @@ statNames::StatName scriptUtil::getFromStringStatName(std::wstring name)
 	if (name == L"highPowerSupply") { return statNames::highPowerSupply; } 
 	if (name == L"actionPoints") { return statNames::actionPoints; } 
 	if (name == L"hull") { return statNames::hull; }
-	if (name == L"hullResist") { return statNames::hullResist; }
+	if (name == L"hullResistPhysical") { return statNames::hullResistPhysical; }
+	if (name == L"hullResistEnergy") { return statNames::hullResistEnergy; }
 	if (name == L"hullReg") { return statNames::hullReg; }
 	if (name == L"hullStructureStability") { return statNames::hullStructureStability; }
 	if (name == L"shield") { return statNames::shield; }
-	if (name == L"shieldResist") { return statNames::shieldResist; }
+	if (name == L"shieldResistPhysical") { return statNames::shieldResistPhysical; }
+	if (name == L"shieldResistEnergy") { return statNames::shieldResistEnergy; }
 	if (name == L"shieldReg") { return statNames::shieldReg; }
 	if (name == L"shieldStructureStability") { return statNames::shieldStructureStability; }
 	if (name == L"evasion") { return statNames::evasion; }

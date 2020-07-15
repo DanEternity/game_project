@@ -1,6 +1,9 @@
 ﻿#import "core.ItemModule"
 #extLinkRename "core.ItemModule->db"
 
+#import "core.PropertiesCollection"
+#extLinkRename "core.PropertiesCollection->db2"
+
 // input
 // arg0  arg1    arg2    arg3    arg4
 // key, quality, level, rarity, destination
@@ -11,56 +14,152 @@ PutFromPointer "$_arg1" to "$_q" // quality
 PutFromPointer "$_arg2" to "$_level" // level
 PutFromPointer "$_arg3" to "$_rarity" // rarity
 
+Put "1" to "$_levelMin" // minimal level
+
 Ariphmetic "$_q / 1000" to "$_qmod" // multiplier 
 
-// energy supply param // NEGATIVE
-Ariphmetic "$_key * 44441" to "$_pA"
-Abs "$_pA" to "$_pA"
-Ariphmetic "$_pA % 10000" to "$_pA"
-Ariphmetic "$_pA / 10000" to "$_pA"
-Ariphmetic "$_pA * 5" to "$_pA"
-Ariphmetic "$_pA + 15" to "$_pA"
-Ariphmetic "$_level * 0.2" to "$_temp"
-Ariphmetic "$_pA + $_temp" to "$_pA"
-Ariphmetic "$_rarity * 0.5" to "$_temp"
-Ariphmetic "$_pA - $_temp" to "$_pA"
-Ariphmetic "$_pA / $_qmod" to "$_pA"
+Ariphmetic "$_rarity - 1" to "$_R"
+Ariphmetic "$_R / 2" to "$_tmp"
+Ariphmetic "$_R % 2" to "$_tmp2"
+Ariphmetic "$_tmp2 / 2" to "$_tmp2"
+Ariphmetic "$_tmp - $_tmp2" to "$_rarityMod"
 
-// mobility param // positive
-Ariphmetic "$_key * 33331" to "$_pC"
-Abs "$_pC" to "$_pC"
-Ariphmetic "$_pC % 10000" to "$_pC"
-Ariphmetic "$_pC / 10000" to "$_pC"
-Ariphmetic "$_pC * 10" to "$_pC"
-Ariphmetic "$_pC + 40" to "$_pC"
-Ariphmetic "$_level * 0.4" to "$_temp"
-Ariphmetic "$_pC + $_temp" to "$_pC"
-Ariphmetic "$_rarity * 2.5" to "$_temp"
-Ariphmetic "$_pC + $_temp" to "$_pC"
-Ariphmetic "$_pC * $_qmod" to "$_pC"
+Ariphmetic "$_level - $_levelMin" "$_levelMod"
 
-// evasion param // positive
-Ariphmetic "$_key * 27731" to "$_pD"
-Abs "$_pD" to "$_pD"
-Ariphmetic "$_pD % 10000" to "$_pD"
-Ariphmetic "$_pD / 10000" to "$_pD"
-Ariphmetic "$_pD * 10" to "$_pD"
-Ariphmetic "$_pD + 20" to "$_pD"
-Ariphmetic "$_level * 0.2" to "$_temp"
-Ariphmetic "$_pD + $_temp" to "$_pD"
-Ariphmetic "$_rarity * 1.25" to "$_temp"
-Ariphmetic "$_pD + $_temp" to "$_pD"
-Ariphmetic "$_pD * $_qmod" to "$_pD"
+Ariphmetic "$_rarityMod * 0.05" to "$_positiveMod"
+Ariphmetic "$_positiveMod + 1" to "$_positiveMod"
 
+Ariphmetic "$_levelMod * 0.02" to "$_positiveTmp"
+Ariphmetic "$_positiveTmp + 1" to "$_positiveTmp"
 
+Ariphmetic "$_positiveMod * $_positiveTmp" to "$_positiveMod"
+
+Ariphmetic "$_rarityMod * 0.04" "$_rarityMod"
+Ariphmetic "1 - $_rarityMod" "$_negativeMod"
+Ariphmetic "$_levelMod * 0.01" "$_levelMod"
+Ariphmetic "$_negativeMod - $_levelMod" "$_negativeMod"
+
+CreateSysModule "$_p" "temp_name" 
+
+Put "0" to "$_pEnergy"
+Put "0" to "$_pEnergyHigh"
+
+// required Energy supply // positive
+Put "15" to "$_b1" // base
+Put "1.5" to "$_r1" // range
+Ariphmetic "$_key * 11113" to "$_k1"
+Abs "$_k1" to "$_k1" // key koef
+Ariphmetic "$_k1 % 10000" to "$_k1"
+Ariphmetic "$_k1 / 10000" to "$_k1"
+Ariphmetic "$_k1 * $_r1" to "$_a1"
+Ariphmetic "$_a1 + $_b1" to "$_a1"
+Ariphmetic "$_a1 * $_positiveMod" "$_a1" 
+//Ariphmetic "$_a1 / $_qmod" "$_a1" // quality does not affect power usage
+Put "$_a1" to "$_pEnergy"
+
+// mobility // positive
+Put "20" to "$_b1" // base
+Put "2" to "$_r1" // range
+Ariphmetic "$_key * 44443" to "$_k1"
+Abs "$_k1" to "$_k1" // key koef
+Ariphmetic "$_k1 % 10000" to "$_k1"
+Ariphmetic "$_k1 / 10000" to "$_k1"
+Ariphmetic "$_k1 * $_r1" to "$_a1"
+Ariphmetic "$_a1 + $_b1" to "$_a1"
+Ariphmetic "$_a1 * $_positiveMod" "$_a1" 
+Ariphmetic "$_a1 * $_qmod" "$_a1"
+CreateModStatEffect "$_effect" "ship" "mobility" "$_a1" "0" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+
+// evasion // positive
+Put "10" to "$_b1" // base
+Put "1" to "$_r1" // range
+Ariphmetic "$_key * 22333" to "$_k1"
+Abs "$_k1" to "$_k1" // key koef
+Ariphmetic "$_k1 % 10000" to "$_k1"
+Ariphmetic "$_k1 / 10000" to "$_k1"
+Ariphmetic "$_k1 * $_r1" to "$_a1"
+Ariphmetic "$_a1 + $_b1" to "$_a1"
+Ariphmetic "$_a1 * $_positiveMod" "$_a1" 
+Ariphmetic "$_a1 * $_qmod" "$_a1"
+CreateModStatEffect "$_effect" "ship" "evasion" "$_a1" "0" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+
+// variable init
+Put "0" to "$_type1"
+Put "0" to "$_effect1"
+Put "0" to "$_effect2"
+// debug
+//Put "5" to "$_rarity"
+Put "$_key" to "$_key2"
+// end debug
+
+ifDoJump "$_rarity < 2" "@common"
+ifDoJump "$_rarity < 4" "@uncommon"
+ifDoJump "$_rarity < 6" "@rare"
+ifDoJump "$_rarity < 8" "@exceptional"
+jump "@exotic"
+@common
+Put "0" "$_rarityTier" 
+// do nothing
+Jump "@next1"
+@uncommon
+Put "1" "$_rarityTier" 
+// get 1 effect
+Call "$EXT:db2:1011" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2"; 
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Jump "@next1"
+@rare
+Put "2" "$_rarityTier" 
+Call "$EXT:db2:1011" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2";
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Ariphmetic "$_key2 * 2" to "$_key2"
+Call "$EXT:db2:1011" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2";
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Jump "@next1"
+@exceptional
+Put "3" "$_rarityTier" 
+Call "$EXT:db2:1011" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2";
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Ariphmetic "$_key2 * 2" to "$_key2"
+Call "$EXT:db2:1011" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2";
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Ariphmetic "$_key2 * 2" to "$_key2"
+Call "$EXT:db2:1011" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2";
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Jump "@next1"
+@exotic
+Put "4" "$_rarityTier" 
+Call "$EXT:db2:1011" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2";
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Ariphmetic "$_key2 * 2" to "$_key2"
+Call "$EXT:db2:1011" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2";
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Ariphmetic "$_key2 * 2" to "$_key2"
+Call "$EXT:db2:1011" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2"; 
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Ariphmetic "$_key2 * 2" to "$_key2"
+Call "$EXT:db2:1011" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2";
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Jump "@next1"
+
+@next1
 Put "Basic engine" to "$_mname"
-
 IfDoJump "$_q >= 1500" "@up3"
 IfDoJump "$_q >= 1300" "@up2"
 IfDoJump "$_q >= 1100" "@up1"
 IfDoJump "$_q >= 900" "@normal"
 IfDoJump "$_q >= 750" "@bad"
-
 @broken
 Put "broken" to "$_qname"
 StringConcat "Broken " "$_mname" "$_mname"
@@ -84,19 +183,11 @@ Jump "@next"
 Put "legendary" to "$_qname"
 StringConcat "$_mname" "★" "$_mname"
 Jump "@next"
-
 @next
-CreateSysModule "$_p" "My_module" 
+
 EditItemProperties "$_p" "$_level" "$_rarity" "1011" "none" "$_mname"
 EditItemConstructableProperties "$_p" "$_key" "$_q" "$_qname"
-EditModuleProperties "$_p" "system" "engine" "large" "$_pA" "0" "5"
-
-
-CreateModStatEffect "$_effect" "ship" "mobility" "$_pC" "0" "0" "0"
-ApplyEffectToSysModule "$_effect" "$_p"
-
-CreateModStatEffect "$_effect" "ship" "evasion" "$_pD" "0" "0" "0"
-ApplyEffectToSysModule "$_effect" "$_p"
+EditModuleProperties "$_p" "system" "engine" "large" "$_pEnergy" "$_pEnergyHigh" "5"
 
 PutToPointer "$_p" "$_arg4"
 
