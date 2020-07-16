@@ -52,6 +52,9 @@
     <Filter Include="Adventure\UI\Handlers">
       <UniqueIdentifier>{37e2aed1-fad3-49b8-9ace-daf04598bf32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SpaceBattle">
+      <UniqueIdentifier>{7bdaae38-0fd0-4e5d-b27e-29ce3ba0c34e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -167,6 +170,9 @@
     </ClCompile>
     <ClCompile Include="Source\Shop.cpp">
       <Filter>Adventure\UI\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\spaceBattleCore.cpp">
+      <Filter>SpaceBattle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -394,6 +400,15 @@
     </ClInclude>
     <ClInclude Include="Source\shopClass.h">
       <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\spaceBattleCore.h">
+      <Filter>SpaceBattle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\spaceBattleData.h">
+      <Filter>SpaceBattle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\spaceBattleSegment.h">
+      <Filter>SpaceBattle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

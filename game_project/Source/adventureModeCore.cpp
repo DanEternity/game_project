@@ -133,6 +133,15 @@ void updateAdventureGameMode(double delteTime)
 	}
 	*/
 
+	// DEBUG
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+	{
+
+		gEnv->game.activeGameMode = gameMode::spaceBattleMode;
+
+	}
+
 	if (gEnv->game.adventureData.currentSectorId == "null")
 	{
 		gEnv->game.adventureData.currentSectorId = gEnv->game.adventureData.sectors.begin()->first;
@@ -541,6 +550,9 @@ void drawAdventureGameMode(double deltaTime)
 		but->setPosition(((marker->pos.x - gEnv->game.player.shipPosition.x) / 15) + lab->getSize().x / 2 - 7.5, ((marker->pos.y - gEnv->game.player.shipPosition.y) / 10) + lab->getSize().y / 2 - 7.5);
 		gEnv->game.adventureGUI.get<tgui::Panel>("minimap")->add(but);
 	}
+
+	// debug
+
 
 }
 

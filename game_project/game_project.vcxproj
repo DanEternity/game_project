@@ -259,6 +259,7 @@
     <ClCompile Include="Source\shipManagement.cpp" />
     <ClCompile Include="Source\shipModulesUI.cpp" />
     <ClCompile Include="Source\Shop.cpp" />
+    <ClCompile Include="Source\spaceBattleCore.cpp" />
     <ClCompile Include="Source\tableInventory.cpp" />
     <ClCompile Include="Source\uiEventHandlers.cpp" />
     <ClCompile Include="Source\UIExtensions.cpp" />
@@ -328,6 +329,9 @@
     <ClInclude Include="Source\shipModulesUI.h" />
     <ClInclude Include="Source\Shop.h" />
     <ClInclude Include="Source\shopClass.h" />
+    <ClInclude Include="Source\spaceBattleCore.h" />
+    <ClInclude Include="Source\spaceBattleData.h" />
+    <ClInclude Include="Source\spaceBattleSegment.h" />
     <ClInclude Include="Source\stat.h" />
     <ClInclude Include="Source\stringHashGenerator.h" />
     <ClInclude Include="Source\tableInventory.h" />

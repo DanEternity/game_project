@@ -9,6 +9,7 @@
 #include "uiData.h"
 #include "localization.h"
 #include "gameLogic.h"
+#include "spaceBattleData.h"
 
 namespace menuState
 {
@@ -181,6 +182,9 @@ public:
 
 	// game logic data
 	GameLogicData gameLogic;
+
+	// space battle info
+	SpaceBattleData spaceBattle;
 
 	// generation utility
 

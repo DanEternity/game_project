@@ -7,6 +7,7 @@
 #include "adventureModeCore.h"
 #include "adventureUI.h"
 #include "worldGenerator.h"
+#include "spaceBattleCore.h"
 
 void updateGameCycle(double deltaTime)
 {
@@ -32,6 +33,9 @@ void updateGameCycle(double deltaTime)
 			drawAdventureGameMode(deltaTime);
 			DrawAdventureUI();
 			break;
+		case gameMode::spaceBattleMode:
+
+			break;
 		default:
 			// invalid game mode
 			// Probably critical error
@@ -51,6 +55,9 @@ void updateGameCycle(double deltaTime)
 		case gameMode::adventureMode:
 			updateAdventureGameMode(deltaTime);
 			updateAdventureUI();
+			break;
+		case gameMode::spaceBattleMode:
+			updateSpaceBattle(deltaTime);
 			break;
 		default:
 			// invalid game mode

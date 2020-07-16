@@ -45,6 +45,10 @@ void preloadModels()
 	createModelDescriptor(L"itemDefault", "\\resources\\textures\\Items\\Standart.png");
 	createModelDescriptor(L"itemEmpty", "\\resources\\textures\\Items\\Empty.png");
 	createModelDescriptor(L"noEnergy", "\\resources\\textures\\Items\\noEnergy.png");
+
+	//Space battle textures
+	createModelDescriptor(L"spaceBattleMapSegment", "\\resources\\textures\\Battle\\battlefield_segment.png");
+	createModelDescriptor(L"spaceBattleMapSegmentHover", "\\resources\\textures\\Battle\\battlefield_segment_hover.png");
 	//createModelDescriptor(L"fsfa", "fsaf", true);
 }
 
