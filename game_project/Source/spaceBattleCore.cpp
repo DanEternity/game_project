@@ -52,8 +52,8 @@ void updateSpaceBattle(double deltaTime)
 		float scale = sb->scale;
 		float x, y;
 
-		x = sb->cameraX  - (gEnv->graphics.windowSizeX / 2);
-		y = sb->cameraY  - (gEnv->graphics.windowSizeY / 2);
+		x = sb->cameraX  - (gEnv->graphics.windowSizeX * scale / 2);
+		y = sb->cameraY  - (gEnv->graphics.windowSizeY * scale / 2);
 
 		//x = gEnv->game.player.cameraPosition.x * 2;
 		//y = gEnv->game.player.cameraPosition.y * 2;
@@ -84,21 +84,21 @@ void updateSpaceBattle(double deltaTime)
 
 				if (qy % 2 == 1)
 				{
-					mx = x + dx * qx + subLineOffset;
-					my = y + dy * qy;
+					mx = -x + dx * qx + subLineOffset;
+					my = -y + dy * qy;
 				}
 					
 				else
 				{
-					mx = x + dx * qx;
-					my = y + dy * qy;
+					mx = -x + dx * qx;
+					my = -y + dy * qy;
 				}
 				
 				sb->map[qy][qx]->screenX = mx;
 				sb->map[qy][qx]->screenY = my;
 
 				float dist = ((mx - mousePos.x)*(mx - mousePos.x)) + ((my - mousePos.y)*(my - mousePos.y));
-				if (dist < (100 * 100 / scale) && dist < minDist)
+				if (dist < (140 * 140 / scale / scale) && dist < minDist)
 				{
 					pickX = qx;
 					pickY = qy;
@@ -156,8 +156,8 @@ void updateSpaceBattle(double deltaTime)
 			qMove.y += 1;
 		}
 		float moveSpeed = 2.5f * scale;
-		sb->cameraX -= qMove.x * moveSpeed;
-		sb->cameraY -= qMove.y * moveSpeed;
+		sb->cameraX += qMove.x * moveSpeed;
+		sb->cameraY += qMove.y * moveSpeed;
 
 		sb->scale -= (gEnv->game.player.mouseWheelDelta / 2);
 
