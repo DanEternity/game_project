@@ -17,10 +17,18 @@ public:
 
 	std::string state;
 
+	int turnNumber;
+
+	std::vector<int> factionOrder; // factions make moves sequentially by an order described in this structure
+	int currentFactionIndex; // vector index, not faction index
+	std::string turnProcessingState = "null";
+
 	SpaceBattleData()
 	{
 		maxLines = 12;
 		maxLength = 20;
+		
+		turnNumber = 1;
 
 		state = "init";
 
@@ -37,5 +45,8 @@ public:
 
 	float cameraX, cameraY;
 	float scale = 2;
+
+	// UI handler
+	tgui::Gui GUI;
 
 };

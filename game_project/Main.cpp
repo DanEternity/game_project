@@ -26,10 +26,12 @@ int main()
 	gEnv->globalGui.setTarget(gEnv->globalWindow);
 	gEnv->scripts.scriptGui.setTarget(gEnv->globalWindow);
 	gEnv->game.adventureGUI.setTarget(gEnv->globalWindow);
+	gEnv->game.spaceBattle.GUI.setTarget(gEnv->globalWindow);
 	tgui::Font fontArial(gEnv->game.workDir + "\\resources\\Fonts\\ARIALUNI.TTF");
 	gEnv->globalGui.setFont(fontArial);
 	gEnv->scripts.scriptGui.setFont(fontArial);
 	gEnv->game.adventureGUI.setFont(fontArial);
+	gEnv->game.spaceBattle.GUI.setFont(fontArial);
 
 	// Clock to calculate time from previous frame
 	sf::Clock deltaClock;

@@ -139,6 +139,8 @@ public:
 	bool globalGUIeventsRequiresUpdate = false;
 	// Does game should display adventure
 	bool gameAdventureGUIRequiresUpdate = false;
+	// Does game should update space battle ui
+	bool gameSpaceBattleGUIRequiresUpdate = false;
 	// WASD controls
 	bool gameCanPlayerMoveWASD = false;
 	// Can trigger markers
