@@ -19,6 +19,16 @@ void updateSpaceBattle(double deltaTime)
 		sb->mapSegment->setOrigin(sizeX / 2, sizeY / 2);
 		sb->mapSegmentHover = new sf::Sprite(gEnv->modelDB[L"spaceBattleMapSegmentHover"]->tex);
 		sb->mapSegmentHover->setOrigin(sizeX / 2, sizeY / 2);
+
+		sb->mapSegmentPlayer = new sf::Sprite(gEnv->modelDB[L"spaceBattleMapSegmentPlayer"]->tex);
+		sb->mapSegmentPlayer->setOrigin(sizeX / 2, sizeY / 2);
+
+		sb->mapSegmentNeutral = new sf::Sprite(gEnv->modelDB[L"spaceBattleMapSegmentNeutral"]->tex);
+		sb->mapSegmentNeutral->setOrigin(sizeX / 2, sizeY / 2);
+
+		sb->mapSegmentEnemy = new sf::Sprite(gEnv->modelDB[L"spaceBattleMapSegmentEnemy"]->tex);
+		sb->mapSegmentEnemy->setOrigin(sizeX / 2, sizeY / 2);
+
 	//	sb->mapSegment->setScale
 		//sb->mapSegment->setPosition;
 		
@@ -38,6 +48,21 @@ void updateSpaceBattle(double deltaTime)
 				sb->map[i][j]->gameY = 0.557f + (i * 0.557f * 1.5f);
 			}
 		}
+
+		Ship * testShip = new Ship();
+		testShip->model = new sf::Sprite(gEnv->modelDB[L"decorationSpaceBeacon"]->tex);
+		testShip->model->setOrigin(sf::Vector2f(testShip->model->getTexture()->getSize()) / 2.0f);
+		sb->map[8][8]->ships.push_back(testShip);
+		sb->map[8][8]->color = segmentColor::enemy;
+
+		sb->map[8][4]->color = segmentColor::player;
+		gEnv->game.player.ship->model = new sf::Sprite(gEnv->modelDB[L"shipBase"]->tex);
+		gEnv->game.player.ship->model->setOrigin(sf::Vector2f(gEnv->game.player.ship->model->getTexture()->getSize()) / 2.0f);
+		//gEnv->game.player.ship->model->rotate(90);
+		sb->map[8][4]->ships.push_back(gEnv->game.player.ship);
+
+		sb->map[7][8]->color = segmentColor::neutral;
+
 		sb->state = "idle";
 	}
 
@@ -75,6 +100,9 @@ void updateSpaceBattle(double deltaTime)
 
 		sb->mapSegment->setScale(1.f / scale, 1.f / scale);
 		sb->mapSegmentHover->setScale(1.f / scale, 1.f / scale);
+		sb->mapSegmentPlayer->setScale(1.f / scale, 1.f / scale);
+		sb->mapSegmentEnemy->setScale(1.f / scale, 1.f / scale);
+		sb->mapSegmentNeutral->setScale(1.f / scale, 1.f / scale);
 
 		for (int qy = 0; qy < sb->maxLines; qy++)
 		{
@@ -98,7 +126,7 @@ void updateSpaceBattle(double deltaTime)
 				sb->map[qy][qx]->screenY = my;
 
 				float dist = ((mx - mousePos.x)*(mx - mousePos.x)) + ((my - mousePos.y)*(my - mousePos.y));
-				if (dist < (140 * 140 / scale / scale) && dist < minDist)
+				if (dist < (220 * 220 / scale / scale) && dist < minDist)
 				{
 					pickX = qx;
 					pickY = qy;
@@ -111,6 +139,7 @@ void updateSpaceBattle(double deltaTime)
 		// background
 		gEnv->globalWindow.draw(*sb->backgroundImage);
 
+		// segments
 		for (int qy = 0; qy < sb->maxLines; qy++)
 		{
 			for (int qx = 0; qx < sb->maxLength; qx++)
@@ -122,12 +151,44 @@ void updateSpaceBattle(double deltaTime)
 				}
 				else
 				{
-					sb->mapSegment->setPosition(sb->map[qy][qx]->screenX, sb->map[qy][qx]->screenY);
-					gEnv->globalWindow.draw(*sb->mapSegment);
+					auto c = sb->map[qy][qx]->color;
+					switch (c)
+					{
+					case segmentColor::base:
+						sb->mapSegment->setPosition(sb->map[qy][qx]->screenX, sb->map[qy][qx]->screenY);
+						gEnv->globalWindow.draw(*sb->mapSegment);
+						break;
+					case segmentColor::player:
+						sb->mapSegmentPlayer->setPosition(sb->map[qy][qx]->screenX, sb->map[qy][qx]->screenY);
+						gEnv->globalWindow.draw(*sb->mapSegmentPlayer);
+						break;
+					case segmentColor::enemy:
+						sb->mapSegmentEnemy->setPosition(sb->map[qy][qx]->screenX, sb->map[qy][qx]->screenY);
+						gEnv->globalWindow.draw(*sb->mapSegmentEnemy);
+						break;
+					case segmentColor::neutral:
+						sb->mapSegmentNeutral->setPosition(sb->map[qy][qx]->screenX, sb->map[qy][qx]->screenY);
+						gEnv->globalWindow.draw(*sb->mapSegmentNeutral);
+						break;
+					default: // actually error but we should draw something
+						sb->mapSegment->setPosition(sb->map[qy][qx]->screenX, sb->map[qy][qx]->screenY);
+						gEnv->globalWindow.draw(*sb->mapSegment);
+						break;
+					}
+
+					
 				}
+
+				if (sb->map[qy][qx]->ships.size() == 1)
+				{
+					auto p = sb->map[qy][qx]->ships[0];
+					p->model->setPosition(sb->map[qy][qx]->screenX, sb->map[qy][qx]->screenY);
+					p->model->setScale(1.f / scale, 1.f / scale);
+					gEnv->globalWindow.draw(*p->model);
+				}
+
 			}
 		}
-
 
 		// camera movement
 

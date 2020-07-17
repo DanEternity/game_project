@@ -26,13 +26,16 @@ public:
 
 	}
 
+	// graphics section
 	sf::Sprite * mapSegment = NULL;
 	sf::Sprite * mapSegmentHover = NULL;
+	sf::Sprite * mapSegmentPlayer = NULL;
+	sf::Sprite * mapSegmentEnemy = NULL;
+	sf::Sprite * mapSegmentNeutral = NULL;
 
 	sf::Sprite * backgroundImage = NULL;
 
 	float cameraX, cameraY;
 	float scale = 2;
-
 
 };

@@ -2,6 +2,16 @@
 
 #include "ship.h"
 
+namespace segmentColor {
+
+enum SegmentColor {
+	base,
+	player,
+	enemy,
+	neutral,
+};
+
+}
 class SpaceBattleSegment
 {
 public:
@@ -15,6 +25,6 @@ public:
 	// ships located in this segment
 	std::vector<Ship*> ships;
 
-
+	segmentColor::SegmentColor color;
 
 };

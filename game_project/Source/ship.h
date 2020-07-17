@@ -19,6 +19,11 @@ class Ship : public BaseObject
 {
 public:
 
+	// Game data
+	int factionId = 0; // indicates ship battle faction
+	sf::Sprite * model = NULL; // ship visual model
+	bool largeShip = false;
+
 	// links section
 
 	std::vector<Module*> modules;

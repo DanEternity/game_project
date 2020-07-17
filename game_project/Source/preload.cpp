@@ -49,6 +49,9 @@ void preloadModels()
 	//Space battle textures
 	createModelDescriptor(L"spaceBattleMapSegment", "\\resources\\textures\\Battle\\battlefield_segment.png");
 	createModelDescriptor(L"spaceBattleMapSegmentHover", "\\resources\\textures\\Battle\\battlefield_segment_hover.png");
+	createModelDescriptor(L"spaceBattleMapSegmentPlayer", "\\resources\\textures\\Battle\\battlefield_segment_player.png");
+	createModelDescriptor(L"spaceBattleMapSegmentEnemy", "\\resources\\textures\\Battle\\battlefield_segment_enemy.png");
+	createModelDescriptor(L"spaceBattleMapSegmentNeutral", "\\resources\\textures\\Battle\\battlefield_segment_neutral.png");
 	//createModelDescriptor(L"fsfa", "fsaf", true);
 }
 
