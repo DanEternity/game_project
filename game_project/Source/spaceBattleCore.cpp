@@ -13,6 +13,8 @@ void updateSpaceBattle(double deltaTime)
 		sizeX = 442;
 		sizeY = 512;
 
+		sb->backgroundImage = new sf::Sprite(gEnv->modelDB[L"testBackgroundSpace"]->tex);
+
 		sb->mapSegment = new sf::Sprite(gEnv->modelDB[L"spaceBattleMapSegment"]->tex);
 		sb->mapSegment->setOrigin(sizeX / 2, sizeY / 2);
 		sb->mapSegmentHover = new sf::Sprite(gEnv->modelDB[L"spaceBattleMapSegmentHover"]->tex);
@@ -22,13 +24,18 @@ void updateSpaceBattle(double deltaTime)
 		
 		sb->cameraX = 500;
 		sb->cameraY = 500;
-		
+
 		for (int i(0); i < sb->maxLines; i++)
 		{
 			sb->map.push_back(std::vector<SpaceBattleSegment * >());
 			for (int j(0); j < sb->maxLength; j++)
 			{
 				sb->map[i].push_back(new SpaceBattleSegment());
+				if (i % 2 == 0)
+					sb->map[i][j]->gameX = 0.5f + j;
+				else
+					sb->map[i][j]->gameX = 1.f + j;
+				sb->map[i][j]->gameY = 0.557f + (i * 0.557f * 1.5f);
 			}
 		}
 		sb->state = "idle";
@@ -42,11 +49,11 @@ void updateSpaceBattle(double deltaTime)
 		float minDist = 999999999;
 
 
-		float scale = 2;
+		float scale = sb->scale;
 		float x, y;
 
-		x = sb->cameraX - gEnv->graphics.windowSizeX / 2;
-		y = sb->cameraY - gEnv->graphics.windowSizeY / 2;
+		x = sb->cameraX  - (gEnv->graphics.windowSizeX / 2);
+		y = sb->cameraY  - (gEnv->graphics.windowSizeY / 2);
 
 		//x = gEnv->game.player.cameraPosition.x * 2;
 		//y = gEnv->game.player.cameraPosition.y * 2;
@@ -91,7 +98,7 @@ void updateSpaceBattle(double deltaTime)
 				sb->map[qy][qx]->screenY = my;
 
 				float dist = ((mx - mousePos.x)*(mx - mousePos.x)) + ((my - mousePos.y)*(my - mousePos.y));
-				if (dist < 100 * 100 && dist < minDist)
+				if (dist < (100 * 100 / scale) && dist < minDist)
 				{
 					pickX = qx;
 					pickY = qy;
@@ -100,6 +107,9 @@ void updateSpaceBattle(double deltaTime)
 
 			}
 		}
+
+		// background
+		gEnv->globalWindow.draw(*sb->backgroundImage);
 
 		for (int qy = 0; qy < sb->maxLines; qy++)
 		{
@@ -145,9 +155,16 @@ void updateSpaceBattle(double deltaTime)
 			//gEnv->game.player.cameraPosition.y += delteTime * gEnv->game.player.cameraSpeed / gEnv->game.adventureData.settingMapScale;
 			qMove.y += 1;
 		}
-		float moveSpeed = 2.5f;
+		float moveSpeed = 2.5f * scale;
 		sb->cameraX -= qMove.x * moveSpeed;
 		sb->cameraY -= qMove.y * moveSpeed;
+
+		sb->scale -= (gEnv->game.player.mouseWheelDelta / 2);
+
+		if (sb->scale < 1)
+			sb->scale = 1;
+		if (sb->scale > 6)
+			sb->scale = 6;
 
 	}
 

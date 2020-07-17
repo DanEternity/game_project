@@ -19,8 +19,8 @@ public:
 
 	SpaceBattleData()
 	{
-		maxLines = 8;
-		maxLength = 8;
+		maxLines = 12;
+		maxLength = 20;
 
 		state = "init";
 
@@ -29,6 +29,10 @@ public:
 	sf::Sprite * mapSegment = NULL;
 	sf::Sprite * mapSegmentHover = NULL;
 
+	sf::Sprite * backgroundImage = NULL;
+
 	float cameraX, cameraY;
+	float scale = 2;
+
 
 };

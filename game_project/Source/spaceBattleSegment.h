@@ -12,5 +12,9 @@ public:
 	// center
 	float screenX, screenY;
 
+	// ships located in this segment
+	std::vector<Ship*> ships;
+
+
 
 };
