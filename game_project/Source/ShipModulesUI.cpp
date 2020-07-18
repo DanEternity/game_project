@@ -172,13 +172,28 @@ void applyModuleTooltipShipUI(int id)
 {
 	if (gEnv->game.player.ship->modules[id] != NULL)
 	{
-		if (!gEnv->game.player.ship->modules[id]->tooltipWasCreated)
+		switch (gEnv->game.player.ship->modules[id]->moduleType)
 		{
-			createModuleTooltip(gEnv->game.player.ship->modules[id]);
-			gEnv->game.player.ship->modules[id]->tooltipWasCreated = true;
+		case moduleType::system:
+			if (!gEnv->game.player.ship->modules[id]->tooltipWasCreated)
+			{
+				createModuleTooltip(gEnv->game.player.ship->modules[id]);
+				gEnv->game.player.ship->modules[id]->tooltipWasCreated = true;
+			}
+			gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(id))->setToolTip(gEnv->game.player.ship->modules[id]->tooltipDescription);
+			tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
+			break;
+		case moduleType::weapon:
+			if (!gEnv->game.player.ship->modules[id]->tooltipWasCreated)
+			{
+				createModuleTooltip(gEnv->game.player.ship->modules[id]);
+				gEnv->game.player.ship->modules[id]->tooltipWasCreated = true;
+			}
+			gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(id))->setToolTip(gEnv->game.player.ship->modules[id]->tooltipDescription);
+			tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
+			break;
 		}
-		gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(id))->setToolTip(gEnv->game.player.ship->modules[id]->tooltipDescription);
-		tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
+		
 	}
 }
 
