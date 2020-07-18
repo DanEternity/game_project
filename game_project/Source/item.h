@@ -127,6 +127,7 @@ public:
 	sf::Texture* icon;
 	Item()
 	{
+		tooltipDescription = tgui::Panel::create();
 		objectType = objectType::item;
 		itemType = itemType::null;
 		itemClass = "Not defined";
@@ -180,7 +181,6 @@ public:
 
 	Module() : ItemEquipable()
 	{
-		tooltipDescription = tgui::Panel::create();
 		ItemEquipable();
 		itemType = itemType::module;
 		memoryControl = memoryControl::fixed;
@@ -194,7 +194,6 @@ public:
 	Module(std::wstring name, moduleType::ModuleType moduleType,
 		moduleSlot::ModuleSlotType moduleSlot, moduleSlot::ModuleSlotSize moduleSize) : ItemEquipable()
 	{
-		tooltipDescription = tgui::Panel::create();
 		this->itemType = itemType::module;
 		this->memoryControl = memoryControl::fixed;
 		this->moduleType = moduleType::system;

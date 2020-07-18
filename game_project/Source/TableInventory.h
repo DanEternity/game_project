@@ -53,6 +53,7 @@ void filterCategoryFieldChanged(tgui::Widget::Ptr widget, const std::string& sig
 void createModuleTooltip(Module * m);
 void createResourseTooltip(ItemResource * r);
 void createEquipmentTooltip(Equipment * e);
+void createWeaponModuleTooltip(WeaponModule * w);
 
 void deleteAllInventoryTooltips();
 void deleteAllGridTooltips();
@@ -60,3 +61,4 @@ void deleteAllGridTooltips();
 void applyStorageTooltip(int id);
 void applyGridModuleTooltip(int id);
 void applyGridEquipmentTooltip(int id);
+void applyGridWeaponModuleTooltip(int id);
