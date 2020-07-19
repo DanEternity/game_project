@@ -417,9 +417,35 @@ void createWeaponModuleTooltip(WeaponModule * w)
 	label4->setTextSize(18);
 	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(90), 18, text));
 
-	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(120), 18, L"Potential Damage: " + std::to_wstring(w->baseDamage.total * w->projectilesAmount.total)));
-	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 4", std::to_string(150), 18, L"Base damage: " + std::to_wstring(w->baseDamage.total)));
-	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 4 * 3", std::to_string(150), 18, L"Projectiles amount: " + std::to_wstring(w->projectilesAmount.total)));
+	switch (w->damageType)
+	{
+	case 0:
+		w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(120), 18, L"Damage type: Null"));
+			break;
+	case 1:
+		w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(120), 18, L"Damage type: Physical"));
+		break;
+	case 2:
+		w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(120), 18, L"Damage type: Energy"));
+		break;
+	}
+
+
+	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(150), 18, L"Potential Damage: " + std::to_wstring(w->baseDamage.total * w->projectilesAmount.total)));
+	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 4", std::to_string(180), 18, L"Base damage: " + std::to_wstring(w->baseDamage.total)));
+	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 4 * 3", std::to_string(180), 18, L"Projectiles amount: " + std::to_wstring(w->projectilesAmount.total)));
+	
+	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(210), 18, L"Hull crit: " + std::to_wstring(w->criticalDamageHull.total) + L"%; Chance: " + std::to_wstring(w->criticalChanceHull.total)));
+	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(210), 18, L"Shield crit: " + std::to_wstring(w->criticalDamageShield.total) + L"%; Chance: " + std::to_wstring(w->criticalChanceShield.total)));
+
+	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(210), 18, L"Hull penetration percentage: " + std::to_wstring(w->resistanceIgnoreHullPercent.total) + L"%; flat: " + std::to_wstring(w->resistanceIgnoreHullFlat.total)));
+	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(210), 18, L"Shield penetration percentage: " + std::to_wstring(w->resistanceIgnoreShieldPercent.total) + L"%; flat: " + std::to_wstring(w->resistanceIgnoreShieldFlat.total)));
+
+	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(240), 18, L"Optimal distance: " + std::to_wstring(w->optimalDistance.total) + L" hexes"));
+	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(270), 18, L"Accuracy: " + std::to_wstring(w->accuracy.total) + L" %"));
+
+	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(300), 18, L"Full cooldown: " + std::to_wstring(w->fullCooldown.total) + L" rounds; Partial cooldown " + std::to_wstring(w->partialCooldown.total) + L" rounds"));
+	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(330), 18, L"Total activations count: " + std::to_wstring(w->activationsLimit.total) + L"; Activations per round  " + std::to_wstring(w->activationsPartial.total)));
 
 
 	/*tgui::Label::Ptr label5 = tgui::Label::create();
