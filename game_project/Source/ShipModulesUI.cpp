@@ -202,5 +202,10 @@ void deleteAllTooltipsShipUI()
 	for (int i = 0; i < gEnv->game.player.ship->modules.size(); i++)
 	{
 		gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(i))->setToolTip(NULL);
+		if (gEnv->game.player.ship->modules[i] != NULL &&gEnv->game.player.ship->modules[i]->tooltipWasCreated)
+		{
+			gEnv->game.player.ship->modules[i]->tooltipDescription->removeAllWidgets();
+			gEnv->game.player.ship->modules[i]->tooltipWasCreated = false;
+		}
 	}
 }

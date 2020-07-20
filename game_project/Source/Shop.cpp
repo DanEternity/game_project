@@ -231,8 +231,8 @@ void ChangeToModules()
 void ChangeToShips()
 {
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("iternalShopModEquipPanel"), false);
-	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("iternalShopShipPanel"), false);
-	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("iternalShopCrewPanel"), true);
+	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("iternalShopShipPanel"), true);
+	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("iternalShopCrewPanel"), false);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("iternalShopResourcesPanel"), false);
 }
 
