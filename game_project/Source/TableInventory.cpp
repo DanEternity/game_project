@@ -289,8 +289,10 @@ void createModuleTooltip(Module * m)
 
 	std::wstring str = L"";
 	bool first = true;
-	str += L"Usage Power Supply: " + std::to_wstring((int)(static_cast<Module*>(m)->powerSupply.total)) + L"\n";
-	str += L"Usage High Power Supply: " + std::to_wstring((int)(static_cast<Module*>(m)->highPowerSupply.total)) + L"\n\n";
+	
+
+	str += L"Usage Power Supply: " + createFloatString(static_cast<Module*>(m)->powerSupply.total) + L"\n";
+	str += L"Usage High Power Supply: " + createFloatString(static_cast<Module*>(m)->highPowerSupply.total) + L"\n\n";
 	for (auto i : static_cast<Module*>(m)->effects)
 	{
 		switch (static_cast<StatModEffect*>(i)->statName)
@@ -378,13 +380,13 @@ void createModuleTooltip(Module * m)
 			break;
 		}
 		if (static_cast<StatModEffect*>(i)->p_add != 0)
-			str += L"+" + std::to_wstring((int)static_cast<StatModEffect*>(i)->p_add) + L" ";
+			str += L"+" + createFloatString(static_cast<StatModEffect*>(i)->p_add) + L" ";
 		if (static_cast<StatModEffect*>(i)->p_mul != 0)
-			str += L"+" + std::to_wstring((int)(static_cast<StatModEffect*>(i)->p_mul * 100)) + L"% ";
+			str += L"+" + createFloatString(static_cast<StatModEffect*>(i)->p_mul * 100) + L"% ";
 		if (static_cast<StatModEffect*>(i)->p_sub != 0)
-			str += L"-" + std::to_wstring((int)static_cast<StatModEffect*>(i)->p_sub) + L" ";
+			str += L"-" + createFloatString(static_cast<StatModEffect*>(i)->p_sub) + L" ";
 		if (static_cast<StatModEffect*>(i)->p_negMul != 0)
-			str += L"-" + std::to_wstring((int)(static_cast<StatModEffect*>(i)->p_negMul * 100)) + L"% ";
+			str += L"-" + createFloatString(static_cast<StatModEffect*>(i)->p_negMul * 100) + L"% ";
 
 		if (!first) label5->setText(label5->getText() + str + L"\n");
 		else label5->setText(str + L"\n");
@@ -655,13 +657,13 @@ void createEquipmentTooltip(Equipment* e)
 			break;
 		}
 		if (static_cast<StatModEffect*>(i)->p_add != 0)
-			str += L"+" + std::to_wstring((int)static_cast<StatModEffect*>(i)->p_add) + L" ";
+			str += L"+" + createFloatString(static_cast<StatModEffect*>(i)->p_add) + L" ";
 		if (static_cast<StatModEffect*>(i)->p_mul != 0)
-			str += L"+" + std::to_wstring((int)(static_cast<StatModEffect*>(i)->p_mul * 100)) + L"% ";
+			str += L"+" + createFloatString(static_cast<StatModEffect*>(i)->p_mul * 100) + L"% ";
 		if (static_cast<StatModEffect*>(i)->p_sub != 0)
-			str += L"-" + std::to_wstring((int)static_cast<StatModEffect*>(i)->p_sub) + L" ";
+			str += L"-" + createFloatString(static_cast<StatModEffect*>(i)->p_sub) + L" ";
 		if (static_cast<StatModEffect*>(i)->p_negMul != 0)
-			str += L"-" + std::to_wstring((int)(static_cast<StatModEffect*>(i)->p_negMul * 100)) + L"% ";
+			str += L"-" + createFloatString(static_cast<StatModEffect*>(i)->p_negMul * 100) + L"% ";
 
 		if (!first)
 			label5->setText(label5->getText() + str + L"\n");

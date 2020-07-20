@@ -44,3 +44,5 @@ void updateInventoryCell(int id);
 void enableWidget(tgui::Widget::Ptr widget, bool enable);
 void swapElements(TargetInventory::targetInventory target, int id);
 void rebuildAll();
+
+std::wstring createFloatString(float number);

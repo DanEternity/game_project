@@ -195,3 +195,18 @@ void rebuildAll()
 	deleteAllTooltipsShipUI();
 	deleteAllInventoryTooltips();
 }
+
+std::wstring createFloatString(float number)
+{
+	int l = (int)(number * 10);
+	std::wstring str = std::to_wstring(l);
+	if (str[str.size() - 1] == '0')
+	{
+		return std::to_wstring((int)number);
+	}
+	else
+	{
+		str.insert(str.end() - 1, '.');
+		return str;
+	}
+}
