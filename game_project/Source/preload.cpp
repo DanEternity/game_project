@@ -83,6 +83,10 @@ void preloadScripts()
 	addScriptToPreloadQueue("\\resources\\scripts\\Items\\Modules\\1031_BasicHyperdrive.esl", L"core");
 	addScriptToPreloadQueue("\\resources\\scripts\\Items\\Modules\\PropertiesCollection\\1041_BasicSensor_PC.esl", L"core");
 	addScriptToPreloadQueue("\\resources\\scripts\\Items\\Modules\\1041_BasicSensor.esl", L"core");
+
+
+	addScriptToPreloadQueue("\\resources\\scripts\\Items\\Modules\\2000_BasicCannon.esl", L"core");
+
 	// sector templates
 	// addScriptToPreloadQueue("\\resources\\scripts\\\World\\SectorTemplates\\Test2.esl", L"core");
 

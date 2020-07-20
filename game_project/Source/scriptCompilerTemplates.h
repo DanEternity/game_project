@@ -70,6 +70,9 @@ namespace scriptCompilerTemplates
 		BaseScript * InitCharacterStats(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * CreateCharacter(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * AddCharacterToPlayerCrew(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * CreateWeaponModule(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * EditWeaponModuleProperties(CompilerCommandTemplateDataBuffer * buffer); // ?
+
 	}
 
 	namespace afterUpdateHandler 

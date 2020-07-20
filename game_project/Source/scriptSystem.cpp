@@ -318,6 +318,12 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::addCharacterToPlayerCrew:
 		p_processAddCharacterToPlayerCrew(static_cast<AddCharacterToPlayerCrewScript*>(command));
 		break;
+	case scriptType::createWeaponModule:
+		p_processCreateWeaponModule(static_cast<CreateWeaponModuleScript*>(command));
+		break;
+	case scriptType::editWeaponModuleProperties:
+		p_processEditWeaponModuleProperties(static_cast<EditWeaponModulePropertiesScript*>(command));
+		break;
 	default:
 		printf("Debug: ScriptSystem Error! Script command has unknown type -> %i", sType);
 		break;
@@ -3318,6 +3324,150 @@ void ScriptSystem::p_processAddCharacterToPlayerCrew(AddCharacterToPlayerCrewScr
 	//BuildPersonSkillTree(id);
 
 	registerPlayerCharacter(p);
+
+}
+
+void ScriptSystem::p_processCreateWeaponModule(CreateWeaponModuleScript * command)
+{
+	auto dst = command->dst;
+
+	// create item
+	// need to store in global item db
+
+	int id = gEnv->objects.nextItemId++;
+	Module * obj = new WeaponModule();
+	gEnv->objects.items[id] = obj;
+	obj->name = command->name;
+
+	auto code = putMemoryCell(dst, obj, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+}
+
+void ScriptSystem::p_processEditWeaponModuleProperties(EditWeaponModulePropertiesScript * command)
+{
+	auto src = command->src;
+	BaseObject * objSrc = NULL;
+
+	auto code = getMemoryCell(src, &objSrc, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::item)
+	{
+		// failed
+		return;
+	}
+	Item * obj = static_cast<Item*>(objSrc);
+	if (obj->itemType != itemType::module)
+	{
+		// failed
+		return;
+	}
+	Module * p1 = static_cast<Module*>(obj);
+
+	if (p1->moduleType != moduleType::weapon)
+	{
+		// failed
+		return;
+	}
+	WeaponModule * p = static_cast<WeaponModule*>(p1);
+
+	bool error = false;
+	std::wstring weaponType = scriptUtil::getArgumentStringValue(command->weaponType, p_d, error);
+	float activCost = scriptUtil::getArgumentFloatValue(command->activationCost, p_d, error);
+	float fullCd = scriptUtil::getArgumentFloatValue(command->fullCooldown, p_d, error);
+	//float activCost = scriptUtil::getArgumentFloatValue(command->activationCost, p_d, error);
+	float activLimit = scriptUtil::getArgumentFloatValue(command->activationsLimit, p_d, error);
+	float activPartial = scriptUtil::getArgumentFloatValue(command->activationsPartial, p_d, error);
+	float partialCd = scriptUtil::getArgumentFloatValue(command->partialCooldown, p_d, error);
+	float damage = scriptUtil::getArgumentFloatValue(command->baseDamage, p_d, error);
+	float proj = scriptUtil::getArgumentFloatValue(command->projectilesAmount, p_d, error);
+	std::wstring damageType = scriptUtil::getArgumentStringValue(command->damageType, p_d, error);
+	float optDist = scriptUtil::getArgumentFloatValue(command->optimalDistance, p_d, error);
+	float acc = scriptUtil::getArgumentFloatValue(command->accuracy, p_d, error);
+	float damagePenalty = scriptUtil::getArgumentFloatValue(command->damagePenalty, p_d, error);
+	float accPenalty = scriptUtil::getArgumentFloatValue(command->accuracyPenalty, p_d, error);
+	float resIgnoreHullFlat = scriptUtil::getArgumentFloatValue(command->resistanceIgnoreHullFlat, p_d, error);
+	float resIgnoreHullPercent = scriptUtil::getArgumentFloatValue(command->resistanceIgnoreHullPercent, p_d, error);
+	float resIgnoreShieldFlat = scriptUtil::getArgumentFloatValue(command->resistanceIgnoreShieldFlat, p_d, error);
+	float resIgnoreShieldPercent = scriptUtil::getArgumentFloatValue(command->resistanceIgnoreShieldPercent, p_d, error);
+	float critChanceHull = scriptUtil::getArgumentFloatValue(command->criticalChanceHull, p_d, error);
+	float critDamageHull = scriptUtil::getArgumentFloatValue(command->criticalDamageHull, p_d, error);
+	float critChanceShield = scriptUtil::getArgumentFloatValue(command->criticalChanceShield, p_d, error);
+	float critDamageShield = scriptUtil::getArgumentFloatValue(command->criticalDamageShield, p_d, error);
+	float ammo = scriptUtil::getArgumentFloatValue(command->weaponAmmoMax, p_d, error);
+
+	float chargeActivationCost = scriptUtil::getArgumentFloatValue(command->chargeActivationCost, p_d, error);
+	float chargeFinalCost = scriptUtil::getArgumentFloatValue(command->chargeFinalCost, p_d, error);
+	float chargeRoundsCount = scriptUtil::getArgumentFloatValue(command->chargeRoundsCount, p_d, error);
+
+	float mHealth = scriptUtil::getArgumentFloatValue(command->missileHealth, p_d, error);
+	float mTier = scriptUtil::getArgumentFloatValue(command->missileTier, p_d, error);
+
+	if (error)
+	{
+		// failed
+		return;
+	}
+
+	if (damageType == L"Physical" || damageType == L"physical")
+	{
+		p->damageType = 1;
+	}
+
+	if (damageType == L"Energy" || damageType == L"energy")
+	{
+		p->damageType = 2;
+	}
+
+	if (mHealth < 0.0001) // because of possible bugs missile hp should be at least 1.
+		p->isMissile = false;
+	else
+		p->isMissile = true;
+
+	if (chargeFinalCost > 0 || chargeActivationCost > 0 || chargeRoundsCount > 0)
+		p->chargeRequired = true;
+	else
+		p->chargeRequired = false;
+
+	p->activationCost.baseValue = activCost;
+	p->fullCooldown.baseValue = fullCd;
+	//p->activationCost.baseValue = activCost;
+	p->activationsLimit.baseValue = activLimit;
+	p->activationsPartial.baseValue = activPartial;
+	p->partialCooldown.baseValue = partialCd;
+	p->baseDamage.baseValue = damage;
+	p->projectilesAmount.baseValue = proj;
+	
+	p->optimalDistance.baseValue = optDist;
+	p->accuracy.baseValue = acc;
+	p->damagePenalty.baseValue = damagePenalty;
+	p->accuracyPenalty.baseValue = accPenalty;
+	p->resistanceIgnoreHullFlat.baseValue = resIgnoreHullFlat;
+	p->resistanceIgnoreHullPercent.baseValue = resIgnoreHullPercent;
+	p->resistanceIgnoreShieldFlat.baseValue = resIgnoreShieldFlat;
+	p->resistanceIgnoreShieldPercent.baseValue = resIgnoreShieldPercent;
+	p->criticalChanceHull.baseValue = critChanceHull;
+	p->criticalDamageHull.baseValue = critDamageHull;
+	p->criticalChanceShield.baseValue = critChanceShield;
+	p->criticalDamageShield.baseValue = critDamageShield;
+	p->weaponAmmoMax.baseValue = ammo;
+
+	p->chargeActivationCost.baseValue = chargeActivationCost;
+	p->chargeFinalCost.baseValue = chargeFinalCost;
+	p->chargeRoundsCount.baseValue = chargeRoundsCount;
+
+	p->missileHealth.baseValue = mHealth;
+	p->missileTier.baseValue = mTier;
+
+	p->CalcStats();
 
 }
 

@@ -88,35 +88,45 @@ namespace statNames {
 
 		// weapon module stat
 
-		weaponFullCooldown,
-		weaponActivationsLimit,
-		weaponActivationsPartial,
-		weaponPartialCooldown,
+		weaponActivationCost, // amount of ActionPoint required to fire with this weapon
 
-		weaponActivationsRemainingPartial,
-		weaponActivationsRemainingFull,
+		weaponFullCooldown, // Amount of round required to refill ActivationLimit
+		weaponActivationsLimit, // Amount of activation this weapon can perform until full cooldown required
+		weaponActivationsPartial, // Amount of activation this weapon can perform before partial cooldown (usually 1-2 per round)
+		weaponPartialCooldown, // Required when activationsPartial exceeded (usually 1) (if 0 this mean that weapon does not have partial CD)
 
-		weaponBaseDamage,
-		weaponProjectilesAmount,
+		weaponBaseDamage, // Damage of single hit of this weapon
+		weaponProjectilesAmount, // Amount of projectiles per activation (Even if weapon laser type) cannot be 0,
+								// full damage per activation = baseDamage * projectilesAmount,
+
 
 		weaponOptimalDistance,
-		weaponAccuracy,
-		weaponDamagePenalty,
-		weaponAccuracyPenalty,
+		weaponAccuracy, // raw value - accuracy will degrade based on distance
+		weaponDamagePenalty, // when out of optimal range per one unit of distance
+		weaponAccuracyPenalty, // when out of optimal range per one unit of distance
 
-		weaponResistanceIgnoreHullFlat,
-		weaponResistanceIgnoreHullPercent,
+		weaponResistanceIgnoreHullFlat, // - resistance
+		weaponResistanceIgnoreHullPercent, // - %resistance
 
 		weaponResistanceIgnoreShieldFlat,
 		weaponResistanceIgnoreShieldPercent,
 
-		weaponCriticalChanceHull,
-		weaponCriticalDamageHull,
+		weaponCriticalChanceHull, // chance 1.0 = 100%
+		weaponCriticalDamageHull, // multiplier 1.0 = +100%
 
 		weaponCriticalChanceShield,
 		weaponCriticalDamageShield,
 
-		weaponWeaponAmmoMax,
+		weaponAmmoMax, // (zero if ammo not used) (weapon always required 1 ammo per activation regardless of projectile count)
+
+		weaponChargeActivationCost,
+		weaponChargeFinalCost,
+		weaponChargeRoundsCount,
+
+
+
+		weaponMissileHealth, // def against flak
+		weaponMissileTier, // def against flak tier
 
 		// module
 

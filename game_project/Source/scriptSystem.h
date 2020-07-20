@@ -144,6 +144,8 @@ private:
 	void p_processInitCharacterStats(InitCharacterStatsScript * command);
 	void p_processCreateCharacter(CreateCharacterScript * command);
 	void p_processAddCharacterToPlayerCrew(AddCharacterToPlayerCrewScript * command);
+	void p_processCreateWeaponModule(CreateWeaponModuleScript * command);
+	void p_processEditWeaponModuleProperties(EditWeaponModulePropertiesScript * command);
 };
 
 extern ScriptSystem * scriptSystem;
