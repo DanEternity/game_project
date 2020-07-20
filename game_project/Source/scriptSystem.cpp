@@ -3546,6 +3546,7 @@ void ScriptSystem::p_processCalcParamStd(CalcParamStdScript * command)
 		r *= vMod;
 	//	r *= qmod;
 
+
 		res = new FloatObject(r);
 		res->memoryControl = memoryControl::singleUse;
 	}
