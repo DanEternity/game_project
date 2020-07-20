@@ -855,7 +855,7 @@ void applyGridWeaponModuleTooltip(int id)
 		{
 			if (gEnv->game.player.ship->modules[i] != NULL)
 			{
-				if (gEnv->game.player.ship->modules[i]->slot == static_cast<Module*>(gEnv->game.player.inventory[id])->slot)
+				if (gEnv->game.player.ship->modules[i]->slot == static_cast<Module*>(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]])->slot)
 				{
 					gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->getToolTip()->setSize(800, gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->getToolTip()->getSize().y);
 					if (gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->getToolTip()->cast<tgui::Panel>()->get<tgui::Panel>("comparePanel") == nullptr)
