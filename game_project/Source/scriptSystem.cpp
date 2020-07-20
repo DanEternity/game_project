@@ -1886,16 +1886,16 @@ void ScriptSystem::p_processEditModuleProperties(EditModulePropertiesScript * co
 		p->moduleType = moduleType::weapon;
 	
 	// Size
-	if (moduleSlot == L"small" || moduleSlot == L"Small")
+	if (moduleSize == L"small" || moduleSize == L"Small")
 		p->size = moduleSlot::small;
 	
-	if (moduleSlot == L"medium" || moduleSlot == L"Medium")
+	if (moduleSize == L"medium" || moduleSize == L"Medium")
 		p->size = moduleSlot::medium;
 
-	if (moduleSlot == L"large" || moduleSlot == L"Large")
+	if (moduleSize == L"large" || moduleSize == L"Large")
 		p->size = moduleSlot::large;
 
-	if (moduleSlot == L"huge" || moduleSlot == L"Huge")
+	if (moduleSize == L"huge" || moduleSize == L"Huge")
 		p->size = moduleSlot::huge;
 
 	// Slot type
