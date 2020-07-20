@@ -289,8 +289,10 @@ void createModuleTooltip(Module * m)
 
 	std::wstring str = L"";
 	bool first = true;
-	str += L"Usage Power Supply: " + std::to_wstring((int)(static_cast<Module*>(m)->powerSupply.total)) + L"\n";
-	str += L"Usage High Power Supply: " + std::to_wstring((int)(static_cast<Module*>(m)->highPowerSupply.total)) + L"\n\n";
+	
+
+	str += L"Usage Power Supply: " + createFloatString(static_cast<Module*>(m)->powerSupply.total) + L"\n";
+	str += L"Usage High Power Supply: " + createFloatString(static_cast<Module*>(m)->highPowerSupply.total) + L"\n\n";
 	for (auto i : static_cast<Module*>(m)->effects)
 	{
 		switch (static_cast<StatModEffect*>(i)->statName)
@@ -378,13 +380,13 @@ void createModuleTooltip(Module * m)
 			break;
 		}
 		if (static_cast<StatModEffect*>(i)->p_add != 0)
-			str += L"+" + std::to_wstring((int)static_cast<StatModEffect*>(i)->p_add) + L" ";
+			str += L"+" + createFloatString(static_cast<StatModEffect*>(i)->p_add) + L" ";
 		if (static_cast<StatModEffect*>(i)->p_mul != 0)
-			str += L"+" + std::to_wstring((int)(static_cast<StatModEffect*>(i)->p_mul * 100)) + L"% ";
+			str += L"+" + createFloatString(static_cast<StatModEffect*>(i)->p_mul * 100) + L"% ";
 		if (static_cast<StatModEffect*>(i)->p_sub != 0)
-			str += L"-" + std::to_wstring((int)static_cast<StatModEffect*>(i)->p_sub) + L" ";
+			str += L"-" + createFloatString(static_cast<StatModEffect*>(i)->p_sub) + L" ";
 		if (static_cast<StatModEffect*>(i)->p_negMul != 0)
-			str += L"-" + std::to_wstring((int)(static_cast<StatModEffect*>(i)->p_negMul * 100)) + L"% ";
+			str += L"-" + createFloatString(static_cast<StatModEffect*>(i)->p_negMul * 100) + L"% ";
 
 		if (!first) label5->setText(label5->getText() + str + L"\n");
 		else label5->setText(str + L"\n");
@@ -395,17 +397,20 @@ void createModuleTooltip(Module * m)
 
 void createWeaponModuleTooltip(WeaponModule * w)
 {
-	w->tooltipDescription->setSize(400, 300 + w->effects.size() * 30);
+	w->tooltipDescription->setSize(400, 500 + w->effects.size() * 30);
 	w->tooltipDescription->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
 
-	tgui::Button::Ptr button = createWidget(WidgetType::Button, "Button", "300", "30", "0", "0")->cast<tgui::Button>();
+	tgui::Panel::Ptr pan = createWidget(WidgetType::Panel, "Panel2", "400", "&.height", "0", "0")->cast<tgui::Panel>();
+	w->tooltipDescription->add(pan);
+
+	tgui::Button::Ptr button = createWidget(WidgetType::Button, "Button", "400", "30", "0", "0")->cast<tgui::Button>();
 	button->setText(w->name);
-	w->tooltipDescription->add(button, "nameButtonTooltip");
+	pan->add(button, "nameButtonTooltip");
 
 	std::string render = "Label";
-	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(30), 18, L"Weapon"));
-	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 4 - 20", std::to_string(60), 18, L"Level: " + std::to_wstring(w->level)));
-	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 4 * 3", std::to_string(60), 18, L"Rarity: " + std::to_wstring(w->rarity)));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(30), 18, L"Weapon"));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 4 - 20", std::to_string(60), 18, L"Level: " + std::to_wstring(w->level)));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 4 * 3 + 20", std::to_string(60), 18, L"Rarity: " + std::to_wstring(w->rarity)));
 
 	tgui::Label::Ptr label4 = tgui::Label::create();
 	label4->setRenderer(gEnv->globalTheme.getRenderer("Label"));
@@ -418,39 +423,39 @@ void createWeaponModuleTooltip(WeaponModule * w)
 
 	} */
 	label4->setTextSize(18);
-	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(90), 18, text));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(90), 18, text));
 
 	switch (w->damageType)
 	{
 	case 0:
-		w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(120), 18, L"Damage type: Null"));
+		pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(120), 18, L"Damage type: Null"));
 			break;
 	case 1:
-		w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(120), 18, L"Damage type: Physical"));
+		pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(120), 18, L"Damage type: Physical"));
 		break;
 	case 2:
-		w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(120), 18, L"Damage type: Energy"));
+		pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(120), 18, L"Damage type: Energy"));
 		break;
 	}
 
 
-	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(150), 18, L"Potential Damage: " + std::to_wstring(w->baseDamage.total * w->projectilesAmount.total)));
-	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 4", std::to_string(180), 18, L"Base damage: " + std::to_wstring(w->baseDamage.total)));
-	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 4 * 3", std::to_string(180), 18, L"Projectiles amount: " + std::to_wstring(w->projectilesAmount.total)));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(150), 18, L"Potential Damage: " + createFloatString(w->baseDamage.total * w->projectilesAmount.total)));
+	pan->add(createWidgetLabel(render, "((&.width - width) / 4) - 40", std::to_string(180), 18, L"Base damage: " + createFloatString(w->baseDamage.total)));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 4 * 3 + 40", std::to_string(180), 18, L"Projectiles amount: " + createFloatString(w->projectilesAmount.total)));
 	
-	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(210), 18, L"Hull crit: " + std::to_wstring(w->criticalDamageHull.total) + L"%; Chance: " + std::to_wstring(w->criticalChanceHull.total)));
-	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(210), 18, L"Shield crit: " + std::to_wstring(w->criticalDamageShield.total) + L"%; Chance: " + std::to_wstring(w->criticalChanceShield.total)));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(210), 18, L"Hull crit: " + createFloatString(w->criticalDamageHull.total) + L"%; Chance: " + createFloatString(w->criticalChanceHull.total) + L"%"));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(240), 18, L"Shield crit: " + createFloatString(w->criticalDamageShield.total) + L"%; Chance: " + createFloatString(w->criticalChanceShield.total) + L"%"));
 
-	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(210), 18, L"Hull penetration percentage: " + std::to_wstring(w->resistanceIgnoreHullPercent.total) + L"%; flat: " + std::to_wstring(w->resistanceIgnoreHullFlat.total)));
-	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(210), 18, L"Shield penetration percentage: " + std::to_wstring(w->resistanceIgnoreShieldPercent.total) + L"%; flat: " + std::to_wstring(w->resistanceIgnoreShieldFlat.total)));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(270), 18, L"Hull penetration %: " + createFloatString(w->resistanceIgnoreHullPercent.total) + L"%; flat: " + createFloatString(w->resistanceIgnoreHullFlat.total)));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(300), 18, L"Shield penetration %: " + createFloatString(w->resistanceIgnoreShieldPercent.total) + L"%; flat: " + createFloatString(w->resistanceIgnoreShieldFlat.total)));
 
-	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(240), 18, L"Optimal distance: " + std::to_wstring(w->optimalDistance.total) + L" hexes"));
-	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(270), 18, L"Accuracy: " + std::to_wstring(w->accuracy.total) + L" %"));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(330), 18, L"Optimal distance: " + createFloatString(w->optimalDistance.total) + L" hexes"));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(360), 18, L"Accuracy: " + createFloatString(w->accuracy.total) + L" %"));
 
-	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(300), 18, L"Full cooldown: " + std::to_wstring(w->fullCooldown.total) + L" rounds; Partial cooldown " + std::to_wstring(w->partialCooldown.total) + L" rounds"));
-	w->tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(330), 18, L"Total activations count: " + std::to_wstring(w->activationsLimit.total) + L"; Activations per round  " + std::to_wstring(w->activationsPartial.total)));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(390), 18, L"Full cooldown: " + createFloatString(w->fullCooldown.total) + L"r; Partial cooldown " + createFloatString(w->partialCooldown.total) + L"r"));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(420), 18, L"Total activations: " + createFloatString(w->activationsLimit.total) + L"; Activations/round  " + createFloatString(w->activationsPartial.total)));
 
-
+	tgui::ToolTip::setDistanceToMouse({ 10, -80 });
 	/*tgui::Label::Ptr label5 = tgui::Label::create();
 	label5->setRenderer(gEnv->globalTheme.getRenderer("Label"));
 	label5->setPosition(10, 120);
@@ -655,13 +660,13 @@ void createEquipmentTooltip(Equipment* e)
 			break;
 		}
 		if (static_cast<StatModEffect*>(i)->p_add != 0)
-			str += L"+" + std::to_wstring((int)static_cast<StatModEffect*>(i)->p_add) + L" ";
+			str += L"+" + createFloatString(static_cast<StatModEffect*>(i)->p_add) + L" ";
 		if (static_cast<StatModEffect*>(i)->p_mul != 0)
-			str += L"+" + std::to_wstring((int)(static_cast<StatModEffect*>(i)->p_mul * 100)) + L"% ";
+			str += L"+" + createFloatString(static_cast<StatModEffect*>(i)->p_mul * 100) + L"% ";
 		if (static_cast<StatModEffect*>(i)->p_sub != 0)
-			str += L"-" + std::to_wstring((int)static_cast<StatModEffect*>(i)->p_sub) + L" ";
+			str += L"-" + createFloatString(static_cast<StatModEffect*>(i)->p_sub) + L" ";
 		if (static_cast<StatModEffect*>(i)->p_negMul != 0)
-			str += L"-" + std::to_wstring((int)(static_cast<StatModEffect*>(i)->p_negMul * 100)) + L"% ";
+			str += L"-" + createFloatString(static_cast<StatModEffect*>(i)->p_negMul * 100) + L"% ";
 
 		if (!first)
 			label5->setText(label5->getText() + str + L"\n");
@@ -850,11 +855,11 @@ void applyGridWeaponModuleTooltip(int id)
 		{
 			if (gEnv->game.player.ship->modules[i] != NULL)
 			{
-				if (gEnv->game.player.ship->modules[i]->slot == static_cast<Module*>(gEnv->game.player.inventory[id])->slot)
+				if (gEnv->game.player.ship->modules[i]->slot == static_cast<Module*>(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]])->slot)
 				{
-					gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->getToolTip()->setSize(600, gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->getToolTip()->getSize().y);
+					gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->getToolTip()->setSize(800, gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->getToolTip()->getSize().y);
 					if (gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->getToolTip()->cast<tgui::Panel>()->get<tgui::Panel>("comparePanel") == nullptr)
-						gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->getToolTip()->cast<tgui::Panel>()->add(createWidget(WidgetType::Panel, "Panel2", "300", "&.height", "300", "0"), "comparePanel");
+						gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->getToolTip()->cast<tgui::Panel>()->add(createWidget(WidgetType::Panel, "Panel2", "400", "&.height", "400", "0"), "comparePanel");
 					if (!gEnv->game.player.ship->modules[i]->tooltipWasCreated)
 					{
 						switch (gEnv->game.player.ship->modules[i]->moduleType)

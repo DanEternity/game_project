@@ -1,6 +1,7 @@
 #pragma once
 
 #include "InventoryHandlers.h"
+#include <string>
 /*
 class InventoryItem;
 class TableInventory;
