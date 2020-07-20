@@ -201,25 +201,25 @@ void updateAdventureGameMode(double delteTime)
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
 			//gEnv->game.player.cameraPosition.x -= delteTime * gEnv->game.player.cameraSpeed / gEnv->game.adventureData.settingMapScale;
-			qMove.x -= 1;
+			qMove.x -= 3;
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
 			//gEnv->game.player.cameraPosition.x += delteTime * gEnv->game.player.cameraSpeed / gEnv->game.adventureData.settingMapScale;
-			qMove.x += 1;
+			qMove.x += 3;
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		{
 			//gEnv->game.player.cameraPosition.y -= delteTime * gEnv->game.player.cameraSpeed / gEnv->game.adventureData.settingMapScale;
-			qMove.y -= 1;
+			qMove.y -= 3;
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
 			//gEnv->game.player.cameraPosition.y += delteTime * gEnv->game.player.cameraSpeed / gEnv->game.adventureData.settingMapScale;
-			qMove.y += 1;
+			qMove.y += 3;
 		}
 
 		if (qMove.x != 0 || qMove.y != 0)
