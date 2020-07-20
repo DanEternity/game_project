@@ -146,6 +146,7 @@ private:
 	void p_processAddCharacterToPlayerCrew(AddCharacterToPlayerCrewScript * command);
 	void p_processCreateWeaponModule(CreateWeaponModuleScript * command);
 	void p_processEditWeaponModuleProperties(EditWeaponModulePropertiesScript * command);
+	void p_processCalcParamStd(CalcParamStdScript * command);
 };
 
 extern ScriptSystem * scriptSystem;

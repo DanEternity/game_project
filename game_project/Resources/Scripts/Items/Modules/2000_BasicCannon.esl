@@ -45,16 +45,7 @@ Put "0" to "$_pEnergy"
 Put "0" to "$_pEnergyHigh"
 
 // required Energy supply // positive
-Put "15" to "$_b1" // base
-Put "1.5" to "$_r1" // range
-Ariphmetic "$_key * 11113" to "$_k1"
-Abs "$_k1" to "$_k1" // key koef
-Ariphmetic "$_k1 % 10000" to "$_k1"
-Ariphmetic "$_k1 / 10000" to "$_k1"
-Ariphmetic "$_k1 * $_r1" to "$_a1"
-Ariphmetic "$_a1 + $_b1" to "$_a1"
-Ariphmetic "$_a1 * $_positiveMod" "$_a1" 
-//Ariphmetic "$_a1 / $_qmod" "$_a1" // quality does not affect power usage
+CalcParamStd "$_a1" "15" "1.5" "$_key" "11113" "$_positiveMod" "0" "3"
 Put "$_a1" to "$_pEnergy"
 
 // variable init
@@ -185,8 +176,8 @@ put "24" "$_chargeRoundsCount"
 put "25" "$_missileHealth" 
 put "26" "$_missileTier"
 
-
-EditItemProperties "$_p" "$_level" "$_rarity" "2000" "none" "$_mname"
+Put "2000" to "$_itemId"
+EditItemProperties "$_p" "$_level" "$_rarity" "$_itemId" "none" "$_mname"
 EditItemConstructableProperties "$_p" "$_key" "$_q" "$_qname"
 EditModuleProperties "$_p" "weapon" "primaryWeapon" "medium" "$_pEnergy" "$_pEnergyHigh" "5"
 EditWeaponModuleProperties "$_p" "$_weaponType" "$_activationCost" 

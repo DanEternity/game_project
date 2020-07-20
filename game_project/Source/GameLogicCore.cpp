@@ -430,4 +430,11 @@ void LoadScriptTemplates()
 	p.mainHandler = scriptCompilerTemplates::mainHandler::EditWeaponModuleProperties;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
+	// CalcParamStd
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"CALCPARAMSTD";
+	p.body = "\"$dst\" \"$base\" \"$range\" \"$key\" \"$constKey\" \"$vMod\" \"$qmod\" \"$type\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::CalcParamStd;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
 }
