@@ -412,4 +412,22 @@ void LoadScriptTemplates()
 	p.mainHandler = scriptCompilerTemplates::mainHandler::AddCharacterToPlayerCrew;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
+	// CreateWeaponModule
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"CREATEWEAPONMODULE";
+	p.body = "\"$dst\" \"$name\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::CreateWeaponModule;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// EditWeaponModuleProperties
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"EDITWEAPONMODULEPROPERTIES";
+	p.body = "\"$src\" \"$weaponType\" \"$activationCost\" \"$cdFull\" \"$cdPartial\" \"$activLimit\" \"$activPartial\" ";
+	p.body += "\"$damage\" \"$hits\" \"$damageType\" \"$optimalDistance\" \"$accuracy\" \"$damagePenalty\" \"$accuracyPenalty\" ";
+	p.body += "\"$resIgnoreShieldFlat\" \"$resIgnoreShieldPercent\" \"$resIgnoreHullFlat\" \"$resIgnoreHullPercent\" ";
+	p.body += "\"$criticalChanceHull\" \"$criticalDamageHull\" \"$criticalChanceShield\" \"$criticalDamageShield\" ";
+	p.body += "\"$weaponAmmoMax\" \"$chargeActivationCost\" \"$chargeFinalCost\" \"$chargeRoundsCount\" \"$missileHealth\" \"$missileTier\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::EditWeaponModuleProperties;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
 }

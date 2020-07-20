@@ -17,6 +17,9 @@ Put "0" "$_res"
 Call "$EXT:dbMod:1021" "1234", "1000", "1", "1", "$_res";
 EquipModule "$_res" "$playerShip" "3"
 
+Put "0" "$_res"
+Call "$EXT:dbMod:2000" "1234", "1000", "1", "1", "$_res";
+PutItemToPlayerInventory "$_res"
 
 Put "100" to "$_health"
 Put "0" to "$_armor"

@@ -307,13 +307,14 @@ public:
 	int weaponMaxAmmo; // (zero if ammo not used) (weapon always required 1 ammo per activation regardless of projectile count)
 */
 
+	int weaponType;
+
+	Stat activationCost; // amount of ActionPoint required to fire with this weapon
+
 	Stat fullCooldown; // Amount of round required to refill ActivationLimit
 	Stat activationsLimit; // Amount of activation this weapon can perform until full cooldown required
 	Stat activationsPartial; // Amount of activation this weapon can perform before partial cooldown (usually 1-2 per round)
 	Stat partialCooldown; // Required when activationsPartial exceeded (usually 1) (if 0 this mean that weapon does not have partial CD)
-
-	Stat activationsRemainingPartial; // Until partial CD
-	Stat activationsRemainingFull; // Until full cooldown
 
 	Stat baseDamage; // Damage of single hit of this weapon
 	Stat projectilesAmount; // Amount of projectiles per activation (Even if weapon laser type) cannot be 0;
@@ -338,15 +339,32 @@ public:
 	Stat criticalDamageShield;
 	
 	Stat weaponAmmoMax; // (zero if ammo not used) (weapon always required 1 ammo per activation regardless of projectile count)
+
+	Stat chargeActivationCost;
+	Stat chargeFinalCost;
+	Stat chargeRoundsCount;
+
+	bool chargeRequired; // weapon required to be charged before fire
+
+	Stat missileHealth; // def against flak
+	Stat missileTier; // def against flak tier
+
+	bool isMissile; // should weapon check enemy missile defence
+
 	int weaponAmmo; // current
 	int activations;
-	int cooldownPartial;
-	int cooldownFull;
+	//int cooldownPartial;
+	//int cooldownFull;
+	int currentCooldown;
+	int activationsRemainingPartial; // Until partial CD
+	int activationsRemainingFull; // Until full cooldown
 	int weaponState; // change to ENUM
+	int chargingRemaining; // if chargeRequired = true
 
 	WeaponModule() : Module()
 	{
 		moduleType = moduleType::weapon;
+		weaponType = 1;
 	}
 
 	Stat * getStat(statNames::StatName statName)
@@ -354,6 +372,9 @@ public:
 		auto p = statName;
 		switch (p)
 		{
+		case statNames::weaponActivationCost:
+			return &activationCost;
+			break;
 		case statNames::weaponFullCooldown:
 			return &fullCooldown;
 			break;
@@ -365,12 +386,6 @@ public:
 			break;
 		case statNames::weaponPartialCooldown:
 			return &partialCooldown;
-			break;
-		case statNames::weaponActivationsRemainingPartial:
-			return &activationsRemainingPartial;
-			break;
-		case statNames::weaponActivationsRemainingFull:
-			return &activationsRemainingFull;
 			break;
 		case statNames::weaponBaseDamage:
 			return &baseDamage;
@@ -414,12 +429,38 @@ public:
 		case statNames::weaponCriticalDamageShield:
 			return &criticalDamageShield;
 			break;
-		case statNames::weaponWeaponAmmoMax:
+		case statNames::weaponAmmoMax:
 			return &weaponAmmoMax;
+			break;
+		case statNames::weaponChargeActivationCost:
+			return &chargeActivationCost;
+			break;
+		case statNames::weaponChargeFinalCost:
+			return &chargeFinalCost;
+			break;
+		case statNames::weaponChargeRoundsCount:
+			return &chargeRoundsCount;
+			break;
+		case statNames::weaponMissileHealth:
+			return &missileHealth;
+			break;
+		case statNames::weaponMissileTier:
+			return &missileTier;
 			break;
 		default:
 			return NULL;
 			break;
+		}
+	}
+
+	void CalcStats()
+	{
+		statNames::StatName i = statNames::weaponActivationCost;
+		
+		while (i <= statNames::weaponMissileTier)
+		{
+			getStat(i)->calcTotal();
+			i = statNames::StatName(int(i) + 1);
 		}
 	}
 

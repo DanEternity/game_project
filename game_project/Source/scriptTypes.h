@@ -70,6 +70,8 @@ namespace scriptType
 		initCharacterStats,
 		createCharacter,
 		addCharacterToPlayerCrew,
+		createWeaponModule,
+		editWeaponModuleProperties,
 	};
 }
 
@@ -872,4 +874,72 @@ public:
 	{
 		this->scriptType = scriptType::addCharacterToPlayerCrew;
 	}
+};
+
+class CreateWeaponModuleScript : public BaseScript
+{
+public:
+
+	std::wstring dst;
+	std::wstring name;
+
+	CreateWeaponModuleScript() : BaseScript()
+	{
+		this->scriptType = scriptType::createWeaponModule;
+	}
+};
+
+class EditWeaponModulePropertiesScript : public BaseScript
+{
+public:
+
+	// sadasdasdasd
+
+	std::wstring src;
+
+	std::wstring weaponType;
+
+	std::wstring activationCost; // amount of ActionPoint required to fire with this weapon
+
+	std::wstring fullCooldown; // Amount of round required to refill ActivationLimit
+	std::wstring activationsLimit; // Amount of activation this weapon can perform until full cooldown required
+	std::wstring activationsPartial; // Amount of activation this weapon can perform before partial cooldown (usually 1-2 per round)
+	std::wstring partialCooldown; // Required when activationsPartial exceeded (usually 1) (if 0 this mean that weapon does not have partial CD)
+
+	std::wstring baseDamage; // Damage of single hit of this weapon
+	std::wstring projectilesAmount; // Amount of projectiles per activation (Even if weapon laser type) cannot be 0;
+							// full damage per activation = baseDamage * projectilesAmount;
+	std::wstring damageType; // 0 - null, 1 - physical, 2 - energy;
+
+	std::wstring optimalDistance;
+	std::wstring accuracy; // raw value - accuracy will degrade based on distance
+	std::wstring damagePenalty; // when out of optimal range per one unit of distance
+	std::wstring accuracyPenalty; // when out of optimal range per one unit of distance
+
+	std::wstring resistanceIgnoreHullFlat; // - resistance
+	std::wstring resistanceIgnoreHullPercent; // - %resistance
+
+	std::wstring resistanceIgnoreShieldFlat;
+	std::wstring resistanceIgnoreShieldPercent;
+
+	std::wstring criticalChanceHull; // chance 1.0 = 100%
+	std::wstring criticalDamageHull; // multiplier 1.0 = +100%
+
+	std::wstring criticalChanceShield;
+	std::wstring criticalDamageShield;
+
+	std::wstring weaponAmmoMax; // (zero if ammo not used) (weapon always required 1 ammo per activation regardless of projectile count)
+
+	std::wstring chargeActivationCost;
+	std::wstring chargeFinalCost;
+	std::wstring chargeRoundsCount;
+
+	std::wstring missileHealth; // def against flak
+	std::wstring missileTier; // def against flak tier
+
+	EditWeaponModulePropertiesScript() : BaseScript()
+	{
+		this->scriptType = scriptType::editWeaponModuleProperties;
+	}
+
 };

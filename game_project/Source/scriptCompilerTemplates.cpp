@@ -662,6 +662,56 @@ BaseScript * scriptCompilerTemplates::mainHandler::AddCharacterToPlayerCrew(Comp
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::CreateWeaponModule(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new CreateWeaponModuleScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->name = convertExtReferences(buffer, buffer->arg["$name"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::EditWeaponModuleProperties(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new EditWeaponModulePropertiesScript();
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+
+	p->weaponType = convertExtReferences(buffer, buffer->arg["$weaponType"]);
+	p->activationCost = convertExtReferences(buffer, buffer->arg["$activationCost"]);
+	p->fullCooldown = convertExtReferences(buffer, buffer->arg["$cdFull"]);
+	p->partialCooldown = convertExtReferences(buffer, buffer->arg["$cdPartial"]);
+	p->activationsLimit = convertExtReferences(buffer, buffer->arg["$activLimit"]);
+	p->activationsPartial = convertExtReferences(buffer, buffer->arg["$activPartial"]);
+	p->baseDamage = convertExtReferences(buffer, buffer->arg["$damage"]);
+	p->projectilesAmount = convertExtReferences(buffer, buffer->arg["$hits"]);
+	p->damageType = convertExtReferences(buffer, buffer->arg["$damageType"]);
+	p->optimalDistance = convertExtReferences(buffer, buffer->arg["$optimalDistance"]);
+	p->accuracy = convertExtReferences(buffer, buffer->arg["$accuracy"]);
+	p->damagePenalty = convertExtReferences(buffer, buffer->arg["$damagePenalty"]);
+	p->accuracyPenalty = convertExtReferences(buffer, buffer->arg["$accuracyPenalty"]);
+
+	p->resistanceIgnoreShieldFlat = convertExtReferences(buffer, buffer->arg["$resIgnoreShieldFlat"]);
+	p->resistanceIgnoreShieldPercent = convertExtReferences(buffer, buffer->arg["$resIgnoreShieldPercent"]);
+	p->resistanceIgnoreHullFlat = convertExtReferences(buffer, buffer->arg["$resIgnoreHullFlat"]);
+	p->resistanceIgnoreHullPercent = convertExtReferences(buffer, buffer->arg["$resIgnoreHullPercent"]);
+
+	p->criticalChanceHull = convertExtReferences(buffer, buffer->arg["$criticalChanceHull"]);
+	p->criticalDamageHull = convertExtReferences(buffer, buffer->arg["$criticalDamageHull"]);
+	p->criticalChanceShield = convertExtReferences(buffer, buffer->arg["$criticalChanceShield"]);
+	p->criticalDamageShield = convertExtReferences(buffer, buffer->arg["$criticalDamageShield"]);
+
+	p->weaponAmmoMax = convertExtReferences(buffer, buffer->arg["$weaponAmmoMax"]);
+	p->chargeActivationCost = convertExtReferences(buffer, buffer->arg["$chargeActivationCost"]);
+	p->chargeFinalCost = convertExtReferences(buffer, buffer->arg["$chargeFinalCost"]);
+	p->chargeRoundsCount = convertExtReferences(buffer, buffer->arg["$chargeRoundsCount"]);
+
+	p->missileHealth = convertExtReferences(buffer, buffer->arg["$missileHealth"]);
+	p->missileTier = convertExtReferences(buffer, buffer->arg["$missileTier"]);
+
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);
