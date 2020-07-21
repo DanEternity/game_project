@@ -186,7 +186,7 @@ void applyModuleTooltipShipUI(int id)
 		case moduleType::weapon:
 			if (!gEnv->game.player.ship->modules[id]->tooltipWasCreated)
 			{
-				createModuleTooltip(gEnv->game.player.ship->modules[id]);
+				createWeaponModuleTooltip(static_cast<WeaponModule*>(gEnv->game.player.ship->modules[id]));
 				gEnv->game.player.ship->modules[id]->tooltipWasCreated = true;
 			}
 			gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(id))->setToolTip(gEnv->game.player.ship->modules[id]->tooltipDescription);

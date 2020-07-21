@@ -425,36 +425,43 @@ void createWeaponModuleTooltip(WeaponModule * w)
 	label4->setTextSize(18);
 	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(90), 18, text));
 
+	pan->add(createWidgetLabel(render, "8", std::to_string(120), 18, L"Damage: " + createFloatString(w->baseDamage.total * (int)w->projectilesAmount.total) + L" (" + createFloatString(w->baseDamage.total) + L" damage x " + std::to_wstring((int)w->projectilesAmount.total) + L" hits)"));
+	
 	switch (w->damageType)
 	{
 	case 0:
-		pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(120), 18, L"Damage type: Null"));
-			break;
+		pan->add(createWidgetLabel(render, "8", std::to_string(150), 18, L"Damage type: Null"));
+		break;
 	case 1:
-		pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(120), 18, L"Damage type: Physical"));
+		pan->add(createWidgetLabel(render, "8", std::to_string(150), 18, L"Damage type: Physical"));
 		break;
 	case 2:
-		pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(120), 18, L"Damage type: Energy"));
+		pan->add(createWidgetLabel(render, "8", std::to_string(150), 18, L"Damage type: Energy"));
 		break;
 	}
 
+	pan->add(createWidgetLabel(render, "8", std::to_string(180), 18, L"Optimal distance: " + createFloatString(w->optimalDistance.total) + L" hex"));
+	pan->add(createWidgetLabel(render, "8", std::to_string(210), 18, L"Accuracy: " + createFloatString(w->accuracy.total)));
+	pan->add(createWidgetLabel(render, "8", std::to_string(240), 18, L"Over range: Damage/Hex -" + createFloatString(w->damagePenalty.total) + L"%"));
+	pan->add(createWidgetLabel(render, "108", std::to_string(270), 18, L"Accuracy/Hex -" + createFloatString(w->accuracyPenalty.total) + L"%"));
+	pan->add(createWidgetLabel(render, "8", std::to_string(300), 18, L"Hull crit chance: " + createFloatString(w->criticalChanceHull.total * 100) + L"%; Multiplier: " + createFloatString(w->criticalDamageHull.total * 100) + L"%"));
+	pan->add(createWidgetLabel(render, "8", std::to_string(330), 18, L"Shield crit chance: " + createFloatString(w->criticalChanceShield.total * 100) + L"%; Multiplier: " + createFloatString(w->criticalDamageShield.total * 100) + L"%"));
+	pan->add(createWidgetLabel(render, "8", std::to_string(360), 18, L"Hull penetration: " + createFloatString(w->resistanceIgnoreHullFlat.total) + L" + " + createFloatString(w->resistanceIgnoreHullPercent.total) + L"% of target resist"));
+	pan->add(createWidgetLabel(render, "8", std::to_string(390), 18, L"Shield penetration: " + createFloatString(w->resistanceIgnoreShieldFlat.total) + L" + " + createFloatString(w->resistanceIgnoreShieldPercent.total) + L"% of target resist"));
+	pan->add(createWidgetLabel(render, "8", std::to_string(420), 18, L"Weapon capacity: " + std::to_wstring((int)w->activationsLimit.total) + L"; Full cooldown: " + std::to_wstring((int)w->fullCooldown.total) + L" rounds"));
+	pan->add(createWidgetLabel(render, "8", std::to_string(450), 18, L"Overheat limit: " + std::to_wstring((int)w->activationsPartial.total) + L"; Overheat cooldown: " + std::to_wstring((int)w->partialCooldown.total) + L" rounds"));
 
-	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(150), 18, L"Potential Damage: " + createFloatString(w->baseDamage.total * w->projectilesAmount.total)));
-	pan->add(createWidgetLabel(render, "((&.width - width) / 4) - 40", std::to_string(180), 18, L"Base damage: " + createFloatString(w->baseDamage.total)));
-	pan->add(createWidgetLabel(render, "(&.width - width) / 4 * 3 + 40", std::to_string(180), 18, L"Projectiles amount: " + createFloatString(w->projectilesAmount.total)));
-	
-	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(210), 18, L"Hull crit: " + createFloatString(w->criticalDamageHull.total) + L"%; Chance: " + createFloatString(w->criticalChanceHull.total) + L"%"));
-	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(240), 18, L"Shield crit: " + createFloatString(w->criticalDamageShield.total) + L"%; Chance: " + createFloatString(w->criticalChanceShield.total) + L"%"));
+	/*pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(240), 18, L"Shield crit: " + createFloatString(w->criticalDamageShield.total) + L"%; Chance: " + createFloatString(w->criticalChanceShield.total) + L"%"));
 
 	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(270), 18, L"Hull penetration %: " + createFloatString(w->resistanceIgnoreHullPercent.total) + L"%; flat: " + createFloatString(w->resistanceIgnoreHullFlat.total)));
 	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(300), 18, L"Shield penetration %: " + createFloatString(w->resistanceIgnoreShieldPercent.total) + L"%; flat: " + createFloatString(w->resistanceIgnoreShieldFlat.total)));
 
-	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(330), 18, L"Optimal distance: " + createFloatString(w->optimalDistance.total) + L" hexes"));
+	
 	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(360), 18, L"Accuracy: " + createFloatString(w->accuracy.total) + L" %"));
 
 	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(390), 18, L"Full cooldown: " + createFloatString(w->fullCooldown.total) + L"r; Partial cooldown " + createFloatString(w->partialCooldown.total) + L"r"));
 	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(420), 18, L"Total activations: " + createFloatString(w->activationsLimit.total) + L"; Activations/round  " + createFloatString(w->activationsPartial.total)));
-
+*/
 	tgui::ToolTip::setDistanceToMouse({ 10, -80 });
 	/*tgui::Label::Ptr label5 = tgui::Label::create();
 	label5->setRenderer(gEnv->globalTheme.getRenderer("Label"));
