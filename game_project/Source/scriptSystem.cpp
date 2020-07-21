@@ -3592,14 +3592,6 @@ void ScriptSystem::p_processCreateShop(CreateShopScript * command)
 void ScriptSystem::p_processAddGoodsToShop(AddGoodsToShopScript * command)
 {
 
-	//std::wstring dst;
-	//std::wstring object;
-	//std::wstring stock;
-	//std::wstring size;
-	//std::wstring creditsPrice;
-	//std::wstring exchangeId;
-	//std::wstring exchangeCount;
-
 	auto src = command->dst;
 	BaseObject * objSrc = NULL;
 

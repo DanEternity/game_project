@@ -31,16 +31,6 @@ PutItemToPlayerInventory "$_res"
 Call "$EXT:dbReward:lvl1-5CommonResource" "$EXT:local:key", "$_res";
 PutItemToPlayerInventory "$_res"
 
-
-Put "0" "$_itemPrice"
-Put "0" "$_product"
-Call "$EXT:dbReward:lvl1-5CommonResource" "$EXT:local:key", "$_itemPrice";
-Call "$EXT:dbReward:lvl1-5CommonResource" "$EXT:local:key", "$_product";
-
-CreateShop "$EXT:local:shop" "Test shop"
-AddGoodsToShop "$EXT:local:shop" "$_product" "228" "$_itemPrice"
-ShowShop "$EXT:local:shop"
-
 AddMoney "100"
 
 ChangeScriptEntryPoint "$self" "@alt"

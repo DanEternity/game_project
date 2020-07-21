@@ -112,7 +112,7 @@ Ariphmetic "$_y - 1000" to "$_y"
 
 
 CreateMarker "$_marker"
-CallMarkerInit "\Resources\Scripts\World\MarkerTemplates\Basic\MarkerEvent04.esl" 
+CallMarkerInit "\Resources\Scripts\World\MarkerTemplates\Basic\MarkerEvent03.esl" 
 "$_sector", "$_marker", "$_key";
 SetMarkerPosition "$_marker" "$_x" "$_y"
 AddMarkerToSector "$_marker" "$_sector"
