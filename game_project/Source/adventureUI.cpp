@@ -247,7 +247,7 @@ void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled, bool openS
 	StatModEffect * sme = new StatModEffect(targetType::ship, statNames::hull, -100, 0, 0, 0);
 	module->effects.push_back(sme);
 	giveIconToItem(module);
-	p->addItemToShop(module, resPrice, 100);
+	p->addItemToShop(module, resPrice, 0);
 
 	switch (gEnv->game.player.shipMenu)
 	{
@@ -302,7 +302,7 @@ void disableAllAdventureUI()
 		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i)), false);
 		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i)), false);
 		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(i)), false);
-
+		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("NamePointsPanel" + std::to_string(i)), false);
 	}
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel"), false);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel"), false);

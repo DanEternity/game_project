@@ -39,4 +39,5 @@ public:
 	int characterPlayerCount = 0;
 
 	Character* choosenShopCharacter;
+	int choosenShopCharacterPrice;
 };
