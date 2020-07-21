@@ -140,14 +140,17 @@ void RebuildInventoryGridPanel()
 					switch (static_cast<Module*>(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]])->moduleType)
 					{
 					case moduleType::system:
+						gEnv->game.adventureGUI.get<tgui::BitmapButton>("InventoryItem" + std::to_string(id))->disconnectAll("MouseEntered");
 						gEnv->game.adventureGUI.get<tgui::BitmapButton>("InventoryItem" + std::to_string(id))->connect("MouseEntered", applyGridModuleTooltip, id);
 						break;
 					case moduleType::weapon:
+						gEnv->game.adventureGUI.get<tgui::BitmapButton>("InventoryItem" + std::to_string(id))->disconnectAll("MouseEntered");
 						gEnv->game.adventureGUI.get<tgui::BitmapButton>("InventoryItem" + std::to_string(id))->connect("MouseEntered", applyGridWeaponModuleTooltip, id);
 						break;
 					}
 					break;
 				case itemType::equipment:
+					gEnv->game.adventureGUI.get<tgui::BitmapButton>("InventoryItem" + std::to_string(id))->disconnectAll("MouseEntered");
 					gEnv->game.adventureGUI.get<tgui::BitmapButton>("InventoryItem" + std::to_string(id))->connect("MouseEntered", applyGridEquipmentTooltip, id);
 					break;
 				}
@@ -451,17 +454,6 @@ void createWeaponModuleTooltip(WeaponModule * w)
 	pan->add(createWidgetLabel(render, "8", std::to_string(420), 18, L"Weapon capacity: " + std::to_wstring((int)w->activationsLimit.total) + L"; Full cooldown: " + std::to_wstring((int)w->fullCooldown.total) + L" rounds"));
 	pan->add(createWidgetLabel(render, "8", std::to_string(450), 18, L"Overheat limit: " + std::to_wstring((int)w->activationsPartial.total) + L"; Overheat cooldown: " + std::to_wstring((int)w->partialCooldown.total) + L" rounds"));
 
-	/*pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(240), 18, L"Shield crit: " + createFloatString(w->criticalDamageShield.total) + L"%; Chance: " + createFloatString(w->criticalChanceShield.total) + L"%"));
-
-	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(270), 18, L"Hull penetration %: " + createFloatString(w->resistanceIgnoreHullPercent.total) + L"%; flat: " + createFloatString(w->resistanceIgnoreHullFlat.total)));
-	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(300), 18, L"Shield penetration %: " + createFloatString(w->resistanceIgnoreShieldPercent.total) + L"%; flat: " + createFloatString(w->resistanceIgnoreShieldFlat.total)));
-
-	
-	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(360), 18, L"Accuracy: " + createFloatString(w->accuracy.total) + L" %"));
-
-	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(390), 18, L"Full cooldown: " + createFloatString(w->fullCooldown.total) + L"r; Partial cooldown " + createFloatString(w->partialCooldown.total) + L"r"));
-	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(420), 18, L"Total activations: " + createFloatString(w->activationsLimit.total) + L"; Activations/round  " + createFloatString(w->activationsPartial.total)));
-*/
 	tgui::ToolTip::setDistanceToMouse({ 10, -80 });
 	/*tgui::Label::Ptr label5 = tgui::Label::create();
 	label5->setRenderer(gEnv->globalTheme.getRenderer("Label"));
@@ -767,6 +759,10 @@ void applyStorageTooltip(int id)
 							}
 						}
 						gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(id))->getToolTip()->cast<tgui::Panel>()->get<tgui::Panel>("comparePanel")->add(gEnv->game.player.ship->modules[i]->tooltipDescription);
+						if (gEnv->game.player.inventory[id]->tooltipDescription->getSize().y < gEnv->game.player.ship->modules[i]->tooltipDescription->getSize().y)
+						{
+							gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(id))->getToolTip()->setSize("600", gEnv->game.player.ship->modules[i]->tooltipDescription->getSize().y);
+						}
 					}
 				}
 			}
@@ -835,6 +831,10 @@ void applyGridModuleTooltip(int id)
 						}
 					}
 					gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->getToolTip()->cast<tgui::Panel>()->get<tgui::Panel>("comparePanel")->add(gEnv->game.player.ship->modules[i]->tooltipDescription);
+					if (gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]->tooltipDescription->getSize().y < gEnv->game.player.ship->modules[i]->tooltipDescription->getSize().y)
+					{
+						gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->getToolTip()->setSize("600", gEnv->game.player.ship->modules[i]->tooltipDescription->getSize().y);
+					}
 				}
 			}
 		}
@@ -882,6 +882,10 @@ void applyGridWeaponModuleTooltip(int id)
 						}
 					}
 					gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->getToolTip()->cast<tgui::Panel>()->get<tgui::Panel>("comparePanel")->add(gEnv->game.player.ship->modules[i]->tooltipDescription);
+					if (gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]->tooltipDescription->getSize().y < gEnv->game.player.ship->modules[i]->tooltipDescription->getSize().y)
+					{
+						gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->getToolTip()->setSize("600", gEnv->game.player.ship->modules[i]->tooltipDescription->getSize().y);
+					}
 				}
 			}
 		}

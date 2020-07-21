@@ -66,114 +66,150 @@ void buildShop(Shop* p)
 	std::string shopNumber = "0";
 	for (int i = 0; i < p->resources.size(); i++)
 	{
+		if (p->resources[i].itemPrice == NULL && p->resources[i].creditsPrice == 0) continue;
 		int posX = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().x * 0.03) + (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().x * 0.4) * i;
 		int posY = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().y * 0.15);
 		int sizeY = gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().x * 0.1;
-		tgui::BitmapButton::Ptr but = createWidget(WidgetType::BitmapButton, "Button", "10%", std::to_string(sizeY), std::to_string(posX), std::to_string(posY))->cast<tgui::BitmapButton>();
-		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->add(but, "playerItemButton" + std::to_string(i) + shopNumber);
-		but->setImage(*p->resources[i].itemPrice->icon);
-		but->connect("MouseEntered", applyShopTooltip, &(*p->resources[i].itemPrice));
+		if (p->resources[i].itemPrice != NULL)
+		{
+			tgui::BitmapButton::Ptr but = createWidget(WidgetType::BitmapButton, "Button", "10%", std::to_string(sizeY), std::to_string(posX), std::to_string(posY))->cast<tgui::BitmapButton>();
+			gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->add(but, "playerItemButton" + std::to_string(i) + shopNumber);
+			if (p->resources[i].itemPrice->icon == NULL) giveIconToItem(p->resources[i].itemPrice);
+			but->setImage(*p->resources[i].itemPrice->icon);
+			but->connect("MouseEntered", applyShopTooltip, &(*p->resources[i].itemPrice));
 
-		int labelPosX = posX + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().x * 0.12;
-		int labelPosY = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().y * 0.15) + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().y * 0.1;
-		tgui::BitmapButton::Ptr but2 = createWidget(WidgetType::BitmapButton, "Button", "10%", "15%", std::to_string(labelPosX), std::to_string(labelPosY))->cast<tgui::BitmapButton>();
-		but2->setText("<-->");
-		but2->setTextSize(18);
-		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->add(but2, "changeItemResourceButton" + std::to_string(i) + shopNumber);
-		const int ci = i;
-		but2->connect("MouseReleased", tradeItems, ci, shopNumber, &(*p->resources[i].product), &(*p->resources[i].itemPrice));
+			int labelPosX = posX + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().x * 0.12;
+			int labelPosY = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().y * 0.15) + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().y * 0.1;
+			tgui::BitmapButton::Ptr but2 = createWidget(WidgetType::BitmapButton, "Button", "10%", "15%", std::to_string(labelPosX), std::to_string(labelPosY))->cast<tgui::BitmapButton>();
+			but2->setText("<-->");
+			but2->setTextSize(18);
+			gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->add(but2, "changeItemResourceButton" + std::to_string(i) + shopNumber);
+			const int ci = i;
+			but2->connect("MouseReleased", tradeItems, ci, shopNumber, &(*p->resources[i].product), &(*p->resources[i].itemPrice), p->resources[i].creditsPrice);
+		}
 
 		int posX2 = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().x * 0.27) + (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().x * 0.4) * i;
 		tgui::BitmapButton::Ptr but3 = createWidget(WidgetType::BitmapButton, "Button", "10%", std::to_string(sizeY), std::to_string(posX2), std::to_string(posY))->cast<tgui::BitmapButton>();
 		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->add(but3, "shopResourceButton" + std::to_string(i) + shopNumber);
+		if (p->resources[i].product->icon == NULL) giveIconToItem(p->resources[i].product);
 		but3->setImage(*p->resources[i].product->icon);
 		but3->connect("MouseEntered", applyShopTooltip, &(*p->resources[i].product));
 		
-		float orlabelPosX = posX + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().x * 0.12 + gEnv->game.adventureGUI.get<tgui::BitmapButton>("changeItemResourceButton" + std::to_string(i) + shopNumber)->getSize().x / 4.2;
-		float orlabelPosY = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().y * 0.15) + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().y * 0.3;
-		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->add(createWidgetLabel("Label", std::to_string(orlabelPosX), std::to_string(orlabelPosY), 18, L"OR"), "shopOrLabel" + std::to_string(i) + shopNumber);
-
-		float buyButtonPosX = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().x * 0.03) + (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().x * 0.4) * i;
-		tgui::BitmapButton::Ptr buyButton = createWidget(WidgetType::BitmapButton, "Button", "34%", "20%", std::to_string(buyButtonPosX), "60%")->cast<tgui::BitmapButton>();
-		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->add(buyButton, "buyCreditsButton" + std::to_string(i) + shopNumber);
-		buyButton->setText("Buy it for " + std::to_string(p->resources[i].creditsPrice) + " credits.");
-		buyButton->connect("MouseReleased", buyItem, i, shopNumber, &(*p->resources[i].product), p->resources[i].creditsPrice);
+		if (p->resources[i].itemPrice != NULL && p->resources[i].creditsPrice != 0)
+		{
+			float orlabelPosX = posX + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().x * 0.12 + gEnv->game.adventureGUI.get<tgui::BitmapButton>("changeItemResourceButton" + std::to_string(i) + shopNumber)->getSize().x / 4.2;
+			float orlabelPosY = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().y * 0.15) + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().y * 0.3;
+			gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->add(createWidgetLabel("Label", std::to_string(orlabelPosX), std::to_string(orlabelPosY), 18, L"OR"), "shopOrLabel" + std::to_string(i) + shopNumber);
+		}
+		if (p->resources[i].creditsPrice != 0)
+		{
+			float buyButtonPosX = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().x * 0.03) + (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().x * 0.4) * i;
+			tgui::BitmapButton::Ptr buyButton = createWidget(WidgetType::BitmapButton, "Button", "34%", "20%", std::to_string(buyButtonPosX), "60%")->cast<tgui::BitmapButton>();
+			gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->add(buyButton, "buyCreditsButton" + std::to_string(i) + shopNumber);
+			buyButton->setText("Buy it for " + std::to_string(p->resources[i].creditsPrice) + " credits.");
+			buyButton->connect("MouseReleased", buyItem, i, shopNumber, &(*p->resources[i].product), &(*p->resources[i].itemPrice), p->resources[i].creditsPrice);
+		}
 	}
 
 	//modules panel
 	shopNumber = "1";
 	for (int i = 0; i < p->modules.size(); i++)
 	{
+		if (p->modules[i].itemPrice == NULL && p->modules[i].creditsPrice == 0) continue;
 		int posX = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().x * 0.03) + (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().x * 0.4) * i;
 		int posY = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().y * 0.15);
 		int sizeY = gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().x * 0.1;
-		tgui::BitmapButton::Ptr but = createWidget(WidgetType::BitmapButton, "Button", "10%", std::to_string(sizeY), std::to_string(posX), std::to_string(posY))->cast<tgui::BitmapButton>();
-		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->add(but, "playerItemButton" + std::to_string(i) + shopNumber);
-		but->setImage(*p->modules[i].itemPrice->icon);
-		but->connect("MouseEntered", applyShopTooltip, &(*p->modules[i].itemPrice));
+		if (p->modules[i].itemPrice != NULL)
+		{
+			tgui::BitmapButton::Ptr but = createWidget(WidgetType::BitmapButton, "Button", "10%", std::to_string(sizeY), std::to_string(posX), std::to_string(posY))->cast<tgui::BitmapButton>();
+			gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->add(but, "playerItemButton" + std::to_string(i) + shopNumber);
+			if (p->modules[i].itemPrice->icon == NULL) giveIconToItem(p->modules[i].itemPrice);
+			but->setImage(*p->modules[i].itemPrice->icon);
+			but->connect("MouseEntered", applyShopTooltip, &(*p->modules[i].itemPrice));
 
-		int labelPosX = posX + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().x * 0.12;
-		int labelPosY = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().y * 0.15) + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().y * 0.1;
-		tgui::BitmapButton::Ptr but2 = createWidget(WidgetType::BitmapButton, "Button", "10%", "15%", std::to_string(labelPosX), std::to_string(labelPosY))->cast<tgui::BitmapButton>();
-		but2->setText("<-->");
-		but2->setTextSize(18);
-		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->add(but2, "changeItemResourceButton" + std::to_string(i) + shopNumber);
-		const int ci = i;
-		but2->connect("MouseReleased", tradeItems, ci, shopNumber, &(*p->modules[i].product), &(*p->modules[i].itemPrice));
+
+			int labelPosX = posX + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().x * 0.12;
+			int labelPosY = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().y * 0.15) + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().y * 0.1;
+			tgui::BitmapButton::Ptr but2 = createWidget(WidgetType::BitmapButton, "Button", "10%", "15%", std::to_string(labelPosX), std::to_string(labelPosY))->cast<tgui::BitmapButton>();
+			but2->setText("<-->");
+			but2->setTextSize(18);
+			gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->add(but2, "changeItemResourceButton" + std::to_string(i) + shopNumber);
+			const int ci = i;
+			but2->connect("MouseReleased", tradeItems, ci, shopNumber, &(*p->modules[i].product), &(*p->modules[i].itemPrice), p->modules[i].creditsPrice);
+		}
 
 		int posX2 = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().x * 0.27) + (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().x * 0.4) * i;
 		tgui::BitmapButton::Ptr but3 = createWidget(WidgetType::BitmapButton, "Button", "10%", std::to_string(sizeY), std::to_string(posX2), std::to_string(posY))->cast<tgui::BitmapButton>();
 		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->add(but3, "shopResourceButton" + std::to_string(i) + shopNumber);
+		if (p->modules[i].product->icon == NULL) giveIconToItem(p->modules[i].product);
 		but3->setImage(*p->modules[i].product->icon);
 		but3->connect("MouseEntered", applyShopTooltip, &(*p->modules[i].product));
 
-		float orlabelPosX = posX + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().x * 0.12 + gEnv->game.adventureGUI.get<tgui::BitmapButton>("changeItemResourceButton" + std::to_string(i) + shopNumber)->getSize().x / 4.2;
-		float orlabelPosY = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().y * 0.15) + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().y * 0.3;
-		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->add(createWidgetLabel("Label", std::to_string(orlabelPosX), std::to_string(orlabelPosY), 18, L"OR"), "shopOrLabel" + std::to_string(i) + shopNumber);
+		if (p->modules[i].itemPrice != NULL && p->modules[i].creditsPrice != 0)
+		{
+			float orlabelPosX = posX + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().x * 0.12 + gEnv->game.adventureGUI.get<tgui::BitmapButton>("changeItemResourceButton" + std::to_string(i) + shopNumber)->getSize().x / 4.2;
+			float orlabelPosY = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().y * 0.15) + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().y * 0.3;
+			gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->add(createWidgetLabel("Label", std::to_string(orlabelPosX), std::to_string(orlabelPosY), 18, L"OR"), "shopOrLabel" + std::to_string(i) + shopNumber);
+		}
 
-		float buyButtonPosX = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().x * 0.03) + (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().x * 0.4) * i;
-		tgui::BitmapButton::Ptr buyButton = createWidget(WidgetType::BitmapButton, "Button", "34%", "20%", std::to_string(buyButtonPosX), "60%")->cast<tgui::BitmapButton>();
-		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->add(buyButton, "buyCreditsButton" + std::to_string(i) + shopNumber);
-		buyButton->setText("Buy it for " + std::to_string(p->modules[i].creditsPrice) + " credits.");
-		buyButton->connect("MouseReleased", buyItem, i, shopNumber, &(*p->modules[i].product), p->modules[i].creditsPrice);
+		if (p->modules[i].creditsPrice != 0)
+		{
+			float buyButtonPosX = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().x * 0.03) + (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().x * 0.4) * i;
+			tgui::BitmapButton::Ptr buyButton = createWidget(WidgetType::BitmapButton, "Button", "34%", "20%", std::to_string(buyButtonPosX), "60%")->cast<tgui::BitmapButton>();
+			gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->add(buyButton, "buyCreditsButton" + std::to_string(i) + shopNumber);
+			buyButton->setText("Buy it for " + std::to_string(p->modules[i].creditsPrice) + " credits.");
+			buyButton->connect("MouseReleased", buyItem, i, shopNumber, &(*p->modules[i].product), &(*p->modules[i].itemPrice), p->modules[i].creditsPrice);
+		}
 	}
 
 	//equipment panel
 	shopNumber = "2";
 	for (int i = 0; i < p->equipments.size(); i++)
 	{
+		if (p->equipments[i].itemPrice == NULL && p->equipments[i].creditsPrice == 0) continue;
 		int posX = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().x * 0.03) + (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().x * 0.4) * i;
 		int posY = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().y * 0.15);
 		int sizeY = gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().x * 0.1;
-		tgui::BitmapButton::Ptr but = createWidget(WidgetType::BitmapButton, "Button", "10%", std::to_string(sizeY), std::to_string(posX), std::to_string(posY))->cast<tgui::BitmapButton>();
-		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->add(but, "playerItemButton" + std::to_string(i) + shopNumber);
-		but->setImage(*p->equipments[i].itemPrice->icon);
-		but->connect("MouseEntered", applyShopTooltip, &(*p->equipments[i].itemPrice));
+		if (p->equipments[i].itemPrice != NULL)
+		{
+			tgui::BitmapButton::Ptr but = createWidget(WidgetType::BitmapButton, "Button", "10%", std::to_string(sizeY), std::to_string(posX), std::to_string(posY))->cast<tgui::BitmapButton>();
+			gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->add(but, "playerItemButton" + std::to_string(i) + shopNumber);
+			if (p->equipments[i].itemPrice->icon == NULL) giveIconToItem(p->equipments[i].itemPrice);
+			but->setImage(*p->equipments[i].itemPrice->icon);
+			but->connect("MouseEntered", applyShopTooltip, &(*p->equipments[i].itemPrice));
 
-		int labelPosX = posX + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().x * 0.12;
-		int labelPosY = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().y * 0.15) + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().y * 0.1;
-		tgui::BitmapButton::Ptr but2 = createWidget(WidgetType::BitmapButton, "Button", "10%", "15%", std::to_string(labelPosX), std::to_string(labelPosY))->cast<tgui::BitmapButton>();
-		but2->setText("<-->");
-		but2->setTextSize(18);
-		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->add(but2, "changeItemResourceButton" + std::to_string(i) + shopNumber);
-		const int ci = i;
-		but2->connect("MouseReleased", tradeItems, ci, shopNumber, &(*p->equipments[i].product), &(*p->equipments[i].itemPrice));
+			int labelPosX = posX + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().x * 0.12;
+			int labelPosY = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().y * 0.15) + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().y * 0.1;
+			tgui::BitmapButton::Ptr but2 = createWidget(WidgetType::BitmapButton, "Button", "10%", "15%", std::to_string(labelPosX), std::to_string(labelPosY))->cast<tgui::BitmapButton>();
+			but2->setText("<-->");
+			but2->setTextSize(18);
+			gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->add(but2, "changeItemResourceButton" + std::to_string(i) + shopNumber);
+			const int ci = i;
+			but2->connect("MouseReleased", tradeItems, ci, shopNumber, &(*p->equipments[i].product), &(*p->equipments[i].itemPrice), p->equipments[i].creditsPrice);
+		}
 
 		int posX2 = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().x * 0.27) + (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().x * 0.4) * i;
 		tgui::BitmapButton::Ptr but3 = createWidget(WidgetType::BitmapButton, "Button", "10%", std::to_string(sizeY), std::to_string(posX2), std::to_string(posY))->cast<tgui::BitmapButton>();
 		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->add(but3, "shopResourceButton" + std::to_string(i) + shopNumber);
+		if (p->equipments[i].product->icon == NULL) giveIconToItem(p->equipments[i].product);
 		but3->setImage(*p->equipments[i].product->icon);
 		but3->connect("MouseEntered", applyShopTooltip, &(*p->equipments[i].product));
 
-		float orlabelPosX = posX + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().x * 0.12 + gEnv->game.adventureGUI.get<tgui::BitmapButton>("changeItemResourceButton" + std::to_string(i) + shopNumber)->getSize().x / 4.2;
-		float orlabelPosY = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().y * 0.15) + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().y * 0.3;
-		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->add(createWidgetLabel("Label", std::to_string(orlabelPosX), std::to_string(orlabelPosY), 18, L"OR"), "shopOrLabel" + std::to_string(i) + shopNumber);
+		if (p->equipments[i].itemPrice != NULL && p->equipments[i].creditsPrice != 0)
+		{
+			float orlabelPosX = posX + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().x * 0.12 + gEnv->game.adventureGUI.get<tgui::BitmapButton>("changeItemResourceButton" + std::to_string(i) + shopNumber)->getSize().x / 4.2;
+			float orlabelPosY = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().y * 0.15) + gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().y * 0.3;
+			gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->add(createWidgetLabel("Label", std::to_string(orlabelPosX), std::to_string(orlabelPosY), 18, L"OR"), "shopOrLabel" + std::to_string(i) + shopNumber);
+		}
 
-		float buyButtonPosX = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().x * 0.03) + (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().x * 0.4) * i;
-		tgui::BitmapButton::Ptr buyButton = createWidget(WidgetType::BitmapButton, "Button", "34%", "20%", std::to_string(buyButtonPosX), "60%")->cast<tgui::BitmapButton>();
-		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->add(buyButton, "buyCreditsButton" + std::to_string(i) + shopNumber);
-		buyButton->setText("Buy it for " + std::to_string(p->equipments[i].creditsPrice) + " credits.");
-		buyButton->connect("MouseReleased", buyItem, i, shopNumber, &(*p->equipments[i].product), p->equipments[i].creditsPrice);
+		if (p->equipments[i].creditsPrice != 0)
+		{
+			float buyButtonPosX = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().x * 0.03) + (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().x * 0.4) * i;
+			tgui::BitmapButton::Ptr buyButton = createWidget(WidgetType::BitmapButton, "Button", "34%", "20%", std::to_string(buyButtonPosX), "60%")->cast<tgui::BitmapButton>();
+			gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->add(buyButton, "buyCreditsButton" + std::to_string(i) + shopNumber);
+			buyButton->setText("Buy it for " + std::to_string(p->equipments[i].creditsPrice) + " credits.");
+			buyButton->connect("MouseReleased", buyItem, i, shopNumber, &(*p->equipments[i].product), &(*p->equipments[i].itemPrice), p->equipments[i].creditsPrice);
+		}
 	}
 
 	//crew panel
@@ -183,7 +219,7 @@ void buildShop(Shop* p)
 		tgui::BitmapButton::Ptr but = createWidget(WidgetType::BitmapButton, "Button", "20%", "100%", std::to_string(posX), "0")->cast<tgui::BitmapButton>();
 		but->setText(p->characters[i].first->name);
 		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopCharacters")->add(but);
-		but->connect("MouseReleased", crewClick, i, &(*p->characters[i].first));
+		but->connect("MouseReleased", crewClick, i, &(*p->characters[i].first), p->characters[i].second);
 
 		std::wstring itemsString = L"Items: ";
 		bool flag = false;
@@ -202,6 +238,7 @@ void buildShop(Shop* p)
 				int sizeY = gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopCharacterStats")->getSize().x * 0.08;
 				tgui::BitmapButton::Ptr but2 = createWidget(WidgetType::BitmapButton, "Button", "8%", std::to_string(sizeY), std::to_string(butPosX), "2%", false)->cast<tgui::BitmapButton>();
 				gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopCharacterStats")->add(but2, "char" + std::to_string(i) + "EquipButton" + std::to_string(j));
+				if (p->characters[i].first->equipment[j]->icon == NULL) giveIconToItem(p->characters[i].first->equipment[j]);
 				but2->setImage(*p->characters[i].first->equipment[j]->icon);
 			}
 		}
@@ -244,7 +281,7 @@ void ChangeToCrew()
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("iternalShopResourcesPanel"), false);
 }
 
-void tradeItems(int id, std::string shopNumber, Item* product, Item* price)
+void tradeItems(int id, std::string shopNumber, Item* product, Item* price, int creditsPrice)
 {
 	int count = 0;
 	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
@@ -293,13 +330,13 @@ void tradeItems(int id, std::string shopNumber, Item* product, Item* price)
 		enableWidget(gEnv->game.adventureGUI.get<tgui::Button>("playerItemButton" + std::to_string(id) + shopNumber), false);
 		enableWidget(gEnv->game.adventureGUI.get<tgui::Button>("changeItemResourceButton" + std::to_string(id) + shopNumber), false);
 		enableWidget(gEnv->game.adventureGUI.get<tgui::Button>("shopResourceButton" + std::to_string(id) + shopNumber), false);
-		enableWidget(gEnv->game.adventureGUI.get<tgui::Label>("shopOrLabel" + std::to_string(id) + shopNumber), false);
-		enableWidget(gEnv->game.adventureGUI.get<tgui::Button>("buyCreditsButton" + std::to_string(id) + shopNumber), false);
+		if (creditsPrice != 0) enableWidget(gEnv->game.adventureGUI.get<tgui::Label>("shopOrLabel" + std::to_string(id) + shopNumber), false);
+		if (creditsPrice != 0) enableWidget(gEnv->game.adventureGUI.get<tgui::Button>("buyCreditsButton" + std::to_string(id) + shopNumber), false);
 		rebuildAll();
 	}
 }
 
-void buyItem(int id, std::string shopNumber, Item* product, int price)
+void buyItem(int id, std::string shopNumber, Item* product, Item* itemPrice, int price)
 {
 	if (gEnv->game.player.money >= price)
 	{
@@ -312,10 +349,10 @@ void buyItem(int id, std::string shopNumber, Item* product, int price)
 				gEnv->game.player.money -= price;
 				gEnv->game.adventureGUI.get<tgui::Label>("moneyLabel")->setText(L"Credits: " + std::to_wstring(gEnv->game.player.money));
 
-				enableWidget(gEnv->game.adventureGUI.get<tgui::Button>("playerItemButton" + std::to_string(id) + shopNumber), false);
-				enableWidget(gEnv->game.adventureGUI.get<tgui::Button>("changeItemResourceButton" + std::to_string(id) + shopNumber), false);
+				if (itemPrice != NULL) enableWidget(gEnv->game.adventureGUI.get<tgui::Button>("playerItemButton" + std::to_string(id) + shopNumber), false);
+				if (itemPrice != NULL) enableWidget(gEnv->game.adventureGUI.get<tgui::Button>("changeItemResourceButton" + std::to_string(id) + shopNumber), false);
 				enableWidget(gEnv->game.adventureGUI.get<tgui::Button>("shopResourceButton" + std::to_string(id) + shopNumber), false);
-				enableWidget(gEnv->game.adventureGUI.get<tgui::Label>("shopOrLabel" + std::to_string(id) + shopNumber), false);
+				if (itemPrice != NULL) enableWidget(gEnv->game.adventureGUI.get<tgui::Label>("shopOrLabel" + std::to_string(id) + shopNumber), false);
 				enableWidget(gEnv->game.adventureGUI.get<tgui::Button>("buyCreditsButton" + std::to_string(id) + shopNumber), false);
 				break;
 			}
@@ -380,7 +417,7 @@ void applyShopTooltip(Item* i, tgui::Widget::Ptr widget, const std::string& sign
 	}
 }
 
-void crewClick(int id, Character *c)
+void crewClick(int id, Character *c, int price)
 {
 	auto widgets = gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopCharacterStats")->getWidgets();
 	for (int i = 0; i < widgets.size(); i++)
@@ -398,6 +435,7 @@ void crewClick(int id, Character *c)
 	}
 
 	gEnv->game.ui.choosenShopCharacter = c;
+	gEnv->game.ui.choosenShopCharacterPrice = price;
 }
 
 void buyCrew()

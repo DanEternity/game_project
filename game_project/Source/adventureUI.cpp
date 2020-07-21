@@ -235,17 +235,19 @@ void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled, bool openS
 	eq->name = L"teloShop";
 	eq->equipmentSlotType = equipmentSlot::body;
 	giveIconToItem(eq);
+	p->addItemToShop(eq, resPrice, 100);
 
 	Character *ch = new Character(L"Shop Character");
 	ch->equipment[1] = eq;
 	p->addCrewToShop(ch, 100);
 	p->addCrewToShop(new Character(L"Shop Character2"), 200);
 
-	/*Module* module = new Module(L"Omega komp for 300$ bucks", moduleType::system, 
+	Module* module = new Module(L"Omega komp for 300$ bucks", moduleType::system, 
 		moduleSlot::core, moduleSlot::ModuleSlotSize::medium);
 	StatModEffect * sme = new StatModEffect(targetType::ship, statNames::hull, -100, 0, 0, 0);
-	module->effects.push_back(sme);*/
-	
+	module->effects.push_back(sme);
+	giveIconToItem(module);
+	p->addItemToShop(module, resPrice, 0);
 
 	switch (gEnv->game.player.shipMenu)
 	{
@@ -300,7 +302,7 @@ void disableAllAdventureUI()
 		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(i)), false);
 		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(i)), false);
 		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("PersonFirstSkillTree" + std::to_string(i)), false);
-
+		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("NamePointsPanel" + std::to_string(i)), false);
 	}
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel"), false);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel"), false);

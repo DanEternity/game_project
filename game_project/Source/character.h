@@ -52,8 +52,8 @@ public:
 
 	bool haveRole = false;
 
-	int level = 2;
-	int skillPoints = 1;
+	int level = 3;
+	int skillPoints = 3;
 	float exp;
 	std::map<int, float> expToNextLevel;
 
