@@ -727,6 +727,34 @@ BaseScript * scriptCompilerTemplates::mainHandler::CalcParamStd(CompilerCommandT
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::CreateShop(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new CreateShopScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->name = convertExtReferences(buffer, buffer->arg["$name"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::AddGoodsToShop(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new AddGoodsToShopScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->object = convertExtReferences(buffer, buffer->arg["$object"]);
+	p->creditsPrice = convertExtReferences(buffer, buffer->arg["$creditsPrice"]);
+	p->exchangeItem = convertExtReferences(buffer, buffer->arg["$exchangeItem"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::ShowShop(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new ShowShopScript();
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);

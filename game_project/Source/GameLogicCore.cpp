@@ -437,4 +437,26 @@ void LoadScriptTemplates()
 	p.mainHandler = scriptCompilerTemplates::mainHandler::CalcParamStd;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
+	// CreateShop
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"CREATESHOP";
+	p.body = "\"$dst\" \"$name\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::CreateShop;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// AddGoodsToShop
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"ADDGOODSTOSHOP";
+	p.body = "\"$dst\" \"$object\" \"$creditsPrice\" \"$exchangeItem\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::AddGoodsToShop;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// ShowShop
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"SHOWSHOP";
+	p.body = "\"$src\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::ShowShop;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+
 }

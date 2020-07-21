@@ -5,23 +5,28 @@
 #include "character.h"
 #include "ship.h"
 
-struct selling
+struct Goods
 {
-	Item* product;
-	Item* itemPrice;
-	int creditsPrice;
+	int stock; // 1 if not resource
+	Item* product; // resulting item - player will get it
+	Item* itemPrice; // item price - player will lose it
+	int creditsPrice; // alternative price in credits
+
 };
 
-class Shop : BaseObject
+class Shop : public BaseObject
 {
 public:
-	std::vector<selling> resources;
-	std::vector<selling> components;
 
-	std::vector<selling> modules;
-	std::vector<selling> modulePlanes;
-	std::vector<selling> equipments;
-	std::vector<selling> equipmentPlanes;
+	std::wstring label;
+
+	std::vector<Goods> resources;
+	std::vector<Goods> components;
+
+	std::vector<Goods> modules;
+	std::vector<Goods> moduleSchemes;
+	std::vector<Goods> equipments;
+	std::vector<Goods> equipmentSchemes;
 
 	std::vector<std::pair<Ship*, int>> ships;
 
@@ -29,7 +34,7 @@ public:
 
 	void addItemToShop(Item* product, Item* itemPrice, int creditsPrice)
 	{
-		selling newSell;
+		Goods newSell;
 		newSell.product = product;
 		newSell.itemPrice = itemPrice;
 		newSell.creditsPrice = creditsPrice;
@@ -62,4 +67,11 @@ public:
 		newPair.second = price;
 		ships.push_back(newPair);
 	}
+
+	Shop() : BaseObject()
+	{
+		this->objectType = objectType::shop;
+		this->memoryControl = memoryControl::fixed;
+	}
+
 };

@@ -73,6 +73,9 @@ namespace scriptType
 		createWeaponModule,
 		editWeaponModuleProperties,
 		calcParamStd,
+		createShop,
+		addGoodsToShop,
+		showShop,
 	};
 }
 
@@ -960,6 +963,48 @@ public:
 	CalcParamStdScript() : BaseScript()
 	{
 		this->scriptType = scriptType::calcParamStd;
+	}
+
+};
+
+class CreateShopScript : public BaseScript
+{
+public:
+	std::wstring dst;
+	std::wstring name;
+
+	CreateShopScript() : BaseScript()
+	{
+		this->scriptType = scriptType::createShop;
+	}
+
+};
+
+class AddGoodsToShopScript : public BaseScript
+{
+public:
+
+	//"$_dst" "type" "object" "stock" "size" "creditsPrice" "exchangeItemId" "exchangeCount"
+	std::wstring dst;
+	std::wstring object;
+	std::wstring creditsPrice;
+	std::wstring exchangeItem;
+
+	AddGoodsToShopScript() : BaseScript()
+	{
+		this->scriptType = scriptType::addGoodsToShop;
+	}
+
+};
+
+class ShowShopScript : public BaseScript
+{
+public:
+	std::wstring src;
+
+	ShowShopScript() : BaseScript()
+	{
+		this->scriptType = scriptType::showShop;
 	}
 
 };

@@ -8,6 +8,7 @@
 #include "characterManagement.h"
 #include "shipModulesUI.h"
 #include "personEquipmentUI.h"
+#include "Shop.h"
 #include <stack>
 //#include "scriptDescriptor.h"
 
@@ -147,6 +148,10 @@ private:
 	void p_processCreateWeaponModule(CreateWeaponModuleScript * command);
 	void p_processEditWeaponModuleProperties(EditWeaponModulePropertiesScript * command);
 	void p_processCalcParamStd(CalcParamStdScript * command);
+	void p_processCreateShop(CreateShopScript * command);
+	void p_processAddGoodsToShop(AddGoodsToShopScript * command);
+	void p_processShowShop(ShowShopScript * command);
+
 };
 
 extern ScriptSystem * scriptSystem;

@@ -73,7 +73,9 @@ namespace scriptCompilerTemplates
 		BaseScript * CreateWeaponModule(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * EditWeaponModuleProperties(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * CalcParamStd(CompilerCommandTemplateDataBuffer * buffer); //
-
+		BaseScript * CreateShop(CompilerCommandTemplateDataBuffer * buffer); //
+		BaseScript * AddGoodsToShop(CompilerCommandTemplateDataBuffer * buffer); //
+		BaseScript * ShowShop(CompilerCommandTemplateDataBuffer * buffer); //
 	}
 
 	namespace afterUpdateHandler 

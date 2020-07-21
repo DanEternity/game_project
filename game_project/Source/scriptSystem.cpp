@@ -327,6 +327,15 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::calcParamStd:
 		p_processCalcParamStd(static_cast<CalcParamStdScript*>(command));
 		break;
+	case scriptType::createShop:
+		p_processCreateShop(static_cast<CreateShopScript*>(command));
+		break;
+	case scriptType::addGoodsToShop:
+		p_processAddGoodsToShop(static_cast<AddGoodsToShopScript*>(command));
+		break;
+	case scriptType::showShop:
+		p_processShowShop(static_cast<ShowShopScript*>(command));
+		break;
 	default:
 		printf("Debug: ScriptSystem Error! Script command has unknown type -> %i", sType);
 		break;
@@ -3555,6 +3564,139 @@ void ScriptSystem::p_processCalcParamStd(CalcParamStdScript * command)
 	{
 		auto code = putMemoryCell(command->dst, res, &p_d->localMemory);
 	}
+
+}
+
+void ScriptSystem::p_processCreateShop(CreateShopScript * command)
+{
+
+	auto dst = command->dst;
+
+	// create item
+	// need to store in global item db
+
+	int id = gEnv->objects.nextShopId++;
+	Shop * obj = new Shop();
+	gEnv->objects.shops[id] = obj;
+	obj->label = command->name;
+
+	auto code = putMemoryCell(dst, obj, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+}
+
+void ScriptSystem::p_processAddGoodsToShop(AddGoodsToShopScript * command)
+{
+
+	//std::wstring dst;
+	//std::wstring object;
+	//std::wstring stock;
+	//std::wstring size;
+	//std::wstring creditsPrice;
+	//std::wstring exchangeId;
+	//std::wstring exchangeCount;
+
+	auto src = command->dst;
+	BaseObject * objSrc = NULL;
+
+	auto code = getMemoryCell(src, &objSrc, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::shop)
+	{
+		// failed
+		return;
+	}
+	Shop * obj = static_cast<Shop*>(objSrc);
+
+	auto objGoods = scriptUtil::getArgumentObject(command->object, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+	bool error = false;
+	int credits = scriptUtil::getArgumentIntValue(command->creditsPrice, p_d, error);
+
+	BaseObject * pExchange = NULL;
+	
+	code = getMemoryCell(command->exchangeItem, &pExchange, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		pExchange = NULL;
+	}
+	Item * qExchange = NULL;
+	if (pExchange != NULL)
+	{
+		if (pExchange->objectType == objectType::item)
+		{
+			qExchange = static_cast<Item*>(pExchange);
+			if (qExchange->itemType != itemType::resource)
+			{
+				qExchange = NULL;
+			}
+		}
+	}
+
+
+	if (objGoods->objectType == objectType::item)
+	{
+		Item * pItem = static_cast<Item*> (objGoods);
+		obj->addItemToShop(pItem, qExchange, credits);
+		return;
+	}
+
+	if (objGoods->objectType == objectType::character)
+	{
+		Character * pChar = static_cast<Character*> (objGoods);
+		obj->addCrewToShop(pChar, credits);
+		return;
+	}
+
+	if (objGoods->objectType == objectType::ship)
+	{
+		Ship * s = static_cast<Ship*> (objGoods);
+		obj->addShipToShop(s, credits);
+		return;
+	}
+
+	// wtf this item (no its not an item)
+	// error. Cannot sell this
+
+}
+
+void ScriptSystem::p_processShowShop(ShowShopScript * command)
+{
+
+	auto src = command->src;
+	BaseObject * objSrc = NULL;
+
+	auto code = getMemoryCell(src, &objSrc, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::shop)
+	{
+		// failed
+		return;
+	}
+	Shop * obj = static_cast<Shop*>(objSrc);
+
+	buildShop(obj);
+
+	// rest in peace
 
 }
 

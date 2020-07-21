@@ -3,6 +3,7 @@
 #include <map>
 #include "poolObject.h"
 #include "item.h"
+#include "shopClass.h"
 
 class ObjectStorage
 {
@@ -24,4 +25,8 @@ public:
 
 	int nextCharId = 0;
 	std::map<int, Character*> characters;
+
+	int nextShopId = 0;
+	std::map<int, Shop*> shops;
+
 };

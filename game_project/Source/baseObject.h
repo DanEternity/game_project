@@ -23,6 +23,7 @@ namespace objectType {
 		sectorTemplate,
 		ship,
 		character,
+		shop,
 	};
 
 } // namespace objectType
