@@ -72,6 +72,7 @@ namespace scriptCompilerTemplates
 		BaseScript * AddCharacterToPlayerCrew(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * CreateWeaponModule(CompilerCommandTemplateDataBuffer * buffer); // ?
 		BaseScript * EditWeaponModuleProperties(CompilerCommandTemplateDataBuffer * buffer); // ?
+		BaseScript * CalcParamStd(CompilerCommandTemplateDataBuffer * buffer); //
 
 	}
 

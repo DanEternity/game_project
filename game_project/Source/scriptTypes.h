@@ -72,6 +72,7 @@ namespace scriptType
 		addCharacterToPlayerCrew,
 		createWeaponModule,
 		editWeaponModuleProperties,
+		calcParamStd,
 	};
 }
 
@@ -940,6 +941,25 @@ public:
 	EditWeaponModulePropertiesScript() : BaseScript()
 	{
 		this->scriptType = scriptType::editWeaponModuleProperties;
+	}
+
+};
+
+class CalcParamStdScript : public BaseScript
+{
+public:
+	std::wstring dst;
+	std::wstring base;
+	std::wstring range;
+	std::wstring key;
+	std::wstring constKey;
+	std::wstring vMod;
+	std::wstring qmod;
+	std::wstring type; // 1 or 2 (positive, negative) also can be version
+
+	CalcParamStdScript() : BaseScript()
+	{
+		this->scriptType = scriptType::calcParamStd;
 	}
 
 };

@@ -712,6 +712,21 @@ BaseScript * scriptCompilerTemplates::mainHandler::EditWeaponModuleProperties(Co
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::CalcParamStd(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new CalcParamStdScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->base = convertExtReferences(buffer, buffer->arg["$base"]);
+	p->range = convertExtReferences(buffer, buffer->arg["$range"]);
+	p->key = convertExtReferences(buffer, buffer->arg["$key"]);
+	p->constKey = convertExtReferences(buffer, buffer->arg["$constKey"]);
+	p->vMod = convertExtReferences(buffer, buffer->arg["$vMod"]);
+	p->qmod = convertExtReferences(buffer, buffer->arg["$qmod"]);
+	p->type = convertExtReferences(buffer, buffer->arg["$type"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);

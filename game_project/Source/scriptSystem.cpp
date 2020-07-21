@@ -324,6 +324,9 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::editWeaponModuleProperties:
 		p_processEditWeaponModuleProperties(static_cast<EditWeaponModulePropertiesScript*>(command));
 		break;
+	case scriptType::calcParamStd:
+		p_processCalcParamStd(static_cast<CalcParamStdScript*>(command));
+		break;
 	default:
 		printf("Debug: ScriptSystem Error! Script command has unknown type -> %i", sType);
 		break;
@@ -1886,16 +1889,16 @@ void ScriptSystem::p_processEditModuleProperties(EditModulePropertiesScript * co
 		p->moduleType = moduleType::weapon;
 	
 	// Size
-	if (moduleSlot == L"small" || moduleSlot == L"Small")
+	if (moduleSize == L"small" || moduleSize == L"Small")
 		p->size = moduleSlot::small;
 	
-	if (moduleSlot == L"medium" || moduleSlot == L"Medium")
+	if (moduleSize == L"medium" || moduleSize == L"Medium")
 		p->size = moduleSlot::medium;
 
-	if (moduleSlot == L"large" || moduleSlot == L"Large")
+	if (moduleSize == L"large" || moduleSize == L"Large")
 		p->size = moduleSlot::large;
 
-	if (moduleSlot == L"huge" || moduleSlot == L"Huge")
+	if (moduleSize == L"huge" || moduleSize == L"Huge")
 		p->size = moduleSlot::huge;
 
 	// Slot type
@@ -3468,6 +3471,90 @@ void ScriptSystem::p_processEditWeaponModuleProperties(EditWeaponModulePropertie
 	p->missileTier.baseValue = mTier;
 
 	p->CalcStats();
+
+}
+
+void ScriptSystem::p_processCalcParamStd(CalcParamStdScript * command)
+{
+	bool error = false;
+
+	float base = scriptUtil::getArgumentFloatValue(command->base, p_d, error);
+	float cKey = scriptUtil::getArgumentFloatValue(command->constKey, p_d, error);
+	float range = scriptUtil::getArgumentFloatValue(command->range, p_d, error);
+	float key = scriptUtil::getArgumentFloatValue(command->key, p_d, error);
+	float qmod = scriptUtil::getArgumentFloatValue(command->qmod, p_d, error);
+	float vMod = scriptUtil::getArgumentFloatValue(command->vMod, p_d, error);
+	int type = scriptUtil::getArgumentIntValue(command->type, p_d, error);
+
+	bool ok = false;
+	FloatObject * res = NULL;
+
+
+	if (type == 1)
+	{
+		ok = true;
+
+		float r;
+		
+		int w;
+		w = int(key) * int(cKey);
+		w = abs(w);
+		w = w % 10000;
+		r = float(w) / 10000;
+		r *= range;
+		r += base;
+		r *= vMod;
+		r *= qmod;
+
+		res = new FloatObject(r);
+		res->memoryControl = memoryControl::singleUse;
+	}
+
+	if (type == 2)
+	{
+		ok = true;
+
+		float r;
+
+		int w;
+		w = int(key) * int(cKey);
+		w = abs(w);
+		w = w % 10000;
+		r = float(w) / 10000;
+		r *= range;
+		r += base;
+		r *= vMod;
+		r /= qmod;
+
+		res = new FloatObject(r);
+		res->memoryControl = memoryControl::singleUse;
+	}
+
+	if (type == 3)
+	{
+		ok = true;
+
+		float r;
+
+		int w;
+		w = int(key) * int(cKey);
+		w = abs(w);
+		w = w % 10000;
+		r = float(w) / 10000;
+		r *= range;
+		r += base;
+		r *= vMod;
+	//	r *= qmod;
+
+
+		res = new FloatObject(r);
+		res->memoryControl = memoryControl::singleUse;
+	}
+
+	if (ok)
+	{
+		auto code = putMemoryCell(command->dst, res, &p_d->localMemory);
+	}
 
 }
 
