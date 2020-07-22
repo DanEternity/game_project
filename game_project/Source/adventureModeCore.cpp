@@ -478,7 +478,7 @@ void drawAdventureGameMode(double deltaTime)
 
 		}
 
-		if (dist2 < 100 * 100)
+		if (dist2 < 100 * 100 && !gEnv->game.adventureUI.isInventoryOpen)
 		{
 			// draw marker panel
 
@@ -514,10 +514,6 @@ void drawAdventureGameMode(double deltaTime)
 			}
 
 			gEnv->game.ui.markerDraw = true;
-			// trg->markers[id]
-
-
-
 		}
 		else
 		{
@@ -547,7 +543,13 @@ void drawAdventureGameMode(double deltaTime)
 		but->setSize(15, 15);
 
 		tgui::Panel::Ptr lab = gEnv->game.adventureGUI.get<tgui::Panel>("minimap")->cast<tgui::Panel>();
-		but->setPosition(((marker->pos.x - gEnv->game.player.shipPosition.x) / 15) + lab->getSize().x / 2 - 7.5, ((marker->pos.y - gEnv->game.player.shipPosition.y) / 10) + lab->getSize().y / 2 - 7.5);
+		int posX = ((marker->pos.x - gEnv->game.player.shipPosition.x) / 15) + lab->getSize().x / 2 - 7.5;
+		int posY = ((marker->pos.y - gEnv->game.player.shipPosition.y) / 10) + lab->getSize().y / 2 - 7.5;
+		if (posX < 0) posX = 0;
+		if (posX > 385) posX = 385;
+		if (posY < 0) posY = 0;
+		if (posY > 285) posY = 285;
+		but->setPosition(posX, posY);
 		gEnv->game.adventureGUI.get<tgui::Panel>("minimap")->add(but);
 	}
 

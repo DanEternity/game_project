@@ -13,8 +13,8 @@ void ChangeToModules();
 void ChangeToShips();
 void ChangeToCrew();
 
-void tradeItems(int id, std::string shopNumber, Item* product, Item* price, int creditsPrice);
-void buyItem(int id, std::string shopNumber, Item* product, Item* itemPrice, int price);
+void tradeItems(Goods g, Shop *p);
+void buyItem(Goods g, Shop *p);
 void sellItem(tgui::Widget::Ptr widget, const std::string& signalName);
 
 void crewClick(int id, Character *c, int price);

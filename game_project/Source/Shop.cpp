@@ -85,7 +85,7 @@ void buildShop(Shop* p)
 			but2->setTextSize(18);
 			gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->add(but2, "changeItemResourceButton" + std::to_string(i) + shopNumber);
 			const int ci = i;
-			but2->connect("MouseReleased", tradeItems, ci, shopNumber, &(*p->resources[i].product), &(*p->resources[i].itemPrice), p->resources[i].creditsPrice);
+			but2->connect("MouseReleased", tradeItems, p->resources[i], &(*p));
 		}
 
 		int posX2 = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().x * 0.27) + (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->getSize().x * 0.4) * i;
@@ -107,7 +107,7 @@ void buildShop(Shop* p)
 			tgui::BitmapButton::Ptr buyButton = createWidget(WidgetType::BitmapButton, "Button", "34%", "20%", std::to_string(buyButtonPosX), "60%")->cast<tgui::BitmapButton>();
 			gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopResources")->add(buyButton, "buyCreditsButton" + std::to_string(i) + shopNumber);
 			buyButton->setText("Buy it for " + std::to_string(p->resources[i].creditsPrice) + " credits.");
-			buyButton->connect("MouseReleased", buyItem, i, shopNumber, &(*p->resources[i].product), &(*p->resources[i].itemPrice), p->resources[i].creditsPrice);
+			buyButton->connect("MouseReleased", buyItem, p->resources[i], &(*p));
 		}
 	}
 
@@ -135,7 +135,7 @@ void buildShop(Shop* p)
 			but2->setTextSize(18);
 			gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->add(but2, "changeItemResourceButton" + std::to_string(i) + shopNumber);
 			const int ci = i;
-			but2->connect("MouseReleased", tradeItems, ci, shopNumber, &(*p->modules[i].product), &(*p->modules[i].itemPrice), p->modules[i].creditsPrice);
+			but2->connect("MouseReleased", tradeItems, p->modules[i], &(*p));
 		}
 
 		int posX2 = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().x * 0.27) + (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->getSize().x * 0.4) * i;
@@ -158,12 +158,11 @@ void buildShop(Shop* p)
 			tgui::BitmapButton::Ptr buyButton = createWidget(WidgetType::BitmapButton, "Button", "34%", "20%", std::to_string(buyButtonPosX), "60%")->cast<tgui::BitmapButton>();
 			gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopModules")->add(buyButton, "buyCreditsButton" + std::to_string(i) + shopNumber);
 			buyButton->setText("Buy it for " + std::to_string(p->modules[i].creditsPrice) + " credits.");
-			buyButton->connect("MouseReleased", buyItem, i, shopNumber, &(*p->modules[i].product), &(*p->modules[i].itemPrice), p->modules[i].creditsPrice);
+			buyButton->connect("MouseReleased", buyItem, p->modules[i], &(*p));
 		}
 	}
 
 	//equipment panel
-	shopNumber = "2";
 	for (int i = 0; i < p->equipments.size(); i++)
 	{
 		if (p->equipments[i].itemPrice == NULL && p->equipments[i].creditsPrice == 0) continue;
@@ -185,7 +184,7 @@ void buildShop(Shop* p)
 			but2->setTextSize(18);
 			gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->add(but2, "changeItemResourceButton" + std::to_string(i) + shopNumber);
 			const int ci = i;
-			but2->connect("MouseReleased", tradeItems, ci, shopNumber, &(*p->equipments[i].product), &(*p->equipments[i].itemPrice), p->equipments[i].creditsPrice);
+			but2->connect("MouseReleased", tradeItems, p->equipments[i], &(*p));
 		}
 
 		int posX2 = (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().x * 0.27) + (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->getSize().x * 0.4) * i;
@@ -208,7 +207,7 @@ void buildShop(Shop* p)
 			tgui::BitmapButton::Ptr buyButton = createWidget(WidgetType::BitmapButton, "Button", "34%", "20%", std::to_string(buyButtonPosX), "60%")->cast<tgui::BitmapButton>();
 			gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("shopEquipments")->add(buyButton, "buyCreditsButton" + std::to_string(i) + shopNumber);
 			buyButton->setText("Buy it for " + std::to_string(p->equipments[i].creditsPrice) + " credits.");
-			buyButton->connect("MouseReleased", buyItem, i, shopNumber, &(*p->equipments[i].product), &(*p->equipments[i].itemPrice), p->equipments[i].creditsPrice);
+			buyButton->connect("MouseReleased", buyItem, p->equipments[i], &(*p));
 		}
 	}
 
@@ -281,38 +280,38 @@ void ChangeToCrew()
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("iternalShopResourcesPanel"), false);
 }
 
-void tradeItems(int id, std::string shopNumber, Item* product, Item* price, int creditsPrice)
+void tradeItems(Goods g, Shop *p)
 {
 	int count = 0;
 	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
 	{
 		if (gEnv->game.player.inventory[i] != NULL)
 		{
-			if (gEnv->game.player.inventory[i]->itemId == price->itemId)
+			if (gEnv->game.player.inventory[i]->itemId == g.itemPrice->itemId)
 			{
 				count += static_cast<ItemResource*>(gEnv->game.player.inventory[i])->count;
 			}
 		}
 	}
-	if (count >= static_cast<ItemResource*>(price)->count)
+	if (count >= static_cast<ItemResource*>(g.itemPrice)->count)
 	{
 		int paid = 0;
 		for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
 		{
 			if (gEnv->game.player.inventory[i] != NULL)
 			{
-				if (gEnv->game.player.inventory[i]->itemId == price->itemId)
+				if (gEnv->game.player.inventory[i]->itemId == g.itemPrice->itemId)
 				{
-					if (paid == static_cast<ItemResource*>(price)->count)
+					if (paid == static_cast<ItemResource*>(g.itemPrice)->count)
 						break;
-					if (static_cast<ItemResource*>(price)->count - paid >= static_cast<ItemResource*>(gEnv->game.player.inventory[i])->count)
+					if (static_cast<ItemResource*>(g.itemPrice)->count - paid >= static_cast<ItemResource*>(gEnv->game.player.inventory[i])->count)
 					{
 						paid += static_cast<ItemResource*>(gEnv->game.player.inventory[i])->count;
 						gEnv->game.player.inventory[i] = NULL;
 					}
 					else
 					{
-						static_cast<ItemResource*>(gEnv->game.player.inventory[i])->count -= static_cast<ItemResource*>(price)->count - paid;
+						static_cast<ItemResource*>(gEnv->game.player.inventory[i])->count -= static_cast<ItemResource*>(g.itemPrice)->count - paid;
 						updateInventoryCell(i);
 						break;
 					}
@@ -323,37 +322,109 @@ void tradeItems(int id, std::string shopNumber, Item* product, Item* price, int 
 		{
 			if (gEnv->game.player.inventory[i] == NULL)
 			{
-				gEnv->game.player.inventory[i] = product;
+				gEnv->game.player.inventory[i] = g.product;
+				
+				switch (g.product->itemType)
+				{
+				case itemType::resource:
+					for (int j = 0; j < p->resources.size(); j++)
+					{
+						if (g.creditsPrice == p->resources[j].creditsPrice
+							&& g.itemPrice == p->resources[j].itemPrice
+							&& g.product == p->resources[j].product
+							&& g.stock == p->resources[j].stock)
+						{
+							p->resources.erase(p->resources.begin() + j);
+						}
+					}
+					break;
+				case itemType::module:
+					for (int j = 0; j < p->resources.size(); j++)
+					{
+						if (g.creditsPrice == p->modules[j].creditsPrice
+							&& g.itemPrice == p->modules[j].itemPrice
+							&& g.product == p->modules[j].product
+							&& g.stock == p->modules[j].stock)
+						{
+							p->modules.erase(p->modules.begin() + j);
+						}
+					}
+					break;
+				case itemType::equipment:
+					for (int j = 0; j < p->equipments.size(); j++)
+					{
+						if (g.creditsPrice == p->equipments[j].creditsPrice
+							&& g.itemPrice == p->equipments[j].itemPrice
+							&& g.product == p->equipments[j].product
+							&& g.stock == p->equipments[j].stock)
+						{
+							p->equipments.erase(p->equipments.begin() + j);
+						}
+					}
+					break;
+				}
+				buildShop(p); 
+				
 				break;
 			}
 		}
-		enableWidget(gEnv->game.adventureGUI.get<tgui::Button>("playerItemButton" + std::to_string(id) + shopNumber), false);
-		enableWidget(gEnv->game.adventureGUI.get<tgui::Button>("changeItemResourceButton" + std::to_string(id) + shopNumber), false);
-		enableWidget(gEnv->game.adventureGUI.get<tgui::Button>("shopResourceButton" + std::to_string(id) + shopNumber), false);
-		if (creditsPrice != 0) enableWidget(gEnv->game.adventureGUI.get<tgui::Label>("shopOrLabel" + std::to_string(id) + shopNumber), false);
-		if (creditsPrice != 0) enableWidget(gEnv->game.adventureGUI.get<tgui::Button>("buyCreditsButton" + std::to_string(id) + shopNumber), false);
 		rebuildAll();
 	}
 }
 
-void buyItem(int id, std::string shopNumber, Item* product, Item* itemPrice, int price)
+void buyItem(Goods g, Shop *p)
 {
-	if (gEnv->game.player.money >= price)
+	if (gEnv->game.player.money >= g.creditsPrice)
 	{
 		for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
 		{
 			if (gEnv->game.player.inventory[i] == NULL)
 			{
-				gEnv->game.player.inventory[i] = product;
+				gEnv->game.player.inventory[i] = g.product;
 				updateInventoryCell(i);
-				gEnv->game.player.money -= price;
+				gEnv->game.player.money -= g.creditsPrice;
 				gEnv->game.adventureGUI.get<tgui::Label>("moneyLabel")->setText(L"Credits: " + std::to_wstring(gEnv->game.player.money));
 
-				if (itemPrice != NULL) enableWidget(gEnv->game.adventureGUI.get<tgui::Button>("playerItemButton" + std::to_string(id) + shopNumber), false);
-				if (itemPrice != NULL) enableWidget(gEnv->game.adventureGUI.get<tgui::Button>("changeItemResourceButton" + std::to_string(id) + shopNumber), false);
-				enableWidget(gEnv->game.adventureGUI.get<tgui::Button>("shopResourceButton" + std::to_string(id) + shopNumber), false);
-				if (itemPrice != NULL) enableWidget(gEnv->game.adventureGUI.get<tgui::Label>("shopOrLabel" + std::to_string(id) + shopNumber), false);
-				enableWidget(gEnv->game.adventureGUI.get<tgui::Button>("buyCreditsButton" + std::to_string(id) + shopNumber), false);
+				switch (g.product->itemType)
+				{
+				case itemType::resource:
+					for (int j = 0; j < p->resources.size(); j++)
+					{
+						if (g.creditsPrice == p->resources[j].creditsPrice
+							&& g.itemPrice == p->resources[j].itemPrice
+							&& g.product == p->resources[j].product
+							&& g.stock == p->resources[j].stock)
+						{
+							p->resources.erase(p->resources.begin() + j);
+						}
+					}
+					break;
+				case itemType::module:
+					for (int j = 0; j < p->resources.size(); j++)
+					{
+						if (g.creditsPrice == p->modules[j].creditsPrice
+							&& g.itemPrice == p->modules[j].itemPrice
+							&& g.product == p->modules[j].product
+							&& g.stock == p->modules[j].stock)
+						{
+							p->modules.erase(p->modules.begin() + j);
+						}
+					}
+					break;
+				case itemType::equipment:
+					for (int j = 0; j < p->equipments.size(); j++)
+					{
+						if (g.creditsPrice == p->equipments[j].creditsPrice
+							&& g.itemPrice == p->equipments[j].itemPrice
+							&& g.product == p->equipments[j].product
+							&& g.stock == p->equipments[j].stock)
+						{
+							p->equipments.erase(p->equipments.begin() + j);
+						}
+					}
+					break;
+				}
+				buildShop(p);
 				break;
 			}
 		}

@@ -208,46 +208,12 @@ void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled, bool openS
 		gEnv->game.player.shipMenu = shipMenu::null;
 		gEnv->game.adventureUI.isInventoryOpen = !gEnv->game.adventureUI.isInventoryOpen;
 	}
+	if (openShop) gEnv->game.adventureUI.isInventoryOpen = true;
 	if (!gEnv->game.adventureUI.isInventoryOpen && !openShop)
 		return;
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("playerUIMainPanel"), true);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel"), true);
 	gEnv->game.player.shipMenu = state;
-
-	// TEST CODE FOR SHOP
-	Shop *p = new Shop();
-
-	ItemResource* res = new ItemResource();
-	res->itemId = -10;
-	res->name = L"TestResource";
-	res->count = 20;
-	res->maxCount = 64;
-	giveIconToItem(res);
-	ItemResource* resPrice = new ItemResource();
-	resPrice->itemId = -9;
-	resPrice->name = L"TestResource2";
-	resPrice->count = 30;
-	resPrice->maxCount = 64;
-	giveIconToItem(resPrice);
-	p->addItemToShop(resPrice, res, 100);
-
-	Equipment *eq = new Equipment();
-	eq->name = L"teloShop";
-	eq->equipmentSlotType = equipmentSlot::body;
-	giveIconToItem(eq);
-	p->addItemToShop(eq, resPrice, 100);
-
-	Character *ch = new Character(L"Shop Character");
-	ch->equipment[1] = eq;
-	p->addCrewToShop(ch, 100);
-	p->addCrewToShop(new Character(L"Shop Character2"), 200);
-
-	Module* module = new Module(L"Omega komp for 300$ bucks", moduleType::system, 
-		moduleSlot::core, moduleSlot::ModuleSlotSize::medium);
-	StatModEffect * sme = new StatModEffect(targetType::ship, statNames::hull, -100, 0, 0, 0);
-	module->effects.push_back(sme);
-	giveIconToItem(module);
-	p->addItemToShop(module, resPrice, 0);
 
 	switch (gEnv->game.player.shipMenu)
 	{
@@ -271,7 +237,6 @@ void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled, bool openS
 		ChangePersonPanelsState(gEnv->game.ui.puistate);
 		break;
 	case shipMenu::hangar:
-		buildShop(p);
 		break;
 	case shipMenu::lab:
 		break;
