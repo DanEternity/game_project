@@ -6,7 +6,8 @@
 #include "shopClass.h"
 
 void createShopPanel();
-void buildShop(Shop* p);
+void createShop();
+void buildShop(Shop* p, bool rebuild = false);
 
 void ChangeToResources();
 void ChangeToModules();

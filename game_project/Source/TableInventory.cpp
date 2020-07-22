@@ -29,6 +29,16 @@ void BuildInventoryUI(int cellSize)
 	}
 }
 
+void updateInventoryCell(int id)
+{
+	gEnv->game.player.inventory[id]->tooltipDescription->removeAllWidgets();
+	gEnv->game.adventureGUI.get<tgui::BitmapButton>("InventoryCell" + std::to_string(id))->setToolTip(NULL);
+	gEnv->game.player.inventory[id]->tooltipWasCreated = false;
+
+	if (gEnv->game.player.inventory[id]->icon != nullptr)
+		gEnv->game.adventureGUI.get<tgui::BitmapButton>("InventoryCell" + std::to_string(id))->setImage(*gEnv->game.player.inventory[id]->icon);
+	else gEnv->game.adventureGUI.get<tgui::BitmapButton>("InventoryCell" + std::to_string(id))->setImage(gEnv->modelDB[L"itemDefault"]->tex);
+}
 
 void CreateInventoryGridPanel(int length)
 {

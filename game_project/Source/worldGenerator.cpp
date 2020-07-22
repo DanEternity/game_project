@@ -469,4 +469,6 @@ void SetupAdventureStart()
 	/* CREATE GRID PANEL */
 
 	CreateInventoryGridPanel(10);
+
+	createShop();
 }

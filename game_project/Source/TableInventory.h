@@ -35,6 +35,7 @@ void InventoryItemClicked(TableInventory* inv, InventoryItem *item, tgui::Widget
 
 
 void BuildInventoryUI(int cellSize);
+void updateInventoryCell(int id);
 
 // filtered inventory grid
 

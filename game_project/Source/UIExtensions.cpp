@@ -44,13 +44,6 @@ tgui::Label::Ptr createWidgetLabel(std::string render, std::string posX, std::st
 	return label;
 }
 
-void updateInventoryCell(int id)
-{
-	gEnv->game.player.inventory[id]->tooltipDescription = tgui::Panel::create();
-	gEnv->game.adventureGUI.get<tgui::Button>("InventoryCell" + std::to_string(id))->setToolTip(NULL);
-	gEnv->game.player.inventory[id]->tooltipWasCreated = false;
-}
-
 void enableWidget(tgui::Widget::Ptr widget, bool enable)
 {
 	widget->setEnabled(enable);
