@@ -176,17 +176,17 @@ void swapElements(TargetInventory::targetInventory target, int id)
 
 void rebuildAll()
 {
-	BuildInventoryUI(9);
-	RebuildInventoryGridPanel();
-	updateShipSchemeUI(); 
-	updateShipValues(gEnv->game.player.ship);
-	buildShipStats();
-	BuildPersonSchemeUI(50, gEnv->game.ui.activeOpenPersonWindow);
-	UpdateStatPersonScreen();
-	deleteAllTooltipsPersonUI();
-	deleteAllGridTooltips();
-	deleteAllTooltipsShipUI();
-	deleteAllInventoryTooltips();
+	BuildInventoryUI(9); //145 ms
+	RebuildInventoryGridPanel(); //53 ms
+	updateShipSchemeUI();  // 9 ms
+	updateShipValues(gEnv->game.player.ship); // 1 ms
+	buildShipStats(); // 27 ms
+	BuildPersonSchemeUI(50, gEnv->game.ui.activeOpenPersonWindow); // 14 ms
+	UpdateStatPersonScreen(); // 14 ms
+	deleteAllTooltipsPersonUI(); // 2 ms
+	deleteAllGridTooltips(); // 3 ms
+	deleteAllTooltipsShipUI(); // 2 ms
+	deleteAllInventoryTooltips(); // 5 ms
 }
 
 std::wstring createFloatString(float number)
