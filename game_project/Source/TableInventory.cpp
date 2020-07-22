@@ -124,7 +124,6 @@ void RebuildInventoryGridPanel()
 		}
 	}
 
-	BuildInventoryUI(9);
 	deleteAllGridTooltips();
 	for (int id(0); id < gEnv->game.player.inventory.size(); id++)
 	{	
