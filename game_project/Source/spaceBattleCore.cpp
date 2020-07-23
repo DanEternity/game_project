@@ -12,7 +12,7 @@ void updateSpaceBattle(double deltaTime)
 		float sizeX, sizeY;
 		sizeX = 442;
 		sizeY = 512;
-
+		// graphics
 		sb->backgroundImage = new sf::Sprite(gEnv->modelDB[L"testBackgroundSpace"]->tex);
 
 		sb->mapSegment = new sf::Sprite(gEnv->modelDB[L"spaceBattleMapSegment"]->tex);
@@ -31,7 +31,7 @@ void updateSpaceBattle(double deltaTime)
 
 	//	sb->mapSegment->setScale
 		//sb->mapSegment->setPosition;
-		
+		// initial camera
 		sb->cameraX = 500;
 		sb->cameraY = 500;
 
@@ -198,6 +198,47 @@ void updateSpaceBattle(double deltaTime)
 			}
 		}
 		
+		if (pickX == -1)
+		{
+			if (sb->miniWindowCreated)
+			{
+				sb->miniWindowCreated = false;
+				hideMiniWindowShipStats();
+			}
+		}
+		else 
+			if (sb->pickI != pickY || sb->pickJ != pickX)
+			{
+				if (sb->map[pickY][pickX]->ships.size() > 0)
+				{
+					buildMiniWindowShipStats(sb->map[pickY][pickX]->screenX + 25, sb->map[pickY][pickX]->screenY, sb->map[pickY][pickX]->ships[0]);
+					sb->miniWindowCreated = true;
+
+					if (sb->miniWindowEmptyCreated)
+					{
+						sb->miniWindowEmptyCreated = false;
+						// hideWindow
+					}
+
+				}
+				else
+				{
+					if (sb->miniWindowCreated)
+					{
+						sb->miniWindowCreated = false;
+						hideMiniWindowShipStats();
+					}
+					if (!sb->miniWindowEmptyCreated)
+					{
+						sb->miniWindowEmptyCreated = true;
+						// showWindow
+					}
+				}
+			}
+
+		sb->pickI = pickY;
+		sb->pickJ = pickX;
+
 		// draw gui
 		gEnv->game.spaceBattle.GUI.draw();
 
@@ -240,4 +281,8 @@ void updateSpaceBattle(double deltaTime)
 	}
 
 
+}
+
+void drawSpaceBattle(double deltaTime)
+{
 }

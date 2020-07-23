@@ -23,6 +23,15 @@ public:
 	int currentFactionIndex; // vector index, not faction index
 	std::string turnProcessingState = "null";
 
+	int pickI = -1, pickJ = -1;
+	bool miniWindowCreated = false;
+
+	bool miniWindowEmptyCreated = false;
+
+	int SelectI, SelectJ;
+	bool selected = false;
+	int SelectedShipId;
+
 	SpaceBattleData()
 	{
 		maxLines = 12;

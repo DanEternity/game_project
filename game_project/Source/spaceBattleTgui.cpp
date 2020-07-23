@@ -3,7 +3,8 @@
 void buildMiniWindowShipStats(int x, int y, Ship * s)
 {
 	std::string render = "Label";
-	tgui::Panel::Ptr pan = createWidget(WidgetType::Panel, "Panel", "400", "500", std::to_string(x), std::to_string(y))->cast<tgui::Panel>();
+	tgui::Panel::Ptr pan = createWidget(WidgetType::Panel, "Panel", "500", "400", std::to_string(x), std::to_string(y))->cast<tgui::Panel>();
+	y = 5;
 	//Hull
 	pan->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Hull") + L": " + std::to_wstring((int)s->hull.current) + L"/" + std::to_wstring((int)s->hull.total))));
 	y += 20;
