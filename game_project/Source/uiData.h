@@ -40,4 +40,6 @@ public:
 
 	Character* choosenShopCharacter;
 	int choosenShopCharacterPrice;
+
+	tgui::Panel::Ptr tooltipDescription = tgui::Panel::create();
 };

@@ -25,7 +25,12 @@ void BuildInventoryUI(int cellSize)
 
 		button->connect("MouseReleased", InventoryResponseSignal, number, std::string("ShipInventory"));
 		button->connect("RightMouseReleased", InventoryResponseSignal, number, std::string("ShipInventory"));
-		button->connect("MouseEntered", applyStorageTooltip, i);
+		//button->connect("MouseEntered", applyStorageTooltip, i);
+
+		gEnv->game.ui.tooltipDescription->setSize(100, 100);
+		gEnv->game.ui.tooltipDescription->setRenderer(gEnv->globalTheme.getRenderer("Panel"));
+		button->setToolTip(gEnv->game.ui.tooltipDescription);
+		tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
 	}
 }
 
