@@ -27,6 +27,7 @@ void BuildShipSchemeUI(int moduleSizeUI)
 		btn->connect("MouseReleased", handleShipModulesPanelEvent, id);
 		btn->connect("RightMouseReleased", handleShipModulesPanelEvent, id);
 		btn->connect("MouseEntered", applyModuleTooltipShipUI, id);
+		btn->setToolTip(gEnv->game.ui.tooltipDescription);
 	}
 }
 
@@ -175,37 +176,13 @@ void applyModuleTooltipShipUI(int id)
 		switch (gEnv->game.player.ship->modules[id]->moduleType)
 		{
 		case moduleType::system:
-			if (!gEnv->game.player.ship->modules[id]->tooltipWasCreated)
-			{
-				createModuleTooltip(gEnv->game.player.ship->modules[id]);
-				gEnv->game.player.ship->modules[id]->tooltipWasCreated = true;
-			}
-			gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(id))->setToolTip(gEnv->game.player.ship->modules[id]->tooltipDescription);
-			tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
+			createModuleTooltip(static_cast<Module*>(gEnv->game.player.ship->modules[id]));
 			break;
 		case moduleType::weapon:
-			if (!gEnv->game.player.ship->modules[id]->tooltipWasCreated)
-			{
-				createWeaponModuleTooltip(static_cast<WeaponModule*>(gEnv->game.player.ship->modules[id]));
-				gEnv->game.player.ship->modules[id]->tooltipWasCreated = true;
-			}
-			gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(id))->setToolTip(gEnv->game.player.ship->modules[id]->tooltipDescription);
-			tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
+			createWeaponModuleTooltip(static_cast<WeaponModule*>(gEnv->game.player.ship->modules[id]));
 			break;
 		}
-		
+		gEnv->game.ui.tooltipDescription->setVisible(true);
 	}
-}
-
-void deleteAllTooltipsShipUI()
-{
-	for (int i = 0; i < gEnv->game.player.ship->modules.size(); i++)
-	{
-		gEnv->game.adventureGUI.get<tgui::Button>("ShipSchemeModule" + std::to_string(i))->setToolTip(NULL);
-		if (gEnv->game.player.ship->modules[i] != NULL &&gEnv->game.player.ship->modules[i]->tooltipWasCreated)
-		{
-			gEnv->game.player.ship->modules[i]->tooltipDescription->removeAllWidgets();
-			gEnv->game.player.ship->modules[i]->tooltipWasCreated = false;
-		}
-	}
+	else gEnv->game.ui.tooltipDescription->setVisible(false);
 }

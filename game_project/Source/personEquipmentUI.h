@@ -30,4 +30,3 @@ void unregisterPlayerCharacter(int id);
 
 
 void applyEquipmentTooltipPersonUI(int id);
-void deleteAllTooltipsPersonUI();

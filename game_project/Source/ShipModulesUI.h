@@ -40,4 +40,3 @@ void createShipModulePriorityPanel();
 void changeShipModulePriority(int id, bool isUp);
 
 void applyModuleTooltipShipUI(int id);
-void deleteAllTooltipsShipUI();

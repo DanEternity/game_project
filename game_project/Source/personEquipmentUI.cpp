@@ -71,6 +71,7 @@ void BuildPersonSchemeUI(int equipSizeUI, int crewPersonNumber)
 		btn->connect("RightMouseReleased", personUIElementWasClicked, id);
 		btn->connect("MouseReleased", personUIElementWasClicked, id);
 		btn->connect("MouseEntered", applyEquipmentTooltipPersonUI, id);
+		btn->setToolTip(gEnv->game.ui.tooltipDescription);
 	}
 }
 
@@ -480,20 +481,8 @@ void applyEquipmentTooltipPersonUI(int id)
 {
 	if (gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id] != NULL)
 	{
-		if (!gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id]->tooltipWasCreated)
-		{
-			createEquipmentTooltip(gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id]);
-			gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id]->tooltipWasCreated = true;
-		}
-		gEnv->game.adventureGUI.get<tgui::BitmapButton>("Person" + std::to_string(gEnv->game.ui.activeOpenPersonWindow) + "Equip" + std::to_string(id))
-			->setToolTip(gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id]->tooltipDescription);
+		createEquipmentTooltip(gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id]);
+		gEnv->game.ui.tooltipDescription->setVisible(true);
 	}
-}
-
-void deleteAllTooltipsPersonUI()
-{
-	for (int i = 0; i < gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment.size(); i++)
-	{
-		gEnv->game.adventureGUI.get<tgui::BitmapButton>("Person" + std::to_string(gEnv->game.ui.activeOpenPersonWindow) + "Equip" + std::to_string(i))->setToolTip(NULL);
-	}
+	else gEnv->game.ui.tooltipDescription->setVisible(false);
 }

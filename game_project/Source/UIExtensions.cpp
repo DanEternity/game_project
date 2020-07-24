@@ -84,13 +84,6 @@ void swapElements(TargetInventory::targetInventory target, int id)
 					gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.pickedItem;
 					static_cast<ItemResource*>(gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId])->count -= (64 - static_cast<ItemResource*>(gEnv->game.player.inventory[id])->count);
 					static_cast<ItemResource*>(gEnv->game.player.inventory[id])->count = 64;
-
-					updateInventoryCell(gEnv->game.player.pickedItemInvId);
-				}
-				updateInventoryCell(id);
-				if (gEnv->game.ui.shiftedItem && !gEnv->game.ui.shiftedItemTakedAll)
-				{
-					updateInventoryCell(gEnv->game.player.pickedItemInvId);
 				}
 				break;
 			}
@@ -108,12 +101,6 @@ void swapElements(TargetInventory::targetInventory target, int id)
 		if (gEnv->game.player.pickedItemInvId != -1)
 		{
 			gEnv->game.player.inventory[id] = gEnv->game.player.pickedItem;
-			updateInventoryCell(id);
-		}
-		// Если мы брали с шифта, обновляем то место, откуда брали
-		if (gEnv->game.ui.shiftedItem && !gEnv->game.ui.shiftedItemTakedAll)
-		{
-			updateInventoryCell(id);
 		}
 		break;
 	case TargetInventory::gridPanel:
@@ -161,6 +148,7 @@ void swapElements(TargetInventory::targetInventory target, int id)
 		break;
 	}
 
+	updateInventoryCell(id);
 	if (!flagCantPlace)
 	{
 		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::BitmapButton>("pickedItemMouse"));
@@ -183,10 +171,6 @@ void rebuildAll()
 	buildShipStats(); // 27 ms
 	BuildPersonSchemeUI(50, gEnv->game.ui.activeOpenPersonWindow); // 14 ms
 	UpdateStatPersonScreen(); // 14 ms
-	deleteAllTooltipsPersonUI(); // 2 ms
-	deleteAllGridTooltips(); // 3 ms
-	deleteAllTooltipsShipUI(); // 2 ms
-	deleteAllInventoryTooltips(); // 5 ms
 }
 
 std::wstring createFloatString(float number)

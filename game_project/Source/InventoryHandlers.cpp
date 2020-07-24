@@ -18,7 +18,7 @@ void InventoryResponseSignal(int cellId, std::string inventoryId, tgui::Widget::
 					{
 						static_cast<ItemResource*>(gEnv->game.player.pickedItem)->count++;
 						static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->count--; 
-						gEnv->game.player.inventory[cellId]->tooltipDescription->get<tgui::Label>("resourceCount")->setText(
+						gEnv->game.ui.tooltipDescription->get<tgui::Label>("resourceCount")->setText(
 							L"Count: " + std::to_wstring(static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->count) + L"/" + std::to_wstring(static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->maxCount));
 
 						if (static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->count == 0)
@@ -42,15 +42,16 @@ void InventoryResponseSignal(int cellId, std::string inventoryId, tgui::Widget::
 				gEnv->game.player.pickedItem = temp;
 				gEnv->game.player.pickedItemInvId = cellId;
 				static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->count--;
+
 				gEnv->game.adventureGUI.add(createWidget(WidgetType::BitmapButton, "Button", std::to_string(45), std::to_string(45), std::to_string(sf::Mouse::getPosition(gEnv->globalWindow).x), std::to_string(sf::Mouse().getPosition(gEnv->globalWindow).y - 5)), "pickedItemMouse");
 				gEnv->game.adventureGUI.get<tgui::BitmapButton>("pickedItemMouse")->setImage(*gEnv->game.player.inventory[cellId]->icon);
 
+				gEnv->game.ui.tooltipDescription->get<tgui::Label>("resourceCount")->setText(
+					L"Count: " + std::to_wstring(static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->count) + L"/" + std::to_wstring(static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->maxCount));
+
 				gEnv->game.ui.shiftedItem = true;
 				gEnv->game.ui.shiftedItemStartId = cellId;
-				tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
 
-				gEnv->game.player.inventory[cellId]->tooltipDescription->get<tgui::Label>("resourceCount")->setText(
-					L"Count: " + std::to_wstring(static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->count) + L"/" + std::to_wstring(static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->maxCount));
 				
 
 				if (static_cast<ItemResource*>(gEnv->game.player.inventory[cellId])->count == 0)
@@ -217,7 +218,6 @@ void rmPanelChoosenInsert(const int id, const int item_id, int inventory, tgui::
 
 		updateShipSchemeUI();
 		BuildInventoryUI(9);
-		deleteAllInventoryTooltips();
 
 		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
 		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempAddPanel"));
@@ -246,7 +246,6 @@ void rmPanelChoosenInsert(const int id, const int item_id, int inventory, tgui::
 			panel2->get<tgui::Button>("Person" + std::to_string(gEnv->game.ui.activeOpenPersonWindow) + "Equip" + std::to_string(item_id))->setText(L"");
 
 		BuildInventoryUI(9);
-		deleteAllInventoryTooltips();
 
 		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
 		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempAddPanel"));
