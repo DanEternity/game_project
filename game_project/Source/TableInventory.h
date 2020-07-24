@@ -57,10 +57,5 @@ void createResourseTooltip(ItemResource * r);
 void createEquipmentTooltip(Equipment * e);
 void createWeaponModuleTooltip(WeaponModule * w);
 
-void deleteAllInventoryTooltips();
-void deleteAllGridTooltips();
-
 void applyStorageTooltip(int id);
-void applyGridModuleTooltip(int id);
-void applyGridEquipmentTooltip(int id);
-void applyGridWeaponModuleTooltip(int id);
+void applyGridTooltip(int id);

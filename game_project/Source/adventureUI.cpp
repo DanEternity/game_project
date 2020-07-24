@@ -243,6 +243,7 @@ void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled, bool openS
 	case shipMenu::stats:
 		break;
 	case shipMenu::storage:
+		BuildInventoryUI(9);
 		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("inventoryPanel"), true);
 		if (openShop) enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("adventureShop"), true);
 		break;
