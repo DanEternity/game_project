@@ -3,8 +3,8 @@
 void buildMiniWindowShipStats(int x, int y, Ship * s)
 {
 	std::string render = "Label";
-	int laby = 0;
-	tgui::Panel::Ptr pan = createWidget(WidgetType::Panel, "Panel", "400", "500", std::to_string(x), std::to_string(y))->cast<tgui::Panel>();
+	int laby = 5;
+	tgui::Panel::Ptr pan = createWidget(WidgetType::Panel, "Panel", "500", "300", std::to_string(x), std::to_string(y))->cast<tgui::Panel>();
 	//Hull
 	pan->add(createWidgetLabel(render, "5", std::to_string(laby), 18, (GetString("Hull") + L": " + std::to_wstring((int)s->hull.current) + L"/" + std::to_wstring((int)s->hull.total))));
 	laby += 20;
@@ -58,10 +58,10 @@ void hideMiniWindowShipStats()
 void buildMiniWindowHex(std::wstring name, bool full, float distance, float moveCost, std::wstring text, int x, int y)
 {
 	std::string render = "Label";
-	int laby = 0;
-	tgui::Panel::Ptr pan = createWidget(WidgetType::Panel, "Panel", "400", "200", std::to_string(x), std::to_string(y))->cast<tgui::Panel>();
+	int laby = 5;
+	tgui::Panel::Ptr pan = createWidget(WidgetType::Panel, "Panel", "300", "150", std::to_string(x), std::to_string(y))->cast<tgui::Panel>();
 	pan->add(createWidgetLabel(render, "5", std::to_string(laby), 18, name));
-	laby += 20;
+	laby += 25;
 	if (full)
 	{
 		pan->add(createWidgetLabel(render, "5", std::to_string(laby), 18, L"Distance: " + createFloatString(distance)));

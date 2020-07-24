@@ -32,6 +32,12 @@ public:
 	bool selected = false;
 	int SelectedShipId;
 
+	bool showPath = false;
+	std::vector<std::pair<int, int >> currentPath;
+
+
+	bool leftMBPressed = false;
+
 	SpaceBattleData()
 	{
 		maxLines = 12;
@@ -49,6 +55,8 @@ public:
 	sf::Sprite * mapSegmentPlayer = NULL;
 	sf::Sprite * mapSegmentEnemy = NULL;
 	sf::Sprite * mapSegmentNeutral = NULL;
+
+	sf::Sprite * mapPathMarker = NULL;
 
 	sf::Sprite * backgroundImage = NULL;
 

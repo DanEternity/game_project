@@ -57,6 +57,8 @@ void updateGameCycle(double deltaTime)
 			updateAdventureUI();
 			break;
 		case gameMode::spaceBattleMode:
+			// Due to manual map segments calculation its not possible to draw it separately
+			// But it's possible to disable controls and freeze animations
 			updateSpaceBattle(deltaTime);
 			break;
 		default:
