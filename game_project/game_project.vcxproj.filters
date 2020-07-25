@@ -177,6 +177,9 @@
     <ClCompile Include="Source\spaceBattleTgui.cpp">
       <Filter>SpaceBattle</Filter>
     </ClCompile>
+    <ClCompile Include="Source\spaceBattleMechanics.cpp">
+      <Filter>SpaceBattle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\game.h">
@@ -414,6 +417,9 @@
       <Filter>SpaceBattle</Filter>
     </ClInclude>
     <ClInclude Include="Source\spaceBattleTgui.h">
+      <Filter>SpaceBattle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\spaceBattleMechanics.h">
       <Filter>SpaceBattle</Filter>
     </ClInclude>
   </ItemGroup>

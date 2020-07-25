@@ -75,10 +75,14 @@ void updateSpaceBattle(double deltaTime)
 
 
 		sb->state = "idle";
+		sb->turnStatus = spaceBattleState::primary;
 	}
 
 	if (sb->state == "idle")
 	{
+
+		sb->actionCooldown = (sb->actionCooldown <= 0) ? 0 : sb->actionCooldown - 1;
+
 		/* Map coordinates, segments, scale and other stuff */
 
 		auto mousePos = sf::Mouse::getPosition(gEnv->globalWindow);
@@ -151,62 +155,56 @@ void updateSpaceBattle(double deltaTime)
 			}
 		}
 
-
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		if (sb->turnStatus == spaceBattleState::primary)
 		{
-			sb->leftMBPressed = true;
-		}
 
-		/* Selecting segment (Click) */
-		if (pickX != -1)
-		{
-			
-			if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && sb->leftMBPressed)
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				if (sb->map[pickY][pickX]->ships.size() > 0)
+				sb->leftMBPressed = true;
+			}
+
+			/* Selecting segment (Click) */
+			if (pickX != -1)
+			{
+				// selecting ship action
+				if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && sb->leftMBPressed)
 				{
-					sb->selected = true;
-					sb->SelectI = pickY;
-					sb->SelectJ = pickX;
-					sb->SelectedShipId = 0;
-					if (debugMode)
-						printf("Info: selected ship in segment: %i, %i \n", pickY, pickX);
+					if (sb->map[pickY][pickX]->ships.size() > 0)
+					{
+						sb->selected = true;
+						sb->SelectI = pickY;
+						sb->SelectJ = pickX;
+						sb->SelectedShipId = 0;
+						if (debugMode)
+							printf("Info: selected ship in segment: %i, %i \n", pickY, pickX);
+					}
 				}
 			}
-		}
 
-		if (!sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			sb->leftMBPressed = false;
-		}
-
-		drawSpaceBattle(deltaTime);
-		
-		if (pickX == -1)
-		{
-
-			sb->showPath = false;
-
-			if (sb->miniWindowCreated)
+			if (!sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				sb->miniWindowCreated = false;
-				hideMiniWindowShipStats();
+				sb->leftMBPressed = false;
 			}
-			if (sb->miniWindowEmptyCreated)
+
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
-				sb->miniWindowEmptyCreated = false;
-				// hideWindow
-				hideMiniWindowHex();
+				sb->rightMBPressed = true;
 			}
-		}
-		else 
-			if (sb->pickI != pickY || sb->pickJ != pickX)
+
+			// Move ship to destination
+			if (!sf::Mouse::isButtonPressed(sf::Mouse::Right) && sb->rightMBPressed)
 			{
-				if (sb->map[pickY][pickX]->ships.size() > 0)
+				if (sb->showPath && sb->currentPath.size() > 0 && pickX != -1 && sb->actionCooldown == 0)
 				{
-					buildMiniWindowShipStats(sb->map[pickY][pickX]->screenX + 25, sb->map[pickY][pickX]->screenY, sb->map[pickY][pickX]->ships[0]);
-					sb->miniWindowCreated = true;
+					// move ship to destination 
+					spaceBattle::teleportShip(sb->SelectI, sb->SelectJ, pickY, pickX, sb->SelectedShipId);
+					
+					//sb->selected = false;
+					sb->SelectI = pickY;
+					sb->SelectJ = pickX;
+
 					sb->showPath = false;
+
 					if (sb->miniWindowEmptyCreated)
 					{
 						sb->miniWindowEmptyCreated = false;
@@ -214,41 +212,141 @@ void updateSpaceBattle(double deltaTime)
 						hideMiniWindowHex();
 					}
 
-				}
-				else
-				{
-					sb->showPath = false;
 					if (sb->miniWindowCreated)
-					{
-						sb->miniWindowCreated = false;
 						hideMiniWindowShipStats();
-					}
-					if (!sb->miniWindowEmptyCreated)
+
+					buildMiniWindowShipStats(sb->map[pickY][pickX]->screenX + 25, sb->map[pickY][pickX]->screenY, sb->map[pickY][pickX]->ships[0]);
+					sb->miniWindowCreated = true;
+
+					sb->actionCooldown = 5;
+
+				}
+			}
+
+			if (!sf::Mouse::isButtonPressed(sf::Mouse::Right))
+			{
+				sb->rightMBPressed = false;
+			}
+
+			drawSpaceBattle(deltaTime);
+
+			if (pickX == -1)
+			{
+
+				sb->showPath = false;
+
+				if (sb->miniWindowCreated)
+				{
+					sb->miniWindowCreated = false;
+					hideMiniWindowShipStats();
+				}
+				if (sb->miniWindowEmptyCreated)
+				{
+					sb->miniWindowEmptyCreated = false;
+					// hideWindow
+					hideMiniWindowHex();
+				}
+			}
+			else
+				if (sb->pickI != pickY || sb->pickJ != pickX)
+				{
+					if (sb->map[pickY][pickX]->ships.size() > 0)
 					{
-						sb->miniWindowEmptyCreated = true;
-						// showWindow
-						buildMiniWindowHex(L"Empty Hex", false, 0, 0, L"No special effects", sb->map[pickY][pickX]->screenX + 25, sb->map[pickY][pickX]->screenY);
-						
-						if (sb->selected)
+						if (sb->miniWindowCreated)
 						{
-							sb->currentPath = spaceBattle::getPath(sb->SelectI, sb->SelectJ, pickY, pickX);
-							sb->showPath = true;
+							hideMiniWindowShipStats();
+						}
+						buildMiniWindowShipStats(sb->map[pickY][pickX]->screenX + 25, sb->map[pickY][pickX]->screenY, sb->map[pickY][pickX]->ships[0]);
+						sb->miniWindowCreated = true;
+						sb->showPath = false;
+						if (sb->miniWindowEmptyCreated)
+						{
+							sb->miniWindowEmptyCreated = false;
+							// hideWindow
+							hideMiniWindowHex();
 						}
 
 					}
 					else
 					{
-						hideMiniWindowHex();
-						buildMiniWindowHex(L"Empty Hex", false, 0, 0, L"No special effects", sb->map[pickY][pickX]->screenX + 25, sb->map[pickY][pickX]->screenY);
-						if (sb->selected)
+						sb->showPath = false;
+						if (sb->miniWindowCreated)
 						{
-							sb->currentPath = spaceBattle::getPath(sb->SelectI, sb->SelectJ, pickY, pickX);
-							sb->showPath = true;
+							sb->miniWindowCreated = false;
+							hideMiniWindowShipStats();
 						}
+						if (!sb->miniWindowEmptyCreated)
+						{
+							sb->miniWindowEmptyCreated = true;
+							// showWindow
+							buildMiniWindowHex(L"Empty Hex", false, 0, 0, L"No special effects", sb->map[pickY][pickX]->screenX + 25, sb->map[pickY][pickX]->screenY);
 
+							if (sb->selected)
+							{
+								sb->currentPath = spaceBattle::getPath(sb->SelectI, sb->SelectJ, pickY, pickX);
+								sb->showPath = true;
+							}
+
+						}
+						else
+						{
+							hideMiniWindowHex();
+							buildMiniWindowHex(L"Empty Hex", false, 0, 0, L"No special effects", sb->map[pickY][pickX]->screenX + 25, sb->map[pickY][pickX]->screenY);
+							if (sb->selected)
+							{
+								sb->currentPath = spaceBattle::getPath(sb->SelectI, sb->SelectJ, pickY, pickX);
+								sb->showPath = true;
+							}
+
+						}
+					}
+				}
+		
+			// ship weapon selection
+			if (sb->selected)
+			{
+			//	sf::Keyboard
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && sb->weaponId != 1)
+				{
+					int wepId = 1;
+					auto w = spaceBattle::getShipWeaponModule(sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId], wepId);
+					if (w != NULL)
+					{
+						wprintf(L"Info: Weapon selected: %ws \n", w->name.c_str());
+						sb->selectedWeaponModule = w;
+						sb->weaponModuleSelected = true;
+						sb->weaponId = wepId;
+					}
+				}
+
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && sb->weaponId != 2)
+				{
+					int wepId = 2;
+					auto w = spaceBattle::getShipWeaponModule(sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId], wepId);
+					if (w != NULL)
+					{
+						wprintf(L"Info: Weapon selected: %ws \n", w->name.c_str());
+						sb->selectedWeaponModule = w;
+						sb->weaponModuleSelected = true;
+						sb->weaponId = wepId;
+					}
+				}
+
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && sb->weaponId != 3)
+				{
+					int wepId = 3;
+					auto w = spaceBattle::getShipWeaponModule(sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId], wepId);
+					if (w != NULL)
+					{
+						wprintf(L"Info: Weapon selected: %ws \n", w->name.c_str());
+						sb->selectedWeaponModule = w;
+						sb->weaponModuleSelected = true;
+						sb->weaponId = wepId;
 					}
 				}
 			}
+
+		}
 
 		sb->pickI = pickY;
 		sb->pickJ = pickX;
@@ -443,6 +541,7 @@ std::vector<std::pair<int, int>> spaceBattle::getPath(int si, int sj, int fi, in
 				{
 
 					int cost = 999999;
+					int dist = 1000 * 1000;
 
 					auto q = move;
 					std::pair<int, int> best = { 0,0 };
@@ -459,10 +558,23 @@ std::vector<std::pair<int, int>> spaceBattle::getPath(int si, int sj, int fi, in
 						if (move.first >= n || move.first < 0 || move.second < 0 || move.second >= k)
 							continue;
 
-						if (m[move.first][move.second] < cost && m[move.first][move.second] > 0)
+						if (m[move.first][move.second] <= cost && m[move.first][move.second] > 0)
 						{
-							best = move;
-							cost = m[move.first][move.second];
+							if (m[move.first][move.second] < cost)
+							{
+								best = move;
+								cost = m[move.first][move.second];
+								dist = dist2(move.first, move.second, si, sj);
+							}
+							else
+							{
+								if (dist2(move.first, move.second, si, sj) < dist)
+								{
+									best = move;
+									cost = m[move.first][move.second];
+									dist = dist2(move.first, move.second, si, sj);
+								}
+							}
 						}
 					}
 
@@ -490,4 +602,52 @@ std::vector<std::pair<int, int>> spaceBattle::getPath(int si, int sj, int fi, in
 	}
 	// path not found. Res is empty
 	return res;
+}
+
+void spaceBattle::teleportShip(int si, int sj, int fi, int fj, int shipId)
+{
+	auto sb = &gEnv->game.spaceBattle;
+
+	Ship * s = sb->map[si][sj]->ships[shipId];
+
+	sb->map[si][sj]->ships.erase(sb->map[si][sj]->ships.begin() + shipId);
+
+	sb->map[fi][fj]->ships.push_back(s);
+}
+
+int spaceBattle::dist2(int x1, int y1, int x2, int y2)
+{
+	return ((x1 - x2)*(x1 - x2)) + ((y1 - y2)*(y1 - y2));
+}
+
+WeaponModule * spaceBattle::getShipWeaponModule(Ship * s, int id)
+{
+
+	if (s == NULL)
+		return nullptr;
+
+	if (s->modules.size() - 1 < id)
+		return nullptr;
+
+	int cur = 0;
+
+	for (int i(0); i < s->modules.size(); i++)
+	{
+		if (s->modules[i] == NULL)
+			continue;
+
+		auto p = s->modules[i];
+
+		if (p->moduleType == moduleType::weapon)
+			cur++;
+		else
+			continue;
+			
+		if (cur == id)
+			return static_cast<WeaponModule*>(p);
+	}
+
+
+
+	return nullptr;
 }
