@@ -1,5 +1,5 @@
 #include "adventureUI.h"
-
+//
 void updateAdventureUI()
 {
 	if (gEnv->game.adventureUI.adventureUIDrawRequired)
