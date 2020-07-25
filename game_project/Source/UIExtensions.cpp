@@ -102,6 +102,7 @@ void swapElements(TargetInventory::targetInventory target, int id)
 		{
 			gEnv->game.player.inventory[id] = gEnv->game.player.pickedItem;
 		}
+		updateInventoryCell(id);
 		break;
 	case TargetInventory::gridPanel:
 		if (gEnv->game.player.pickedLocalInventory != -1)
@@ -148,7 +149,6 @@ void swapElements(TargetInventory::targetInventory target, int id)
 		break;
 	}
 
-	updateInventoryCell(id);
 	if (!flagCantPlace)
 	{
 		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::BitmapButton>("pickedItemMouse"));
