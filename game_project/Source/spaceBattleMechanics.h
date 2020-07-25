@@ -2,17 +2,33 @@
 
 #include "ship.h"
 
-struct AttackResult
+namespace spaceBattle
 {
-	int hits;
-	int misses;
 
-	float shieldDamage;
-	float hullDamage;
+	struct AttackResult
+	{
+		int hits;
+		int misses;
 
-	bool isCritical;
-	bool isLethal;
-};
+		float shieldDamage;
+		float hullDamage;
+
+		bool isCritical;
+		bool isLethal;
+
+		AttackResult()
+		{
+			hits = 0;
+			misses = 0;
+			shieldDamage = 0;
+			hullDamage = 0;
+			isCritical = false;
+			isLethal = false;
+		}
+
+	};
 
 
-AttackResult weaponAttack(Ship * src, WeaponModule * m, Ship * target, float dist);
+	AttackResult weaponAttack(Ship * src, WeaponModule * m, Ship * target, float dist, int key);
+
+}

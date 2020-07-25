@@ -344,7 +344,89 @@ void updateSpaceBattle(double deltaTime)
 						sb->weaponId = wepId;
 					}
 				}
+
+				if (sb->weaponModuleSelected)
+				{
+					sb->turnStatus = spaceBattleState::targetingWeapon;
+
+					sb->showPath = false;
+					
+					
+
+				}
+
 			}
+
+		}
+
+		if (sb->turnStatus == spaceBattleState::targetingWeapon)
+		{
+
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				sb->leftMBPressed = true;
+			}
+
+			/* Selecting segment (Click) */
+			if (pickX != -1)
+			{
+				// selecting ship action
+				if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && sb->leftMBPressed)
+				{
+					if (sb->map[pickY][pickX]->ships.size() > 0 && sb->actionCooldown == 0)
+					{
+						// ATTTACK
+						/*sb->selected = true;
+						sb->SelectI = pickY;
+						sb->SelectJ = pickX;
+						sb->SelectedShipId = 0;*/
+						if (debugMode)
+							printf("Info: Using weapon agains ship in: %i, %i \n", pickY, pickX);
+
+						auto res = spaceBattle::weaponAttack(
+							sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId],
+							sb->selectedWeaponModule,
+							sb->map[pickY][pickX]->ships[0],
+							std::sqrt(spaceBattle::dist2(sb->map[sb->SelectI][sb->SelectJ]->gameX, sb->map[sb->SelectI][sb->SelectJ]->gameY, sb->map[pickY][pickX]->gameX, sb->map[pickY][pickX]->gameY)),
+							rand() % 65535
+							);
+
+						printf("Info: Total hits: %i (%i missed), Total shield damage: %f, Total hull damage: %f \n", res.hits, res.misses, res.shieldDamage, res.hullDamage);
+
+					}
+				}
+			}
+
+			if (!sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				sb->leftMBPressed = false;
+			}
+
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+			{
+				sb->rightMBPressed = true;
+			}
+
+			
+			if (!sf::Mouse::isButtonPressed(sf::Mouse::Right) && sb->rightMBPressed)
+			{
+				
+				sb->weaponModuleSelected = false;
+				sb->weaponId = 0;
+
+				sb->actionCooldown = 5;
+
+				sb->turnStatus = spaceBattleState::primary;
+
+			}
+
+			if (!sf::Mouse::isButtonPressed(sf::Mouse::Right))
+			{
+				sb->rightMBPressed = false;
+			}
+
+			drawSpaceBattle(deltaTime);
+
 
 		}
 
