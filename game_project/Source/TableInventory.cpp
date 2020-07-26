@@ -681,9 +681,69 @@ void applyStorageTooltip(int id)
 			{
 			case moduleType::system:
 				createModuleTooltip(static_cast<Module*>(gEnv->game.player.inventory[id]));
+
+				for (int i = 0; i < gEnv->game.player.ship->slots.size(); i++)
+				{
+					if (gEnv->game.player.ship->modules[i] != NULL)
+					{
+						if (gEnv->game.player.ship->modules[i]->slot == static_cast<Module*>(gEnv->game.player.inventory[id])->slot)
+						{
+							switch (gEnv->game.player.ship->modules[i]->moduleType)
+							{
+							case moduleType::system:
+								createModuleTooltip(gEnv->game.player.ship->modules[i]);
+								break;
+							case moduleType::weapon:
+								createWeaponModuleTooltip(static_cast<WeaponModule*>(gEnv->game.player.ship->modules[i]));
+								break;
+							}
+							tgui::Widget::Ptr temp = gEnv->game.ui.tooltipDescription->cast<tgui::Widget>()->clone();
+							temp->setVisible(true);
+
+							createModuleTooltip(static_cast<Module*>(gEnv->game.player.inventory[id]));
+							if (temp->getSize().y < gEnv->game.ui.tooltipDescription->getSize().y)
+								gEnv->game.ui.tooltipDescription->setSize(600, gEnv->game.ui.tooltipDescription->getSize().y);
+							else gEnv->game.ui.tooltipDescription->setSize(600, temp->getSize().y);
+
+							gEnv->game.ui.tooltipDescription->add(temp, "comparePanel");
+							gEnv->game.ui.tooltipDescription->get<tgui::Panel>("comparePanel")->setPosition(300, 0);
+						}
+					}
+				}
+
 				break;
 			case moduleType::weapon:
 				createWeaponModuleTooltip(static_cast<WeaponModule*>(gEnv->game.player.inventory[id]));
+
+				for (int i = 0; i < gEnv->game.player.ship->slots.size(); i++)
+				{
+					if (gEnv->game.player.ship->modules[i] != NULL)
+					{
+						if (gEnv->game.player.ship->modules[i]->slot == static_cast<Module*>(gEnv->game.player.inventory[id])->slot)
+						{
+							switch (gEnv->game.player.ship->modules[i]->moduleType)
+							{
+							case moduleType::system:
+								createModuleTooltip(gEnv->game.player.ship->modules[i]);
+								break;
+							case moduleType::weapon:
+								createWeaponModuleTooltip(static_cast<WeaponModule*>(gEnv->game.player.ship->modules[i]));
+								break;
+							}
+							tgui::Widget::Ptr temp = gEnv->game.ui.tooltipDescription->cast<tgui::Widget>()->clone();
+							temp->setVisible(true);
+
+							createWeaponModuleTooltip(static_cast<WeaponModule*>(gEnv->game.player.inventory[id]));
+							if (temp->getSize().y < gEnv->game.ui.tooltipDescription->getSize().y)
+								gEnv->game.ui.tooltipDescription->setSize(600, gEnv->game.ui.tooltipDescription->getSize().y);
+							else gEnv->game.ui.tooltipDescription->setSize(600, temp->getSize().y);
+
+							gEnv->game.ui.tooltipDescription->add(temp, "comparePanel");
+							gEnv->game.ui.tooltipDescription->get<tgui::Panel>("comparePanel")->setPosition(300, 0);
+						}
+					}
+				}
+
 				break;
 			}
 			break;
@@ -712,9 +772,69 @@ void applyGridTooltip(int id)
 				{
 				case moduleType::system:
 					createModuleTooltip(static_cast<Module*>(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]));
+
+					for (int i = 0; i < gEnv->game.player.ship->slots.size(); i++)
+					{
+						if (gEnv->game.player.ship->modules[i] != NULL)
+						{
+							if (gEnv->game.player.ship->modules[i]->slot == static_cast<Module*>(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]])->slot)
+							{
+								switch (gEnv->game.player.ship->modules[i]->moduleType)
+								{
+								case moduleType::system:
+									createModuleTooltip(gEnv->game.player.ship->modules[i]);
+									break;
+								case moduleType::weapon:
+									createWeaponModuleTooltip(static_cast<WeaponModule*>(gEnv->game.player.ship->modules[i]));
+									break;
+								}
+								tgui::Widget::Ptr temp = gEnv->game.ui.tooltipDescription->cast<tgui::Widget>()->clone();
+								temp->setVisible(true);
+
+								createModuleTooltip(static_cast<Module*>(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]));
+								if (temp->getSize().y < gEnv->game.ui.tooltipDescription->getSize().y)
+									gEnv->game.ui.tooltipDescription->setSize(600, gEnv->game.ui.tooltipDescription->getSize().y);
+								else gEnv->game.ui.tooltipDescription->setSize(600, temp->getSize().y);
+
+								gEnv->game.ui.tooltipDescription->add(temp, "comparePanel");
+								gEnv->game.ui.tooltipDescription->get<tgui::Panel>("comparePanel")->setPosition(300, 0);
+							}
+						}
+					}
+
 					break;
 				case moduleType::weapon:
 					createWeaponModuleTooltip(static_cast<WeaponModule*>(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]));
+
+					for (int i = 0; i < gEnv->game.player.ship->slots.size(); i++)
+					{
+						if (gEnv->game.player.ship->modules[i] != NULL)
+						{
+							if (gEnv->game.player.ship->modules[i]->slot == static_cast<Module*>(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]])->slot)
+							{
+								switch (gEnv->game.player.ship->modules[i]->moduleType)
+								{
+								case moduleType::system:
+									createModuleTooltip(gEnv->game.player.ship->modules[i]);
+									break;
+								case moduleType::weapon:
+									createWeaponModuleTooltip(static_cast<WeaponModule*>(gEnv->game.player.ship->modules[i]));
+									break;
+								}
+								tgui::Widget::Ptr temp = gEnv->game.ui.tooltipDescription->cast<tgui::Widget>()->clone();
+								temp->setVisible(true);
+
+								createWeaponModuleTooltip(static_cast<WeaponModule*>(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]));
+								if (temp->getSize().y < gEnv->game.ui.tooltipDescription->getSize().y)
+									gEnv->game.ui.tooltipDescription->setSize(800, gEnv->game.ui.tooltipDescription->getSize().y);
+								else gEnv->game.ui.tooltipDescription->setSize(800, temp->getSize().y);
+
+								gEnv->game.ui.tooltipDescription->add(temp, "comparePanel");
+								gEnv->game.ui.tooltipDescription->get<tgui::Panel>("comparePanel")->setPosition(400, 0);
+							}
+						}
+					}
+
 					break;
 				}
 				break;
