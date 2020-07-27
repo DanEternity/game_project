@@ -17,6 +17,8 @@ spaceBattle::AttackResult spaceBattle::weaponAttack(Ship * src, WeaponModule * m
 
 	int hits = int(m->projectilesAmount.total);
 	
+	res.total = hits;
+
 	// apply target evasion
 	accuracy -= target->evasion.total;
 	// doesnt want to handle negative accuracy
@@ -32,7 +34,7 @@ spaceBattle::AttackResult spaceBattle::weaponAttack(Ship * src, WeaponModule * m
 		key2 = (key2 * 62791 + 1111117) % 65536;
 		key2 = abs(key2);
 
-		float keyQ = key2 / 65536;
+		float keyQ = float(key2) / 65536;
 
 		if (accQ > keyQ)
 		{
@@ -69,21 +71,55 @@ spaceBattle::AttackResult spaceBattle::weaponAttack(Ship * src, WeaponModule * m
 			shieldResist = shieldResist / (shieldResist + 100);
 
 			// critical strike calc
-			/*key2 = (key2 * 62791 + 1111117) % 65536;
-			key2 = abs(key2);
-			float keyQ2 = key2 / 65536;*/
 
+			bool criticalS = false;
+			bool criticalH = false;
+			float critChanceS = m->criticalChanceShield.total;
+			float critChanceH = m->criticalChanceHull.total;
+
+			key2 = (key2 * 62791 + 1111117) % 65536;
+			key2 = abs(key2);
+			float keyQ2 = float(key2) / 65536;
+
+			if (critChanceS > keyQ2)
+				criticalS = true;
+
+			key2 = (key2 * 62791 + 1111117) % 65536;
+			key2 = abs(key2);
+			keyQ2 = float(key2) / 65536;
+
+			if (critChanceH > keyQ2)
+				criticalH = true;
+
+			float bDamage = damage;
 			float fDamage = damage;
+
+			if (criticalS)
+				fDamage += std::max(0.f, fDamage * m->criticalDamageShield.total - target->shieldStructureStability.total);
 
 			float targetShield = target->shield.current;
 			float targetHull = target->hull.current;
 
 			if (fDamage * (1 - shieldResist) > targetShield)
 			{
-				// damage exceeds shield
+				if ((targetShield > 0 && criticalS) || criticalH)
+					res.crits++;
 
+				// damage exceeds shield
 				res.shieldDamage += targetShield;
+				targetShield = 0;
 				fDamage -= targetShield / (1 - shieldResist);
+
+				if (criticalS)
+				{
+					fDamage = fDamage / std::max(1.f, 1 + m->criticalDamageShield.total - target->shieldStructureStability.total);
+				}
+
+				if (criticalH)
+				{
+					fDamage += fDamage * m->criticalDamageHull.total;
+				}
+
 				//targetShield -= fDamage * (1 - shieldResist);
 
 				targetHull -= fDamage * (1 - hullResist);
@@ -91,6 +127,14 @@ spaceBattle::AttackResult spaceBattle::weaponAttack(Ship * src, WeaponModule * m
 			}
 			else
 			{
+
+				fDamage = bDamage;
+				if (criticalH)
+				{
+					res.crits++;
+					fDamage += std::max(0.f, fDamage * m->criticalDamageHull.total - target->hullStructureStability.total);
+				}
+
 				targetShield -= fDamage * (1 - shieldResist);
 				res.shieldDamage += fDamage;
 			}
@@ -103,6 +147,24 @@ spaceBattle::AttackResult spaceBattle::weaponAttack(Ship * src, WeaponModule * m
 		{
 			res.misses += 1;
 		}
+	}
+
+	// update cooldowns
+	m->activationsRemainingPartial--;
+	m->activationsRemainingFull--;
+
+	src->actionPoints.current -= m->activationCost.total;
+
+	if (m->activationsRemainingPartial == 0 && m->activationsPartial.total != 0)
+	{
+		m->currentCooldown = m->partialCooldown.total;
+		m->weaponState = weaponModuleState::partialCooldown;
+	}
+
+	if (m->activationsRemainingFull == 0 && m->activationsLimit.total != 0)
+	{
+		m->currentCooldown = m->fullCooldown.total;
+		m->weaponState = weaponModuleState::fullCooldown;
 	}
 
 	return res;

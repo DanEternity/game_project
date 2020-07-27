@@ -8,6 +8,7 @@ void updateSpaceBattle(double deltaTime)
 	// draw battlefield
 	if (sb->state == "init")
 	{
+		createSpaceBattleUI();
 
 		float sizeX, sizeY;
 		sizeX = 442;
@@ -55,6 +56,7 @@ void updateSpaceBattle(double deltaTime)
 		Ship * testShip = new Ship();
 		testShip->model = new sf::Sprite(gEnv->modelDB[L"decorationSpaceBeacon"]->tex);
 		testShip->model->setOrigin(sf::Vector2f(testShip->model->getTexture()->getSize()) / 2.0f);
+		testShip->factionId = 2; // TEST
 		sb->map[8][8]->ships.push_back(testShip);
 		sb->map[8][8]->color = segmentColor::enemy;
 
@@ -63,6 +65,7 @@ void updateSpaceBattle(double deltaTime)
 		gEnv->game.player.ship->model->setOrigin(sf::Vector2f(gEnv->game.player.ship->model->getTexture()->getSize()) / 2.0f);
 		//gEnv->game.player.ship->model->rotate(90);
 		sb->map[8][4]->ships.push_back(gEnv->game.player.ship);
+		gEnv->game.player.ship->factionId = 1;
 
 		sb->map[7][8]->color = segmentColor::neutral;
 
@@ -73,9 +76,11 @@ void updateSpaceBattle(double deltaTime)
 
 		gEnv->game.gameSpaceBattleGUIRequiresUpdate = true;
 
+		// debug
+		spaceBattle::initBattle();
 
 		sb->state = "idle";
-		sb->turnStatus = spaceBattleState::primary;
+		sb->turnStatus = spaceBattleState::endTurn; // start new turn
 	}
 
 	if (sb->state == "idle")
@@ -175,6 +180,8 @@ void updateSpaceBattle(double deltaTime)
 						sb->SelectI = pickY;
 						sb->SelectJ = pickX;
 						sb->SelectedShipId = 0;
+						//hideShipInfo();
+						displayShipInfo();
 						if (debugMode)
 							printf("Info: selected ship in segment: %i, %i \n", pickY, pickX);
 					}
@@ -202,6 +209,9 @@ void updateSpaceBattle(double deltaTime)
 					//sb->selected = false;
 					sb->SelectI = pickY;
 					sb->SelectJ = pickX;
+					
+					//hideShipInfo();
+					displayShipInfo();
 
 					sb->showPath = false;
 
@@ -312,10 +322,13 @@ void updateSpaceBattle(double deltaTime)
 					auto w = spaceBattle::getShipWeaponModule(sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId], wepId);
 					if (w != NULL)
 					{
-						wprintf(L"Info: Weapon selected: %ws \n", w->name.c_str());
-						sb->selectedWeaponModule = w;
-						sb->weaponModuleSelected = true;
-						sb->weaponId = wepId;
+						if (spaceBattle::canUseWeapon(sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId], w))
+						{
+							wprintf(L"Info: Weapon selected: %ws \n", w->name.c_str());
+							sb->selectedWeaponModule = w;
+							sb->weaponModuleSelected = true;
+							sb->weaponId = wepId;
+						}
 					}
 				}
 
@@ -325,10 +338,13 @@ void updateSpaceBattle(double deltaTime)
 					auto w = spaceBattle::getShipWeaponModule(sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId], wepId);
 					if (w != NULL)
 					{
-						wprintf(L"Info: Weapon selected: %ws \n", w->name.c_str());
-						sb->selectedWeaponModule = w;
-						sb->weaponModuleSelected = true;
-						sb->weaponId = wepId;
+						if (spaceBattle::canUseWeapon(sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId], w))
+						{
+							wprintf(L"Info: Weapon selected: %ws \n", w->name.c_str());
+							sb->selectedWeaponModule = w;
+							sb->weaponModuleSelected = true;
+							sb->weaponId = wepId;
+						}
 					}
 				}
 
@@ -338,20 +354,38 @@ void updateSpaceBattle(double deltaTime)
 					auto w = spaceBattle::getShipWeaponModule(sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId], wepId);
 					if (w != NULL)
 					{
-						wprintf(L"Info: Weapon selected: %ws \n", w->name.c_str());
-						sb->selectedWeaponModule = w;
-						sb->weaponModuleSelected = true;
-						sb->weaponId = wepId;
+						if (spaceBattle::canUseWeapon(sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId], w))
+						{
+							wprintf(L"Info: Weapon selected: %ws \n", w->name.c_str());
+							sb->selectedWeaponModule = w;
+							sb->weaponModuleSelected = true;
+							sb->weaponId = wepId;
+						}
 					}
 				}
 
 				if (sb->weaponModuleSelected)
 				{
+
+					// Changing to targeting mode
+
 					sb->turnStatus = spaceBattleState::targetingWeapon;
 
 					sb->showPath = false;
+									
+					sb->actionCooldown = 3;
+
+					if (sb->miniWindowCreated)
+					{
+						sb->miniWindowCreated = false;
+						hideMiniWindowShipStats();
+					}
 					
-					
+					if (sb->miniWindowEmptyCreated)
+					{
+						sb->miniWindowEmptyCreated = false;
+						hideMiniWindowShipStats();
+					}
 
 				}
 
@@ -381,7 +415,7 @@ void updateSpaceBattle(double deltaTime)
 						sb->SelectJ = pickX;
 						sb->SelectedShipId = 0;*/
 						if (debugMode)
-							printf("Info: Using weapon agains ship in: %i, %i \n", pickY, pickX);
+							printf("Info: Using weapon against ship in: %i, %i \n", pickY, pickX);
 
 						auto res = spaceBattle::weaponAttack(
 							sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId],
@@ -391,7 +425,17 @@ void updateSpaceBattle(double deltaTime)
 							rand() % 65535
 							);
 
-						printf("Info: Total hits: %i (%i missed), Total shield damage: %f, Total hull damage: %f \n", res.hits, res.misses, res.shieldDamage, res.hullDamage);
+						displayShipInfo();
+
+						printf("Info: Total hits: %i/%i (%i critical), Total shield damage: %f, Total hull damage: %f \n", res.hits, res.total, res.crits, res.shieldDamage, res.hullDamage);
+
+						if (!spaceBattle::canUseWeapon(sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId], sb->selectedWeaponModule))
+						{
+							sb->weaponModuleSelected = false;
+							sb->weaponId = -1;
+							sb->turnStatus = spaceBattleState::primary;
+							printf("Info: Weapon no longer selected - cant use it\n");
+						}
 
 					}
 				}
@@ -429,6 +473,28 @@ void updateSpaceBattle(double deltaTime)
 
 
 		}
+
+		if (sb->turnStatus == spaceBattleState::endTurn)
+		{
+			
+			if (sb->currentFactionIndex + 1 > sb->factionOrder.size() - 1)
+			{
+				sb->currentFactionIndex = -1;
+			}
+			
+			int id = sb->factionOrder[++sb->currentFactionIndex];
+
+			spaceBattle::startTurnUpdate(id);
+
+			if (id == 1)
+				sb->turnNumber++;
+
+			printf("Next turn: %i for player %i\n", sb->turnNumber, id);
+
+			sb->turnStatus = spaceBattleState::primary;
+
+		}
+
 
 		sb->pickI = pickY;
 		sb->pickJ = pickX;
@@ -474,6 +540,12 @@ void updateSpaceBattle(double deltaTime)
 		if (sb->scale > 6)
 			sb->scale = 6;
 
+		if (sb->EndTurnPressed)
+		{
+			sb->EndTurnPressed = false;
+			sb->actionCooldown = 5;
+			sb->turnStatus = spaceBattleState::endTurn;
+		}
 	}
 
 
@@ -550,6 +622,172 @@ void drawSpaceBattle(double deltaTime)
 		}
 	}
 
+}
+
+void spaceBattle::initBattle()
+{
+
+	initAllShips();
+
+	auto sb = &gEnv->game.spaceBattle;
+
+	sb->factionOrder.clear();
+	sb->factionOrder.push_back(1); /// player
+
+	sb->turnNumber = 0; // Next turn will be 1
+
+	sb->currentFactionIndex = -1; // next will be 0 - sb->factionOrder[0] // first faction to move in battle
+
+
+
+}
+
+void spaceBattle::initAllShips()
+{
+
+	auto sb = &gEnv->game.spaceBattle;
+
+	for (int i(0); i<sb->map.size(); i++)
+		for (int j(0); j<sb->map[i].size(); j++)
+			for (int k(0); k < sb->map[i][j]->ships.size(); k++)
+			{
+				initShip(sb->map[i][j]->ships[k]);
+			}
+
+
+}
+
+void spaceBattle::initShip(Ship * s)
+{
+
+	updateShipValues(s);
+
+	s->actionPoints.current = s->actionPoints.total;
+	// some other field to reset
+	// do not know what exctly
+	// s->something.current = 0;
+	s->actionPointsPenalty = 0;
+
+
+
+	for (int i(0); i < s->modules.size(); i++)
+	{
+		if (s->modules[i] == NULL)
+			continue;
+		
+		if (s->modules[i]->moduleType != moduleType::weapon)
+			continue;
+
+		WeaponModule * m = static_cast<WeaponModule*>(s->modules[i]);
+
+		m->CalcStats();
+
+		m->currentCooldown = 0;
+		m->activationsRemainingPartial = int(m->activationsPartial.total);
+		m->activationsRemainingFull = int(m->activationsLimit.total);
+		m->weaponState = weaponModuleState::normal;
+		
+		if (m->chargeRequired)
+			m->chargingRemaining = int(m->chargeRoundsCount.total);
+		else
+			m->chargingRemaining = 0;
+
+	}
+
+
+}
+
+void spaceBattle::startTurnUpdate(int factionId)
+{
+	auto sb = &gEnv->game.spaceBattle;
+
+	for (int i(0); i<sb->map.size(); i++)
+		for (int j(0); j<sb->map[i].size(); j++)
+			for (int k(0); k < sb->map[i][j]->ships.size(); k++)
+			{
+				if (sb->map[i][j]->ships[k]->factionId == factionId)
+				{
+					// update ship
+					spaceBattle::updateShip(sb->map[i][j]->ships[k]);
+				}
+			}
+
+}
+
+void spaceBattle::updateShip(Ship * s)
+{
+
+	updateShipValues(s);
+
+	s->actionPoints.current = s->actionPoints.total * (1 - s->actionPointsPenalty);
+	s->actionPointsPenalty = 0;
+
+	s->shield.current += s->shieldReg.total;
+	s->hull.current += s->hullReg.total;
+
+	s->shield.current = std::min(s->shield.current, s->shield.total);
+	s->hull.current = std::min(s->hull.current, s->hull.total);
+
+	for (int i(0); i < s->modules.size(); i++)
+	{
+		if (s->modules[i] == NULL)
+			continue;
+
+		if (s->modules[i]->moduleType != moduleType::weapon)
+			continue;
+
+		WeaponModule * m = static_cast<WeaponModule*>(s->modules[i]);
+
+		m->CalcStats();
+
+		if (m->weaponState == weaponModuleState::partialCooldown)
+		{
+			m->currentCooldown -= 1;
+			if (m->currentCooldown == 0)
+			{
+				m->weaponState = weaponModuleState::normal;
+				m->activationsRemainingPartial = int(m->activationsPartial.total);
+			}
+		}
+
+		if (m->weaponState == weaponModuleState::fullCooldown)
+		{
+			m->currentCooldown -= 1;
+			if (m->currentCooldown == 0)
+			{
+				m->weaponState = weaponModuleState::normal;
+				m->activationsRemainingPartial = int(m->activationsPartial.total);
+				m->activationsRemainingFull = int(m->activationsLimit.total);
+			}
+		}
+
+		if (m->weaponState == weaponModuleState::charging)
+		{
+			if (m->chargingRemaining == 0)
+			{
+				m->weaponState = weaponModuleState::fullCharge; // equal to Ready to fire
+			}
+		}
+
+	}
+}
+
+bool spaceBattle::canUseWeapon(Ship * s, WeaponModule * m)
+{
+
+	auto state = m->weaponState;
+
+	if (state != weaponModuleState::normal)
+	{
+		return false;
+	}
+
+	if (s->actionPoints.current < m->activationCost.total)
+	{
+		return false;
+	}
+
+	return true;
 }
 
 std::vector<std::pair<int, int>> spaceBattle::getPath(int si, int sj, int fi, int fj)

@@ -55,6 +55,9 @@
     <Filter Include="SpaceBattle">
       <UniqueIdentifier>{7bdaae38-0fd0-4e5d-b27e-29ce3ba0c34e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SpaceBattle\UI">
+      <UniqueIdentifier>{f764cb03-8cca-4441-9c96-edebf040f5ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -174,11 +177,14 @@
     <ClCompile Include="Source\spaceBattleCore.cpp">
       <Filter>SpaceBattle</Filter>
     </ClCompile>
-    <ClCompile Include="Source\spaceBattleTgui.cpp">
-      <Filter>SpaceBattle</Filter>
-    </ClCompile>
     <ClCompile Include="Source\spaceBattleMechanics.cpp">
       <Filter>SpaceBattle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\spaceBattleTgui.cpp">
+      <Filter>SpaceBattle\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\spaceBattleUI.cpp">
+      <Filter>SpaceBattle\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -416,11 +422,14 @@
     <ClInclude Include="Source\spaceBattleSegment.h">
       <Filter>SpaceBattle</Filter>
     </ClInclude>
-    <ClInclude Include="Source\spaceBattleTgui.h">
-      <Filter>SpaceBattle</Filter>
-    </ClInclude>
     <ClInclude Include="Source\spaceBattleMechanics.h">
       <Filter>SpaceBattle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\spaceBattleUI.h">
+      <Filter>SpaceBattle\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\spaceBattleTgui.h">
+      <Filter>SpaceBattle\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

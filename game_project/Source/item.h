@@ -268,6 +268,20 @@ public:
 	}
 };
 
+namespace weaponModuleState
+{
+	enum WeaponModuleState
+	{
+		normal,
+		disabled,
+		partialCooldown,
+		fullCooldown,
+		charging,
+		fullCharge,
+
+	};
+}
+
 class WeaponModule : public Module
 {
 public:
@@ -358,7 +372,7 @@ public:
 	int currentCooldown;
 	int activationsRemainingPartial; // Until partial CD
 	int activationsRemainingFull; // Until full cooldown
-	int weaponState; // change to ENUM
+	weaponModuleState::WeaponModuleState weaponState; // change to ENUM
 	int chargingRemaining; // if chargeRequired = true
 
 	WeaponModule() : Module()

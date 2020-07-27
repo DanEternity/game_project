@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ship.h"
+#include <cmath>
 
 namespace spaceBattle
 {
@@ -9,6 +10,8 @@ namespace spaceBattle
 	{
 		int hits;
 		int misses;
+		int crits;
+		int total;
 
 		float shieldDamage;
 		float hullDamage;
@@ -20,6 +23,9 @@ namespace spaceBattle
 		{
 			hits = 0;
 			misses = 0;
+			crits = 0;
+			total = 0;
+
 			shieldDamage = 0;
 			hullDamage = 0;
 			isCritical = false;

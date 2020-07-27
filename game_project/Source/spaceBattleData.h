@@ -56,10 +56,14 @@ public:
 	bool weaponModuleSelected = false;
 	int weaponId = -1;
 
+
 	bool leftMBPressed = false;
 	bool rightMBPressed = false;
 
 	int actionCooldown = 0;
+
+
+	bool EndTurnPressed = false;
 
 	SpaceBattleData()
 	{
@@ -88,5 +92,6 @@ public:
 
 	// UI handler
 	tgui::Gui GUI;
+
 
 };
