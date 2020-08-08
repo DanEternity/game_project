@@ -170,3 +170,10 @@ spaceBattle::AttackResult spaceBattle::weaponAttack(Ship * src, WeaponModule * m
 	return res;
 }
 
+Ship* getCurrentPickShip()
+{
+	if (gEnv->game.spaceBattle.pickI == -1 || gEnv->game.spaceBattle.pickJ == -1) return NULL;
+	if (gEnv->game.spaceBattle.map[gEnv->game.spaceBattle.pickI][gEnv->game.spaceBattle.pickJ]->ships.size() == 0) return NULL;
+	if (gEnv->game.spaceBattle.map[gEnv->game.spaceBattle.pickI][gEnv->game.spaceBattle.pickJ]->ships[gEnv->game.spaceBattle.SelectedShipId] == NULL) return NULL;
+	return gEnv->game.spaceBattle.map[gEnv->game.spaceBattle.pickI][gEnv->game.spaceBattle.pickJ]->ships[gEnv->game.spaceBattle.SelectedShipId];
+}

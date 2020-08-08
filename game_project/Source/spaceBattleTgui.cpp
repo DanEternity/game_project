@@ -47,12 +47,14 @@ void buildMiniWindowShipStats(int x, int y, Ship * s)
 		+ L"%)")), "shipStatShieldResistPhysical");
 	laby += 20;
 
-	gEnv->game.spaceBattle.GUI.add(pan, "MiniWindowShipStats");
+	gEnv->game.spaceBattle.GUI.add(pan, "MiniWindowShipStats" + std::to_string(gEnv->game.ui.spaceBattleShipMiniWindowCount++));
 }
 
 void hideMiniWindowShipStats()
 {
-	gEnv->game.spaceBattle.GUI.remove(gEnv->game.spaceBattle.GUI.get<tgui::Panel>("MiniWindowShipStats"));
+	for (int i = 0; i < gEnv->game.ui.spaceBattleShipMiniWindowCount; i++)
+		gEnv->game.spaceBattle.GUI.remove(gEnv->game.spaceBattle.GUI.get<tgui::Panel>("MiniWindowShipStats" + std::to_string(i)));
+	gEnv->game.ui.spaceBattleShipMiniWindowCount = 0;
 }
 
 void buildMiniWindowHex(std::wstring name, bool full, float distance, float moveCost, std::wstring text, int x, int y)
@@ -71,10 +73,120 @@ void buildMiniWindowHex(std::wstring name, bool full, float distance, float move
 	}
 	pan->add(createWidgetLabel(render, "5", std::to_string(laby), 18, L"Effects:\n" + text));
 
-	gEnv->game.spaceBattle.GUI.add(pan, "MiniWindowHex");
+	gEnv->game.spaceBattle.GUI.add(pan, "MiniWindowHex" + std::to_string(gEnv->game.ui.spaceBattleHexMiniWindowCount));
+	gEnv->game.ui.spaceBattleHexMiniWindowCount++;
 }
 
 void hideMiniWindowHex()
 {
-	gEnv->game.spaceBattle.GUI.remove(gEnv->game.spaceBattle.GUI.get<tgui::Panel>("MiniWindowHex"));
+	for (int i = 0; i < gEnv->game.ui.spaceBattleHexMiniWindowCount; i++)
+		gEnv->game.spaceBattle.GUI.remove(gEnv->game.spaceBattle.GUI.get<tgui::Panel>("MiniWindowHex" + std::to_string(i)));
+	gEnv->game.ui.spaceBattleHexMiniWindowCount = 0;
+}
+
+void showBars()
+{
+	if (gEnv->game.spaceBattle.GUI.get<tgui::ProgressBar>("spaceBattleHullBar") != NULL)
+	{
+		gEnv->game.spaceBattle.GUI.remove(gEnv->game.spaceBattle.GUI.get<tgui::ProgressBar>("spaceBattleHullBar"));
+		gEnv->game.spaceBattle.GUI.remove(gEnv->game.spaceBattle.GUI.get<tgui::ProgressBar>("spaceBattleShieldBar"));
+		gEnv->game.spaceBattle.GUI.remove(gEnv->game.spaceBattle.GUI.get<tgui::ProgressBar>("spaceBattleActionPointsBar"));
+	}
+	auto ship = gEnv->game.spaceBattle.map[gEnv->game.spaceBattle.pickI][gEnv->game.spaceBattle.pickJ]
+		->ships[gEnv->game.spaceBattle.SelectedShipId];
+
+	tgui::ProgressBar::Ptr bar = createWidget(WidgetType::ProgressBar, "ProgressBar", "300", "30", "2%", "85%")->cast<tgui::ProgressBar>();
+	bar->setMinimum(0);
+	bar->setMaximum(ship->hull.total);
+	bar->setValue(ship->hull.current);
+	bar->setText("Hull: "
+		+ std::to_string((int)ship->hull.current)
+		+ "/"
+		+ std::to_string((int)ship->hull.total));
+
+	gEnv->game.spaceBattle.GUI.add(bar, "spaceBattleHullBar");
+
+	bar = createWidget(WidgetType::ProgressBar, "ProgressBar", "300", "30", "2%", "90%")->cast<tgui::ProgressBar>();
+	bar->setMinimum(0);
+	bar->setMaximum(ship->shield.total);
+	bar->setValue(ship->shield.current);
+	bar->setText("Shield: "
+		+ std::to_string((int)ship->shield.current)
+		+ "/"
+		+ std::to_string((int)ship->shield.total));
+
+	gEnv->game.spaceBattle.GUI.add(bar, "spaceBattleShieldBar");
+
+	bar = createWidget(WidgetType::ProgressBar, "ProgressBar", "300", "30", "2%", "95%")->cast<tgui::ProgressBar>();
+	bar->setMinimum(0);
+	bar->setMaximum(ship->actionPoints.total);
+	bar->setValue(ship->actionPoints.current);
+	bar->setText("Action points: "
+		+ std::to_string((int)ship->actionPoints.current)
+		+ "/"
+		+ std::to_string((int)ship->actionPoints.total));
+
+	gEnv->game.spaceBattle.GUI.add(bar, "spaceBattleActionPointsBar");
+
+}
+
+void hideBars()
+{
+	if (gEnv->game.spaceBattle.GUI.get<tgui::ProgressBar>("spaceBattleHullBar") != NULL)
+	{
+		gEnv->game.spaceBattle.GUI.remove(gEnv->game.spaceBattle.GUI.get<tgui::ProgressBar>("spaceBattleHullBar"));
+		gEnv->game.spaceBattle.GUI.remove(gEnv->game.spaceBattle.GUI.get<tgui::ProgressBar>("spaceBattleShieldBar"));
+		gEnv->game.spaceBattle.GUI.remove(gEnv->game.spaceBattle.GUI.get<tgui::ProgressBar>("spaceBattleActionPointsBar"));
+	}
+}
+
+void createActiveModulesButtons()
+{
+	for (int i = 0; i < gEnv->game.ui.activeWeaponModulesCount; i++)
+	{
+		gEnv->game.spaceBattle.GUI.remove(gEnv->game.spaceBattle.GUI.get<tgui::BitmapButton>("activeModuleButton" + std::to_string(i)));
+	}
+	gEnv->game.ui.activeWeaponModulesCount = 0;
+
+	auto ship = getCurrentPickShip();
+	if (ship == NULL) return;
+	for (int i = 0, j = 0; i < ship->modules.size(); i++)
+	{
+		if (ship->modules[i] != NULL)
+		{
+			if (ship->modules[i]->moduleType == moduleType::weapon)
+			{
+				tgui::BitmapButton::Ptr but = tgui::BitmapButton::create();
+				gEnv->game.spaceBattle.GUI.add(but, "activeModuleButton" + std::to_string(i));
+				but->setSize("10%", "&.height * 0.1");
+				but->setText(ship->modules[i]->name);
+				int shift = but->getParent()->getSize().x * 0.3;
+				but->setPosition(shift + but->getSize().x * j++, "90%");
+				but->setRenderer(gEnv->globalTheme.getRenderer("Button"));
+
+				but->connect("MouseReleased", selectWeaponModule, j);
+				gEnv->game.ui.activeWeaponModulesCount++;
+			}
+		}
+	}
+}
+
+void selectWeaponModule(int id)
+{
+	auto sb = &gEnv->game.spaceBattle;
+	if (sb->weaponId != id)
+	{
+		int wepId = id;
+		auto w = spaceBattle::getShipWeaponModule(sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId], wepId);
+		if (w != NULL)
+		{
+			if (spaceBattle::canUseWeapon(sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId], w))
+			{
+				wprintf(L"Info: Weapon selected: %ws \n", w->name.c_str());
+				sb->selectedWeaponModule = w;
+				sb->weaponModuleSelected = true;
+				sb->weaponId = wepId;
+			}
+		}
+	}
 }

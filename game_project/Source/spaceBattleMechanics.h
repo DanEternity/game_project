@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ship.h"
+#include "enviroment.h"
 #include <cmath>
 
 namespace spaceBattle
@@ -38,3 +39,5 @@ namespace spaceBattle
 	AttackResult weaponAttack(Ship * src, WeaponModule * m, Ship * target, float dist, int key);
 
 }
+
+Ship* getCurrentPickShip();

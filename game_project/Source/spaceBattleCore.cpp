@@ -182,6 +182,8 @@ void updateSpaceBattle(double deltaTime)
 						sb->SelectedShipId = 0;
 						//hideShipInfo();
 						displayShipInfo();
+						showBars();
+						createActiveModulesButtons();
 						if (debugMode)
 							printf("Info: selected ship in segment: %i, %i \n", pickY, pickX);
 					}
@@ -265,6 +267,7 @@ void updateSpaceBattle(double deltaTime)
 						if (sb->miniWindowCreated)
 						{
 							hideMiniWindowShipStats();
+							hideBars();
 						}
 						buildMiniWindowShipStats(sb->map[pickY][pickX]->screenX + 25, sb->map[pickY][pickX]->screenY, sb->map[pickY][pickX]->ships[0]);
 						sb->miniWindowCreated = true;
@@ -436,7 +439,7 @@ void updateSpaceBattle(double deltaTime)
 							sb->turnStatus = spaceBattleState::primary;
 							printf("Info: Weapon no longer selected - cant use it\n");
 						}
-
+						showBars();
 					}
 				}
 			}
@@ -493,8 +496,10 @@ void updateSpaceBattle(double deltaTime)
 
 			sb->turnStatus = spaceBattleState::primary;
 
-		}
+			if (getCurrentPickShip() != NULL)
+				showBars();
 
+		}
 
 		sb->pickI = pickY;
 		sb->pickJ = pickX;
@@ -547,8 +552,6 @@ void updateSpaceBattle(double deltaTime)
 			sb->turnStatus = spaceBattleState::endTurn;
 		}
 	}
-
-
 }
 
 void drawSpaceBattle(double deltaTime)

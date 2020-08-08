@@ -38,6 +38,11 @@ void buildShipStats()
 	int y = 5;
 	//Hull
 	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Hull") + L": " + std::to_wstring((int)gEnv->game.player.ship->hull.current) + L"/" + std::to_wstring((int)gEnv->game.player.ship->hull.total) + L" (+" + std::to_wstring((int)gEnv->game.player.ship->hullReg.total) + L" / round; NONE / day)")), "shipStatHull");
+	tgui::Label::Ptr lab = tgui::Label::create();
+	lab->setTextSize(18);
+	lab->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	lab->setText("The strength of the ship's hull plating.\nIf the durability drops to 0, the core will be destroyed and the ship will explode.");
+	gEnv->game.adventureGUI.get<tgui::Label>("shipStatHull")->setToolTip(lab);
 	y += 20;
 	//Shield
 	gEnv->game.adventureGUI.get<tgui::Panel>("shipStatsPanel")->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield") + L": " + std::to_wstring((int)gEnv->game.player.ship->shield.current) + L"/" + std::to_wstring((int)gEnv->game.player.ship->shield.total) + L" (+" + std::to_wstring((int)gEnv->game.player.ship->shieldReg.total) + L" / round; NONE / day)")), "shipStatShield");

@@ -42,4 +42,8 @@ public:
 	int choosenShopCharacterPrice;
 
 	tgui::Panel::Ptr tooltipDescription = tgui::Panel::create();
+
+	int spaceBattleHexMiniWindowCount = 0;
+	int spaceBattleShipMiniWindowCount = 0;
+	int activeWeaponModulesCount = 0;
 };
