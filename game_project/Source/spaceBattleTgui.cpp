@@ -2,6 +2,7 @@
 
 void buildMiniWindowShipStats(int x, int y, Ship * s)
 {
+	if (gEnv->game.spaceBattle.GUI.get<tgui::Panel>("shipInfoPanel") != nullptr) return;
 	std::string render = "Label";
 	int laby = 5;
 	tgui::Panel::Ptr pan = createWidget(WidgetType::Panel, "Panel", "500", "300", std::to_string(x), std::to_string(y))->cast<tgui::Panel>();
@@ -59,6 +60,7 @@ void hideMiniWindowShipStats()
 
 void buildMiniWindowHex(std::wstring name, bool full, float distance, float moveCost, std::wstring text, int x, int y)
 {
+	if (gEnv->game.spaceBattle.GUI.get<tgui::Panel>("shipInfoPanel") != nullptr) return;
 	std::string render = "Label";
 	int laby = 5;
 	tgui::Panel::Ptr pan = createWidget(WidgetType::Panel, "Panel", "300", "150", std::to_string(x), std::to_string(y))->cast<tgui::Panel>();
@@ -246,7 +248,6 @@ void clickShipInfo()
 		lab->setTextSize(18);
 		lab->setRenderer(gEnv->globalTheme.getRenderer("Label"));
 		lab->setText("The strength of the ship's hull plating.\nIf the durability drops to 0, the core will be destroyed and the ship will explode.");
-		statPan->setToolTip(lab);
 		y += yDif;
 		//Shield
 		statPan->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield") + L": " + std::to_wstring((int)ship->shield.current) + L"/" + std::to_wstring((int)ship->shield.total) + L" (+" + std::to_wstring((int)ship->shieldReg.total) + L" / round; NONE / day)")), "shipStatShield");
