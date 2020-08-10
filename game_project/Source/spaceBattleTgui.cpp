@@ -95,7 +95,7 @@ void showBars()
 	auto ship = gEnv->game.spaceBattle.map[gEnv->game.spaceBattle.pickI][gEnv->game.spaceBattle.pickJ]
 		->ships[gEnv->game.spaceBattle.SelectedShipId];
 
-	tgui::ProgressBar::Ptr bar = createWidget(WidgetType::ProgressBar, "ProgressBar", "300", "30", "2%", "85%")->cast<tgui::ProgressBar>();
+	tgui::ProgressBar::Ptr bar = createWidget(WidgetType::ProgressBar, "ProgressBar2", "300", "30", "2%", "85%")->cast<tgui::ProgressBar>();
 	bar->setMinimum(0);
 	bar->setMaximum(ship->hull.total);
 	bar->setValue(ship->hull.current);
@@ -188,5 +188,153 @@ void selectWeaponModule(int id)
 				sb->weaponId = wepId;
 			}
 		}
+	}
+}
+
+void buttonShipInfo()
+{
+	if (gEnv->game.spaceBattle.GUI.get<tgui::BitmapButton>("buttonShipInfo") == nullptr)
+	{
+		gEnv->game.spaceBattle.GUI.add(createWidget(WidgetType::BitmapButton, "Button", "10%", "10%", "90%", "70%"), "buttonShipInfo");
+		gEnv->game.spaceBattle.GUI.get<tgui::BitmapButton>("buttonShipInfo")->setText(L"Detailed ship info");
+		gEnv->game.spaceBattle.GUI.get<tgui::BitmapButton>("buttonShipInfo")->setTextSize(20);
+		gEnv->game.spaceBattle.GUI.get<tgui::BitmapButton>("buttonShipInfo")->connect("MouseReleased", clickShipInfo);
+	}
+}
+
+void clickShipInfo()
+{
+	if (gEnv->game.spaceBattle.GUI.get<tgui::Panel>("shipInfoPanel") != nullptr) return;
+	auto ship = getCurrentPickShip();
+	if (ship != NULL)
+	{
+		tgui::Panel::Ptr pan = createWidget(WidgetType::Panel, "Panel", "60%", "60%", "20%", "20%")->cast<tgui::Panel>();
+		gEnv->game.spaceBattle.GUI.add(pan, "shipInfoPanel");
+
+		tgui::Panel::Ptr modPan = createWidget(WidgetType::Panel, "Panel2", "48%", "94%", "2%", "3%")->cast<tgui::Panel>();
+		pan->add(modPan);
+
+		tgui::Panel::Ptr statPan = createWidget(WidgetType::Panel, "Panel3", "46%", "89%", "52%", "8%")->cast<tgui::Panel>();
+		pan->add(statPan);
+
+		tgui::BitmapButton::Ptr exBut = createWidget(WidgetType::BitmapButton, "Button", "5%", "6%", "93%", "1%")->cast<tgui::BitmapButton>();
+		exBut->setText("X");
+		exBut->setTextSize(20);
+		exBut->connect("MouseReleased", shipInfoExButton);
+		pan->add(exBut);
+
+		for (int i = 0; i < ship->modules.size(); i++)
+		{
+			tgui::BitmapButton::Ptr modBut = createWidget(WidgetType::BitmapButton, "Button", "50", "50", std::to_string(50 + i * 60), "200")->cast<tgui::BitmapButton>();
+			modPan->add(modBut);
+			if (ship->modules[i] != NULL)
+			{
+				if (ship->modules[i]->icon == NULL)
+					giveIconToItem(ship->modules[i]);
+				modBut->setImage(*ship->modules[i]->icon);
+				modBut->setToolTip(gEnv->game.ui.tooltipDescription);
+				modBut->connect("MouseEntered", applyShipInfoTooltip, i);
+			}
+		}
+
+		std::string render = "Label";
+		int y = 5;
+		int yDif = 23;
+		//Hull
+		statPan->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Hull") + L": " + std::to_wstring((int)ship->hull.current) + L"/" + std::to_wstring((int)ship->hull.total) + L" (+" + std::to_wstring((int)ship->hullReg.total) + L" / round; NONE / day)")), "shipStatHull");
+		tgui::Label::Ptr lab = tgui::Label::create();
+		lab->setTextSize(18);
+		lab->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+		lab->setText("The strength of the ship's hull plating.\nIf the durability drops to 0, the core will be destroyed and the ship will explode.");
+		statPan->setToolTip(lab);
+		y += yDif;
+		//Shield
+		statPan->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield") + L": " + std::to_wstring((int)ship->shield.current) + L"/" + std::to_wstring((int)ship->shield.total) + L" (+" + std::to_wstring((int)ship->shieldReg.total) + L" / round; NONE / day)")), "shipStatShield");
+		y += yDif;
+		//Power Supply
+		statPan->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Energy used") + L": " + std::to_wstring((int)ship->powerSupply.current) + L"/" + std::to_wstring((int)ship->powerSupply.total))), "shipStatPowerSupply");
+		y += yDif;
+		//High Power Supply
+		statPan->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("High energy limit used") + L": " + std::to_wstring((int)ship->highPowerSupply.current) + L"/" + std::to_wstring((int)ship->highPowerSupply.total))), "shipStatHighPowerSupply");
+		y += yDif;
+		//Battle Action Points
+		statPan->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Action points in battle") + L": " + std::to_wstring((int)ship->actionPoints.total))), "shipStatActionPoints");
+		y += yDif;
+		//Hull resist to damgage
+		statPan->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Hull resistance") + L": "
+			+ std::to_wstring((int)ship->hullResistPhysical.total)
+			+ L"/" + std::to_wstring((int)ship->hullResistEnergy.total)
+			+ L"/" + std::to_wstring((int)ship->hullStructureStability.total)
+			+ L" (Physical: "
+			+ std::to_wstring((int)ship->hullResistPhysical.total != 0 ? (int)((ship->hullResistPhysical.total / (ship->hullResistPhysical.total + 100)) * 100) : 0)
+			+ L"%; Energy: "
+			+ std::to_wstring((int)ship->hullResistEnergy.total != 0 ? (int)((ship->hullResistEnergy.total / (ship->hullResistEnergy.total + 100)) * 100) : 0)
+			+ L"%; Crit: "
+			+ std::to_wstring((int)ship->hullStructureStability.total != 0 ? (int)((ship->hullStructureStability.total / (ship->hullStructureStability.total + 100)) * 100) : 0)
+			+ L"%)")), "shipStatHullResist");
+		y += yDif;
+		//Shield resist to damage
+		statPan->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield resistance") + L": "
+			+ std::to_wstring((int)ship->shieldResistPhysical.total)
+			+ L"/" + std::to_wstring((int)ship->shieldResistEnergy.total)
+			+ L"/" + std::to_wstring((int)ship->shieldStructureStability.total)
+			+ L" (Physical: "
+			+ std::to_wstring((int)ship->shieldResistPhysical.total != 0 ? (int)((ship->shieldResistPhysical.total / (ship->shieldResistPhysical.total + 100)) * 100) : 0)
+			+ L"%; Energy: "
+			+ std::to_wstring((int)ship->shieldResistEnergy.total != 0 ? (int)((ship->shieldResistEnergy.total / (ship->shieldResistEnergy.total + 100)) * 100) : 0)
+			+ L"%; Crit: "
+			+ std::to_wstring((int)ship->shieldStructureStability.total != 0 ? (int)((ship->shieldStructureStability.total / (ship->shieldStructureStability.total + 100)) * 100) : 0)
+			+ L"%)")), "shipStatShieldResistPhysical");
+		y += yDif;
+
+		//Stealth, evasion, sensors and missileDefence
+		statPan->add(createWidgetLabel(render, "5", std::to_string(y), 18, GetString("Sensor power: ") + std::to_wstring((int)ship->sensorPower.total) + L";"), "shipStatSensors");
+		statPan->add(createWidgetLabel(render, "250", std::to_string(y), 18, GetString("Sensor tier: ") + std::to_wstring((int)ship->sensorTier.total), "shipStatSensorsTier"));
+		y += yDif;
+		statPan->add(createWidgetLabel(render, "5", std::to_string(y), 18, GetString("Stealth power: ") + std::to_wstring((int)ship->stealth.total) + L";"));
+		statPan->add(createWidgetLabel(render, "250", std::to_string(y), 18, GetString("Stealth tier: ") + std::to_wstring((int)ship->stealthTier.total), "shipStatStealthTier"));
+		y += yDif;
+		statPan->add(createWidgetLabel(render, "5", std::to_string(y), 18, GetString("Evasion: ") + std::to_wstring((int)ship->evasion.total) + L";"), "shipStatEvasion");
+		statPan->add(createWidgetLabel(render, "250", std::to_string(y), 18, GetString("Mobility: ") + std::to_wstring((int)ship->mobility.total), "shipStatMobility"));
+		y += yDif;
+		statPan->add(createWidgetLabel(render, "5", std::to_string(y), 18, GetString("Missile defence power: ") + std::to_wstring((int)ship->missileDefense.total) + L";"), "shipStatMissileDefence");
+		statPan->add(createWidgetLabel(render, "250", std::to_string(y), 18, GetString("Missile defence tier: ") + std::to_wstring((int)ship->missileDefenseTier.total), "shipStatMissileDefenceTier"));
+		y += yDif * 2;
+		//HyperDrive
+		statPan->add(createWidgetLabel(render, "5", std::to_string(y), 18,
+			GetString("Hyper Drive Power")
+			+ L": " + std::to_wstring((int)ship->hyperDrivePower.total)
+			+ L";\n" + GetString("Hyper Drive Tier")
+			+ L": " + std::to_wstring((int)ship->hyperDriveTier.total)
+			+ L";\n" + GetString("Hyper Drive Fuel Effiency")
+			+ L": " + std::to_wstring((int)ship->hyperDriveFuelEfficiency.total)), "shipStatsHyperDrive");
+	}
+}
+
+void shipInfoExButton()
+{
+	gEnv->game.spaceBattle.GUI.get<tgui::Panel>("shipInfoPanel")->removeAllWidgets();
+	gEnv->game.spaceBattle.GUI.remove(gEnv->game.spaceBattle.GUI.get<tgui::Panel>("shipInfoPanel"));
+}
+
+void applyShipInfoTooltip(int id)
+{
+	auto ship = getCurrentPickShip();
+	if (ship != NULL)
+	{
+		if (ship->modules[id] != NULL)
+		{
+			switch (ship->modules[id]->moduleType)
+			{
+			case moduleType::system:
+				createModuleTooltip(ship->modules[id]);
+				break;
+			case moduleType::weapon:
+				createWeaponModuleTooltip(static_cast<WeaponModule*>(ship->modules[id]));
+				break;
+			}
+			gEnv->game.ui.tooltipDescription->setVisible(true);
+		}
+		else gEnv->game.ui.tooltipDescription->setVisible(false);
 	}
 }

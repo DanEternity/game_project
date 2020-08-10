@@ -183,6 +183,7 @@ void updateSpaceBattle(double deltaTime)
 						//hideShipInfo();
 						displayShipInfo();
 						showBars();
+						buttonShipInfo();
 						createActiveModulesButtons();
 						if (debugMode)
 							printf("Info: selected ship in segment: %i, %i \n", pickY, pickX);

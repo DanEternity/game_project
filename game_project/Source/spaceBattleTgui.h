@@ -16,3 +16,8 @@ void hideBars();
 
 void createActiveModulesButtons();
 void selectWeaponModule(int id);
+
+void buttonShipInfo();
+void clickShipInfo();
+void shipInfoExButton();
+void applyShipInfoTooltip(int id);

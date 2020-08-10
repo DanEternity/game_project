@@ -172,8 +172,8 @@ spaceBattle::AttackResult spaceBattle::weaponAttack(Ship * src, WeaponModule * m
 
 Ship* getCurrentPickShip()
 {
-	if (gEnv->game.spaceBattle.pickI == -1 || gEnv->game.spaceBattle.pickJ == -1) return NULL;
-	if (gEnv->game.spaceBattle.map[gEnv->game.spaceBattle.pickI][gEnv->game.spaceBattle.pickJ]->ships.size() == 0) return NULL;
-	if (gEnv->game.spaceBattle.map[gEnv->game.spaceBattle.pickI][gEnv->game.spaceBattle.pickJ]->ships[gEnv->game.spaceBattle.SelectedShipId] == NULL) return NULL;
-	return gEnv->game.spaceBattle.map[gEnv->game.spaceBattle.pickI][gEnv->game.spaceBattle.pickJ]->ships[gEnv->game.spaceBattle.SelectedShipId];
+	if (gEnv->game.spaceBattle.SelectI == -1 || gEnv->game.spaceBattle.SelectJ == -1) return NULL;
+	if (gEnv->game.spaceBattle.map[gEnv->game.spaceBattle.SelectI][gEnv->game.spaceBattle.SelectJ]->ships.size() == 0) return NULL;
+	if (gEnv->game.spaceBattle.map[gEnv->game.spaceBattle.SelectI][gEnv->game.spaceBattle.SelectJ]->ships[gEnv->game.spaceBattle.SelectedShipId] == NULL) return NULL;
+	return gEnv->game.spaceBattle.map[gEnv->game.spaceBattle.SelectI][gEnv->game.spaceBattle.SelectJ]->ships[gEnv->game.spaceBattle.SelectedShipId];
 }

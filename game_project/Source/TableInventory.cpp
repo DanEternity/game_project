@@ -579,14 +579,17 @@ void createEquipmentTooltip(Equipment* e)
 	gEnv->game.ui.tooltipDescription->setSize(300, 250 + e->effects.size() * 30);
 	gEnv->game.ui.tooltipDescription->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
 
+	tgui::Panel::Ptr pan = createWidget(WidgetType::Panel, "Panel2", "300", "&.height", "0", "0")->cast<tgui::Panel>();
+	gEnv->game.ui.tooltipDescription->add(pan);
+
 	tgui::Button::Ptr button = createWidget(WidgetType::Button, "Button", "300", "30", "0", "0")->cast<tgui::Button>();
 	button->setText(e->name);
-	gEnv->game.ui.tooltipDescription->add(button, "nameButtonTooltip");
+	pan->add(button, "nameButtonTooltip");
 
 	std::string render = "Label";
-	gEnv->game.ui.tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(30), 18, L"Equipment"));
-	gEnv->game.ui.tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 4 - 20", std::to_string(60), 18, L"Level: " + std::to_wstring(e->level)));
-	gEnv->game.ui.tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 4 * 3", std::to_string(60), 18, L"Rarity: " + std::to_wstring(e->rarity)));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(30), 18, L"Equipment"));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 4 - 20", std::to_string(60), 18, L"Level: " + std::to_wstring(e->level)));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 4 * 3", std::to_string(60), 18, L"Rarity: " + std::to_wstring(e->rarity)));
 
 	std::wstring text = L"";
 	switch (e->equipmentSlotType)
@@ -606,14 +609,14 @@ void createEquipmentTooltip(Equipment* e)
 	case equipmentSlot::universal:
 		text = L"Slot type: Universal";
 	}
-	gEnv->game.ui.tooltipDescription->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(90), 18, text));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(90), 18, text));
 
 
 	tgui::Label::Ptr label5 = tgui::Label::create();
 	label5->setRenderer(gEnv->globalTheme.getRenderer("Label"));
 	label5->setPosition(10, 120);
 	label5->setTextSize(18);
-	gEnv->game.ui.tooltipDescription->add(label5);
+	pan->add(label5);
 
 	std::wstring str = L"";
 	bool first = true;
@@ -772,7 +775,6 @@ void applyGridTooltip(int id)
 				{
 				case moduleType::system:
 					createModuleTooltip(static_cast<Module*>(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]));
-
 					for (int i = 0; i < gEnv->game.player.ship->slots.size(); i++)
 					{
 						if (gEnv->game.player.ship->modules[i] != NULL)
@@ -805,7 +807,6 @@ void applyGridTooltip(int id)
 					break;
 				case moduleType::weapon:
 					createWeaponModuleTooltip(static_cast<WeaponModule*>(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]));
-
 					for (int i = 0; i < gEnv->game.player.ship->slots.size(); i++)
 					{
 						if (gEnv->game.player.ship->modules[i] != NULL)
@@ -840,6 +841,27 @@ void applyGridTooltip(int id)
 				break;
 			case itemType::equipment:
 				createEquipmentTooltip(static_cast<Equipment*>(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]));
+				for (int i = 0; i < gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment.size(); i++)
+				{
+					if (gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[i] != NULL)
+					{
+						if (static_cast<Equipment*>(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]])->equipmentSlotType == gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[i]->equipmentSlotType)
+						{
+							createEquipmentTooltip(gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[i]);
+
+							tgui::Widget::Ptr temp = gEnv->game.ui.tooltipDescription->cast<tgui::Widget>()->clone();
+							temp->setVisible(true);
+
+							createEquipmentTooltip(static_cast<Equipment*>(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]));
+							if (temp->getSize().y < gEnv->game.ui.tooltipDescription->getSize().y)
+								gEnv->game.ui.tooltipDescription->setSize(600, gEnv->game.ui.tooltipDescription->getSize().y);
+							else gEnv->game.ui.tooltipDescription->setSize(600, temp->getSize().y);
+
+							gEnv->game.ui.tooltipDescription->add(temp, "comparePanel");
+							gEnv->game.ui.tooltipDescription->get<tgui::Panel>("comparePanel")->setPosition(300, 0);
+						}
+					}
+				}
 				break;
 			case itemType::resource:
 				createResourseTooltip(static_cast<ItemResource*>(gEnv->game.player.inventory[gEnv->game.player.localInventory[id]]));

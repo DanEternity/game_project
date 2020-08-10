@@ -7,6 +7,7 @@ void createSpaceBattleUI()
 
 	tgui::Button::Ptr btn = createWidget(WidgetType::Button, "Button", "200", "200", "100% - 200", "100% - 200")->cast<tgui::Button>();
 	btn->setText("Next Turn");
+	btn->setTextSize(20);
 	sb->GUI.add(btn, "EndTurnButton");
 
 	btn->connect("clicked", clickEndTurnButton);
