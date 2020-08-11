@@ -24,6 +24,7 @@ namespace objectType {
 		ship,
 		character,
 		shop,
+		itemScheme,
 	};
 
 } // namespace objectType

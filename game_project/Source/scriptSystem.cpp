@@ -336,6 +336,15 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::showShop:
 		p_processShowShop(static_cast<ShowShopScript*>(command));
 		break;
+	case scriptType::createShip:
+		p_processCreateShip(static_cast<CreateShipScript*>(command));
+		break;
+	case scriptType::editShipStats:
+		p_processEditShipStats(static_cast<EditShipStatsScript*>(command));
+		break;
+	case scriptType::addSlotToShip:
+		p_processAddSlotToShip(static_cast<AddSlotToShipScript*>(command));
+		break;
 	default:
 		printf("Debug: ScriptSystem Error! Script command has unknown type -> %i", sType);
 		break;
@@ -3689,6 +3698,185 @@ void ScriptSystem::p_processShowShop(ShowShopScript * command)
 	buildShop(obj);
 
 	// rest in peace
+
+}
+
+void ScriptSystem::p_processCreateShip(CreateShipScript * command)
+{
+
+	auto dst = command->dst;
+
+	// create item
+	// need to store in global item db
+
+	int id = gEnv->objects.nextShopId++;
+	Ship * obj = new Ship();
+	gEnv->objects.ships[id] = obj;
+	obj->name = command->name;
+
+	auto code = putMemoryCell(dst, obj, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+}
+
+void ScriptSystem::p_processEditShipStats(EditShipStatsScript * command)
+{
+
+	auto src = command->src;
+	BaseObject * objSrc = NULL;
+
+	auto code = getMemoryCell(src, &objSrc, &p_d->localMemory);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::ship)
+	{
+		// failed
+		return;
+	}
+	
+	Ship * p = static_cast<Ship*>(objSrc);
+
+	bool error = false;
+	
+	float hull = scriptUtil::getArgumentFloatValue(command->hull, p_d, error);
+	float hullResistPhysical = scriptUtil::getArgumentFloatValue(command->hullResistPhysical, p_d, error);
+	float hullResistEnergy = scriptUtil::getArgumentFloatValue(command->hullResistEnergy, p_d, error);
+	float hullReg = scriptUtil::getArgumentFloatValue(command->hullReg, p_d, error);
+	float hullStructureStability = scriptUtil::getArgumentFloatValue(command->hullStructureStability, p_d, error);
+
+	float shield = scriptUtil::getArgumentFloatValue(command->shield, p_d, error);
+	float shieldResistPhysical = scriptUtil::getArgumentFloatValue(command->shieldResistPhysical, p_d, error);
+	float shieldResistEnergy = scriptUtil::getArgumentFloatValue(command->shieldResistEnergy, p_d, error);
+	float shieldReg = scriptUtil::getArgumentFloatValue(command->shieldReg, p_d, error);
+	float shieldStructureStability = scriptUtil::getArgumentFloatValue(command->shieldStructureStability, p_d, error);
+
+	float evasion = scriptUtil::getArgumentFloatValue(command->evasion, p_d, error);
+	float mobility = scriptUtil::getArgumentFloatValue(command->mobility, p_d, error);
+	float stealth = scriptUtil::getArgumentFloatValue(command->stealth, p_d, error);
+	float stealthTier = scriptUtil::getArgumentFloatValue(command->stealthTier, p_d, error);
+	float sensorPower = scriptUtil::getArgumentFloatValue(command->sensorPower, p_d, error);
+	float sensorTier = scriptUtil::getArgumentFloatValue(command->sensorTier, p_d, error);
+	float missileDefense = scriptUtil::getArgumentFloatValue(command->missileDefense, p_d, error);
+	float missileDefenseTier = scriptUtil::getArgumentFloatValue(command->missileDefenseTier, p_d, error);
+
+	float powerSupply = scriptUtil::getArgumentFloatValue(command->powerSupply, p_d, error);
+	float highPowerSupply = scriptUtil::getArgumentFloatValue(command->highPowerSupply, p_d, error);
+	float actionPoints = scriptUtil::getArgumentFloatValue(command->actionPoints, p_d, error);
+	
+
+	if (error)
+	{
+		// failed
+		return;
+	}
+
+	//p->hull.baseValue = hull;
+
+	p->hull.baseValue = hull;
+	p->hullResistPhysical.baseValue = hullResistPhysical;
+	p->hullResistEnergy.baseValue = hullResistEnergy;
+	p->hullReg.baseValue = hullReg;
+	p->hullStructureStability.baseValue = hullStructureStability;
+	p->shield.baseValue = shield;
+	p->shieldResistPhysical.baseValue = shieldResistPhysical;
+	p->shieldResistEnergy.baseValue = shieldResistEnergy;
+	p->shieldReg.baseValue = shieldReg;
+	p->shieldStructureStability.baseValue = shieldStructureStability;
+
+	p->evasion.baseValue = evasion;
+	p->mobility.baseValue = mobility;
+	p->stealth.baseValue = stealth;
+	p->stealthTier.baseValue = stealthTier;
+	p->sensorPower.baseValue = sensorPower;
+	p->sensorTier.baseValue = sensorTier;
+	p->missileDefense.baseValue = missileDefense;
+	p->missileDefenseTier.baseValue = missileDefenseTier;
+
+	p->powerSupply.baseValue = powerSupply; 
+	p->highPowerSupply.baseValue = highPowerSupply; 
+	p->actionPoints.baseValue = actionPoints; 
+
+}
+
+void ScriptSystem::p_processAddSlotToShip(AddSlotToShipScript * command)
+{
+
+	RETURN_CODE code;
+
+	auto objDest = scriptUtil::getArgumentObject(command->dst, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+	bool error = false;
+
+
+	if (objDest->objectType != objectType::ship)
+	{
+		// failed
+		return;
+	}
+
+
+	Ship * s = static_cast<Ship*> (objDest);
+
+	std::wstring slotType = scriptUtil::getArgumentStringValue(command->slotType, p_d, error);
+	std::wstring slotSize = scriptUtil::getArgumentStringValue(command->slotSize, p_d, error);
+
+	if (error)
+	{
+		// failed
+		return;
+	}
+
+	moduleSlot::ModuleSlot p;
+	
+	// Size
+	if (slotSize == L"small" || slotSize == L"Small")
+		p.size = moduleSlot::small;
+
+	if (slotSize == L"medium" || slotSize == L"Medium")
+		p.size = moduleSlot::medium;
+
+	if (slotSize == L"large" || slotSize == L"Large")
+		p.size = moduleSlot::large;
+
+	if (slotSize == L"huge" || slotSize == L"Huge")
+		p.size = moduleSlot::huge;
+
+	// Slot type
+	if (slotType == L"core" || slotType == L"Core")
+		p.type = moduleSlot::core;
+
+	if (slotType == L"engine" || slotType == L"Engine")
+		p.type = moduleSlot::engine;
+
+	if (slotType == L"hyperdrive" || slotType == L"Hyperdrive")
+		p.type = moduleSlot::hyperdrive;
+
+	if (slotType == L"system" || slotType == L"System")
+		p.type = moduleSlot::system;
+
+	if (slotType == L"primaryWeapon" || slotType == L"PrimaryWeapon")
+		p.type = moduleSlot::primaryWeapon;
+
+	if (slotType == L"secondaryWeapon" || slotType == L"SecondaryWeapon")
+		p.type = moduleSlot::secondaryWeapon;
+
+	if (slotType == L"universal" || slotType == L"Universal")
+		p.type = moduleSlot::universal;
+
+	s->slots.push_back(p);
+	s->modules.push_back(NULL);
 
 }
 

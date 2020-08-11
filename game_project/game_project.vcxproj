@@ -292,6 +292,7 @@
     <ClInclude Include="Source\graphicsModel.h" />
     <ClInclude Include="Source\InventoryHandlers.h" />
     <ClInclude Include="Source\item.h" />
+    <ClInclude Include="Source\itemScheme.h" />
     <ClInclude Include="Source\itemUtils.h" />
     <ClInclude Include="Source\loader.h" />
     <ClInclude Include="Source\LocaleLoader.h" />

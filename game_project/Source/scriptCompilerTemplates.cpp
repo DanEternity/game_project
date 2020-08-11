@@ -755,6 +755,65 @@ BaseScript * scriptCompilerTemplates::mainHandler::ShowShop(CompilerCommandTempl
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::CreateShip(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new CreateShipScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->name = convertExtReferences(buffer, buffer->arg["$name"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::EditShipStats(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new EditShipStatsScript();
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+
+	//p.body = "\"$src\" \"$hull\" \"$hullReg\" \"$hullResistPhysical\" \"$hullResistEnergy\" \"$hullStructureStability\"";
+	//p.body += " \"$shield\" \"$shieldReg\" \"$shieldResistPhysical\" \"$shieldResistEnergy\" \"$shieldStructureStability\"";
+	//p.body += " \"$evasion\" \"$mobility\" \"$stealth\" \"$stealthTier\" \"$sensorPower\" \"$sensorTier\" \"$missileDefence\" \"$missileDefenceTier\"";
+	//p.body += " \"$powerSupply\" \"$highPowerSupply\" \"$actionPoints\"";
+	p->hull = convertExtReferences(buffer, buffer->arg["$hull"]);
+	p->hullReg = convertExtReferences(buffer, buffer->arg["$hullReg"]);
+	p->hullResistPhysical = convertExtReferences(buffer, buffer->arg["$hullResistPhysical"]);
+	p->hullResistEnergy = convertExtReferences(buffer, buffer->arg["$hullResistEnergy"]);
+	p->hullStructureStability = convertExtReferences(buffer, buffer->arg["$hullStructureStability"]);
+
+	p->shield = convertExtReferences(buffer, buffer->arg["$shield"]);
+	p->shieldReg = convertExtReferences(buffer, buffer->arg["$shieldReg"]);
+	p->shieldResistPhysical = convertExtReferences(buffer, buffer->arg["$shieldResistPhysical"]);
+	p->shieldResistEnergy = convertExtReferences(buffer, buffer->arg["$shieldResistEnergy"]);
+	p->shieldStructureStability = convertExtReferences(buffer, buffer->arg["$shieldStructureStability"]);
+
+	p->evasion = convertExtReferences(buffer, buffer->arg["$evasion"]);
+	p->mobility = convertExtReferences(buffer, buffer->arg["$mobility"]);
+	p->stealth = convertExtReferences(buffer, buffer->arg["$stealth"]);
+	p->stealthTier = convertExtReferences(buffer, buffer->arg["$stealthTier"]);
+
+	p->sensorPower = convertExtReferences(buffer, buffer->arg["$sensorPower"]);
+	p->sensorTier = convertExtReferences(buffer, buffer->arg["$sensorTier"]);
+
+	p->missileDefense = convertExtReferences(buffer, buffer->arg["$missileDefence"]);
+	p->missileDefenseTier = convertExtReferences(buffer, buffer->arg["$missileDefenceTier"]);
+
+	p->powerSupply = convertExtReferences(buffer, buffer->arg["$powerSupply"]);
+	p->highPowerSupply = convertExtReferences(buffer, buffer->arg["$highPowerSupply"]);
+	p->actionPoints = convertExtReferences(buffer, buffer->arg["$actionPoints"]);
+
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::AddSlotToShip(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new AddSlotToShipScript();
+	p->dst = convertExtReferences(buffer, buffer->arg["$dst"]);
+	p->slotType = convertExtReferences(buffer, buffer->arg["$slotType"]);
+	p->slotSize = convertExtReferences(buffer, buffer->arg["$slotSize"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);

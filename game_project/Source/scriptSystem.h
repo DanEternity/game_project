@@ -151,6 +151,9 @@ private:
 	void p_processCreateShop(CreateShopScript * command);
 	void p_processAddGoodsToShop(AddGoodsToShopScript * command);
 	void p_processShowShop(ShowShopScript * command);
+	void p_processCreateShip(CreateShipScript * command);
+	void p_processEditShipStats(EditShipStatsScript * command);
+	void p_processAddSlotToShip(AddSlotToShipScript * command);
 
 };
 

@@ -431,6 +431,9 @@
     <ClInclude Include="Source\spaceBattleTgui.h">
       <Filter>SpaceBattle\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Source\itemScheme.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\Localization\ru_ru.txt">

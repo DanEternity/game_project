@@ -29,4 +29,7 @@ public:
 	int nextShopId = 0;
 	std::map<int, Shop*> shops;
 
+	int nextShipId = 0;
+	std::map<int, Ship*> ships;
+
 };

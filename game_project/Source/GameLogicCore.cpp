@@ -458,5 +458,30 @@ void LoadScriptTemplates()
 	p.mainHandler = scriptCompilerTemplates::mainHandler::ShowShop;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
+	// CreateShip
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"CREATESHIP";
+	p.body = "\"$dst\" \"$name\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::CreateShip;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// EditShipStats
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"EDITSHIPSTATS";
+	p.body = "\"$src\" \"$hull\" \"$hullReg\" \"$hullResistPhysical\" \"$hullResistEnergy\" \"$hullStructureStability\"";
+	p.body += " \"$shield\" \"$shieldReg\" \"$shieldResistPhysical\" \"$shieldResistEnergy\" \"$shieldStructureStability\"";
+	p.body += " \"$evasion\" \"$mobility\" \"$stealth\" \"$stealthTier\" \"$sensorPower\" \"$sensorTier\" \"$missileDefence\" \"$missileDefenceTier\"";
+	p.body += " \"$powerSupply\" \"$highPowerSupply\" \"$actionPoints\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::EditShipStats;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// AddSlotToShip
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"ADDSLOTTOSHIP";
+	p.body = "\"$dst\" \"$slotType\" \"$slotSize\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::AddSlotToShip;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+
 
 }
