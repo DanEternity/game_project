@@ -113,9 +113,9 @@ void collectModules(Ship * p)
 
 	//collect buffs from crew
 
-	for (auto c : gEnv->game.player.crew.characters)
+	for (auto c : p->characterPosition)
 	{
-		if (c->haveRole)
+		if (c != NULL)
 		{
 			for (auto e : c->effectsForShip)
 			{
