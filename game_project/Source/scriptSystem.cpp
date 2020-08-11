@@ -345,6 +345,9 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::addSlotToShip:
 		p_processAddSlotToShip(static_cast<AddSlotToShipScript*>(command));
 		break;
+	case scriptType::addShipToPlayerHangar:
+		p_processAddShipToPlayerHangar(static_cast<AddShipToPlayerHangarScript*>(command));
+		break;
 	default:
 		printf("Debug: ScriptSystem Error! Script command has unknown type -> %i", sType);
 		break;
@@ -3877,6 +3880,33 @@ void ScriptSystem::p_processAddSlotToShip(AddSlotToShipScript * command)
 
 	s->slots.push_back(p);
 	s->modules.push_back(NULL);
+
+}
+
+void ScriptSystem::p_processAddShipToPlayerHangar(AddShipToPlayerHangarScript * command)
+{
+
+	RETURN_CODE code;
+
+	auto objDest = scriptUtil::getArgumentObject(command->src, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+	bool error = false;
+
+
+	if (objDest->objectType != objectType::ship)
+	{
+		// failed
+		return;
+	}
+
+
+	Ship * s = static_cast<Ship*> (objDest);
+
+	addShipToHangar(s);
 
 }
 

@@ -79,6 +79,7 @@ namespace scriptType
 		createShip,
 		editShipStats,
 		addSlotToShip,
+		addShipToPlayerHangar,
 	};
 }
 
@@ -1081,4 +1082,17 @@ public:
 	{
 		this->scriptType = scriptType::addSlotToShip;
 	}
+};
+
+class AddShipToPlayerHangarScript : public BaseScript
+{
+public:
+
+	std::wstring src;
+
+	AddShipToPlayerHangarScript() : BaseScript()
+	{
+		this->scriptType = scriptType::addShipToPlayerHangar;
+	}
+
 };

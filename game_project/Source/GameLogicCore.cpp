@@ -482,6 +482,12 @@ void LoadScriptTemplates()
 	p.mainHandler = scriptCompilerTemplates::mainHandler::AddSlotToShip;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
+	// AddShipToPlayerHangar
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"ADDSHIPTOPLAYERHANGAR";
+	p.body = "\"$src\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::AddShipToPlayerHangar;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
 
 }

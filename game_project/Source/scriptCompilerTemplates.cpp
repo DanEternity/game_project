@@ -814,6 +814,14 @@ BaseScript * scriptCompilerTemplates::mainHandler::AddSlotToShip(CompilerCommand
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::AddShipToPlayerHangar(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new AddShipToPlayerHangarScript();
+	p->src = convertExtReferences(buffer, buffer->arg["$src"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);

@@ -9,6 +9,7 @@
 #include "shipModulesUI.h"
 #include "personEquipmentUI.h"
 #include "Shop.h"
+#include "hangarUI.h"
 #include <stack>
 //#include "scriptDescriptor.h"
 
@@ -154,6 +155,7 @@ private:
 	void p_processCreateShip(CreateShipScript * command);
 	void p_processEditShipStats(EditShipStatsScript * command);
 	void p_processAddSlotToShip(AddSlotToShipScript * command);
+	void p_processAddShipToPlayerHangar(AddShipToPlayerHangarScript * command);
 
 };
 
