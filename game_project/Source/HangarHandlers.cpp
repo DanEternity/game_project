@@ -9,7 +9,13 @@ void handleFighterModulesPanelEvent(int fighterId, int moduleId, tgui::Widget::P
 			Module* p_module = static_cast<Module*>(gEnv->game.player.pickedItem);
 			if (p_module->slot == gEnv->game.player.fighterPlanes[fighterId]->slots[moduleId].type)
 			{
-				gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.fighterPlanes[fighterId]->modules[moduleId];
+				if (gEnv->game.player.fighterPlanes[fighterId]->modules[moduleId] != NULL)
+				{
+					gEnv->game.player.inventory[gEnv->game.player.pickedLocalInventory] = gEnv->game.player.fighterPlanes[fighterId]->modules[moduleId];
+					RebuildInventoryGridPanel();
+				}
+				if (gEnv->game.player.pickedLocalInventory != -1)
+					gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.fighterPlanes[fighterId]->modules[moduleId];
 				gEnv->game.player.fighterPlanes[fighterId]->modules[moduleId] = p_module;
 
 				gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::BitmapButton>("pickedItemMouse"));
@@ -17,6 +23,17 @@ void handleFighterModulesPanelEvent(int fighterId, int moduleId, tgui::Widget::P
 				gEnv->game.player.pickedItemInvId = -1;
 				gEnv->game.player.pickedLocalInventory = -1;
 
+				buildFigtherModules(fighterId);
+			}
+		}
+		else
+		{
+			if (gEnv->game.player.fighterPlanes[fighterId]->modules[moduleId] != NULL)
+			{
+				gEnv->game.adventureGUI.add(createWidget(WidgetType::BitmapButton, "Button", std::to_string(45), std::to_string(45), std::to_string(sf::Mouse::getPosition(gEnv->globalWindow).x), std::to_string(sf::Mouse().getPosition(gEnv->globalWindow).y - 5)), "pickedItemMouse");
+				gEnv->game.adventureGUI.get<tgui::BitmapButton>("pickedItemMouse")->setImage(*gEnv->game.player.fighterPlanes[fighterId]->modules[moduleId]->icon);
+				gEnv->game.player.pickedItem = gEnv->game.player.fighterPlanes[fighterId]->modules[moduleId];
+				gEnv->game.player.fighterPlanes[fighterId]->modules[moduleId] = NULL;
 				buildFigtherModules(fighterId);
 			}
 		}
