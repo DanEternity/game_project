@@ -79,6 +79,7 @@ namespace scriptCompilerTemplates
 		BaseScript * CreateShip(CompilerCommandTemplateDataBuffer * buffer); //
 		BaseScript * EditShipStats(CompilerCommandTemplateDataBuffer * buffer); //
 		BaseScript * AddSlotToShip(CompilerCommandTemplateDataBuffer * buffer); //
+		BaseScript * AddShipToPlayerHangar(CompilerCommandTemplateDataBuffer * buffer); //
 		
 	}
 

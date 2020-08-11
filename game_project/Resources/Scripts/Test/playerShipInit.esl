@@ -52,4 +52,22 @@ InitCharacterStats "$captain" "$_health" "$_armor" "$_shield" "$_block"
 "$_resist" "$_shieldReg" "$_actionPoints" "$_energy" "$_energyReg" "$_initiative" 
 "$_combat" "$_science" "$_adaptation" "$_reflexes" "$_engineerig" "$_perception" "$_social"
 
+CreateShip "$_ship" "Test ship"
+
+//EditShipStats "$_ship" "$hull" "$hullReg" "$hullResistPhysical" "$hullResistEnergy" "$hullStructureStability"
+//	"$shield" "$shieldReg" "$shieldResistPhysical" "$shieldResistEnergy" "$shieldStructureStability"
+//	"$evasion" "$mobility" "$stealth" "$stealthTier" "$sensorPower" "$sensorTier" "$missileDefence" "$missileDefenceTier"
+//	"$powerSupply" "$highPowerSupply" "$actionPoints"
+	
+EditShipStats "$_ship" "100" "0" "10" "10" "0"
+	"0" "0" "0" "0" "0"
+	"25" "25" "5" "1" "10" "1" "4" "1"
+	"15" "1.5" "50"
+
+AddSlotToShip "$_ship" "core" "huge"
+AddSlotToShip "$_ship" "universal" "medium"
+AddSlotToShip "$_ship" "primaryWeapon" "medium"
+
+AddShipToPlayerHangar "$_ship"
+
 Terminate 
