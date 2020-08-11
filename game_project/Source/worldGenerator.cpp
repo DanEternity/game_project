@@ -474,7 +474,7 @@ void SetupAdventureStart()
 
 	Ship* fighter = new Ship();
 	Ship* fighter2 = new Ship();
-	gEnv->game.player.fighterPlanes.push_back(fighter);
-	gEnv->game.player.fighterPlanes.push_back(fighter2);
+	addShipToHangar(fighter);
+	addShipToHangar(fighter2);
 	BuildHangar();
 }

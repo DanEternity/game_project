@@ -459,13 +459,26 @@ void unregisterPlayerCharacter(int id)
 		}
 		if (gEnv->game.player.crew.characters[id]->haveRole)
 		{
-			for (int i = 0; i < gEnv->game.player.ship->characterPosition.size(); i++)
+			if (gEnv->game.player.crew.characters[id]->role == characterRole::pilot)
 			{
-				if (gEnv->game.player.crew.characters[id] == gEnv->game.player.ship->characterPosition[i]) {
-					gEnv->game.player.ship->characterPosition[i] = NULL;
-					break;
+				for (int i = 0; i < gEnv->game.player.fighterPlanes.size(); i++)
+				{
+					if (gEnv->game.player.crew.characters[id] == gEnv->game.player.fighterPlanes[i]->characterPosition[0])
+					{
+						gEnv->game.player.fighterPlanes[i]->characterPosition[0] = NULL;
+						gEnv->game.adventureGUI.get<tgui::BitmapButton>("pilotFighterButton" + std::to_string(i))->setText("");
+						break;
+					}
 				}
 			}
+			else
+				for (int i = 0; i < gEnv->game.player.ship->characterPosition.size(); i++)
+				{
+					if (gEnv->game.player.crew.characters[id] == gEnv->game.player.ship->characterPosition[i]) {
+						gEnv->game.player.ship->characterPosition[i] = NULL;
+						break;
+					}
+				}
 		}
 		gEnv->game.player.crew.characters.clear();
 		for (int i = 0; i < temp.size(); i++)
