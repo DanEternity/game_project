@@ -4,7 +4,7 @@
 
 void BuildShipSchemeUI(int moduleSizeUI)
 {
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::Panel, "Panel3", "600", "300", "1%", "2%", false), "ShipSchemeModulesPanel");
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::Panel, "Panel3", "600", "60%", "1%", "2%", false), "ShipSchemeModulesPanel");
 
 	tgui::Button::Ptr priorityButton = createWidget(WidgetType::Button, "Button", "130", "30", "76%", "2%")->cast<tgui::Button>();
 	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemeModulesPanel")->add(priorityButton, "priorityButton");

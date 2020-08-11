@@ -236,6 +236,7 @@
     <ClCompile Include="Source\game.cpp" />
     <ClCompile Include="Source\GameLogicCore.cpp" />
     <ClCompile Include="Source\generationUtility.cpp" />
+    <ClCompile Include="Source\HangarHandlers.cpp" />
     <ClCompile Include="Source\hangarUI.cpp" />
     <ClCompile Include="Source\InventoryHandlers.cpp" />
     <ClCompile Include="Source\itemUtils.cpp" />
@@ -291,6 +292,7 @@
     <ClInclude Include="Source\generationUtility.h" />
     <ClInclude Include="Source\graphics.h" />
     <ClInclude Include="Source\graphicsModel.h" />
+    <ClInclude Include="Source\HangarHandlers.h" />
     <ClInclude Include="Source\hangarUI.h" />
     <ClInclude Include="Source\InventoryHandlers.h" />
     <ClInclude Include="Source\item.h" />

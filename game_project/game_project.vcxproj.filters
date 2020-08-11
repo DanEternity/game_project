@@ -189,6 +189,9 @@
     <ClCompile Include="Source\hangarUI.cpp">
       <Filter>Adventure\UI\General</Filter>
     </ClCompile>
+    <ClCompile Include="Source\HangarHandlers.cpp">
+      <Filter>Adventure\UI\Handlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\game.h">
@@ -439,6 +442,9 @@
     </ClInclude>
     <ClInclude Include="Source\hangarUI.h">
       <Filter>Adventure\UI\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HangarHandlers.h">
+      <Filter>Adventure\UI\Handlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

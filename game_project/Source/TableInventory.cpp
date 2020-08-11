@@ -155,7 +155,7 @@ void ApplyDefaultFilterToInventoryPanel()
 	// current menu
 	auto q = gEnv->game.player.shipMenu;
 	
-	if (q == shipMenu::ship)
+	if (q == shipMenu::ship || q == shipMenu::hangar)
 	{
 		gEnv->game.player.inventoryFilter.itemType.insert(itemType::module);
 	}

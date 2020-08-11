@@ -25,7 +25,8 @@ namespace TargetInventory
 		tableInventory,
 		gridPanel,
 		shipPanel,
-		personPanel
+		personPanel,
+		fighterPanel,
 	};
 }
 

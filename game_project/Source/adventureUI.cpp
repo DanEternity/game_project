@@ -281,6 +281,8 @@ void disableAllAdventureUI()
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("globalMapPanel"), false);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("adventureShop"), false);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("hangarMainPanel"), false);
+	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("fighterModules"), false);
+	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("priorityButton"), false);
 }
 
 void updateCategoryFilters()
@@ -322,7 +324,13 @@ void updateCategoryFilters()
 	case shipMenu::stats:
 		break;
 	case shipMenu::hangar:
-
+		p->addItem(GetString("Primary weapon"), "Primary weapon");
+		p->addItem(GetString("Secondary weapon"), "Secondary weapon");
+		p->addItem(GetString("Engine"), "Engine");
+		p->addItem(GetString("Hyperdrive"), "Hyperdrive");
+		p->addItem(GetString("Core"), "Core");
+		p->addItem(GetString("System"), "System");
+		p->addItem(GetString("Universal"), "Universal");
 		break;
 	default:
 		break;

@@ -46,8 +46,11 @@ tgui::Label::Ptr createWidgetLabel(std::string render, std::string posX, std::st
 
 void enableWidget(tgui::Widget::Ptr widget, bool enable)
 {
-	widget->setEnabled(enable);
-	widget->setVisible(enable);
+	if (widget != NULL)
+	{
+		widget->setEnabled(enable);
+		widget->setVisible(enable);
+	}
 }
 
 void swapElements(TargetInventory::targetInventory target, int id)
