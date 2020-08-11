@@ -65,6 +65,9 @@ public:
 	float shipAngle = 0;
 	CrewData crew;
 	Character * captain;
+
+	int hangarSize = 4;
+	std::vector<Ship*> fighterPlanes;
 	
 	// Adventure ship position on sector (world coord)
 	sf::Vector2f shipPosition = { 0, 0 };

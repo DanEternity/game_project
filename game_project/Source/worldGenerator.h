@@ -11,6 +11,7 @@
 #include "scriptCompiler.h"
 #include "adventureUI.h"
 #include "map.h"
+#include "hangarUI.h"
 
 void startWorldGeneration();
 

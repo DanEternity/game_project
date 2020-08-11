@@ -417,7 +417,6 @@ void SetupAdventureStart()
 	giveIconToItem(gEnv->game.player.inventory[11]);
 
 	BuildInventoryUI(9);
-	createShopPanel();
 
 	gEnv->game.player.inventory[20] = new ItemResource();
 	gEnv->game.player.inventory[20]->itemId = -10;
@@ -470,5 +469,12 @@ void SetupAdventureStart()
 
 	CreateInventoryGridPanel(10);
 
+	createShopPanel();
 	createShop();
+
+	Ship* fighter = new Ship();
+	Ship* fighter2 = new Ship();
+	gEnv->game.player.fighterPlanes.push_back(fighter);
+	gEnv->game.player.fighterPlanes.push_back(fighter2);
+	BuildHangar();
 }

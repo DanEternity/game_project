@@ -237,6 +237,7 @@ void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled, bool openS
 		ChangePersonPanelsState(gEnv->game.ui.puistate);
 		break;
 	case shipMenu::hangar:
+		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("hangarMainPanel"), true);
 		break;
 	case shipMenu::lab:
 		break;
@@ -279,6 +280,7 @@ void disableAllAdventureUI()
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("PanelChangePersonState"), false);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("globalMapPanel"), false);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("adventureShop"), false);
+	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("hangarMainPanel"), false);
 }
 
 void updateCategoryFilters()
