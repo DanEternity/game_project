@@ -21,7 +21,7 @@ namespace characterRole
 	{
 		noneRole,
 		captain,
-
+		pilot,
 	};
 }
 
