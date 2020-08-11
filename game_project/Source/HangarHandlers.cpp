@@ -7,7 +7,7 @@ void handleFighterModulesPanelEvent(int fighterId, int moduleId, tgui::Widget::P
 		if (gEnv->game.player.pickedItem != NULL)
 		{
 			Module* p_module = static_cast<Module*>(gEnv->game.player.pickedItem);
-			if (p_module->slot == gEnv->game.player.fighterPlanes[fighterId]->modules[moduleId]->slot)
+			if (p_module->slot == gEnv->game.player.fighterPlanes[fighterId]->slots[moduleId].type)
 			{
 				gEnv->game.player.inventory[gEnv->game.player.pickedItemInvId] = gEnv->game.player.fighterPlanes[fighterId]->modules[moduleId];
 				gEnv->game.player.fighterPlanes[fighterId]->modules[moduleId] = p_module;
@@ -16,6 +16,8 @@ void handleFighterModulesPanelEvent(int fighterId, int moduleId, tgui::Widget::P
 				gEnv->game.player.pickedItem = NULL;
 				gEnv->game.player.pickedItemInvId = -1;
 				gEnv->game.player.pickedLocalInventory = -1;
+
+				buildFigtherModules(fighterId);
 			}
 		}
 	}

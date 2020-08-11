@@ -282,6 +282,7 @@ void disableAllAdventureUI()
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("adventureShop"), false);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("hangarMainPanel"), false);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("fighterModules"), false);
+	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("fighterStats"), false);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("priorityButton"), false);
 }
 
