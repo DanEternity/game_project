@@ -434,6 +434,9 @@
     <ClInclude Include="Source\spaceBattleTgui.h">
       <Filter>SpaceBattle\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Source\itemScheme.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
     <ClInclude Include="Source\hangarUI.h">
       <Filter>Adventure\UI\General</Filter>
     </ClInclude>

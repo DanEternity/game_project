@@ -76,6 +76,9 @@ namespace scriptType
 		createShop,
 		addGoodsToShop,
 		showShop,
+		createShip,
+		editShipStats,
+		addSlotToShip,
 	};
 }
 
@@ -1007,4 +1010,75 @@ public:
 		this->scriptType = scriptType::showShop;
 	}
 
+};
+
+class CreateShipScript : public BaseScript
+{
+public:
+
+	std::wstring dst;
+	std::wstring name; // ship name
+
+	CreateShipScript() : BaseScript()
+	{
+		this->scriptType = scriptType::createShip;
+	}
+
+};
+
+class EditShipStatsScript : public BaseScript
+{
+public:
+
+	std::wstring src; // ship
+
+	// stats
+	// Some of stats are missing because they are special and probably doesn't need to be initialized here
+	// This is only (base) part of Stat. So it can be modified by modules, effects etc.
+
+	std::wstring hull;
+	std::wstring hullResistPhysical;
+	std::wstring hullResistEnergy;
+	std::wstring hullReg;
+	std::wstring hullStructureStability;
+	std::wstring shield;
+	std::wstring shieldResistPhysical;
+	std::wstring shieldResistEnergy;
+	std::wstring shieldReg;
+	std::wstring shieldStructureStability;
+
+	std::wstring evasion;
+	std::wstring mobility;
+	std::wstring stealth;
+	std::wstring stealthTier;
+	std::wstring sensorPower;
+	std::wstring sensorTier;
+	std::wstring missileDefense;
+	std::wstring missileDefenseTier;
+
+	std::wstring powerSupply; 
+	std::wstring highPowerSupply; 
+	std::wstring actionPoints; 
+
+
+	EditShipStatsScript() : BaseScript()
+	{
+		this->scriptType = scriptType::editShipStats;
+	}
+
+};
+
+class AddSlotToShipScript : public BaseScript
+{
+public:
+
+	std::wstring dst;
+
+	std::wstring slotType;
+	std::wstring slotSize;
+
+	AddSlotToShipScript() : BaseScript()
+	{
+		this->scriptType = scriptType::addSlotToShip;
+	}
 };

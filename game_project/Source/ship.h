@@ -23,6 +23,7 @@ public:
 	int factionId = 0; // indicates ship battle faction
 	sf::Sprite * model = NULL; // ship visual model
 	bool largeShip = false;
+	std::wstring name; // ship name 
 
 	// links section
 

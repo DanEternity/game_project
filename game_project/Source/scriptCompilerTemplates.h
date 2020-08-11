@@ -76,6 +76,10 @@ namespace scriptCompilerTemplates
 		BaseScript * CreateShop(CompilerCommandTemplateDataBuffer * buffer); //
 		BaseScript * AddGoodsToShop(CompilerCommandTemplateDataBuffer * buffer); //
 		BaseScript * ShowShop(CompilerCommandTemplateDataBuffer * buffer); //
+		BaseScript * CreateShip(CompilerCommandTemplateDataBuffer * buffer); //
+		BaseScript * EditShipStats(CompilerCommandTemplateDataBuffer * buffer); //
+		BaseScript * AddSlotToShip(CompilerCommandTemplateDataBuffer * buffer); //
+		
 	}
 
 	namespace afterUpdateHandler 
