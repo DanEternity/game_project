@@ -36,7 +36,7 @@ void BuildShipSchemeUI(int moduleSizeUI = 45);
 void buildShipStats();
 void updateShipSchemeUI();
 
-void createShipModulePriorityPanel();
-void changeShipModulePriority(int id, bool isUp);
+void createShipModulePriorityPanel(Ship *s);
+void changeShipModulePriority(int id, bool isUp, Ship *s);
 
 void applyModuleTooltipShipUI(int id);

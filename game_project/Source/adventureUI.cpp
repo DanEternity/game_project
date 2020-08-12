@@ -174,8 +174,6 @@ void createAdventureUIButtons()
 
 	buildShipStats();
 	BuildPlanPanel();
-	createShipModulePriorityPanel();
-
 }
 
 
@@ -285,8 +283,7 @@ void disableAllAdventureUI()
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("fighterStats"), false);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("priorityButton"), false);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::BitmapButton>("swipeFighterLeft"), false);
-	enableWidget(gEnv->game.adventureGUI.get<tgui::BitmapButton>("swipeFighterRight"), false);
-}
+	enableWidget(gEnv->game.adventureGUI.get<tgui::BitmapButton>("swipeFighterRight"), false);}
 
 void updateCategoryFilters()
 {

@@ -139,6 +139,9 @@ void buildFigtherModules(int id)
 	}
 
 	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::Panel, "Panel3", "43%", "60%", "5%", "2%"), "fighterModules");
+	gEnv->game.adventureGUI.get<tgui::Panel>("fighterModules")->add(createWidget(WidgetType::BitmapButton, "Button", "130", "30", "70%", "2%"), "fighterPriority");
+	gEnv->game.adventureGUI.get<tgui::BitmapButton>("fighterPriority")->setText("Modules priority");
+	gEnv->game.adventureGUI.get<tgui::BitmapButton>("fighterPriority")->connect("MouseReleased", createShipModulePriorityPanel, &(*gEnv->game.player.fighterPlanes[id]));
 
 	if (gEnv->game.adventureGUI.get<tgui::BitmapButton>("swipeFighterLeft") != nullptr)
 	{
