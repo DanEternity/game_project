@@ -129,6 +129,7 @@ void placePilotToFighter(Character *c, int id, bool isUnassigned)
 
 void buildFigtherModules(int id)
 {
+	gEnv->game.ui.activeOpenFighterWindow = id;
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("hangarMainPanel"), false);
 
 	if (gEnv->game.adventureGUI.get<tgui::Panel>("fighterModules") != nullptr)
@@ -137,7 +138,36 @@ void buildFigtherModules(int id)
 		gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->remove(gEnv->game.adventureGUI.get<tgui::Panel>("fighterModules"));
 	}
 
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::Panel, "Panel3", "51%", "60%", "1%", "2%"), "fighterModules");
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::Panel, "Panel3", "43%", "60%", "5%", "2%"), "fighterModules");
+
+	if (gEnv->game.adventureGUI.get<tgui::BitmapButton>("swipeFighterLeft") != nullptr)
+	{
+		gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->remove(gEnv->game.adventureGUI.get<tgui::BitmapButton>("swipeFighterLeft"));
+	}
+	if (gEnv->game.adventureGUI.get<tgui::BitmapButton>("swipeFighterRight") != nullptr)
+	{
+		gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->remove(gEnv->game.adventureGUI.get<tgui::BitmapButton>("swipeFighterRight"));
+	}
+
+	if (id != 0)
+	{
+		tgui::BitmapButton::Ptr left = createWidget(WidgetType::BitmapButton, "Button", "3%", "12%", "1%", "24%")->cast<tgui::BitmapButton>();
+		left->setText("<");
+		left->setTextSize(36);
+		gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(left, "swipeFighterLeft");
+		const int newid = id - 1;
+		left->connect("MouseReleased", buildFigtherModules, newid);
+	}
+	if (id != gEnv->game.player.fighterPlanes.size() - 1)
+	{
+		tgui::BitmapButton::Ptr right = createWidget(WidgetType::BitmapButton, "Button", "3%", "12%", "50%", "24%")->cast<tgui::BitmapButton>();
+		right->setText(">");
+		right->setTextSize(36);
+		gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(right, "swipeFighterRight");
+		const int newid = id + 1;
+		right->connect("MouseReleased", buildFigtherModules, newid);
+	}
+	
 
 	if (gEnv->game.adventureGUI.get<tgui::Panel>("fighterStats") != nullptr)
 	{
