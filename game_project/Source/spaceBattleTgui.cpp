@@ -341,14 +341,26 @@ void applyShipInfoTooltip(int id)
 
 void createLogsWindow()
 {
-	tgui::ScrollablePanel::Ptr pan = createWidget(WidgetType::ScrollablePanel, "Panel2", "15%", "40%", "170", "30")->cast<tgui::ScrollablePanel>();
-	tgui::Label::Ptr lab = createWidgetLabel("Label", "8", "10", 18, gEnv->game.ui.spaceBattleLogs);
-	pan->add(lab);
-	gEnv->game.spaceBattle.GUI.add(pan);
+	if (gEnv->game.spaceBattle.GUI.get<tgui::Panel>("spaceBattleLogsPanel") != nullptr)
+	{
+		gEnv->game.spaceBattle.GUI.get<tgui::Panel>("spaceBattleLogsPanel")->removeAllWidgets();
+		gEnv->game.spaceBattle.GUI.remove(gEnv->game.spaceBattle.GUI.get<tgui::Panel>("spaceBattleLogsPanel"));
+	}
+	else {
+		tgui::ScrollablePanel::Ptr pan = createWidget(WidgetType::ScrollablePanel, "Panel2", "15%", "40%", "170", "30")->cast<tgui::ScrollablePanel>();
+		tgui::Label::Ptr lab = createWidgetLabel("Label", "8", "10", 18, gEnv->game.ui.spaceBattleLogs);
+		pan->add(lab);
+		gEnv->game.spaceBattle.GUI.add(pan, "spaceBattleLogsPanel");
+	}
 }
 
 void addNoteToLogs(std::wstring stroke)
 {
 	stroke += L"\n";
 	gEnv->game.ui.spaceBattleLogs += stroke;
+}
+
+void clearLogs()
+{
+	gEnv->game.ui.spaceBattleLogs = L"";
 }

@@ -24,3 +24,4 @@ void applyShipInfoTooltip(int id);
 
 void createLogsWindow();
 void addNoteToLogs(std::wstring stroke);
+void clearLogs();
