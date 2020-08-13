@@ -94,8 +94,7 @@ void showBars()
 		gEnv->game.spaceBattle.GUI.remove(gEnv->game.spaceBattle.GUI.get<tgui::ProgressBar>("spaceBattleShieldBar"));
 		gEnv->game.spaceBattle.GUI.remove(gEnv->game.spaceBattle.GUI.get<tgui::ProgressBar>("spaceBattleActionPointsBar"));
 	}
-	auto ship = gEnv->game.spaceBattle.map[gEnv->game.spaceBattle.pickI][gEnv->game.spaceBattle.pickJ]
-		->ships[gEnv->game.spaceBattle.SelectedShipId];
+	auto ship = getCurrentPickShip();
 
 	tgui::ProgressBar::Ptr bar = createWidget(WidgetType::ProgressBar, "ProgressBar2", "300", "30", "2%", "85%")->cast<tgui::ProgressBar>();
 	bar->setMinimum(0);
@@ -338,4 +337,18 @@ void applyShipInfoTooltip(int id)
 		}
 		else gEnv->game.ui.tooltipDescription->setVisible(false);
 	}
+}
+
+void createLogsWindow()
+{
+	tgui::ScrollablePanel::Ptr pan = createWidget(WidgetType::ScrollablePanel, "Panel2", "15%", "40%", "170", "30")->cast<tgui::ScrollablePanel>();
+	tgui::Label::Ptr lab = createWidgetLabel("Label", "8", "10", 18, gEnv->game.ui.spaceBattleLogs);
+	pan->add(lab);
+	gEnv->game.spaceBattle.GUI.add(pan);
+}
+
+void addNoteToLogs(std::wstring stroke)
+{
+	stroke += L"\n";
+	gEnv->game.ui.spaceBattleLogs += stroke;
 }

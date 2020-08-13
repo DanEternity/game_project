@@ -5,7 +5,7 @@ void createSpaceBattleUI()
 
 	auto sb = &gEnv->game.spaceBattle;
 
-	tgui::Button::Ptr btn = createWidget(WidgetType::Button, "Button", "200", "200", "100% - 200", "100% - 200")->cast<tgui::Button>();
+	tgui::BitmapButton::Ptr btn = createWidget(WidgetType::BitmapButton, "Button", "200", "200", "100% - 200", "100% - 200")->cast<tgui::BitmapButton>();
 	btn->setText("Next Turn");
 	btn->setTextSize(20);
 	sb->GUI.add(btn, "EndTurnButton");
@@ -17,6 +17,14 @@ void createSpaceBattleUI()
 
 	text1->setVisible(false);
 
+	tgui::BitmapButton::Ptr logBtn = createWidget(WidgetType::BitmapButton, "Button", "150", "50", "5", "5")->cast<tgui::BitmapButton>();
+	logBtn->setText("Logs");
+	logBtn->setTextSize(20);
+	logBtn->connect("MouseReleased", createLogsWindow);
+	sb->GUI.add(logBtn, "logsButton");
+
+	addNoteToLogs(L"Note 1");
+	addNoteToLogs(L"Note 2");
 }
 
 void clickEndTurnButton()

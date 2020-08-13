@@ -47,4 +47,6 @@ public:
 	int spaceBattleHexMiniWindowCount = 0;
 	int spaceBattleShipMiniWindowCount = 0;
 	int activeWeaponModulesCount = 0;
+
+	std::wstring spaceBattleLogs = L"";
 };

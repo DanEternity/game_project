@@ -2,6 +2,7 @@
 
 #include "enviroment.h"
 #include "UIExtensions.h"
+#include "spaceBattleTgui.h"
 
 void createSpaceBattleUI();
 

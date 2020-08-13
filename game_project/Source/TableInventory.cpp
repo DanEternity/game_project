@@ -392,7 +392,7 @@ void createModuleTooltip(Module * m)
 void createWeaponModuleTooltip(WeaponModule * w)
 {
 	gEnv->game.ui.tooltipDescription->removeAllWidgets();
-	gEnv->game.ui.tooltipDescription->setSize(400, 500 + w->effects.size() * 30);
+	gEnv->game.ui.tooltipDescription->setSize(400, 550 + w->effects.size() * 30);
 	gEnv->game.ui.tooltipDescription->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
 
 	tgui::Panel::Ptr pan = createWidget(WidgetType::Panel, "Panel2", "400", "&.height", "0", "0")->cast<tgui::Panel>();
@@ -402,14 +402,17 @@ void createWeaponModuleTooltip(WeaponModule * w)
 	button->setText(w->name);
 	pan->add(button, "nameButtonTooltip");
 
-	std::string render = "Label";
-	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(30), 18, L"Weapon"));
-	pan->add(createWidgetLabel(render, "(&.width - width) / 4 - 20", std::to_string(60), 18, L"Level: " + std::to_wstring(w->level)));
-	pan->add(createWidgetLabel(render, "(&.width - width) / 4 * 3 + 20", std::to_string(60), 18, L"Rarity: " + std::to_wstring(w->rarity)));
+	int y = 0;
+	int yDif = 30;
 
-	tgui::Label::Ptr label4 = tgui::Label::create();
-	label4->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label4->setPosition("(&.width - width) / 2", 90);
+	std::string render = "Label";
+	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(y += yDif), 18, L"Weapon"));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 4 - 20", std::to_string(y += yDif), 18, L"Level: " + std::to_wstring(w->level)));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 4 * 3 + 20", std::to_string(y), 18, L"Rarity: " + std::to_wstring(w->rarity)));
+
+	pan->add(createWidgetLabel(render, "8", std::to_string(y += yDif), 18, L"Power Supply: " + std::to_wstring(w->powerSupply.total)));
+	pan->add(createWidgetLabel(render, "8", std::to_string(y += yDif), 18, L"High Power Supply: " + std::to_wstring(w->highPowerSupply.total)));
+
 	std::wstring text = L"";
 	/*switch (w->type)
 	{
@@ -417,36 +420,35 @@ void createWeaponModuleTooltip(WeaponModule * w)
 		WRITE WEAPON TYPE INTO text VAR
 
 	} */
-	label4->setTextSize(18);
-	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(90), 18, text));
+	pan->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(y += yDif), 18, text));
 
-	pan->add(createWidgetLabel(render, "8", std::to_string(120), 18, L"Damage: " + createFloatString(w->baseDamage.total * (int)w->projectilesAmount.total) + L" (" + createFloatString(w->baseDamage.total) + L" damage x " + std::to_wstring((int)w->projectilesAmount.total) + L" hits)"));
+	pan->add(createWidgetLabel(render, "8", std::to_string(y += yDif), 18, L"Damage: " + createFloatString(w->baseDamage.total * (int)w->projectilesAmount.total) + L" (" + createFloatString(w->baseDamage.total) + L" damage x " + std::to_wstring((int)w->projectilesAmount.total) + L" hits)"));
 	
 	switch (w->damageType)
 	{
 	case 0:
-		pan->add(createWidgetLabel(render, "8", std::to_string(150), 18, L"Damage type: Null"));
+		pan->add(createWidgetLabel(render, "8", std::to_string(y += yDif), 18, L"Damage type: Null"));
 		break;
 	case 1:
-		pan->add(createWidgetLabel(render, "8", std::to_string(150), 18, L"Damage type: Physical"));
+		pan->add(createWidgetLabel(render, "8", std::to_string(y += yDif), 18, L"Damage type: Physical"));
 		break;
 	case 2:
-		pan->add(createWidgetLabel(render, "8", std::to_string(150), 18, L"Damage type: Energy"));
+		pan->add(createWidgetLabel(render, "8", std::to_string(y += yDif), 18, L"Damage type: Energy"));
 		break;
 	}
 
-	pan->add(createWidgetLabel(render, "8", std::to_string(180), 18, L"Optimal distance: " + createFloatString(w->optimalDistance.total) + L" hex"));
-	pan->add(createWidgetLabel(render, "8", std::to_string(210), 18, L"Accuracy: " + createFloatString(w->accuracy.total)));
-	pan->add(createWidgetLabel(render, "8", std::to_string(240), 18, L"Over range: Damage/Hex -" + createFloatString(w->damagePenalty.total * 100) + L"%"));
-	pan->add(createWidgetLabel(render, "108", std::to_string(270), 18, L"Accuracy/Hex -" + createFloatString(w->accuracyPenalty.total * 100) + L"%"));
-	pan->add(createWidgetLabel(render, "8", std::to_string(300), 18, L"Hull crit chance: " + createFloatString(w->criticalChanceHull.total * 100) + L"%; Multiplier: " + createFloatString(w->criticalDamageHull.total * 100) + L"%"));
-	pan->add(createWidgetLabel(render, "8", std::to_string(330), 18, L"Shield crit chance: " + createFloatString(w->criticalChanceShield.total * 100) + L"%; Multiplier: " + createFloatString(w->criticalDamageShield.total * 100) + L"%"));
-	pan->add(createWidgetLabel(render, "8", std::to_string(360), 18, L"Hull penetration: " + createFloatString(w->resistanceIgnoreHullFlat.total) + L" + " + createFloatString(w->resistanceIgnoreHullPercent.total * 100) + L"% of target resist"));
-	pan->add(createWidgetLabel(render, "8", std::to_string(390), 18, L"Shield penetration: " + createFloatString(w->resistanceIgnoreShieldFlat.total) + L" + " + createFloatString(w->resistanceIgnoreShieldPercent.total * 100) + L"% of target resist"));
-	pan->add(createWidgetLabel(render, "8", std::to_string(420), 18, L"Weapon capacity: " + std::to_wstring((int)w->activationsLimit.total) + L"; Full cooldown: " + std::to_wstring((int)w->fullCooldown.total) + L" rounds"));
-	pan->add(createWidgetLabel(render, "8", std::to_string(450), 18, L"Overheat limit: " + std::to_wstring((int)w->activationsPartial.total) + L"; Overheat cooldown: " + std::to_wstring((int)w->partialCooldown.total) + L" rounds"));
+	pan->add(createWidgetLabel(render, "8", std::to_string(y += yDif), 18, L"Optimal distance: " + createFloatString(w->optimalDistance.total) + L" hex"));
+	pan->add(createWidgetLabel(render, "8", std::to_string(y += yDif), 18, L"Accuracy: " + createFloatString(w->accuracy.total)));
+	pan->add(createWidgetLabel(render, "8", std::to_string(y += yDif), 18, L"Over range: Damage/Hex -" + createFloatString(w->damagePenalty.total * 100) + L"%"));
+	pan->add(createWidgetLabel(render, "108", std::to_string(y += yDif), 18, L"Accuracy/Hex -" + createFloatString(w->accuracyPenalty.total * 100) + L"%"));
+	pan->add(createWidgetLabel(render, "8", std::to_string(y += yDif), 18, L"Hull crit chance: " + createFloatString(w->criticalChanceHull.total * 100) + L"%; Multiplier: " + createFloatString(w->criticalDamageHull.total * 100) + L"%"));
+	pan->add(createWidgetLabel(render, "8", std::to_string(y += yDif), 18, L"Shield crit chance: " + createFloatString(w->criticalChanceShield.total * 100) + L"%; Multiplier: " + createFloatString(w->criticalDamageShield.total * 100) + L"%"));
+	pan->add(createWidgetLabel(render, "8", std::to_string(y += yDif), 18, L"Hull penetration: " + createFloatString(w->resistanceIgnoreHullFlat.total) + L" + " + createFloatString(w->resistanceIgnoreHullPercent.total * 100) + L"% of target resist"));
+	pan->add(createWidgetLabel(render, "8", std::to_string(y += yDif), 18, L"Shield penetration: " + createFloatString(w->resistanceIgnoreShieldFlat.total) + L" + " + createFloatString(w->resistanceIgnoreShieldPercent.total * 100) + L"% of target resist"));
+	pan->add(createWidgetLabel(render, "8", std::to_string(y += yDif), 18, L"Weapon capacity: " + std::to_wstring((int)w->activationsLimit.total) + L"; Full cooldown: " + std::to_wstring((int)w->fullCooldown.total) + L" rounds"));
+	pan->add(createWidgetLabel(render, "8", std::to_string(y += yDif), 18, L"Overheat limit: " + std::to_wstring((int)w->activationsPartial.total) + L"; Overheat cooldown: " + std::to_wstring((int)w->partialCooldown.total) + L" rounds"));
 
-	tgui::ToolTip::setDistanceToMouse({ 10, -80 });
+	tgui::ToolTip::setDistanceToMouse({ 15, -100 });
 	/*tgui::Label::Ptr label5 = tgui::Label::create();
 	label5->setRenderer(gEnv->globalTheme.getRenderer("Label"));
 	label5->setPosition(10, 120);

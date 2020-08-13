@@ -11,3 +11,6 @@ void UpdateMapUI();
 
 
 void openMap();
+
+void createSectorTooltipDescription(MapSector* m);
+void applySectorTooltip(int id);

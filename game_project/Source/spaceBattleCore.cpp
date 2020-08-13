@@ -69,11 +69,6 @@ void updateSpaceBattle(double deltaTime)
 
 		sb->map[7][8]->color = segmentColor::neutral;
 
-
-		tgui::Button::Ptr q = tgui::Button::create("TEST");
-		q->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-		gEnv->game.spaceBattle.GUI.add(q);
-
 		gEnv->game.gameSpaceBattleGUIRequiresUpdate = true;
 
 		// debug

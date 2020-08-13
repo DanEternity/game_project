@@ -21,3 +21,6 @@ void buttonShipInfo();
 void clickShipInfo();
 void shipInfoExButton();
 void applyShipInfoTooltip(int id);
+
+void createLogsWindow();
+void addNoteToLogs(std::wstring stroke);
