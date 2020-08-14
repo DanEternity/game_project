@@ -38,8 +38,11 @@ void RewardResponseSignal(int cellId, tgui::Widget::Ptr widget, const std::strin
 
 void RewardNewItemsResponseSignal(int cellId, Item* item, tgui::Widget::Ptr widget, const std::string & signalName)
 {
-	gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("rewardPanel")->remove(gEnv->game.adventureGUI.get<tgui::BitmapButton>("rewardItem" + std::to_string(cellId)));
-	gEnv->game.adventureGUI.add(createWidget(WidgetType::BitmapButton, "Button", std::to_string(45), std::to_string(45), std::to_string(sf::Mouse::getPosition(gEnv->globalWindow).x), std::to_string(sf::Mouse().getPosition(gEnv->globalWindow).y - 5)), "pickedItemMouse");
-	gEnv->game.adventureGUI.get<tgui::BitmapButton>("pickedItemMouse")->setImage(*item->icon);
-	gEnv->game.player.pickedItem = item;
+	if (gEnv->game.player.pickedItem == NULL && gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("addRewardPanel") != nullptr)
+	{
+		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("rewardPanel")->remove(gEnv->game.adventureGUI.get<tgui::BitmapButton>("rewardItem" + std::to_string(cellId)));
+		gEnv->game.adventureGUI.add(createWidget(WidgetType::BitmapButton, "Button", std::to_string(45), std::to_string(45), std::to_string(sf::Mouse::getPosition(gEnv->globalWindow).x), std::to_string(sf::Mouse().getPosition(gEnv->globalWindow).y - 5)), "pickedItemMouse");
+		gEnv->game.adventureGUI.get<tgui::BitmapButton>("pickedItemMouse")->setImage(*item->icon);
+		gEnv->game.player.pickedItem = item;
+	}
 }

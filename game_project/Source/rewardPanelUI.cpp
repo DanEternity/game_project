@@ -10,22 +10,22 @@ void showItemsReward(std::vector<Item*> items)
 		tgui::BitmapButton::Ptr button = createWidget(WidgetType::BitmapButton, "Button", "50", "50", std::to_string(10 + i % 10 * 60), std::to_string(10 + i / 10 * 60))->cast<tgui::BitmapButton>();
 		button->setImage(*item->icon);
 		gEnv->game.adventureGUI.get<tgui::Panel>("rewardPanel")->add(button, "rewardItem" + std::to_string(i));
-		applyRewardTooltip(item);
 		button->setToolTip(gEnv->game.ui.tooltipDescription);
 		const int id = i;
 		button->connect("MouseReleased", RewardNewItemsResponseSignal, id, &(*item));
+		button->connect("MouseEntered", applyRewardTooltip, &(*item));
 		i++;
 	}
 
 	tgui::BitmapButton::Ptr exit = createWidget(WidgetType::BitmapButton, "Button", "200", "50", "70%", "80%")->cast<tgui::BitmapButton>();
 	exit->connect("MouseReleased", closeRewardWindow, items);
-	exit->setText("Snova huina, skip");
+	exit->setText("Take reward");
 	gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("rewardPanel")->add(exit, "exitRewardWindow");
 }
 
 void closeRewardWindow(std::vector<Item*> items)
 {
-
+	gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("rewardPanel")->remove(gEnv->game.adventureGUI.get<tgui::BitmapButton>("exitRewardWindow"));
 	int emptyCount = 0;
 	std::vector<int> indexes;
 	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
