@@ -360,6 +360,9 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::startSpaceBattle:
 		p_processStartSpaceBattle(static_cast<StartSpaceBattleScript*>(command));
 		break;
+	case scriptType::setShipDurabilityFull:
+		p_processSetShipDurabilityFull(static_cast<SetShipDurabilityFullScript*>(command));
+		break;
 	default:
 		printf("Debug: ScriptSystem Error! Script command has unknown type -> %i", sType);
 		break;
@@ -4004,6 +4007,8 @@ void ScriptSystem::p_processAddShipToBattle(AddShipToBattleScript * command)
 	// adding to battle
 	auto * sb = &gEnv->game.spaceBattle;
 
+	updateShipValues(s);
+
 	sb->map[y][x]->ships.push_back(s);
 
 }
@@ -4023,6 +4028,8 @@ void ScriptSystem::p_processAddPlayerShipsToBattle(AddPlayerShipsToBattleScript 
 		gEnv->game.player.ship->model->rotate(90);
 	}
 
+	gEnv->game.player.ship->factionId = 1;
+
 	// adding to battle
 	auto * sb = &gEnv->game.spaceBattle;
 
@@ -4039,6 +4046,33 @@ void ScriptSystem::p_processStartSpaceBattle(StartSpaceBattleScript * command)
 	gEnv->game.activeGameMode = gameMode::spaceBattleMode;
 
 }
+
+void ScriptSystem::p_processSetShipDurabilityFull(SetShipDurabilityFullScript * command)
+{
+
+	RETURN_CODE code;
+	bool error = false;
+
+	auto objSrc = scriptUtil::getArgumentObject(command->ship, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::ship)
+	{
+		// failed
+		return;
+	}
+
+	Ship * s = static_cast<Ship*>(objSrc);
+
+	s->hull.current = s->hull.total;
+	s->shield.current = s->shield.total;
+
+}
+
 
 
 

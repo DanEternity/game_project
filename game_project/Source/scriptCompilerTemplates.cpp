@@ -870,6 +870,14 @@ BaseScript * scriptCompilerTemplates::mainHandler::BindToEvent(CompilerCommandTe
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::SetShipDurabilityFull(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new SetShipDurabilityFullScript();
+	p->ship = convertExtReferences(buffer, buffer->arg["$ship"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);

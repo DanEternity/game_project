@@ -85,6 +85,8 @@ namespace scriptType
 		addPlayerShipsToBattle,
 		startSpaceBattle,
 		bindToEvent,
+		setShipCurrentHull,
+		setShipDurabilityFull,
 	};
 }
 
@@ -1167,4 +1169,21 @@ public:
 		this->scriptType = scriptType::bindToEvent; 
 	}
 
+};
+
+class SetShipCurrentHull : public BaseScript
+{
+public:
+
+};
+
+class SetShipDurabilityFullScript : public BaseScript
+{
+public:
+	std::wstring ship;
+
+	SetShipDurabilityFullScript() : BaseScript()
+	{
+		this->scriptType = scriptType::setShipDurabilityFull;
+	}
 };

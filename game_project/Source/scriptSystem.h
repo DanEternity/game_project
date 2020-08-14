@@ -160,7 +160,7 @@ private:
 	void p_processAddShipToBattle(AddShipToBattleScript * command);
 	void p_processAddPlayerShipsToBattle(AddPlayerShipsToBattleScript * command);
 	void p_processStartSpaceBattle(StartSpaceBattleScript * command);
-
+	void p_processSetShipDurabilityFull(SetShipDurabilityFullScript * command);
 };
 
 extern ScriptSystem * scriptSystem;

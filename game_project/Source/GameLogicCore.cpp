@@ -525,5 +525,11 @@ void LoadScriptTemplates()
 	p.postUpdateHandler = scriptCompilerTemplates::afterUpdateHandler::BindToEvent;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 	
+	// SetShipDurabilityFull
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"SETSHIPDURABILITYFULL";
+	p.body = "\"$ship\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::SetShipDurabilityFull;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
 }

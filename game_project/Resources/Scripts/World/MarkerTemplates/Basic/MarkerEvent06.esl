@@ -50,6 +50,7 @@ AddSlotToShip "$_ship" "universal" "medium"
 AddSlotToShip "$_ship" "primaryWeapon" "medium" 
 
 AddShipToBattle "$_ship" "2" "default" "10" "5" "decorationSpaceBeacon"
+SetShipDurabilityFull "$_ship"
 
 CreateShip "$_ship" "Enemy ship"
 
@@ -68,6 +69,7 @@ AddSlotToShip "$_ship" "universal" "medium"
 AddSlotToShip "$_ship" "primaryWeapon" "medium" 
 
 AddShipToBattle "$_ship" "2" "default" "10" "7" "decorationSpaceBeacon"
+SetShipDurabilityFull "$_ship"
 ChangeScriptEntryPoint "$self" "@exit"
 StartSpaceBattle 
 
