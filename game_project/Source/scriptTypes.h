@@ -1174,7 +1174,7 @@ public:
 class SetShipCurrentHull : public BaseScript
 {
 public:
-
+	std::wstring ship;
 };
 
 class SetShipDurabilityFullScript : public BaseScript

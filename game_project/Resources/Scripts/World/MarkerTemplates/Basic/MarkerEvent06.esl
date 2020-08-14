@@ -70,6 +70,26 @@ AddSlotToShip "$_ship" "primaryWeapon" "medium"
 
 AddShipToBattle "$_ship" "2" "default" "10" "7" "decorationSpaceBeacon"
 SetShipDurabilityFull "$_ship"
+
+CreateShip "$_ship" "Enemy ship large"
+
+//EditShipStats "$_ship" "$hull" "$hullReg" "$hullResistPhysical" "$hullResistEnergy" "$hullStructureStability"
+//	"$shield" "$shieldReg" "$shieldResistPhysical" "$shieldResistEnergy" "$shieldStructureStability"
+//	"$evasion" "$mobility" "$stealth" "$stealthTier" "$sensorPower" "$sensorTier" "$missileDefence" "$missileDefenceTier"
+//	"$powerSupply" "$highPowerSupply" "$actionPoints"
+	
+EditShipStats "$_ship" "7250" "0" "1000" "1000" "0"
+	"0" "0" "0" "0" "0"
+	"25" "25" "5" "1" "10" "1" "4" "1"
+	"15" "1.5" "50"
+
+AddSlotToShip "$_ship" "core" "huge"
+AddSlotToShip "$_ship" "universal" "medium"
+AddSlotToShip "$_ship" "primaryWeapon" "medium" 
+
+AddShipToBattle "$_ship" "2" "default" "11" "5" "decorationSpaceBeacon"
+SetShipDurabilityFull "$_ship"
+
 ChangeScriptEntryPoint "$self" "@exit"
 StartSpaceBattle 
 
