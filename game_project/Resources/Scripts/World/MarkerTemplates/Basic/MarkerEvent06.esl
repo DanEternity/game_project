@@ -25,57 +25,54 @@ Terminate
 
 Text "This is a test event created with key $EXT:local:key "
 
-Choose "Someone try to contact with you. Reply to him?" [true]"Yes"[@tobipizda],[true]"No"[@fight];
-
-@tobipizda
-GetCharacterStat "$captain" "characterSocial" "$_soc"
-Choose "Unknown person want to take all your items" [true]"Give him all items"[@loseitems],[$_soc >= 10]"Ask who are you talking to"[@dialog];
-
-@dialog
-GetShipStat "$ship" "sensorPower" "$_senspow"
-GetShipStat "$ship" "additionalWeaponAccuracy" "$_accuracy"
-IfDoJump "$_senspow < 50" "@fight"
-Choose "Unknown person keeps silent" [$_senspow > 90]"Scan him"[@scan"],[$_accuracy > 2]"Attack him"[@fight],[$_soc > 30]"Join us!"[@join];
-
-@scan
-ChangeScriptEntryPoint "$self" "@exit"
-
-@join
-Put "100" to "$_health"
-Put "0" to "$_armor"
-Put "0" to "$_shield"
-Put "0" to "$_block"
-
-Put "0" to "$_resist"
-Put "0" to "$_shieldReg"
-
-Put "3" to "$_actionPoints"
-Put "100" to "$_energy"
-Put "5" to "$_energyReg"
-
-Put "10" to "$_initiative"
-
-Put "10" to "$_combat"
-Put "15" to "$_science"
-Put "10" to "$_adaptation"
-Put "10" to "$_reflexes"
-Put "10" to "$_perception"
-Put "10" to "$_engineerig"
-
-Put "0" to "$_social"
-
-CreateCharacter "$_char" "QWERTY QWERTY" "Human" "Engineer" "NULL"
-
-InitCharacterStats "$_char" "$_health" "$_armor" "$_shield" "$_block" 
-"$_resist" "$_shieldReg" "$_actionPoints" "$_energy" "$_energyReg" "$_initiative" 
-"$_combat" "$_science" "$_adaptation" "$_reflexes" "$_engineerig" "$_perception" "$_social"
-
-AddCharacterToPlayerCrew "$_char"
-ChangeScriptEntryPoint "$self" "@exit"
-
+Choose "You have detected several ship signatures. You can attept to scan them or just leave?" 
+[true]"Scan them (will fight)"[@fight],[true]"Leave"[@end];
 @fight
-Text "Your ship was attacked by unknown ship"
+Text "Enemy approaching you... (initializing space battle...)"
+
+InitSpaceBattleBuffer "8" "12"
+AddPlayerShipsToBattle "2" "4" "2"
+
+CreateShip "$_ship" "Enemy ship example"
+
+//EditShipStats "$_ship" "$hull" "$hullReg" "$hullResistPhysical" "$hullResistEnergy" "$hullStructureStability"
+//	"$shield" "$shieldReg" "$shieldResistPhysical" "$shieldResistEnergy" "$shieldStructureStability"
+//	"$evasion" "$mobility" "$stealth" "$stealthTier" "$sensorPower" "$sensorTier" "$missileDefence" "$missileDefenceTier"
+//	"$powerSupply" "$highPowerSupply" "$actionPoints"
+	
+EditShipStats "$_ship" "100" "0" "10" "10" "0"
+	"0" "0" "0" "0" "0"
+	"25" "25" "5" "1" "10" "1" "4" "1"
+	"15" "1.5" "50"
+
+AddSlotToShip "$_ship" "core" "huge"
+AddSlotToShip "$_ship" "universal" "medium"
+AddSlotToShip "$_ship" "primaryWeapon" "medium" 
+
+AddShipToBattle "$_ship" "2" "default" "10" "5" "decorationSpaceBeacon"
+
+CreateShip "$_ship" "Enemy ship"
+
+//EditShipStats "$_ship" "$hull" "$hullReg" "$hullResistPhysical" "$hullResistEnergy" "$hullStructureStability"
+//	"$shield" "$shieldReg" "$shieldResistPhysical" "$shieldResistEnergy" "$shieldStructureStability"
+//	"$evasion" "$mobility" "$stealth" "$stealthTier" "$sensorPower" "$sensorTier" "$missileDefence" "$missileDefenceTier"
+//	"$powerSupply" "$highPowerSupply" "$actionPoints"
+	
+EditShipStats "$_ship" "125" "0" "10" "10" "0"
+	"0" "0" "0" "0" "0"
+	"25" "25" "5" "1" "10" "1" "4" "1"
+	"15" "1.5" "50"
+
+AddSlotToShip "$_ship" "core" "huge"
+AddSlotToShip "$_ship" "universal" "medium"
+AddSlotToShip "$_ship" "primaryWeapon" "medium" 
+
+AddShipToBattle "$_ship" "2" "default" "10" "7" "decorationSpaceBeacon"
 ChangeScriptEntryPoint "$self" "@exit"
+StartSpaceBattle 
+
+@end
+Terminate
 
 @exit
 Text "Nothing else here"

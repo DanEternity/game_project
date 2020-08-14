@@ -80,7 +80,11 @@ namespace scriptCompilerTemplates
 		BaseScript * EditShipStats(CompilerCommandTemplateDataBuffer * buffer); //
 		BaseScript * AddSlotToShip(CompilerCommandTemplateDataBuffer * buffer); //
 		BaseScript * AddShipToPlayerHangar(CompilerCommandTemplateDataBuffer * buffer); //
-		
+		BaseScript * InitSpaceBattleBuffer(CompilerCommandTemplateDataBuffer * buffer); //
+		BaseScript * AddShipToBattle(CompilerCommandTemplateDataBuffer * buffer); //
+		BaseScript * AddPlayerShipsToBattle(CompilerCommandTemplateDataBuffer * buffer); //
+		BaseScript * StartSpaceBattle(CompilerCommandTemplateDataBuffer * buffer); //
+		BaseScript * BindToEvent(CompilerCommandTemplateDataBuffer * buffer); //
 	}
 
 	namespace afterUpdateHandler 
@@ -92,6 +96,7 @@ namespace scriptCompilerTemplates
 		void Choose(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1);
 		void ChangeScriptEntryPoint(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1);
 		void IfDoJump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1);
+		void BindToEvent(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1);
 	}
 
 }

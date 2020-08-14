@@ -348,6 +348,18 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::addShipToPlayerHangar:
 		p_processAddShipToPlayerHangar(static_cast<AddShipToPlayerHangarScript*>(command));
 		break;
+	case scriptType::initSpaceBattleBuffer:
+		p_processInitSpaceBattleBuffer(static_cast<InitSpaceBattleBufferScript*>(command));
+		break;
+	case scriptType::addShipToBattle:
+		p_processAddShipToBattle(static_cast<AddShipToBattleScript*>(command));
+		break;
+	case scriptType::addPlayerShipsToBattle:
+		p_processAddPlayerShipsToBattle(static_cast<AddPlayerShipsToBattleScript*>(command));
+		break;
+	case scriptType::startSpaceBattle:
+		p_processStartSpaceBattle(static_cast<StartSpaceBattleScript*>(command));
+		break;
 	default:
 		printf("Debug: ScriptSystem Error! Script command has unknown type -> %i", sType);
 		break;
@@ -3907,6 +3919,124 @@ void ScriptSystem::p_processAddShipToPlayerHangar(AddShipToPlayerHangarScript * 
 	Ship * s = static_cast<Ship*> (objDest);
 
 	addShipToHangar(s);
+
+}
+
+void ScriptSystem::p_processInitSpaceBattleBuffer(InitSpaceBattleBufferScript * command)
+{
+
+	// clear all current battle info
+	auto * sb = &gEnv->game.spaceBattle;
+	
+	sb->map.clear();
+	sb->turnNumber = 0;
+	// setup initial states
+	
+	bool error = false;
+
+	int y = scriptUtil::getArgumentIntValue(command->y, p_d, error);
+	int x = scriptUtil::getArgumentIntValue(command->x, p_d, error);
+
+	sb->maxLines = y;
+	sb->maxLength = x;
+
+	for (int i(0); i < sb->maxLines; i++)
+	{
+		sb->map.push_back(std::vector<SpaceBattleSegment * >());
+		for (int j(0); j < sb->maxLength; j++)
+		{
+			sb->map[i].push_back(new SpaceBattleSegment());
+			if (i % 2 == 0)
+				sb->map[i][j]->gameX = 0.5f + j;
+			else
+				sb->map[i][j]->gameX = 1.f + j;
+			sb->map[i][j]->gameY = 0.557f + (i * 0.557f * 1.5f);
+		}
+	}
+
+	// initial camera
+	sb->cameraX = 500;
+	sb->cameraY = 500;
+
+	sb->turnStatus = spaceBattleState::endTurn; // this required to make first turn update (turn 0 -> turn 1) 
+	sb->actionCooldown = 5;
+	sb->currentPath.clear();
+	sb->EndTurnPressed = false;
+	sb->factionOrder.clear();
+	sb->selected = false;
+	sb->currentFactionIndex = 0;
+	sb->factionOrder.push_back(1);
+
+}
+
+void ScriptSystem::p_processAddShipToBattle(AddShipToBattleScript * command)
+{
+
+	RETURN_CODE code;
+	bool error = false;
+
+	auto objSrc = scriptUtil::getArgumentObject(command->ship, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::ship)
+	{
+		// failed
+		return;
+	}
+
+	Ship * s = static_cast<Ship*>(objSrc);
+
+	int factionId = scriptUtil::getArgumentIntValue(command->factionId, p_d, error);
+	int x = scriptUtil::getArgumentIntValue(command->posX, p_d, error);
+	int y = scriptUtil::getArgumentIntValue(command->posY, p_d, error);
+
+	std::wstring m = scriptUtil::getArgumentStringValue(command->modelName, p_d, error);
+
+	s->factionId = factionId;
+
+	s->model = new sf::Sprite(gEnv->modelDB[m]->tex);
+	s->model->setOrigin(sf::Vector2f(s->model->getTexture()->getSize()) / 2.0f);
+
+	// adding to battle
+	auto * sb = &gEnv->game.spaceBattle;
+
+	sb->map[y][x]->ships.push_back(s);
+
+}
+
+void ScriptSystem::p_processAddPlayerShipsToBattle(AddPlayerShipsToBattleScript * command)
+{
+	bool error = false;
+
+	int x = scriptUtil::getArgumentIntValue(command->posX, p_d, error);
+	int y = scriptUtil::getArgumentIntValue(command->posY, p_d, error);
+	int range = scriptUtil::getArgumentIntValue(command->tacticalRange, p_d, error);
+	
+	if (gEnv->game.player.ship->model == NULL)
+	{
+		gEnv->game.player.ship->model = new sf::Sprite(gEnv->modelDB[L"shipBase"]->tex);
+		gEnv->game.player.ship->model->setOrigin(sf::Vector2f(gEnv->game.player.ship->model->getTexture()->getSize()) / 2.0f);
+		gEnv->game.player.ship->model->rotate(90);
+	}
+
+	// adding to battle
+	auto * sb = &gEnv->game.spaceBattle;
+
+	sb->map[y][x]->ships.push_back(gEnv->game.player.ship);
+	sb->tacticsRange = std::max(1, range);
+
+}
+
+void ScriptSystem::p_processStartSpaceBattle(StartSpaceBattleScript * command)
+{
+
+	// switch game mode;
+
+	gEnv->game.activeGameMode = gameMode::spaceBattleMode;
 
 }
 

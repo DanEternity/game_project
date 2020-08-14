@@ -156,6 +156,10 @@ private:
 	void p_processEditShipStats(EditShipStatsScript * command);
 	void p_processAddSlotToShip(AddSlotToShipScript * command);
 	void p_processAddShipToPlayerHangar(AddShipToPlayerHangarScript * command);
+	void p_processInitSpaceBattleBuffer(InitSpaceBattleBufferScript * command);
+	void p_processAddShipToBattle(AddShipToBattleScript * command);
+	void p_processAddPlayerShipsToBattle(AddPlayerShipsToBattleScript * command);
+	void p_processStartSpaceBattle(StartSpaceBattleScript * command);
 
 };
 

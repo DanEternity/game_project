@@ -80,6 +80,11 @@ namespace scriptType
 		editShipStats,
 		addSlotToShip,
 		addShipToPlayerHangar,
+		initSpaceBattleBuffer,
+		addShipToBattle,
+		addPlayerShipsToBattle,
+		startSpaceBattle,
+		bindToEvent,
 	};
 }
 
@@ -1093,6 +1098,73 @@ public:
 	AddShipToPlayerHangarScript() : BaseScript()
 	{
 		this->scriptType = scriptType::addShipToPlayerHangar;
+	}
+
+};
+
+class InitSpaceBattleBufferScript : public BaseScript
+{
+public:
+	std::wstring y;
+	std::wstring x;
+
+	InitSpaceBattleBufferScript() : BaseScript()
+	{
+		this->scriptType = scriptType::initSpaceBattleBuffer;
+	}
+};
+
+class AddShipToBattleScript : public BaseScript
+{
+public:
+	std::wstring ship;
+	std::wstring factionId;
+	std::wstring aiControl;
+	std::wstring posX;
+	std::wstring posY;
+	std::wstring modelName;
+
+	AddShipToBattleScript() : BaseScript()
+	{
+		this->scriptType = scriptType::addShipToBattle;
+	}
+};
+
+class AddPlayerShipsToBattleScript : public BaseScript
+{
+public:
+	// only set marker, not actual ship
+	std::wstring posX;
+	std::wstring posY;
+	std::wstring tacticalRange; // only for future compability // 1 minimum cause need space to put interceptors
+
+	AddPlayerShipsToBattleScript() : BaseScript()
+	{
+		this->scriptType = scriptType::addPlayerShipsToBattle;
+	}
+};
+
+class StartSpaceBattleScript : public BaseScript
+{
+public:
+	StartSpaceBattleScript() : BaseScript()
+	{
+		this->scriptType = scriptType::startSpaceBattle;
+	}
+};
+
+class BindToEventScript : public BaseScript
+{
+public:
+	// restricted use only
+	// doesn't work outside of current script
+	std::wstring eventName;
+	int lineId; // jump to line
+	std::wstring chache = L"";
+
+	BindToEventScript() : BaseScript()
+	{
+		this->scriptType = scriptType::bindToEvent; 
 	}
 
 };

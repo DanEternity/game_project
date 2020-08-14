@@ -822,6 +822,54 @@ BaseScript * scriptCompilerTemplates::mainHandler::AddShipToPlayerHangar(Compile
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::InitSpaceBattleBuffer(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new InitSpaceBattleBufferScript();
+	p->y = convertExtReferences(buffer, buffer->arg["$sizeY"]);
+	p->x = convertExtReferences(buffer, buffer->arg["$sizeX"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::AddShipToBattle(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new AddShipToBattleScript();
+	p->aiControl = convertExtReferences(buffer, buffer->arg["$aiControl"]);
+	p->ship = convertExtReferences(buffer, buffer->arg["$ship"]);
+	p->posX = convertExtReferences(buffer, buffer->arg["$posX"]);
+	p->posY = convertExtReferences(buffer, buffer->arg["$posY"]);
+	p->factionId = convertExtReferences(buffer, buffer->arg["$factionId"]);
+	p->modelName = convertExtReferences(buffer, buffer->arg["$modelName"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::AddPlayerShipsToBattle(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new AddPlayerShipsToBattleScript();
+	p->posX = convertExtReferences(buffer, buffer->arg["$posX"]);
+	p->posY = convertExtReferences(buffer, buffer->arg["$posY"]);
+	p->tacticalRange = convertExtReferences(buffer, buffer->arg["$tacticalRange"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::StartSpaceBattle(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new StartSpaceBattleScript();
+	p->commandId = buffer->commandId;
+	return p;
+}
+
+BaseScript * scriptCompilerTemplates::mainHandler::BindToEvent(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new BindToEventScript();
+	p->eventName = convertExtReferences(buffer, buffer->arg["$eventName"]);
+	p->chache = convertExtReferences(buffer, buffer->arg["$lineId"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);
@@ -846,5 +894,11 @@ void scriptCompilerTemplates::afterUpdateHandler::ChangeScriptEntryPoint(Compile
 void scriptCompilerTemplates::afterUpdateHandler::IfDoJump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<IfDoJumpScript*>(p1);
+	p->lineId = convertMarkerToLine(buffer, p->chache);
+}
+
+void scriptCompilerTemplates::afterUpdateHandler::BindToEvent(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
+{
+	auto p = static_cast<BindToEventScript*>(p1);
 	p->lineId = convertMarkerToLine(buffer, p->chache);
 }

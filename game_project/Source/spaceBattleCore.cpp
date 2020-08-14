@@ -35,39 +35,37 @@ void updateSpaceBattle(double deltaTime)
 
 	//	sb->mapSegment->setScale
 		//sb->mapSegment->setPosition;
-		// initial camera
-		sb->cameraX = 500;
-		sb->cameraY = 500;
 
-		for (int i(0); i < sb->maxLines; i++)
-		{
-			sb->map.push_back(std::vector<SpaceBattleSegment * >());
-			for (int j(0); j < sb->maxLength; j++)
-			{
-				sb->map[i].push_back(new SpaceBattleSegment());
-				if (i % 2 == 0)
-					sb->map[i][j]->gameX = 0.5f + j;
-				else
-					sb->map[i][j]->gameX = 1.f + j;
-				sb->map[i][j]->gameY = 0.557f + (i * 0.557f * 1.5f);
-			}
-		}
 
-		Ship * testShip = new Ship();
-		testShip->model = new sf::Sprite(gEnv->modelDB[L"decorationSpaceBeacon"]->tex);
-		testShip->model->setOrigin(sf::Vector2f(testShip->model->getTexture()->getSize()) / 2.0f);
-		testShip->factionId = 2; // TEST
-		sb->map[8][8]->ships.push_back(testShip);
-		sb->map[8][8]->color = segmentColor::enemy;
+		//for (int i(0); i < sb->maxLines; i++)
+		//{
+		//	sb->map.push_back(std::vector<SpaceBattleSegment * >());
+		//	for (int j(0); j < sb->maxLength; j++)
+		//	{
+		//		sb->map[i].push_back(new SpaceBattleSegment());
+		//		if (i % 2 == 0)
+		//			sb->map[i][j]->gameX = 0.5f + j;
+		//		else
+		//			sb->map[i][j]->gameX = 1.f + j;
+		//		sb->map[i][j]->gameY = 0.557f + (i * 0.557f * 1.5f);
+		//	}
+		//}
 
-		sb->map[8][4]->color = segmentColor::player;
-		gEnv->game.player.ship->model = new sf::Sprite(gEnv->modelDB[L"shipBase"]->tex);
-		gEnv->game.player.ship->model->setOrigin(sf::Vector2f(gEnv->game.player.ship->model->getTexture()->getSize()) / 2.0f);
-		//gEnv->game.player.ship->model->rotate(90);
-		sb->map[8][4]->ships.push_back(gEnv->game.player.ship);
-		gEnv->game.player.ship->factionId = 1;
+		//Ship * testShip = new Ship();
+		//testShip->model = new sf::Sprite(gEnv->modelDB[L"decorationSpaceBeacon"]->tex);
+		//testShip->model->setOrigin(sf::Vector2f(testShip->model->getTexture()->getSize()) / 2.0f);
+		//testShip->factionId = 2; // TEST
+		//sb->map[8][8]->ships.push_back(testShip);
+		//sb->map[8][8]->color = segmentColor::enemy;
 
-		sb->map[7][8]->color = segmentColor::neutral;
+		//sb->map[8][4]->color = segmentColor::player;
+		//gEnv->game.player.ship->model = new sf::Sprite(gEnv->modelDB[L"shipBase"]->tex);
+		//gEnv->game.player.ship->model->setOrigin(sf::Vector2f(gEnv->game.player.ship->model->getTexture()->getSize()) / 2.0f);
+		////gEnv->game.player.ship->model->rotate(90);
+		//sb->map[8][4]->ships.push_back(gEnv->game.player.ship);
+		//gEnv->game.player.ship->factionId = 1;
+
+		//sb->map[7][8]->color = segmentColor::neutral;
 
 		gEnv->game.gameSpaceBattleGUIRequiresUpdate = true;
 

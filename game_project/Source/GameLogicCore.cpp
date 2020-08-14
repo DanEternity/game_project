@@ -489,5 +489,41 @@ void LoadScriptTemplates()
 	p.mainHandler = scriptCompilerTemplates::mainHandler::AddShipToPlayerHangar;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
+	// InitSpaceBattleBuffer
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"INITSPACEBATTLEBUFFER";
+	p.body = "\"$sizeY\" \"$sizeX\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::InitSpaceBattleBuffer;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// AddShipToBattle
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"ADDSHIPTOBATTLE";
+	p.body = "\"$ship\" \"$factionId\" \"$aiControl\" \"$posX\" \"$posY\" \"$modelName\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::AddShipToBattle;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// AddPlayerShipsToBattle
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"ADDPLAYERSHIPSTOBATTLE";
+	p.body = "\"$posX\" \"$posY\" \"$tacticalRange\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::AddPlayerShipsToBattle;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// StartSpaceBattle
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"STARTSPACEBATTLE";
+	p.body = "";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::StartSpaceBattle;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
+	// BindToEvent
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"BINDTOEVENT";
+	p.body = "\"$eventName\" \"$lineId\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::BindToEvent;
+	p.postUpdateHandler = scriptCompilerTemplates::afterUpdateHandler::BindToEvent;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+	
 
 }

@@ -65,6 +65,8 @@ public:
 
 	bool EndTurnPressed = false;
 
+	int tacticsRange = 1;
+
 	SpaceBattleData()
 	{
 		maxLines = 12;
