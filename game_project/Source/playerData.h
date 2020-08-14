@@ -50,6 +50,9 @@ public:
 	// temp inventory // view
 	std::vector<int> localInventory;
 
+	// temp inventory for rewards
+	std::vector<Item *> rewardInventory;
+
 	// filter condition
 	IntventoryFilter inventoryFilter;
 

@@ -50,7 +50,7 @@ void BuildPersonSchemeUI(int equipSizeUI, int crewPersonNumber)
 {
 	if (gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(crewPersonNumber)) != NULL)
 		gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(crewPersonNumber))->removeAllWidgets();
-	else gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::Panel, "Panel3", "600", "370", "1%", "1%", false), "PersonSchemeEquipPanel" + std::to_string(crewPersonNumber));
+	else gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::Panel, "Panel3", "44%", "370", "5%", "1%", false), "PersonSchemeEquipPanel" + std::to_string(crewPersonNumber));
 
 	tgui::Label::Ptr characterName = createWidget(WidgetType::Label, "Label", "0", "0", "(&.size - size)/2", "2%")->cast<tgui::Label>();
 	characterName->setText(gEnv->game.player.crew.characters[crewPersonNumber]->name);
@@ -77,7 +77,7 @@ void BuildPersonSchemeUI(int equipSizeUI, int crewPersonNumber)
 
 void BuildStatPersonScreen(int crewPersonNumber)
 {
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::Panel, "Panel3", "400", "580", "1% + 610", "1%", false), "PersonStatScreen" + std::to_string(crewPersonNumber));
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::Panel, "Panel3", "32%", "98%", "55%", "1%", false), "PersonStatScreen" + std::to_string(crewPersonNumber));
 }
 
 void BuildPersonSkillTree(int crewPersonNumber)
@@ -245,7 +245,7 @@ void UpdateStatPersonScreen()
 void BuildPanelChangePersonState()
 {
 
-	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::Panel, "Panel", "15%", "100%", "1% + 1010", "1%", false), "PanelChangePersonState");
+	gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(createWidget(WidgetType::Panel, "Panel", "15%", "98%%", "1% + 1010", "1%", false), "PanelChangePersonState");
 
 	tgui::Button::Ptr button = createWidget(WidgetType::Button, "Button", "180", "200", "-15", "0")->cast<tgui::Button>();
 	button->setText("Inventory");
@@ -272,6 +272,15 @@ void ChangeActiveCharacter(int id)
 
 void ChangePersonPanelsState(PUIState::personUIstate state)
 {
+	if (gEnv->game.adventureGUI.get<tgui::BitmapButton>("swipeFighterLeft") != nullptr)
+	{
+		gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->remove(gEnv->game.adventureGUI.get<tgui::BitmapButton>("swipeFighterLeft"));
+	}
+	if (gEnv->game.adventureGUI.get<tgui::BitmapButton>("swipeFighterRight") != nullptr)
+	{
+		gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->remove(gEnv->game.adventureGUI.get<tgui::BitmapButton>("swipeFighterRight"));
+	}
+
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("choosePersonPanel"), false);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles"), false);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel"), false);
@@ -290,6 +299,24 @@ void ChangePersonPanelsState(PUIState::personUIstate state)
 		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles"), true);
 		break;
 	case PUIState::inventoryState:
+		if (gEnv->game.ui.activeOpenPersonWindow != 0)
+		{
+			tgui::BitmapButton::Ptr left = createWidget(WidgetType::BitmapButton, "Button", "3%", "12%", "1%", "24%")->cast<tgui::BitmapButton>();
+			left->setText("<");
+			left->setTextSize(36);
+			gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(left, "swipeFighterLeft");
+			const int newid = gEnv->game.ui.activeOpenPersonWindow - 1;
+			left->connect("MouseReleased", ChangeActiveCharacter, newid);
+		}
+		if (gEnv->game.ui.activeOpenPersonWindow != gEnv->game.player.crew.characters.size() - 1)
+		{
+			tgui::BitmapButton::Ptr right = createWidget(WidgetType::BitmapButton, "Button", "3%", "12%", "50%", "24%")->cast<tgui::BitmapButton>();
+			right->setText(">");
+			right->setTextSize(36);
+			gEnv->game.adventureGUI.get<tgui::Panel>("playerUISubPanel")->add(right, "swipeFighterRight");
+			const int newid = gEnv->game.ui.activeOpenPersonWindow + 1;
+			right->connect("MouseReleased", ChangeActiveCharacter, newid);
+		}
 		UpdateStatPersonScreen();
 		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("inventoryGridPanel"), true);
 		enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("playerUIGridSubPanel"), true);

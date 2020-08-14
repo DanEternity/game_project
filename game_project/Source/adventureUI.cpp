@@ -174,6 +174,19 @@ void createAdventureUIButtons()
 
 	buildShipStats();
 	BuildPlanPanel();
+
+	std::vector<Item*> testVec;
+	for (int i = 0; i < 60; i++)
+	{
+		ItemResource* testRes = new ItemResource();
+		testRes->itemId = -10;
+		testRes->name = L"TestResource";
+		testRes->count = 10;
+		testRes->maxCount = 64;
+		giveIconToItem(testRes);
+		testVec.push_back(testRes);
+	}
+	showItemsReward(testVec);
 }
 
 
@@ -348,47 +361,4 @@ void createPauseMenu()
 	//btn->setTextSize(22);
 	//btn->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 	//gEnv->game.adventureGUI.add(btn);
-}
-
-
-
-void showItemsReward(std::vector<Item*> items)
-{
-	gEnv->game.adventureGUI.add(createWidget(WidgetType::Panel, "Panel", "700", "500", "30%", "15%"), "rewardPanel");
-
-	int i = 0;
-	for (auto item : items)
-	{
-		tgui::Button::Ptr button = createWidget(WidgetType::BitmapButton, "Button", "200", "50", "(&.width - width) / 2", "25" + std::to_string(i))->cast<tgui::Button>();
-		button->setText(item->name);
-		gEnv->game.adventureGUI.get<tgui::Panel>("rewardPanel")->add(button);
-		applyRewardTooltip(item);
-		button->setToolTip(item->tooltipDescription);
-
-		i += 75;
-	}
-
-	tgui::Button::Ptr exit = createWidget(WidgetType::BitmapButton, "Button", "200", "50", "70%", "88%" + std::to_string(i))->cast<tgui::Button>();
-	exit->connect("MouseReleased", closeRewardWindow);
-	exit->setText("Snova huina, skip");
-	gEnv->game.adventureGUI.get<tgui::Panel>("rewardPanel")->add(exit);
-}
-
-void applyRewardTooltip(Item *item)
-{
-	if (item != NULL)
-	{
-		switch (item->itemType)
-		{
-		case itemType::module:
-			createModuleTooltip(static_cast<Module*>(item));
-			tgui::ToolTip::setInitialDelay(sf::milliseconds(0));
-		}
-	}
-}
-
-void closeRewardWindow()
-{
-	gEnv->game.adventureGUI.get<tgui::Panel>("rewardPanel")->removeAllWidgets();
-	gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("rewardPanel"));
 }

@@ -192,6 +192,12 @@
     <ClCompile Include="Source\HangarHandlers.cpp">
       <Filter>Adventure\UI\Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="Source\rewardPanelUI.cpp">
+      <Filter>Adventure\UI\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RewardsHandlers.cpp">
+      <Filter>Adventure\UI\Handlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\game.h">
@@ -444,6 +450,12 @@
       <Filter>Adventure\UI\General</Filter>
     </ClInclude>
     <ClInclude Include="Source\HangarHandlers.h">
+      <Filter>Adventure\UI\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\rewardPanelUI.h">
+      <Filter>Adventure\UI\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RewardsHandlers.h">
       <Filter>Adventure\UI\Handlers</Filter>
     </ClInclude>
   </ItemGroup>

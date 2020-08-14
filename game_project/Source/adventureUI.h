@@ -11,6 +11,7 @@
 #include "map.h"
 #include "UIExtensions.h"
 #include "Shop.h"
+#include "rewardPanelUI.h"
 
 void updateAdventureUI();
 void DrawAdventureUI();
@@ -20,10 +21,6 @@ void createAdventureUIButtons();
 void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled, bool openShop = false);
 void updateCategoryFilters();
 
-
-void showItemsReward(std::vector<Item*> items);
-void applyRewardTooltip(Item *item);
-void closeRewardWindow();
 
 // ui event handlers
 

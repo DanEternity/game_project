@@ -249,6 +249,8 @@
     <ClCompile Include="Source\PersonHandlers.cpp" />
     <ClCompile Include="Source\postUpdate.cpp" />
     <ClCompile Include="Source\preload.cpp" />
+    <ClCompile Include="Source\rewardPanelUI.cpp" />
+    <ClCompile Include="Source\RewardsHandlers.cpp" />
     <ClCompile Include="Source\scriptCompiler.cpp" />
     <ClCompile Include="Source\scriptCompilerTemplates.cpp" />
     <ClCompile Include="Source\scriptCompilerUtilityParsers.cpp" />
@@ -317,6 +319,8 @@
     <ClInclude Include="Source\poolObject.h" />
     <ClInclude Include="Source\postUpdate.h" />
     <ClInclude Include="Source\preload.h" />
+    <ClInclude Include="Source\rewardPanelUI.h" />
+    <ClInclude Include="Source\RewardsHandlers.h" />
     <ClInclude Include="Source\scriptCompiler.h" />
     <ClInclude Include="Source\scriptCompilerTemplates.h" />
     <ClInclude Include="Source\scriptCompilerUtilityParsers.h" />

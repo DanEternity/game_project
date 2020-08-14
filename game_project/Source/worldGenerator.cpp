@@ -405,6 +405,7 @@ void SetupAdventureStart()
 	/* INITIALIZE INVENTORY */
 
 	gEnv->game.player.inventory.resize(54, nullptr);
+	gEnv->game.player.rewardInventory.resize(gEnv->game.player.inventory.size());
 
 	gEnv->game.player.inventory[0] = new Equipment();
 	gEnv->game.player.inventory[0]->name = L"roflanTelo";
