@@ -135,12 +135,7 @@ void updateAdventureGameMode(double delteTime)
 
 	// DEBUG
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-	{
 
-		gEnv->game.activeGameMode = gameMode::spaceBattleMode;
-
-	}
 
 	if (gEnv->game.adventureData.currentSectorId == "null")
 	{
