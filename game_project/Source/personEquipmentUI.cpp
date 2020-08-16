@@ -184,36 +184,45 @@ void UpdateStatPersonScreen()
 {
 	updateCharacterStats(gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]);
 	
+	Character *c = gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow];
 	gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->removeAllWidgets();
 
-	#pragma region Person Stats Labels
-
-
+	int y = 10;
+	int yDif = 24;
+	std::string render = "Label";
+	int textSize = 18;
 
 	tgui::Label::Ptr label = tgui::Label::create();
 	label->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label->setPosition("(&.width - width) / 2", 10);
+	label->setPosition("(&.width - width) / 2", y);
 	label->setText(gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->name);
 	label->setTextSize(24);
 	gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->add(label);
+	y += yDif;
+
+	gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))
+		->add(createWidgetLabel(render, "(&.width - width) / 2", std::to_string(y), 20, L"Level: "
+			+ std::to_wstring(c->level) + L" (Exp: " + std::to_wstring((int)c->exp) + L"/" + std::to_wstring((int)c->expToNextLevel[c->level + 1]) + L")"));
+	y += yDif;
 
 	tgui::Label::Ptr label2 = tgui::Label::create();
 	label2->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label2->setPosition("(&.width - width) / 4", 40);
+	label2->setPosition("(&.width - width) / 4", y);
 	label2->setText(L"Class: " + gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->characterClass);
 	label2->setTextSize(20);
 	gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->add(label2);
 
 	tgui::Label::Ptr label3 = tgui::Label::create();
 	label3->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label3->setPosition("(&.width - width) / 4 * 3", 40);
+	label3->setPosition("(&.width - width) / 4 * 3", y);
 	label3->setText(L"Race: " + gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->characterRace);
 	label3->setTextSize(20);
 	gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->add(label3);
+	y += yDif;
 
 	tgui::Label::Ptr label4 = tgui::Label::create();
 	label4->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label4->setPosition("(&.width - width) / 4", 70);
+	label4->setPosition("(&.width - width) / 4", y);
 	switch (gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->role){
 	case characterRole::noneRole:
 		label4->setText(L"Role: none");
@@ -224,7 +233,7 @@ void UpdateStatPersonScreen()
 
 	tgui::Label::Ptr label5 = tgui::Label::create();
 	label5->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label5->setPosition("(&.width - width) / 4 * 3", 70);
+	label5->setPosition("(&.width - width) / 4 * 3", y);
 	switch (gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->role) {
 	case characterAspect::noneAspect:
 		label5->setText(L"Aspect: none");
@@ -232,14 +241,15 @@ void UpdateStatPersonScreen()
 	}
 	label5->setTextSize(20);
 	gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->add(label5);
+	y += yDif;
 
 	tgui::Label::Ptr label6 = tgui::Label::create();
 	label6->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	label6->setPosition("(&.width - width) / 2", 100);
+	label6->setPosition("(&.width - width) / 2", y);
 	label6->setText(L"Health: " + std::to_wstring((int)(gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->health.total)));
 	label6->setTextSize(20);
 	gEnv->game.adventureGUI.get<tgui::Panel>("PersonStatScreen" + std::to_string(gEnv->game.ui.activeOpenPersonWindow))->add(label6);
-	#pragma endregion
+	y += yDif;
 }
 
 void BuildPanelChangePersonState()

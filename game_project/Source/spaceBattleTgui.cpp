@@ -146,6 +146,7 @@ void createActiveModulesButtons()
 	for (int i = 0; i < gEnv->game.ui.activeWeaponModulesCount; i++)
 	{
 		gEnv->game.spaceBattle.GUI.remove(gEnv->game.spaceBattle.GUI.get<tgui::BitmapButton>("activeModuleButton" + std::to_string(i)));
+		gEnv->game.spaceBattle.GUI.remove(gEnv->game.spaceBattle.GUI.get<tgui::Label>("activeModuleStateText" + std::to_string(i)));
 	}
 	gEnv->game.ui.activeWeaponModulesCount = 0;
 
@@ -157,16 +158,38 @@ void createActiveModulesButtons()
 		{
 			if (ship->modules[i]->moduleType == moduleType::weapon)
 			{
+				
+
 				tgui::BitmapButton::Ptr but = tgui::BitmapButton::create();
-				gEnv->game.spaceBattle.GUI.add(but, "activeModuleButton" + std::to_string(i));
+				gEnv->game.spaceBattle.GUI.add(but, "activeModuleButton" + std::to_string(j));
 				but->setSize("10%", "&.height * 0.1");
 				but->setText(ship->modules[i]->name);
 				int shift = but->getParent()->getSize().x * 0.3;
-				but->setPosition(shift + but->getSize().x * j++, "90%");
+				but->setPosition(shift + but->getSize().x * j, "90%");
 				but->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 
-				but->connect("MouseReleased", selectWeaponModule, j);
+				std::wstring text = L"";
+				switch (static_cast<WeaponModule*>(ship->modules[i])->weaponState)
+				{
+				case weaponModuleState::normal:
+					text = L"Ready to use";
+					break;
+				case weaponModuleState::partialCooldown:
+					text = L"Partial cooldown";
+					break;
+				case weaponModuleState::fullCooldown:
+					text = L"Full cooldown";
+					break;
+				default:
+					text = L"Unknown state";
+				}
+
+				gEnv->game.spaceBattle.GUI.add(createWidgetLabel("Label", std::to_string(shift + but->getSize().x * j), "85%", 18, text), "activeModuleStateText" + std::to_string(j));
+
+				but->connect("MouseReleased", selectWeaponModule, ++j);
 				gEnv->game.ui.activeWeaponModulesCount++;
+
+				
 			}
 		}
 	}
