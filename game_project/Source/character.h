@@ -144,6 +144,12 @@ public:
 		effects.push_back(new StatModEffect(targetType::ship, statNames::powerSupply, 30, 0, 0, 0));
 
 		createNewTree(addPassives(names, skillLevels, effects));
+
+		expToNextLevel[2] = 200.0f;
+		expToNextLevel[3] = 300.0f;
+		expToNextLevel[4] = 400.0f;
+		expToNextLevel[5] = 500.0f;
+		exp = 0.0f;
 	}
 
 	void createNewTree(std::vector<PassiveSkill*> passives)

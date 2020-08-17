@@ -433,6 +433,7 @@ void updateSpaceBattle(double deltaTime)
 							sb->turnStatus = spaceBattleState::primary;
 							printf("Info: Weapon no longer selected - cant use it\n");
 						}
+						createActiveModulesButtons();
 						showBars();
 					}
 				}
@@ -491,7 +492,10 @@ void updateSpaceBattle(double deltaTime)
 			sb->turnStatus = spaceBattleState::primary;
 
 			if (getCurrentPickShip() != NULL)
+			{
 				showBars();
+				createActiveModulesButtons();
+			}
 
 		}
 
