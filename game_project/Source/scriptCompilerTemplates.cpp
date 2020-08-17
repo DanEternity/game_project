@@ -878,6 +878,16 @@ BaseScript * scriptCompilerTemplates::mainHandler::SetShipDurabilityFull(Compile
 	return p;
 }
 
+BaseScript * scriptCompilerTemplates::mainHandler::SetShipCurrentHull(CompilerCommandTemplateDataBuffer * buffer)
+{
+	auto p = new SetShipCurrentHullScript();
+	p->ship = convertExtReferences(buffer, buffer->arg["$ship"]);
+	p->value = convertExtReferences(buffer, buffer->arg["$value"]);
+	p->mode = convertExtReferences(buffer, buffer->arg["$mode"]);
+	p->commandId = buffer->commandId;
+	return p;
+}
+
 void scriptCompilerTemplates::afterUpdateHandler::Jump(CompilerCommandTemplateDataBuffer * buffer, BaseScript * p1)
 {
 	auto p = static_cast<JumpScript*> (p1);

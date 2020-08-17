@@ -1171,10 +1171,19 @@ public:
 
 };
 
-class SetShipCurrentHull : public BaseScript
+class SetShipCurrentHullScript : public BaseScript
 {
 public:
 	std::wstring ship;
+	std::wstring value;
+	std::wstring mode; // percent//global
+
+
+	SetShipCurrentHullScript() : BaseScript()
+	{
+		this->scriptType = scriptType::setShipCurrentHull;
+	}
+
 };
 
 class SetShipDurabilityFullScript : public BaseScript

@@ -86,6 +86,7 @@ namespace scriptCompilerTemplates
 		BaseScript * StartSpaceBattle(CompilerCommandTemplateDataBuffer * buffer); //
 		BaseScript * BindToEvent(CompilerCommandTemplateDataBuffer * buffer); //
 		BaseScript * SetShipDurabilityFull(CompilerCommandTemplateDataBuffer * buffer); //
+		BaseScript * SetShipCurrentHull(CompilerCommandTemplateDataBuffer * buffer); //
 	}
 
 	namespace afterUpdateHandler 

@@ -363,6 +363,9 @@ void ScriptSystem::p_processCommand(BaseScript * command)
 	case scriptType::setShipDurabilityFull:
 		p_processSetShipDurabilityFull(static_cast<SetShipDurabilityFullScript*>(command));
 		break;
+	case scriptType::setShipCurrentHull:
+		p_processSetShipCurrentHull(static_cast<SetShipCurrentHullScript*>(command));
+		break;
 	default:
 		printf("Debug: ScriptSystem Error! Script command has unknown type -> %i", sType);
 		break;
@@ -4070,6 +4073,40 @@ void ScriptSystem::p_processSetShipDurabilityFull(SetShipDurabilityFullScript * 
 
 	s->hull.current = s->hull.total;
 	s->shield.current = s->shield.total;
+
+}
+
+void ScriptSystem::p_processSetShipCurrentHull(SetShipCurrentHullScript * command)
+{
+	RETURN_CODE code;
+	bool error = false;
+
+	auto objSrc = scriptUtil::getArgumentObject(command->ship, p_d, code);
+	if (code != memoryUtil::ok)
+	{
+		// failed
+		return;
+	}
+
+	if (objSrc->objectType != objectType::ship)
+	{
+		// failed
+		return;
+	}
+
+	Ship * s = static_cast<Ship*>(objSrc);
+
+	float value = scriptUtil::getArgumentFloatValue(command->value, p_d, error);
+	std::wstring mode = scriptUtil::getArgumentStringValue(command->mode, p_d, error);
+
+	if (mode == L"percent" || mode == L"Percent" || mode == L"%")
+	{
+		s->hull.current = value / 100.f * s->hull.total;
+	}
+	else
+	{
+		s->hull.current = value;
+	}
 
 }
 

@@ -532,4 +532,11 @@ void LoadScriptTemplates()
 	p.mainHandler = scriptCompilerTemplates::mainHandler::SetShipDurabilityFull;
 	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
 
+	// SetShipCurrentHull
+	p = CompilerCommandTemplate();
+	p.mainPrefix = L"SETSHIPCURRENTHULL";
+	p.body = "\"$ship\" \"$value\" \"$mode\"";
+	p.mainHandler = scriptCompilerTemplates::mainHandler::SetShipCurrentHull;
+	gEnv->game.gameLogic.compilerCommandTemplates[p.mainPrefix] = p;
+
 }
