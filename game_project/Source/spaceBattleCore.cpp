@@ -571,6 +571,42 @@ void updateSpaceBattle(double deltaTime)
 
 				createActiveModulesButtons();
 				showBars();
+
+				// blast animation
+
+				for (int i(0); i < 50; i++)
+				{
+					spaceBattleAnimationElement * q = new spaceBattleAnimationElement();
+					sb->animElems.push_back(q);
+					q->curPos = {
+						(sb->map[sb->dstI][sb->dstJ]->screenX + x) * scale ,
+						(sb->map[sb->dstI][sb->dstJ]->screenY + y) * scale };
+
+					int qx = rand() % 100 - 50;
+					int qy = rand() % 100 - 50;
+					int qs = rand() % 80 + 20;
+					int qt = rand() % 20 + 80;
+					
+					q->speedVector = { 1 * (qx / 100.f), 1 * (qy / 100.f) };
+
+
+					float md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+					q->speedVector /= md;
+					q->curPos = q->speedVector * 4.f + q->curPos;
+					q->moveSpeed = 30 + qs;
+
+					q->destroyWhenTimeElapsed = true;
+					q->destroyWhenFinishPointAchived = false;
+					q->timeRemaining = 5 * (qt / 100.f);
+					q->lockAtFinish = false;
+					q->scale = 4;
+					q->scaleFactorByTime = -0.45 * (100.f / qt);
+					q->sprite = new sf::Sprite(gEnv->modelDB[L"spaceBattleParticleBase"]->tex);
+					q->sprite->setOrigin(sf::Vector2f(q->sprite->getTexture()->getSize()) / 2.f);
+
+				}
+
+
 			}
 
 			drawSpaceBattle(deltaTime);

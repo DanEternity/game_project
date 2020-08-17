@@ -67,6 +67,8 @@ public:
 		}
 
 		scale += scaleFactorByTime * deltaTime;
+		if (scale < 0)
+			scale = 0;
 
 		moveSpeed += speedFactorByTime * deltaTime;
 		if (moveSpeed < 0)
