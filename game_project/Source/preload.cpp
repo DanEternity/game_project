@@ -53,6 +53,9 @@ void preloadModels()
 	createModelDescriptor(L"spaceBattleMapSegmentEnemy", "\\resources\\textures\\Battle\\battlefield_segment_enemy.png");
 	createModelDescriptor(L"spaceBattleMapSegmentNeutral", "\\resources\\textures\\Battle\\battlefield_segment_neutral.png");
 	createModelDescriptor(L"spaceBattleMapSegmentMovement", "\\resources\\textures\\Battle\\battlefield_segment_movement.png");
+
+	createModelDescriptor(L"spaceBattleProjectileBase", "\\resources\\textures\\Battle\\projectileBase.png");
+	createModelDescriptor(L"spaceBattleParticleBase", "\\resources\\textures\\Battle\\particleBase.png");
 	//createModelDescriptor(L"fsfa", "fsaf", true);
 }
 

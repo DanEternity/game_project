@@ -341,6 +341,7 @@
     <ClInclude Include="Source\shipModulesUI.h" />
     <ClInclude Include="Source\Shop.h" />
     <ClInclude Include="Source\shopClass.h" />
+    <ClInclude Include="Source\spaceBattleAnimationData.h" />
     <ClInclude Include="Source\spaceBattleCore.h" />
     <ClInclude Include="Source\spaceBattleData.h" />
     <ClInclude Include="Source\spaceBattleMechanics.h" />

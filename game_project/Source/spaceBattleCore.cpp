@@ -411,9 +411,43 @@ void updateSpaceBattle(double deltaTime)
 						sb->SelectI = pickY;
 						sb->SelectJ = pickX;
 						sb->SelectedShipId = 0;*/
+
 						if (debugMode)
 							printf("Info: Using weapon against ship in: %i, %i \n", pickY, pickX);
 
+						spaceBattleAnimationElement * q = new spaceBattleAnimationElement();
+						sb->waitForAnimElement = q;
+						sb->animElems.push_back(q);
+						q->curPos = {
+							(sb->map[sb->SelectI][sb->SelectJ]->screenX + x) * scale ,
+							(sb->map[sb->SelectI][sb->SelectJ]->screenY + y) * scale };
+						q->speedVector = {sb->map[pickY][pickX]->screenX - sb->map[sb->SelectI][sb->SelectJ]->screenX, sb->map[pickY][pickX]->screenY - sb->map[sb->SelectI][sb->SelectJ]->screenY, };
+						
+						q->finishPos = {
+							(sb->map[pickY][pickX]->screenX + x) * scale ,
+							(sb->map[pickY][pickX]->screenY + y) * scale };
+
+						float md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+						q->speedVector /= md;
+						q->moveSpeed = 1500;
+						q->destroyWhenTimeElapsed = false;
+						q->destroyWhenFinishPointAchived = true;
+						q->lockAtFinish = true;
+						q->scale = 1;
+						q->sprite = new sf::Sprite(gEnv->modelDB[L"spaceBattleProjectileBase"]->tex);
+						q->sprite->setOrigin(sf::Vector2f(q->sprite->getTexture()->getSize()) / 2.f);
+
+						sb->turnStatus = spaceBattleState::waitForWeaponAnim;
+
+						sb->srcI = sb->SelectI;
+						sb->srcJ = sb->SelectJ;
+						sb->srcK = sb->SelectedShipId;
+						sb->dstI = pickY;
+						sb->dstJ = pickX;
+						sb->dstK = 0;
+						 
+
+						/*
 						auto res = spaceBattle::weaponAttack(
 							sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId],
 							sb->selectedWeaponModule,
@@ -434,7 +468,7 @@ void updateSpaceBattle(double deltaTime)
 							printf("Info: Weapon no longer selected - cant use it\n");
 						}
 						createActiveModulesButtons();
-						showBars();
+						showBars();*/
 					}
 				}
 			}
@@ -498,6 +532,51 @@ void updateSpaceBattle(double deltaTime)
 			}
 
 		}
+
+		if (sb->turnStatus == spaceBattleState::waitForWeaponAnim)
+		{
+			if (sb->waitForAnimElement == NULL)
+			{
+				// qq
+				printf("Hit!\n");
+
+				//sb->srcI = sb->SelectI;
+				//sb->srcJ = sb->SelectJ;
+				//sb->srcK = sb->SelectedShipId;
+				//sb->dstI = pickY;
+				//sb->dstJ = pickX;
+				//sb->dstK = 0;
+
+				auto res = spaceBattle::weaponAttack(
+					sb->map[sb->srcI][sb->srcJ]->ships[sb->SelectedShipId],
+					sb->selectedWeaponModule,
+					sb->map[sb->dstI][sb->dstJ]->ships[0],
+					std::sqrt(spaceBattle::dist2(sb->map[sb->srcI][sb->srcJ]->gameX, sb->map[sb->srcI][sb->srcJ]->gameY, sb->map[sb->dstI][sb->dstJ]->gameX, sb->map[sb->dstI][sb->dstJ]->gameY)),
+					rand() % 65535
+				);
+
+				displayShipInfo();
+
+				printf("Info: Total hits: %i/%i (%i critical), Total shield damage: %f, Total hull damage: %f \n", res.hits, res.total, res.crits, res.shieldDamage, res.hullDamage);
+
+				if (!spaceBattle::canUseWeapon(sb->map[sb->srcI][sb->srcJ]->ships[sb->SelectedShipId], sb->selectedWeaponModule))
+				{
+					sb->weaponModuleSelected = false;
+					sb->weaponId = -1;
+					sb->turnStatus = spaceBattleState::primary;
+					printf("Info: Weapon no longer selected - cant use it\n");
+				}
+				else
+					sb->turnStatus = spaceBattleState::targetingWeapon;
+
+				createActiveModulesButtons();
+				showBars();
+			}
+
+			drawSpaceBattle(deltaTime);
+
+		}
+
 
 		sb->pickI = pickY;
 		sb->pickJ = pickX;
@@ -609,6 +688,39 @@ void drawSpaceBattle(double deltaTime)
 			}
 
 		}
+	}
+
+
+
+	int x = sb->cameraX - (gEnv->graphics.windowSizeX * sb->scale / 2);
+	int y = sb->cameraY - (gEnv->graphics.windowSizeY * sb->scale / 2);
+	x /= sb->scale;
+	y /= sb->scale;
+	for (int i(0); i < sb->animElems.size(); i++)
+	{
+		auto p = sb->animElems[i];
+		p->update(deltaTime);
+
+		sf::Vector2f nPos = p->curPos / sb->scale;
+
+		p->sprite->setPosition(nPos.x - x, nPos.y - y);
+		p->sprite->setScale(p->scale / sb->scale, p->scale / sb->scale);
+		gEnv->globalWindow.draw(*p->sprite);
+
+		if (p->destroy)
+		{
+			if (p == sb->waitForAnimElement)
+			{
+				sb->waitForAnimElement = NULL;
+			}
+			delete (p->sprite);
+			delete (p);
+			
+			sb->animElems.erase(sb->animElems.begin() + i);
+			i--;
+		}
+
+	
 	}
 
 	if (sb->showPath)

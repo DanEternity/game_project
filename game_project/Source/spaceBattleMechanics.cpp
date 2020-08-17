@@ -123,7 +123,7 @@ spaceBattle::AttackResult spaceBattle::weaponAttack(Ship * src, WeaponModule * m
 				//targetShield -= fDamage * (1 - shieldResist);
 
 				targetHull -= fDamage * (1 - hullResist);
-				res.hullDamage += fDamage;
+				res.hullDamage += fDamage * (1 - hullResist);
 			}
 			else
 			{
@@ -136,7 +136,7 @@ spaceBattle::AttackResult spaceBattle::weaponAttack(Ship * src, WeaponModule * m
 				}
 
 				targetShield -= fDamage * (1 - shieldResist);
-				res.shieldDamage += fDamage;
+				res.shieldDamage += fDamage * (1 - shieldResist);
 			}
 
 			target->shield.current = targetShield;

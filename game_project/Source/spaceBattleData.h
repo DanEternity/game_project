@@ -2,7 +2,7 @@
 
 #include <vector>
 #include "spaceBattleSegment.h"
-
+#include "spaceBattleAnimationData.h"
 
 namespace spaceBattleState
 {
@@ -15,6 +15,7 @@ namespace spaceBattleState
 		animationMoving,
 		endTurn,
 		tacticsMode,
+		waitForWeaponAnim,
 	};
 }
 
@@ -56,6 +57,14 @@ public:
 	bool weaponModuleSelected = false;
 	int weaponId = -1;
 
+	// weapon use section (new)
+
+	int srcI, srcJ, srcK;
+	int dstI, dstJ, dstK;
+	int srcWepId;
+
+	// end
+
 
 	bool leftMBPressed = false;
 	bool rightMBPressed = false;
@@ -88,6 +97,10 @@ public:
 	sf::Sprite * mapPathMarker = NULL;
 
 	sf::Sprite * backgroundImage = NULL;
+
+	std::vector<spaceBattleAnimationElement*> animElems;
+
+	spaceBattleAnimationElement * waitForAnimElement = NULL;
 
 	float cameraX, cameraY;
 	float scale = 2;
