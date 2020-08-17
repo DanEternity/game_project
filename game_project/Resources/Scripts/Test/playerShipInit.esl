@@ -23,7 +23,8 @@ PutItemToPlayerInventory "$_res"
 
 Put "0" "$_res"
 Call "$EXT:dbMod:2000" "4321", "1000", "1", "1", "$_res";
-PutItemToPlayerInventory "$_res"
+//PutItemToPlayerInventory "$_res"
+EquipModule "$_res" "$playerShip" "4"
 
 Put "100" to "$_health"
 Put "0" to "$_armor"

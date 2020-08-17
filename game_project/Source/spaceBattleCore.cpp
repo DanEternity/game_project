@@ -197,11 +197,18 @@ void updateSpaceBattle(double deltaTime)
 			// Move ship to destination
 			if (!sf::Mouse::isButtonPressed(sf::Mouse::Right) && sb->rightMBPressed)
 			{
-				if (sb->showPath && sb->currentPath.size() > 0 && pickX != -1 && sb->actionCooldown == 0)
+				float mobility = sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId]->mobility.total;
+				float cost = 40 / (mobility / 100 + 1);
+				cost *= sb->currentPath.size();
+
+				if (sb->showPath && sb->currentPath.size() > 0 && pickX != -1 && sb->actionCooldown == 0 && sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId]->actionPoints.current >= cost)
 				{
+					sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId]->actionPoints.current -= cost;
+
 					// move ship to destination 
 					spaceBattle::teleportShip(sb->SelectI, sb->SelectJ, pickY, pickX, sb->SelectedShipId);
 					
+
 					//sb->selected = false;
 					sb->SelectI = pickY;
 					sb->SelectJ = pickX;
@@ -225,7 +232,7 @@ void updateSpaceBattle(double deltaTime)
 					sb->miniWindowCreated = true;
 
 					sb->actionCooldown = 5;
-
+					showBars();
 				}
 			}
 
@@ -286,24 +293,40 @@ void updateSpaceBattle(double deltaTime)
 						{
 							sb->miniWindowEmptyCreated = true;
 							// showWindow
-							buildMiniWindowHex(L"Empty Hex", false, 0, 0, L"No special effects", sb->map[pickY][pickX]->screenX + 25, sb->map[pickY][pickX]->screenY);
+							
 
 							if (sb->selected)
 							{
 								sb->currentPath = spaceBattle::getPath(sb->SelectI, sb->SelectJ, pickY, pickX);
+								float mobility = sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId]->mobility.total;
+								float cost = 40 / (mobility / 100 + 1);
+								cost *= sb->currentPath.size();
+								buildMiniWindowHex(L"Empty Hex", true, sb->currentPath.size(), cost, L"No special effects", sb->map[pickY][pickX]->screenX + 25, sb->map[pickY][pickX]->screenY);
 								sb->showPath = true;
 							}
+							else
+								buildMiniWindowHex(L"Empty Hex", false, 0, 0, L"No special effects", sb->map[pickY][pickX]->screenX + 25, sb->map[pickY][pickX]->screenY);
 
 						}
 						else
 						{
 							hideMiniWindowHex();
-							buildMiniWindowHex(L"Empty Hex", false, 0, 0, L"No special effects", sb->map[pickY][pickX]->screenX + 25, sb->map[pickY][pickX]->screenY);
+							
 							if (sb->selected)
 							{
 								sb->currentPath = spaceBattle::getPath(sb->SelectI, sb->SelectJ, pickY, pickX);
+
+								//spaceBattle::dist2(sb->map[sb->SelectI][sb->SelectJ]->gameX, sb->map[sb->SelectI][sb->SelectJ]->gameY, sb->map[pickY][pickX]->gameX, sb->map[pickY][pickX]->gameY);
+
+								float mobility = sb->map[sb->SelectI][sb->SelectJ]->ships[sb->SelectedShipId]->mobility.total;
+								float cost = 40 / (mobility / 100 + 1);
+								cost *= sb->currentPath.size();
+								buildMiniWindowHex(L"Empty Hex", true, sb->currentPath.size(), cost, L"No special effects", sb->map[pickY][pickX]->screenX + 25, sb->map[pickY][pickX]->screenY);
 								sb->showPath = true;
 							}
+							else
+								buildMiniWindowHex(L"Empty Hex", false, 0, 0, L"No special effects", sb->map[pickY][pickX]->screenX + 25, sb->map[pickY][pickX]->screenY);
+							
 
 						}
 					}
