@@ -159,7 +159,6 @@ void createActiveModulesButtons()
 			if (ship->modules[i]->moduleType == moduleType::weapon)
 			{
 				
-
 				tgui::BitmapButton::Ptr but = tgui::BitmapButton::create();
 				gEnv->game.spaceBattle.GUI.add(but, "activeModuleButton" + std::to_string(j));
 				but->setSize("10%", "&.height * 0.1");

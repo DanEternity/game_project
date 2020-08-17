@@ -42,7 +42,20 @@ void BuildSchemeRoles()
 		tgui::Button::Ptr but = createWidget(WidgetType::Button, "Button", "100", "100", std::to_string(100 + i * 120), "50%")->cast<tgui::Button>();
 		if (gEnv->game.player.ship->characterPosition[i] != NULL) but->setText(gEnv->game.player.ship->characterPosition[i]->name);
 		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->add(but, "buttonChangeRole" + std::to_string(i));
-		but->connect("RightMouseReleased", giveRoleFind, id, id);
+		but->connect("RightMouseReleased", giveRoleFind, id);
+		but->connect("MouseReleased", giveRoleFind, id);
+
+		std::wstring text = L"";
+		switch (gEnv->game.player.ship->characterRoleSlots[i])
+		{
+		case characterRole::captain:
+			text = L"Captain";
+			break;
+		default:
+			text = L"N\A Role";
+		}
+
+		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->add(createWidgetLabel("Label", std::to_string(100 + i * 120), "45%", 18, text));
 	}
 }
 
@@ -384,7 +397,7 @@ void skillUp(Character *c, PassiveSkill *p, int treeNumber, tgui::Widget::Ptr wi
 	UpdatePersonSkillTree();
 }
 
-void giveRoleFind(int id, int buttonId, tgui::Widget::Ptr widget, const std::string& signalName)
+void giveRoleFind(int id, tgui::Widget::Ptr widget, const std::string& signalName)
 {
 	if (!gEnv->game.ui.rmWasClicked)
 	{
@@ -402,7 +415,7 @@ void giveRoleFind(int id, int buttonId, tgui::Widget::Ptr widget, const std::str
 				count++;
 				but->setText(gEnv->game.player.crew.characters[i]->name);
 				gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->add(but);
-				const int constButtonId = buttonId;
+				const int constButtonId = id;
 				but->connect("MouseReleased", giveRole, &(*gEnv->game.player.crew.characters[i]), constButtonId);
 			}
 		}
@@ -417,7 +430,7 @@ void giveRoleFind(int id, int buttonId, tgui::Widget::Ptr widget, const std::str
 			tgui::Button::Ptr but = createWidget(WidgetType::Button, "Button", "120", "30", "-10", std::to_string(30*count))->cast<tgui::Button>();
 			but->setText("Cancel");
 			gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->add(but);
-			const int constButtonId = buttonId;
+			const int constButtonId = id;
 			but->connect("MouseReleased", giveRole, nullptr, constButtonId);
 		}
 	}
