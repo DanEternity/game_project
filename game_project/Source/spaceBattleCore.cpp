@@ -459,7 +459,19 @@ void updateSpaceBattle(double deltaTime)
 						q->scale = 1;
 						q->sprite = new sf::Sprite(gEnv->modelDB[L"spaceBattleProjectileBase"]->tex);
 						q->sprite->setOrigin(sf::Vector2f(q->sprite->getTexture()->getSize()) / 2.f);
+						
+						float angle = std::acos((q->speedVector.x * 1) / (std::sqrt((double)q->speedVector.x*q->speedVector.x + q->speedVector.y*q->speedVector.y)));
+						angle = angle * 180 / 3.1415f;
+						
 
+						float tx, ty;
+						tx = 1 * cos(angle * 3.1315f / 180) - 0;
+						ty = 1 * sin(angle * 3.1315f / 180) + 0;
+
+						if (abs(q->speedVector.x - tx) > 0.01 || abs(q->speedVector.y - ty) > 0.01)
+							angle = -angle;
+
+						q->rotationAngle = angle;
 						sb->turnStatus = spaceBattleState::waitForWeaponAnim;
 
 						sb->srcI = sb->SelectI;
@@ -764,6 +776,7 @@ void drawSpaceBattle(double deltaTime)
 
 		p->sprite->setPosition(nPos.x - x, nPos.y - y);
 		p->sprite->setScale(p->scale / sb->scale, p->scale / sb->scale);
+		p->sprite->setRotation(p->rotationAngle);
 		gEnv->globalWindow.draw(*p->sprite);
 
 		if (p->destroy)

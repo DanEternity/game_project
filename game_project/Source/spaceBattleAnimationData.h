@@ -25,6 +25,8 @@ public:
 	float scale;
 	float scaleFactorByTime;
 
+	float rotationAngle;
+
 	float timeFromStart;
 	float timeRemaining;
 
@@ -40,6 +42,7 @@ public:
 		scaleFactorByTime = 0;
 		timeFromStart = 0;
 		timeRemaining = 0;
+		rotationAngle = 0;
 		destroyWhenFinishPointAchived = true;
 		destroyWhenTimeElapsed = true;
 		lockAtFinish = true;
