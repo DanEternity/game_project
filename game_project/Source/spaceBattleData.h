@@ -65,6 +65,8 @@ public:
 
 	// end
 
+	bool endBattle = false;
+	float endBattleDelay;
 
 	bool leftMBPressed = false;
 	bool rightMBPressed = false;

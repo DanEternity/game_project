@@ -46,4 +46,6 @@ namespace spaceBattle
 
 	bool canUseWeapon(Ship * s, WeaponModule * m);
 
+	void paintMap(int ownFactionId);
+
 }

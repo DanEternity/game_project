@@ -230,7 +230,7 @@ void updateSpaceBattle(double deltaTime)
 
 					buildMiniWindowShipStats(sb->map[pickY][pickX]->screenX + 25, sb->map[pickY][pickX]->screenY, sb->map[pickY][pickX]->ships[0]);
 					sb->miniWindowCreated = true;
-
+					spaceBattle::paintMap(1);
 					sb->actionCooldown = 5;
 					showBars();
 				}
@@ -480,7 +480,87 @@ void updateSpaceBattle(double deltaTime)
 						sb->dstI = pickY;
 						sb->dstJ = pickX;
 						sb->dstK = 0;
-						 
+						
+						// weapon attack particles
+
+						for (int i(0); i < 35; i++)
+						{
+							spaceBattleAnimationElement * q = new spaceBattleAnimationElement();
+							sb->animElems.push_back(q);
+							q->curPos = {
+								(sb->map[sb->srcI][sb->srcJ]->screenX + x) * scale ,
+								(sb->map[sb->srcI][sb->srcJ]->screenY + y) * scale };
+							q->speedVector = { sb->map[pickY][pickX]->screenX - sb->map[sb->SelectI][sb->SelectJ]->screenX, sb->map[pickY][pickX]->screenY - sb->map[sb->SelectI][sb->SelectJ]->screenY, };
+							float md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+							q->speedVector /= md;
+
+							int qx = rand() % 100 - 50;
+							int qy = rand() % 100 - 50;
+							int qs = rand() % 200;
+							int qt = rand() % 20 + 80;
+
+							//q->speedVector = { 1 * (qx / 100.f), 1 * (qy / 100.f) };
+							q->speedVector.x += (qx / 100.f)*0.2;
+							q->speedVector.y += (qy / 100.f)*0.2;
+
+							md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+							q->speedVector /= md;
+
+							//md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+							//q->speedVector /= md;
+							q->curPos = q->speedVector * 4.f + q->curPos;
+							q->moveSpeed = 1300 + qs;
+							q->speedFactorByTime = -350.f;
+							q->destroyWhenTimeElapsed = true;
+							q->destroyWhenFinishPointAchived = false;
+							q->timeRemaining = 1.5f * (qt / 100.f);
+							q->lockAtFinish = false;
+							q->scale = 2;
+							q->scaleFactorByTime = -0.25 * (100.f / qt);
+							q->sprite = new sf::Sprite(gEnv->modelDB[L"spaceBattleParticleBase"]->tex);
+							q->sprite->setOrigin(sf::Vector2f(q->sprite->getTexture()->getSize()) / 2.f);
+
+						}
+
+						for (int i(0); i < 12; i++)
+						{
+							spaceBattleAnimationElement * q = new spaceBattleAnimationElement();
+							sb->animElems.push_back(q);
+							q->curPos = {
+								(sb->map[sb->srcI][sb->srcJ]->screenX + x) * scale ,
+								(sb->map[sb->srcI][sb->srcJ]->screenY + y) * scale };
+							q->speedVector = { sb->map[pickY][pickX]->screenX - sb->map[sb->SelectI][sb->SelectJ]->screenX, sb->map[pickY][pickX]->screenY - sb->map[sb->SelectI][sb->SelectJ]->screenY, };
+							float md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+							q->speedVector /= md;
+
+							int qx = rand() % 100 - 50;
+							int qy = rand() % 100 - 50;
+							int qs = rand() % 100;
+							int qt = rand() % 20 + 80;
+
+							//q->speedVector = { 1 * (qx / 100.f), 1 * (qy / 100.f) };
+							q->speedVector.x += (qx / 100.f)*0.55;
+							q->speedVector.y += (qy / 100.f)*0.55;
+
+							md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+							q->speedVector /= md;
+
+							//md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+							//q->speedVector /= md;
+							q->curPos = q->speedVector * 4.f + q->curPos;
+							q->moveSpeed = 50 + qs;
+							q->speedFactorByTime = -25.f;
+							q->destroyWhenTimeElapsed = true;
+							q->destroyWhenFinishPointAchived = false;
+							q->timeRemaining = 3.5f * (qt / 100.f);
+							q->lockAtFinish = false;
+							q->scale = 3.5f;
+							q->scaleFactorByTime = -0.8 * (100.f / qt);
+							q->sprite = new sf::Sprite(gEnv->modelDB[L"spaceBattleParticleBase"]->tex);
+							q->sprite->setOrigin(sf::Vector2f(q->sprite->getTexture()->getSize()) / 2.f);
+
+						}
+
 
 						/*
 						auto res = spaceBattle::weaponAttack(
@@ -609,7 +689,7 @@ void updateSpaceBattle(double deltaTime)
 
 				// blast animation
 
-				for (int i(0); i < 50; i++)
+				for (int i(0); i < 60; i++)
 				{
 					spaceBattleAnimationElement * q = new spaceBattleAnimationElement();
 					sb->animElems.push_back(q);
@@ -629,13 +709,45 @@ void updateSpaceBattle(double deltaTime)
 					q->speedVector /= md;
 					q->curPos = q->speedVector * 4.f + q->curPos;
 					q->moveSpeed = 30 + qs;
-
+					q->speedFactorByTime = -15;
 					q->destroyWhenTimeElapsed = true;
 					q->destroyWhenFinishPointAchived = false;
 					q->timeRemaining = 5 * (qt / 100.f);
 					q->lockAtFinish = false;
 					q->scale = 4;
 					q->scaleFactorByTime = -0.45 * (100.f / qt);
+					q->sprite = new sf::Sprite(gEnv->modelDB[L"spaceBattleParticleBase"]->tex);
+					q->sprite->setOrigin(sf::Vector2f(q->sprite->getTexture()->getSize()) / 2.f);
+
+				}
+
+				for (int i(0); i < 80; i++)
+				{
+					spaceBattleAnimationElement * q = new spaceBattleAnimationElement();
+					sb->animElems.push_back(q);
+					q->curPos = {
+						(sb->map[sb->dstI][sb->dstJ]->screenX + x) * scale ,
+						(sb->map[sb->dstI][sb->dstJ]->screenY + y) * scale };
+
+					int qx = rand() % 100 - 50;
+					int qy = rand() % 100 - 50;
+					int qs = rand() % 80 + 20;
+					int qt = rand() % 20 + 80;
+
+					q->speedVector = { 1 * (qx / 100.f), 1 * (qy / 100.f) };
+
+
+					float md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+					q->speedVector /= md;
+					q->curPos = q->speedVector * 4.f + q->curPos;
+					q->moveSpeed = 150 + qs;
+					q->speedFactorByTime = -50;
+					q->destroyWhenTimeElapsed = true;
+					q->destroyWhenFinishPointAchived = false;
+					q->timeRemaining = 2.5 * (qt / 100.f);
+					q->lockAtFinish = false;
+					q->scale = 2;
+					q->scaleFactorByTime = -0.15 * (100.f / qt);
 					q->sprite = new sf::Sprite(gEnv->modelDB[L"spaceBattleParticleBase"]->tex);
 					q->sprite->setOrigin(sf::Vector2f(q->sprite->getTexture()->getSize()) / 2.f);
 
@@ -652,6 +764,8 @@ void updateSpaceBattle(double deltaTime)
 					}
 
 					sb->map[sb->dstI][sb->dstJ]->ships.erase(sb->map[sb->dstI][sb->dstJ]->ships.begin() + 0);
+
+					// ship blast
 
 					for (int i(0); i < 40; i++)
 					{
@@ -717,6 +831,7 @@ void updateSpaceBattle(double deltaTime)
 
 					}
 
+					spaceBattle::paintMap(1);
 
 				}
 
@@ -974,7 +1089,7 @@ void spaceBattle::startTurnUpdate(int factionId)
 					spaceBattle::updateShip(sb->map[i][j]->ships[k]);
 				}
 			}
-
+	spaceBattle::paintMap(1);
 }
 
 void spaceBattle::updateShip(Ship * s)
@@ -1051,6 +1166,32 @@ bool spaceBattle::canUseWeapon(Ship * s, WeaponModule * m)
 	}
 
 	return true;
+}
+
+void spaceBattle::paintMap(int ownFactionId)
+{
+
+	auto sb = &gEnv->game.spaceBattle;
+
+	for (int i(0); i<sb->map.size(); i++)
+		for (int j(0); j < sb->map[i].size(); j++)
+		{
+			auto q = sb->map[i][j];
+			if (q->ships.empty())
+			{
+				q->color = segmentColor::base;
+				continue;
+			}
+
+			if (q->ships[0]->factionId == ownFactionId)
+			{
+				q->color = segmentColor::player;
+			}
+			else
+			{
+				q->color = segmentColor::enemy;
+			}
+		}
 }
 
 std::vector<std::pair<int, int>> spaceBattle::getPath(int si, int sj, int fi, int fj)
