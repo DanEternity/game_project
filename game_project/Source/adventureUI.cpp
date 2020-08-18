@@ -186,7 +186,7 @@ void createAdventureUIButtons()
 		giveIconToItem(testRes);
 		testVec.push_back(testRes);
 	}
-	showItemsReward(testVec);
+	//showItemsReward(testVec);
 }
 
 
