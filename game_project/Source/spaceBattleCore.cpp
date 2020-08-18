@@ -642,6 +642,84 @@ void updateSpaceBattle(double deltaTime)
 				}
 
 
+				if (sb->map[sb->dstI][sb->dstJ]->ships[0]->hull.current <= 0)
+				{
+					if (gEnv->game.player.ship->hull.current <= 0)
+					{
+						// exit game
+
+						return;
+					}
+
+					sb->map[sb->dstI][sb->dstJ]->ships.erase(sb->map[sb->dstI][sb->dstJ]->ships.begin() + 0);
+
+					for (int i(0); i < 40; i++)
+					{
+						spaceBattleAnimationElement * q = new spaceBattleAnimationElement();
+						sb->animElems.push_back(q);
+						q->curPos = {
+							(sb->map[sb->dstI][sb->dstJ]->screenX + x) * scale ,
+							(sb->map[sb->dstI][sb->dstJ]->screenY + y) * scale };
+
+						int qx = rand() % 100 - 50;
+						int qy = rand() % 100 - 50;
+						int qs = rand() % 20 + 10;
+						int qt = rand() % 20 + 80;
+
+						q->speedVector = { 1 * (qx / 100.f), 1 * (qy / 100.f) };
+
+
+						float md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+						q->speedVector /= md;
+						q->curPos = q->speedVector * 4.f + q->curPos;
+						q->moveSpeed = 30 + qs;
+
+						q->destroyWhenTimeElapsed = true;
+						q->destroyWhenFinishPointAchived = false;
+						q->timeRemaining = 5 * (qt / 100.f);
+						q->lockAtFinish = false;
+						q->scale = 3;
+						q->scaleFactorByTime = -0.45 * (100.f / qt);
+						q->sprite = new sf::Sprite(gEnv->modelDB[L"spaceBattleParticleBaseRed"]->tex);
+						q->sprite->setOrigin(sf::Vector2f(q->sprite->getTexture()->getSize()) / 2.f);
+
+					}
+
+					for (int i(0); i < 15; i++)
+					{
+						spaceBattleAnimationElement * q = new spaceBattleAnimationElement();
+						sb->animElems.push_back(q);
+						q->curPos = {
+							(sb->map[sb->dstI][sb->dstJ]->screenX + x) * scale ,
+							(sb->map[sb->dstI][sb->dstJ]->screenY + y) * scale };
+
+						int qx = rand() % 100 - 50;
+						int qy = rand() % 100 - 50;
+						int qs = rand() % 20 + 10;
+						int qt = rand() % 20 + 80;
+
+						q->speedVector = { 1 * (qx / 100.f), 1 * (qy / 100.f) };
+
+
+						float md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+						q->speedVector /= md;
+						q->curPos = q->speedVector * 4.f + q->curPos;
+						q->moveSpeed = 10 + qs;
+
+						q->destroyWhenTimeElapsed = true;
+						q->destroyWhenFinishPointAchived = false;
+						q->timeRemaining = 10 * (qt / 100.f);
+						q->lockAtFinish = false;
+						q->scale = 6;
+						q->scaleFactorByTime = -0.45 * (100.f / qt);
+						q->sprite = new sf::Sprite(gEnv->modelDB[L"spaceBattleParticleBaseRed"]->tex);
+						q->sprite->setOrigin(sf::Vector2f(q->sprite->getTexture()->getSize()) / 2.f);
+
+					}
+
+
+				}
+
 			}
 
 			drawSpaceBattle(deltaTime);
