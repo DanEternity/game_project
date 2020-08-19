@@ -646,6 +646,12 @@ void updateSpaceBattle(double deltaTime)
 				createActiveModulesButtons();
 			}
 
+			if (id != 1)
+			{
+				sb->turnStatus = spaceBattleState::aiTurn;
+				sb->aiHandleStatus = "startTurn";
+			}
+
 		}
 
 		if (sb->turnStatus == spaceBattleState::waitForWeaponAnim)
@@ -833,6 +839,9 @@ void updateSpaceBattle(double deltaTime)
 
 					spaceBattle::paintMap(1);
 
+					spaceBattle::checkForEndCondition();
+						
+
 				}
 
 			}
@@ -841,6 +850,14 @@ void updateSpaceBattle(double deltaTime)
 
 		}
 
+		if (sb->turnStatus == spaceBattleState::aiTurn)
+		{
+
+			spaceBattle::aiFactionHandle(deltaTime);
+
+			drawSpaceBattle(deltaTime);
+
+		}
 
 		sb->pickI = pickY;
 		sb->pickJ = pickX;
@@ -892,6 +909,22 @@ void updateSpaceBattle(double deltaTime)
 			sb->actionCooldown = 5;
 			sb->turnStatus = spaceBattleState::endTurn;
 		}
+
+		if (sb->endBattle)
+		{
+			sb->endBattleDelay -= deltaTime;
+			if (sb->endBattleDelay < 0)
+			{
+				// end battle
+				gEnv->game.activeGameMode = gameMode::adventureMode;
+				printf("Space battle ended.\n");
+
+				//
+				// Script section
+				//
+			}
+		}
+
 	}
 }
 
@@ -1016,8 +1049,9 @@ void spaceBattle::initBattle()
 
 	sb->currentFactionIndex = -1; // next will be 0 - sb->factionOrder[0] // first faction to move in battle
 
+	spaceBattle::collectAiFactions_TEST();
 
-
+	sb->endBattle = false;
 }
 
 void spaceBattle::initAllShips()
@@ -1192,6 +1226,512 @@ void spaceBattle::paintMap(int ownFactionId)
 				q->color = segmentColor::enemy;
 			}
 		}
+}
+
+void spaceBattle::checkForEndCondition()
+{
+
+	// by default only player can end battle this way
+	// player id = 1
+	auto sb = &gEnv->game.spaceBattle;
+
+	for (int i(0); i<sb->map.size(); i++)
+		for (int j(0); j < sb->map[i].size(); j++)
+		{
+			auto q = sb->map[i][j];
+			if (q->ships.empty())
+				continue;
+
+			if (q->ships[0]->factionId != 1)
+				return;
+
+		}
+
+	sb->endBattle = true;
+	sb->endBattleDelay = 1.f;
+
+}
+
+void spaceBattle::aiFactionHandle(double deltaTime)
+{
+	// this function handle ai behavioh
+	auto sb = &gEnv->game.spaceBattle;
+
+	if (sb->aiHandleStatus == "startTurn")
+	{
+		// collecting ai ships
+		sb->aiQueueSegments.clear();
+		int faction = sb->factionOrder[sb->currentFactionIndex];
+
+		for (int i(0); i<sb->map.size(); i++)
+			for (int j(0); j < sb->map[i].size(); j++)
+			{
+				auto q = sb->map[i][j];
+				if (q->ships.empty())
+					continue;
+
+				if (q->ships[0]->factionId == faction)
+				{
+					aiShipInfo w;
+					w.segment = q;
+					w.i = i;
+					w.j = j;
+					sb->aiQueueSegments.push_back(w);
+				}
+
+			}
+		sb->aiSegmentIndex = 0;
+		sb->aiHandleStatus = "handlingShips";
+		return;
+	}
+
+	if (sb->aiHandleStatus == "handlingShips")
+	{
+		if (sb->aiSegmentIndex >= sb->aiQueueSegments.size())
+		{
+			sb->aiHandleStatus = "endTurn";
+			return;
+		}
+
+		Ship * s = sb->aiQueueSegments[sb->aiSegmentIndex].segment->ships[0];
+		if (s == NULL)
+		{
+			sb->aiSegmentIndex += 1;
+			return;
+		}
+
+		// checking weapon
+		auto q = spaceBattle::getShipWeaponModule(s, 1);
+		if (q == NULL)
+		{
+			sb->aiSegmentIndex += 1;
+			return;
+		}
+
+		if (q->weaponState != weaponModuleState::normal)
+		{
+			// weapon on cd or dont work. So ai shouldn't use it
+			sb->aiSegmentIndex += 1;
+			return;
+		}
+
+		if (s->actionPoints.current < q->activationCost.total)
+		{
+			// doesn't have enough energy
+			sb->aiSegmentIndex += 1;
+			return;
+		}
+
+		// selecting target
+
+		int targetI = -1;
+		int targetJ = -1;
+
+		for (int i(0); i<sb->map.size(); i++)
+			for (int j(0); j < sb->map[i].size(); j++)
+			{
+				auto q = sb->map[i][j];
+				if (q->ships.empty())
+					continue;
+
+				if (q->ships[0]->factionId == 1)
+				{
+					targetI = i;
+					targetJ = j;
+					break;
+				}
+			}
+
+		// attacking
+		{
+			int pickY = targetI;
+			int pickX = targetJ;
+
+			float x, y;
+			float scale = sb->scale;
+
+			x = sb->cameraX - (gEnv->graphics.windowSizeX * sb->scale / 2);
+			y = sb->cameraY - (gEnv->graphics.windowSizeY * sb->scale / 2);
+
+			x = x / sb->scale;
+			y = y / sb->scale;
+
+			sb->srcI = sb->aiQueueSegments[sb->aiSegmentIndex].i;
+			sb->srcJ = sb->aiQueueSegments[sb->aiSegmentIndex].j;
+			sb->srcK = 0;
+			sb->dstI = targetI;
+			sb->dstJ = targetJ;
+			sb->dstK = 0;
+
+			if (debugMode)
+				printf("Info: AI using weapon against ship in: %i, %i \n", pickY, pickX);
+
+			spaceBattleAnimationElement * q = new spaceBattleAnimationElement();
+			sb->waitForAnimElement = q;
+			sb->animElems.push_back(q);
+			q->curPos = {
+				(sb->map[sb->srcI][sb->srcJ]->screenX + x) * scale ,
+				(sb->map[sb->srcI][sb->srcJ]->screenY + y) * scale };
+			q->speedVector = { sb->map[pickY][pickX]->screenX - sb->map[sb->srcI][sb->srcJ]->screenX, sb->map[pickY][pickX]->screenY - sb->map[sb->srcI][sb->srcJ]->screenY, };
+
+			q->finishPos = {
+				(sb->map[pickY][pickX]->screenX + x) * scale ,
+				(sb->map[pickY][pickX]->screenY + y) * scale };
+
+			float md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+			q->speedVector /= md;
+			q->moveSpeed = 1500;
+			q->destroyWhenTimeElapsed = false;
+			q->destroyWhenFinishPointAchived = true;
+			q->lockAtFinish = true;
+			q->scale = 1;
+			q->sprite = new sf::Sprite(gEnv->modelDB[L"spaceBattleProjectileBase"]->tex);
+			q->sprite->setOrigin(sf::Vector2f(q->sprite->getTexture()->getSize()) / 2.f);
+
+			float angle = std::acos((q->speedVector.x * 1) / (std::sqrt((double)q->speedVector.x*q->speedVector.x + q->speedVector.y*q->speedVector.y)));
+			angle = angle * 180 / 3.1415f;
+
+
+			float tx, ty;
+			tx = 1 * cos(angle * 3.1315f / 180) - 0;
+			ty = 1 * sin(angle * 3.1315f / 180) + 0;
+
+			if (abs(q->speedVector.x - tx) > 0.01 || abs(q->speedVector.y - ty) > 0.01)
+				angle = -angle;
+
+			q->rotationAngle = angle;
+			//sb->turnStatus = spaceBattleState::waitForWeaponAnim;
+
+			// weapon attack particles
+
+			for (int i(0); i < 35; i++)
+			{
+				spaceBattleAnimationElement * q = new spaceBattleAnimationElement();
+				sb->animElems.push_back(q);
+				q->curPos = {
+					(sb->map[sb->srcI][sb->srcJ]->screenX + x) * scale ,
+					(sb->map[sb->srcI][sb->srcJ]->screenY + y) * scale };
+				q->speedVector = { sb->map[pickY][pickX]->screenX - sb->map[sb->srcI][sb->srcJ]->screenX, sb->map[pickY][pickX]->screenY - sb->map[sb->srcI][sb->srcJ]->screenY, };
+				float md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+				q->speedVector /= md;
+
+				int qx = rand() % 100 - 50;
+				int qy = rand() % 100 - 50;
+				int qs = rand() % 200;
+				int qt = rand() % 20 + 80;
+
+				//q->speedVector = { 1 * (qx / 100.f), 1 * (qy / 100.f) };
+				q->speedVector.x += (qx / 100.f)*0.2;
+				q->speedVector.y += (qy / 100.f)*0.2;
+
+				md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+				q->speedVector /= md;
+
+				//md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+				//q->speedVector /= md;
+				q->curPos = q->speedVector * 4.f + q->curPos;
+				q->moveSpeed = 1300 + qs;
+				q->speedFactorByTime = -350.f;
+				q->destroyWhenTimeElapsed = true;
+				q->destroyWhenFinishPointAchived = false;
+				q->timeRemaining = 1.5f * (qt / 100.f);
+				q->lockAtFinish = false;
+				q->scale = 2;
+				q->scaleFactorByTime = -0.25 * (100.f / qt);
+				q->sprite = new sf::Sprite(gEnv->modelDB[L"spaceBattleParticleBase"]->tex);
+				q->sprite->setOrigin(sf::Vector2f(q->sprite->getTexture()->getSize()) / 2.f);
+
+			}
+
+			for (int i(0); i < 12; i++)
+			{
+				spaceBattleAnimationElement * q = new spaceBattleAnimationElement();
+				sb->animElems.push_back(q);
+				q->curPos = {
+					(sb->map[sb->srcI][sb->srcJ]->screenX + x) * scale ,
+					(sb->map[sb->srcI][sb->srcJ]->screenY + y) * scale };
+				q->speedVector = { sb->map[pickY][pickX]->screenX - sb->map[sb->srcI][sb->srcJ]->screenX, sb->map[pickY][pickX]->screenY - sb->map[sb->srcI][sb->srcJ]->screenY, };
+				float md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+				q->speedVector /= md;
+
+				int qx = rand() % 100 - 50;
+				int qy = rand() % 100 - 50;
+				int qs = rand() % 100;
+				int qt = rand() % 20 + 80;
+
+				//q->speedVector = { 1 * (qx / 100.f), 1 * (qy / 100.f) };
+				q->speedVector.x += (qx / 100.f)*0.55;
+				q->speedVector.y += (qy / 100.f)*0.55;
+
+				md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+				q->speedVector /= md;
+
+				//md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+				//q->speedVector /= md;
+				q->curPos = q->speedVector * 4.f + q->curPos;
+				q->moveSpeed = 50 + qs;
+				q->speedFactorByTime = -25.f;
+				q->destroyWhenTimeElapsed = true;
+				q->destroyWhenFinishPointAchived = false;
+				q->timeRemaining = 3.5f * (qt / 100.f);
+				q->lockAtFinish = false;
+				q->scale = 3.5f;
+				q->scaleFactorByTime = -0.8 * (100.f / qt);
+				q->sprite = new sf::Sprite(gEnv->modelDB[L"spaceBattleParticleBase"]->tex);
+				q->sprite->setOrigin(sf::Vector2f(q->sprite->getTexture()->getSize()) / 2.f);
+
+			}
+
+			sb->aiHandleStatus = "waitForAttack";
+			return;
+
+		}
+
+	}
+
+	if (sb->aiHandleStatus == "endTurn")
+	{
+		// end turn (?)
+		sb->turnStatus = spaceBattleState::endTurn;
+		sb->aiHandleStatus = "startTurn";
+		return;
+	}
+
+	if (sb->aiHandleStatus == "waitForAttack")
+	{
+		if (sb->waitForAnimElement == NULL)
+		{
+			// qq
+			printf("Hit!\n");
+
+			float x, y;
+			float scale = sb->scale;
+
+			x = sb->cameraX - (gEnv->graphics.windowSizeX * sb->scale / 2);
+			y = sb->cameraY - (gEnv->graphics.windowSizeY * sb->scale / 2);
+
+			x = x / sb->scale;
+			y = y / sb->scale;
+
+			auto res = spaceBattle::weaponAttack(
+				sb->map[sb->srcI][sb->srcJ]->ships[sb->SelectedShipId],
+				getShipWeaponModule(sb->aiQueueSegments[sb->aiSegmentIndex].segment->ships[0], 1),
+				sb->map[sb->dstI][sb->dstJ]->ships[0],
+				std::sqrt(spaceBattle::dist2(sb->map[sb->srcI][sb->srcJ]->gameX, sb->map[sb->srcI][sb->srcJ]->gameY, sb->map[sb->dstI][sb->dstJ]->gameX, sb->map[sb->dstI][sb->dstJ]->gameY)),
+				rand() % 65535
+			);
+
+			//displayShipInfo();
+
+			printf("Info: Total hits: %i/%i (%i critical), Total shield damage: %f, Total hull damage: %f \n", res.hits, res.total, res.crits, res.shieldDamage, res.hullDamage);
+
+			//createActiveModulesButtons();
+			//showBars();
+
+			// blast animation
+
+			for (int i(0); i < 60; i++)
+			{
+				spaceBattleAnimationElement * q = new spaceBattleAnimationElement();
+				sb->animElems.push_back(q);
+				q->curPos = {
+					(sb->map[sb->dstI][sb->dstJ]->screenX + x) * scale ,
+					(sb->map[sb->dstI][sb->dstJ]->screenY + y) * scale };
+
+				int qx = rand() % 100 - 50;
+				int qy = rand() % 100 - 50;
+				int qs = rand() % 80 + 20;
+				int qt = rand() % 20 + 80;
+
+				q->speedVector = { 1 * (qx / 100.f), 1 * (qy / 100.f) };
+
+
+				float md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+				q->speedVector /= md;
+				q->curPos = q->speedVector * 4.f + q->curPos;
+				q->moveSpeed = 30 + qs;
+				q->speedFactorByTime = -15;
+				q->destroyWhenTimeElapsed = true;
+				q->destroyWhenFinishPointAchived = false;
+				q->timeRemaining = 5 * (qt / 100.f);
+				q->lockAtFinish = false;
+				q->scale = 4;
+				q->scaleFactorByTime = -0.45 * (100.f / qt);
+				q->sprite = new sf::Sprite(gEnv->modelDB[L"spaceBattleParticleBase"]->tex);
+				q->sprite->setOrigin(sf::Vector2f(q->sprite->getTexture()->getSize()) / 2.f);
+
+			}
+
+			for (int i(0); i < 80; i++)
+			{
+				spaceBattleAnimationElement * q = new spaceBattleAnimationElement();
+				sb->animElems.push_back(q);
+				q->curPos = {
+					(sb->map[sb->dstI][sb->dstJ]->screenX + x) * scale ,
+					(sb->map[sb->dstI][sb->dstJ]->screenY + y) * scale };
+
+				int qx = rand() % 100 - 50;
+				int qy = rand() % 100 - 50;
+				int qs = rand() % 80 + 20;
+				int qt = rand() % 20 + 80;
+
+				q->speedVector = { 1 * (qx / 100.f), 1 * (qy / 100.f) };
+
+
+				float md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+				q->speedVector /= md;
+				q->curPos = q->speedVector * 4.f + q->curPos;
+				q->moveSpeed = 150 + qs;
+				q->speedFactorByTime = -50;
+				q->destroyWhenTimeElapsed = true;
+				q->destroyWhenFinishPointAchived = false;
+				q->timeRemaining = 2.5 * (qt / 100.f);
+				q->lockAtFinish = false;
+				q->scale = 2;
+				q->scaleFactorByTime = -0.15 * (100.f / qt);
+				q->sprite = new sf::Sprite(gEnv->modelDB[L"spaceBattleParticleBase"]->tex);
+				q->sprite->setOrigin(sf::Vector2f(q->sprite->getTexture()->getSize()) / 2.f);
+
+			}
+
+
+			if (sb->map[sb->dstI][sb->dstJ]->ships[0]->hull.current <= 0)
+			{
+				if (gEnv->game.player.ship->hull.current <= 0)
+				{
+					// exit game
+
+					return;
+				}
+
+				sb->map[sb->dstI][sb->dstJ]->ships.erase(sb->map[sb->dstI][sb->dstJ]->ships.begin() + 0);
+
+				// ship blast
+
+				for (int i(0); i < 40; i++)
+				{
+					spaceBattleAnimationElement * q = new spaceBattleAnimationElement();
+					sb->animElems.push_back(q);
+					q->curPos = {
+						(sb->map[sb->dstI][sb->dstJ]->screenX + x) * scale ,
+						(sb->map[sb->dstI][sb->dstJ]->screenY + y) * scale };
+
+					int qx = rand() % 100 - 50;
+					int qy = rand() % 100 - 50;
+					int qs = rand() % 20 + 10;
+					int qt = rand() % 20 + 80;
+
+					q->speedVector = { 1 * (qx / 100.f), 1 * (qy / 100.f) };
+
+
+					float md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+					q->speedVector /= md;
+					q->curPos = q->speedVector * 4.f + q->curPos;
+					q->moveSpeed = 30 + qs;
+
+					q->destroyWhenTimeElapsed = true;
+					q->destroyWhenFinishPointAchived = false;
+					q->timeRemaining = 5 * (qt / 100.f);
+					q->lockAtFinish = false;
+					q->scale = 3;
+					q->scaleFactorByTime = -0.45 * (100.f / qt);
+					q->sprite = new sf::Sprite(gEnv->modelDB[L"spaceBattleParticleBaseRed"]->tex);
+					q->sprite->setOrigin(sf::Vector2f(q->sprite->getTexture()->getSize()) / 2.f);
+
+				}
+
+				for (int i(0); i < 15; i++)
+				{
+					spaceBattleAnimationElement * q = new spaceBattleAnimationElement();
+					sb->animElems.push_back(q);
+					q->curPos = {
+						(sb->map[sb->dstI][sb->dstJ]->screenX + x) * scale ,
+						(sb->map[sb->dstI][sb->dstJ]->screenY + y) * scale };
+
+					int qx = rand() % 100 - 50;
+					int qy = rand() % 100 - 50;
+					int qs = rand() % 20 + 10;
+					int qt = rand() % 20 + 80;
+
+					q->speedVector = { 1 * (qx / 100.f), 1 * (qy / 100.f) };
+
+
+					float md = sqrt(q->speedVector.x * q->speedVector.x + q->speedVector.y * q->speedVector.y);
+					q->speedVector /= md;
+					q->curPos = q->speedVector * 4.f + q->curPos;
+					q->moveSpeed = 10 + qs;
+
+					q->destroyWhenTimeElapsed = true;
+					q->destroyWhenFinishPointAchived = false;
+					q->timeRemaining = 10 * (qt / 100.f);
+					q->lockAtFinish = false;
+					q->scale = 6;
+					q->scaleFactorByTime = -0.45 * (100.f / qt);
+					q->sprite = new sf::Sprite(gEnv->modelDB[L"spaceBattleParticleBaseRed"]->tex);
+					q->sprite->setOrigin(sf::Vector2f(q->sprite->getTexture()->getSize()) / 2.f);
+
+				}
+
+				spaceBattle::paintMap(1);
+
+				spaceBattle::checkForEndCondition();
+
+				
+			}
+
+			sb->aiHandleStatus = "waitAfterAttack";
+			sb->aiActionDelay = 1.5f;
+
+		}
+		return;
+	}
+
+	if (sb->aiHandleStatus == "waitAfterAttack")
+	{
+		
+		sb->aiActionDelay -= deltaTime;
+		if (sb->aiActionDelay < 0)
+		{
+			sb->aiHandleStatus = "handlingShips";
+			sb->aiSegmentIndex++;
+		}
+		return;
+	}
+
+
+}
+
+void spaceBattle::collectAiFactions_TEST()
+{
+	auto sb = &gEnv->game.spaceBattle;
+
+	for (int i(0); i<sb->map.size(); i++)
+		for (int j(0); j < sb->map[i].size(); j++)
+		{
+			auto q = sb->map[i][j];
+			if (q->ships.empty())
+				continue;
+
+			int factionId = q->ships[0]->factionId;
+			
+
+			// add faction
+			bool factionExist = false;
+			for (int i(0); i < sb->factionOrder.size(); i++)
+			{
+				if (sb->factionOrder[i] == factionId)
+				{
+					factionExist = true;
+					break;
+				}
+			}
+
+			if (!factionExist)
+				sb->factionOrder.push_back(factionId);
+
+		}
+
+
 }
 
 std::vector<std::pair<int, int>> spaceBattle::getPath(int si, int sj, int fi, int fj)

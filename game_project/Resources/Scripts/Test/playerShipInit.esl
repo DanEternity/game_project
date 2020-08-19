@@ -26,6 +26,8 @@ Call "$EXT:dbMod:2000" "4321", "1000", "1", "1", "$_res";
 //PutItemToPlayerInventory "$_res"
 EquipModule "$_res" "$playerShip" "4"
 
+SetShipDurabilityFull "$playerShip"
+
 Put "100" to "$_health"
 Put "0" to "$_armor"
 Put "0" to "$_shield"

@@ -4011,7 +4011,21 @@ void ScriptSystem::p_processAddShipToBattle(AddShipToBattleScript * command)
 	auto * sb = &gEnv->game.spaceBattle;
 
 	updateShipValues(s);
+/*
+	// add faction
+	bool factionExist = false;
+	for (int i(0); i < sb->factionOrder.size(); i++)
+	{
+		if (sb->factionOrder[i] == s->factionId)
+		{
+			factionExist = true;
+			break;
+		}
+	}
 
+	if (!factionExist)
+		sb->factionOrder.push_back(factionId);
+*/
 	sb->map[y][x]->ships.push_back(s);
 
 }

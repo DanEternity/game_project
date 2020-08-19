@@ -49,6 +49,11 @@ AddSlotToShip "$_ship" "core" "huge"
 AddSlotToShip "$_ship" "universal" "medium"
 AddSlotToShip "$_ship" "primaryWeapon" "medium" 
 
+Put "0" "$_res"
+Call "$EXT:dbMod:2000" "4321", "700", "1", "1", "$_res";
+//PutItemToPlayerInventory "$_res"
+EquipModule "$_res" "$_ship" "2"
+
 AddShipToBattle "$_ship" "2" "default" "10" "5" "decorationSpaceBeacon"
 SetShipDurabilityFull "$_ship"
 
@@ -68,6 +73,11 @@ AddSlotToShip "$_ship" "core" "huge"
 AddSlotToShip "$_ship" "universal" "medium"
 AddSlotToShip "$_ship" "primaryWeapon" "medium" 
 
+Put "0" "$_res"
+Call "$EXT:dbMod:2000" "4321", "700", "1", "1", "$_res";
+//PutItemToPlayerInventory "$_res"
+EquipModule "$_res" "$_ship" "2"
+
 AddShipToBattle "$_ship" "2" "default" "10" "7" "decorationSpaceBeacon"
 SetShipDurabilityFull "$_ship"
 
@@ -78,7 +88,7 @@ CreateShip "$_ship" "Enemy ship large"
 //	"$evasion" "$mobility" "$stealth" "$stealthTier" "$sensorPower" "$sensorTier" "$missileDefence" "$missileDefenceTier"
 //	"$powerSupply" "$highPowerSupply" "$actionPoints"
 	
-EditShipStats "$_ship" "7250" "0" "1000" "1000" "0"
+EditShipStats "$_ship" "150" "0" "10" "10" "0"
 	"0" "0" "0" "0" "0"
 	"25" "25" "5" "1" "10" "1" "4" "1"
 	"15" "1.5" "50"
@@ -86,6 +96,11 @@ EditShipStats "$_ship" "7250" "0" "1000" "1000" "0"
 AddSlotToShip "$_ship" "core" "huge"
 AddSlotToShip "$_ship" "universal" "medium"
 AddSlotToShip "$_ship" "primaryWeapon" "medium" 
+
+Put "0" "$_res"
+Call "$EXT:dbMod:2000" "4321", "700", "1", "1", "$_res";
+//PutItemToPlayerInventory "$_res"
+EquipModule "$_res" "$_ship" "2"
 
 AddShipToBattle "$_ship" "2" "default" "11" "5" "decorationSpaceBeacon"
 SetShipDurabilityFull "$_ship"

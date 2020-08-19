@@ -16,8 +16,16 @@ namespace spaceBattleState
 		endTurn,
 		tacticsMode,
 		waitForWeaponAnim,
+		aiTurn,
 	};
 }
+
+struct aiShipInfo
+{
+	SpaceBattleSegment * segment;
+	int i;
+	int j;
+};
 
 class SpaceBattleData
 {
@@ -77,6 +85,16 @@ public:
 	bool EndTurnPressed = false;
 
 	int tacticsRange = 1;
+
+	// ai factions section
+
+	std::string aiHandleStatus = "null";
+	std::vector<aiShipInfo> aiQueueSegments;
+	
+	float aiActionDelay;
+	int aiSegmentIndex;
+
+	//
 
 	SpaceBattleData()
 	{

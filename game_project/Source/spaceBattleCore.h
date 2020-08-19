@@ -48,4 +48,10 @@ namespace spaceBattle
 
 	void paintMap(int ownFactionId);
 
+	void checkForEndCondition();
+
+	void aiFactionHandle(double deltaTime);
+
+	void collectAiFactions_TEST();
+
 }
