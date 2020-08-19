@@ -235,6 +235,7 @@
     <ClCompile Include="Source\envUtils.cpp" />
     <ClCompile Include="Source\game.cpp" />
     <ClCompile Include="Source\GameLogicCore.cpp" />
+    <ClCompile Include="Source\gameOverGamemode.cpp" />
     <ClCompile Include="Source\generationUtility.cpp" />
     <ClCompile Include="Source\HangarHandlers.cpp" />
     <ClCompile Include="Source\hangarUI.cpp" />
@@ -291,6 +292,7 @@
     <ClInclude Include="Source\gamedata.h" />
     <ClInclude Include="Source\gameLogic.h" />
     <ClInclude Include="Source\GameLogicCore.h" />
+    <ClInclude Include="Source\gameOverGamemode.h" />
     <ClInclude Include="Source\generationUtility.h" />
     <ClInclude Include="Source\graphics.h" />
     <ClInclude Include="Source\graphicsModel.h" />

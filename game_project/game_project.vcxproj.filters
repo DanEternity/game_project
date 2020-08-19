@@ -198,6 +198,9 @@
     <ClCompile Include="Source\RewardsHandlers.cpp">
       <Filter>Adventure\UI\Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="Source\gameOverGamemode.cpp">
+      <Filter>Adventure</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\game.h">
@@ -460,6 +463,9 @@
     </ClInclude>
     <ClInclude Include="Source\spaceBattleAnimationData.h">
       <Filter>SpaceBattle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\gameOverGamemode.h">
+      <Filter>Adventure</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -68,6 +68,9 @@ int main()
 		// Post update
 		postUpdate();
 
+		if (gEnv->game.endGameFlag)
+			break;
+
 	}
 
 	return 0;

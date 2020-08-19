@@ -765,7 +765,7 @@ void updateSpaceBattle(double deltaTime)
 					if (gEnv->game.player.ship->hull.current <= 0)
 					{
 						// exit game
-
+						gEnv->game.activeGameMode = gameMode::gameover;
 						return;
 					}
 
@@ -1600,7 +1600,7 @@ void spaceBattle::aiFactionHandle(double deltaTime)
 				if (gEnv->game.player.ship->hull.current <= 0)
 				{
 					// exit game
-
+					gEnv->game.activeGameMode = gameMode::gameover;
 					return;
 				}
 
