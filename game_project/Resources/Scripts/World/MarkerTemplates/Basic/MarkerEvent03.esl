@@ -1,0 +1,51 @@
+﻿#extLocal "local"
+#import "core.ItemModule"
+#extLinkRename "core.ItemModule->dbMod"
+
+#import "core.ItemResource"
+#extLinkRename "core.ItemResource->dbRes"
+
+#import "core.RewardPool"
+#extLinkRename "core.RewardPool->dbReward"
+
+// init section
+@init
+PutFromPointer "$_arg2" to "$EXT:local:key"
+
+ChangeScriptEntryPoint "$self" "@start" 
+PutFromPointer "$_arg1" "$_marker"
+LinkScriptToMarker "$self" to "$_marker"
+EditMarkerProperties "$_marker" "10" "5" "500" "500" "Trading station" "Some info"
+
+Put "0" to "$EXT:local:initCompleted"
+
+Terminate 
+
+// start section
+@start
+
+Text "This is a test event created with key $EXT:local:key "
+
+Text "You see an automatic trading station."
+
+IfDoJump "$EXT:local:initCompleted >= 1" "@_show"
+Put "1" to "$EXT:local:initCompleted"
+Text "Create shop"
+CreateShop "$EXT:local:s" "Uranium trading station"
+Put "0" "$_res"
+Put "0" "$_price"
+Call "$EXT:dbRes:121" "10", "$_res";
+Call "$EXT:dbRes:101" "25", "$_price";
+AddGoodsToShop "$EXT:local:s" "$_res" "100" "$_price"
+
+Put "0" "$_res"
+Put "0" "$_price"
+Call "$EXT:dbRes:121" "7", "$_res";
+Call "$EXT:dbRes:111" "14", "$_price";
+AddGoodsToShop "$EXT:local:s" "$_res" "70" "$_price"
+
+@_show
+ShowShop "$EXT:local:s"
+
+@end
+Terminate

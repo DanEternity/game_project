@@ -1,0 +1,116 @@
+﻿#extLocal "local"
+#import "core.ItemModule"
+#extLinkRename "core.ItemModule->dbMod"
+
+#import "core.ItemResource"
+#extLinkRename "core.ItemResource->dbRes"
+
+#import "core.RewardPool"
+#extLinkRename "core.RewardPool->dbReward"
+
+// init section
+@init
+PutFromPointer "$_arg2" to "$EXT:local:key"
+
+ChangeScriptEntryPoint "$self" "@start" 
+PutFromPointer "$_arg1" "$_marker"
+LinkScriptToMarker "$self" to "$_marker"
+EditMarkerProperties "$_marker" "10" "5" "500" "500" "Unknown signal" "Something dangerous"
+
+
+Terminate 
+
+// start section
+@start
+
+Text "This is a test event created with key $EXT:local:key "
+
+Choose "You have detected several ship signatures. You can attept to scan them or just leave?" 
+[true]"Scan them (will fight)"[@fight],[true]"Leave"[@end];
+@fight
+Text "Enemy approaching you... (initializing space battle...)"
+
+InitSpaceBattleBuffer "8" "12"
+AddPlayerShipsToBattle "2" "4" "2"
+
+CreateShip "$_ship" "Enemy ship example"
+
+//EditShipStats "$_ship" "$hull" "$hullReg" "$hullResistPhysical" "$hullResistEnergy" "$hullStructureStability"
+//	"$shield" "$shieldReg" "$shieldResistPhysical" "$shieldResistEnergy" "$shieldStructureStability"
+//	"$evasion" "$mobility" "$stealth" "$stealthTier" "$sensorPower" "$sensorTier" "$missileDefence" "$missileDefenceTier"
+//	"$powerSupply" "$highPowerSupply" "$actionPoints"
+	
+EditShipStats "$_ship" "100" "0" "10" "10" "0"
+	"0" "0" "0" "0" "0"
+	"25" "25" "5" "1" "10" "1" "4" "1"
+	"15" "1.5" "50"
+
+AddSlotToShip "$_ship" "core" "huge"
+AddSlotToShip "$_ship" "universal" "medium"
+AddSlotToShip "$_ship" "primaryWeapon" "medium" 
+
+Put "0" "$_res"
+Call "$EXT:dbMod:2000" "4321", "700", "1", "1", "$_res";
+//PutItemToPlayerInventory "$_res"
+EquipModule "$_res" "$_ship" "2"
+
+AddShipToBattle "$_ship" "2" "default" "10" "5" "decorationSpaceBeacon"
+SetShipDurabilityFull "$_ship"
+
+CreateShip "$_ship" "Enemy ship"
+
+//EditShipStats "$_ship" "$hull" "$hullReg" "$hullResistPhysical" "$hullResistEnergy" "$hullStructureStability"
+//	"$shield" "$shieldReg" "$shieldResistPhysical" "$shieldResistEnergy" "$shieldStructureStability"
+//	"$evasion" "$mobility" "$stealth" "$stealthTier" "$sensorPower" "$sensorTier" "$missileDefence" "$missileDefenceTier"
+//	"$powerSupply" "$highPowerSupply" "$actionPoints"
+	
+EditShipStats "$_ship" "125" "0" "10" "10" "0"
+	"0" "0" "0" "0" "0"
+	"25" "25" "5" "1" "10" "1" "4" "1"
+	"15" "1.5" "50"
+
+AddSlotToShip "$_ship" "core" "huge"
+AddSlotToShip "$_ship" "universal" "medium"
+AddSlotToShip "$_ship" "primaryWeapon" "medium" 
+
+Put "0" "$_res"
+Call "$EXT:dbMod:2000" "4321", "700", "1", "1", "$_res";
+//PutItemToPlayerInventory "$_res"
+EquipModule "$_res" "$_ship" "2"
+
+AddShipToBattle "$_ship" "2" "default" "10" "7" "decorationSpaceBeacon"
+SetShipDurabilityFull "$_ship"
+
+CreateShip "$_ship" "Enemy ship large"
+
+//EditShipStats "$_ship" "$hull" "$hullReg" "$hullResistPhysical" "$hullResistEnergy" "$hullStructureStability"
+//	"$shield" "$shieldReg" "$shieldResistPhysical" "$shieldResistEnergy" "$shieldStructureStability"
+//	"$evasion" "$mobility" "$stealth" "$stealthTier" "$sensorPower" "$sensorTier" "$missileDefence" "$missileDefenceTier"
+//	"$powerSupply" "$highPowerSupply" "$actionPoints"
+	
+EditShipStats "$_ship" "150" "0" "10" "10" "0"
+	"0" "0" "0" "0" "0"
+	"25" "25" "5" "1" "10" "1" "4" "1"
+	"15" "1.5" "50"
+
+AddSlotToShip "$_ship" "core" "huge"
+AddSlotToShip "$_ship" "universal" "medium"
+AddSlotToShip "$_ship" "primaryWeapon" "medium" 
+
+Put "0" "$_res"
+Call "$EXT:dbMod:2000" "4321", "700", "1", "1", "$_res";
+//PutItemToPlayerInventory "$_res"
+EquipModule "$_res" "$_ship" "2"
+
+AddShipToBattle "$_ship" "2" "default" "11" "5" "decorationSpaceBeacon"
+SetShipDurabilityFull "$_ship"
+
+ChangeScriptEntryPoint "$self" "@exit"
+StartSpaceBattle 
+
+@end
+Terminate
+
+@exit
+Text "Nothing else here"
+Terminate

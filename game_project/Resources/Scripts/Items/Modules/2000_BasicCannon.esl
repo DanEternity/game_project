@@ -1,0 +1,207 @@
+﻿#import "core.ItemModule"
+#extLinkRename "core.ItemModule->db"
+
+#import "core.PropertiesCollection"
+#extLinkRename "core.PropertiesCollection->db2"
+
+// input
+// arg0  arg1    arg2    arg3    arg4
+// key, quality, level, rarity, destination
+// EXAMPLE: Call "$EXT:db:1001" "41234134" "1300" "5" "1" "$_res"
+
+PutFromPointer "$_arg0" to "$_key"
+PutFromPointer "$_arg1" to "$_q" // quality
+PutFromPointer "$_arg2" to "$_level" // level
+PutFromPointer "$_arg3" to "$_rarity" // rarity
+
+Put "1" to "$_levelMin" // minimal level
+
+Ariphmetic "$_q / 1000" to "$_qmod" // multiplier 
+
+Ariphmetic "$_rarity - 1" to "$_R"
+Ariphmetic "$_R / 2" to "$_tmp"
+Ariphmetic "$_R % 2" to "$_tmp2"
+Ariphmetic "$_tmp2 / 2" to "$_tmp2"
+Ariphmetic "$_tmp - $_tmp2" to "$_rarityMod"
+
+Ariphmetic "$_level - $_levelMin" "$_levelMod"
+
+Ariphmetic "$_rarityMod * 0.05" to "$_positiveMod"
+Ariphmetic "$_positiveMod + 1" to "$_positiveMod"
+
+Ariphmetic "$_levelMod * 0.02" to "$_positiveTmp"
+Ariphmetic "$_positiveTmp + 1" to "$_positiveTmp"
+
+Ariphmetic "$_positiveMod * $_positiveTmp" to "$_positiveMod"
+
+Ariphmetic "$_rarityMod * 0.04" "$_rarityMod"
+Ariphmetic "1 - $_rarityMod" "$_negativeMod"
+Ariphmetic "$_levelMod * 0.01" "$_levelMod"
+Ariphmetic "$_negativeMod - $_levelMod" "$_negativeMod"
+
+CreateWeaponModule "$_p" "temp_name" 
+
+Put "0" to "$_pEnergy"
+Put "0" to "$_pEnergyHigh"
+
+// required Energy supply // positive
+CalcParamStd "$_a1" "15" "1.5" "$_key" "11113" "$_positiveMod" "0" "3"
+Put "$_a1" to "$_pEnergy"
+
+put "basic" "$_weaponType" 
+CalcParamStd "$_activationCost" "15" "1.5" "$_key" "21113" "$_positiveMod" "$_qmod" "3"
+CalcParamStd "$_cdFull" "3" "0" "$_key" "11113" "$_negativeMod" "$_qmod" "2" 
+CalcParamStd "$_cdPartial" "1" "0" "$_key" "11113" "$_negativeMod" "$_qmod" "2"
+CalcParamStd "$_activLimit" "4" "1" "$_key" "31233" "$_positiveMod" "$_qmod" "1"
+CalcParamStd "$_activPartial" "1" "0" "$_key" "11113" "$_positiveMod" "$_qmod" "1"
+CalcParamStd "$_baseDamage" "20" "2" "$_key" "47713" "$_positiveMod" "$_qmod" "1"
+CalcParamStd  "$_hitsAmount" "5" "1" "$_key" "23713" "$_positiveMod" "$_qmod" "1"
+
+put "physical" "$_damageType" 
+
+CalcParamStd "$_optimalDistance" "5.5" "0.5" "$_key" "10713" "$_positiveMod" "$_qmod" "1"
+CalcParamStd  "$_accuracy" "120" "5" "$_key" "42513" "$_positiveMod" "$_qmod" "1"
+CalcParamStd  "$_damagePenalty" "0.15" "0.025" "$_key" "44413" "$_negativeMod" "$_qmod" "2"
+CalcParamStd  "$_accuracyPenalty" "0.15" "0.025" "$_key" "17713" "$_negativeMod" "$_qmod" "2"
+CalcParamStd  "$_resIgnoreShieldFlat" "20" "2" "$_key" "40713" "$_positiveMod" "$_qmod" "1"
+CalcParamStd  "$_resIgnoreShieldPercent" "0.2" "0.02" "$_key" "22213" "$_positiveMod" "$_qmod" "1"
+CalcParamStd  "$_resIgnoreHullFlat" "0" "0" "$_key" "10713" "$_positiveMod" "$_qmod" "1"
+CalcParamStd  "$_resIgnoreHullPercent" "0.05" "0.005" "$_key" "21111" "$_positiveMod" "$_qmod" "1"
+CalcParamStd  "$_criticalChanceHull" "0.25" "0.025" "$_key" "59001" "$_positiveMod" "$_qmod" "1"
+CalcParamStd  "$_criticalDamageHull" "1" "0.1" "$_key" "57199" "$_positiveMod" "$_qmod" "1"
+CalcParamStd  "$_criticalChanceShield" "0.25" "0.025" "$_key" "49113" "$_positiveMod" "$_qmod" "1"
+CalcParamStd  "$_criticalDamageShield" "0.5" "0.05" "$_key" "25714" "$_positiveMod" "$_qmod" "1"
+
+put "0"  "$_weaponAmmoMax" 
+put "0" "$_chargeActivationCost" 
+put "0" "$_chargeFinalCost"
+put "0" "$_chargeRoundsCount"
+put "0" "$_missileHealth" 
+put "0" "$_missileTier"
+
+
+
+// variable init
+Put "0" to "$_type1"
+Put "0" to "$_effect1"
+Put "0" to "$_effect2"
+// debug
+//Put "5" to "$_rarity"
+Put "$_key" to "$_key2"
+// end debug
+
+ifDoJump "$_rarity < 2" "@common"
+ifDoJump "$_rarity < 4" "@uncommon"
+ifDoJump "$_rarity < 6" "@rare"
+ifDoJump "$_rarity < 8" "@exceptional"
+jump "@exotic"
+@common
+Put "0" "$_rarityTier" 
+// do nothing
+Jump "@next1"
+@uncommon
+Put "1" "$_rarityTier" 
+// get 1 effect
+Call "$EXT:db2:1041" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2"; 
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Jump "@next1"
+@rare
+Put "2" "$_rarityTier" 
+Call "$EXT:db2:1041" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2";
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Ariphmetic "$_key2 * 2" to "$_key2"
+Call "$EXT:db2:1041" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2";
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Jump "@next1"
+@exceptional
+Put "3" "$_rarityTier" 
+Call "$EXT:db2:1041" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2";
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Ariphmetic "$_key2 * 2" to "$_key2"
+Call "$EXT:db2:1041" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2";
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Ariphmetic "$_key2 * 2" to "$_key2"
+Call "$EXT:db2:1041" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2";
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Jump "@next1"
+@exotic
+Put "4" "$_rarityTier" 
+Call "$EXT:db2:1041" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2";
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Ariphmetic "$_key2 * 2" to "$_key2"
+Call "$EXT:db2:1041" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2";
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Ariphmetic "$_key2 * 2" to "$_key2"
+Call "$EXT:db2:1041" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2"; 
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Ariphmetic "$_key2 * 2" to "$_key2"
+Call "$EXT:db2:1041" "$_key2", "$_rarity", "$_type1", "$_effect1", "$_effect2";
+ApplyEffectToSysModule "$_effect1" "$_p"
+ApplyEffectToSysModule "$_effect2" "$_p"
+Jump "@next1"
+
+@next1
+Put "Basic Cannon" to "$_mname"
+IfDoJump "$_q >= 1500" "@up3"
+IfDoJump "$_q >= 1300" "@up2"
+IfDoJump "$_q >= 1100" "@up1"
+IfDoJump "$_q >= 900" "@normal"
+IfDoJump "$_q >= 750" "@bad"
+@broken
+Put "broken" to "$_qname"
+StringConcat "Broken " "$_mname" "$_mname"
+Jump "@next"
+@bad
+Put "bad" to "$_qname"
+StringConcat "Defective " "$_mname" "$_mname"
+Jump "@next"
+@normal
+Put "normal" to "$_qname"
+Jump "@next"
+@up1
+Put "upgrade1" to "$_qname"
+StringConcat "$_mname" "+" "$_mname"
+Jump "@next"
+@up2
+Put "upgrade2" to "$_qname"
+StringConcat "$_mname" "++" "$_mname"
+Jump "@next"
+@up3
+Put "legendary" to "$_qname"
+StringConcat "$_mname" "★" "$_mname"
+Jump "@next"
+@next
+
+Put "2000" to "$_itemId"
+EditItemProperties "$_p" "$_level" "$_rarity" "$_itemId" "none" "$_mname"
+EditItemConstructableProperties "$_p" "$_key" "$_q" "$_qname"
+EditModuleProperties "$_p" "weapon" "primaryWeapon" "medium" "$_pEnergy" "$_pEnergyHigh" "5"
+EditWeaponModuleProperties "$_p" "$_weaponType" "$_activationCost" 
+"$_cdFull" "$_cdPartial" 
+"$_activLimit" "$_activPartial"
+"$_baseDamage" "$_hitsAmount" "$_damageType" "$_optimalDistance"
+"$_accuracy" "$_damagePenalty" "$_accuracyPenalty"
+"$_resIgnoreShieldFlat" "$_resIgnoreShieldPercent"
+"$_resIgnoreHullFlat" "$_resIgnoreHullPercent"
+"$_criticalChanceHull" "$_criticalDamageHull"
+"$_criticalChanceShield" "$_criticalDamageShield"
+"$_weaponAmmoMax" "$_chargeActivationCost" "$_chargeFinalCost"
+"$_chargeRoundsCount"
+"$_missileHealth" "$_missileTier"
+
+
+PutToPointer "$_p" "$_arg4"
+
+// End section
+Terminate
+
+#registerFunction "$EXT:db:2000"

@@ -1,10 +1,7 @@
 #pragma once
 
-#include "enviroment.h"
-#include "Item.h"
-#include "shipManagement.h"
-#include "shipModulesUI.h"
-#include "LocaleLoader.h"
+#include "InventoryHandlers.h"
+#include <string>
 /*
 class InventoryItem;
 class TableInventory;
@@ -38,11 +35,7 @@ void InventoryItemClicked(TableInventory* inv, InventoryItem *item, tgui::Widget
 
 
 void BuildInventoryUI(int cellSize);
-void DeleteInventoryUI();
-void IntentoryResponseSignal(int cellId, std::string inventoryId, tgui::Widget::Ptr widget, const std::string & signalName);
-void rmPanelClickedInventory(const int id, tgui::Widget::Ptr widget, const std::string& signalName);
-void rmPanelChoosenInsert(const int id, const int item_id, int inventory, tgui::Widget::Ptr widget, const std::string& signalName);
-
+void updateInventoryCell(int id);
 
 // filtered inventory grid
 
@@ -56,8 +49,13 @@ void ApplyDefaultFilterToInventoryPanel();
 void filterSearchFieldChanged(tgui::Widget::Ptr widget, const std::string& signalName);
 void filterCategoryFieldChanged(tgui::Widget::Ptr widget, const std::string& signalName);
 
-void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, const std::string& signalName);
 
-void applyTooltip(int id);
-void createTooltip(Item * m);
-void disableTooltips();
+
+
+void createModuleTooltip(Module * m);
+void createResourseTooltip(ItemResource * r);
+void createEquipmentTooltip(Equipment * e);
+void createWeaponModuleTooltip(WeaponModule * w);
+
+void applyStorageTooltip(int id);
+void applyGridTooltip(int id);

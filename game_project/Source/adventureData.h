@@ -26,9 +26,18 @@ public:
 
 	std::string currentSectorId = "null";
 
+	bool isSectorLoaded = false;
+
 	// world to pixel coordinate conversion
 	float settingMapScale = 2;
 
 	WorldGenerationData worldGeneratorData;
+	
+
+	sf::Sprite * bgImage = NULL;
+
+	// special
+
+	sf::Sprite * sysImage = NULL;
 
 };

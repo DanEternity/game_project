@@ -7,19 +7,24 @@
 #include "tableInventory.h"
 #include "storageStuff.h"
 #include "LocaleLoader.h"
+#include "CraftUI.h"
+#include "map.h"
+#include "UIExtensions.h"
+#include "Shop.h"
+#include "rewardPanelUI.h"
 
 void updateAdventureUI();
+void DrawAdventureUI();
 void disableAllAdventureUIWidgets();
 void createAdventureUIButtons();
 
-void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled);
+void updateShipMenuUIState(shipMenu::ShipMenu state, int whereCalled, bool openShop = false);
 void updateCategoryFilters();
 
-void disableAllAdventureUI();
 
 // ui event handlers
-void adventureUIChangeState(AdventureUIInventoryStateNamespace::AdventureUIInventoryState state);
-void adventureUIInventorySpecialButtons(AdventureUIInventoryStateNamespace::AdventureUIInventoryState newState);
 
 //
 void createPauseMenu();
+void disableAllAdventureUI();
+

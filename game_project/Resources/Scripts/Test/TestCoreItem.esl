@@ -1,0 +1,97 @@
+﻿#ext "ItemTemplates"
+
+// input
+// key quality destination
+
+PutFromPointer "$_arg0" to "$_key"
+PutFromPointer "$_arg1" to "$_q"
+
+Ariphmetic "$_q / 1000" to "$_qmod" // multiplier 
+
+// energy supply param
+Ariphmetic "$_key * 44441" to "$_pA"
+Ariphmetic "$_pA % 10000" to "$_pA"
+Ariphmetic "$_pA / 10000" to "$_pA"
+Ariphmetic "$_pA * 20" to "$_pA"
+Ariphmetic "$_pA + 80" to "$_pA"
+Ariphmetic "$_pA * $_qmod" to "$_pA"
+
+// high energy supply param
+Ariphmetic "$_key * 53331" to "$_pB"
+Ariphmetic "$_pB % 10000" to "$_pB"
+Ariphmetic "$_pB / 10000" to "$_pB"
+Ariphmetic "$_pB * 0.5" to "$_pB"
+Ariphmetic "$_pB + 1.5" to "$_pB"
+Ariphmetic "$_pB * $_qmod" to "$_pB"
+
+// action points param
+Ariphmetic "$_key * 39991" to "$_pD"
+Ariphmetic "$_pD % 10000" to "$_pD"
+Ariphmetic "$_pD / 10000" to "$_pD"
+Ariphmetic "$_pD * 10" to "$_pD"
+Ariphmetic "$_pD + 60" to "$_pD"
+Ariphmetic "$_pD * $_qmod" to "$_pD"
+
+// hull param
+Ariphmetic "$_key * 59991" to "$_pC"
+Ariphmetic "$_pC % 10000" to "$_pC"
+Ariphmetic "$_pC / 10000" to "$_pC"
+Ariphmetic "$_pC * 40" to "$_pC"
+Ariphmetic "$_pC + 230" to "$_pC"
+Ariphmetic "$_pC * $_qmod" to "$_pC"
+
+IfDoJump "$_q >= 1500" "@up3"
+IfDoJump "$_q >= 1300" "@up2"
+IfDoJump "$_q >= 1100" "@up1"
+IfDoJump "$_q >= 900" "@normal"
+IfDoJump "$_q >= 750" "@bad"
+
+@broken
+Put "broken" to "$_qname"
+Put "Broken Nuclear reactor rd-12" to "$_mname"
+Jump "@next"
+@bad
+Put "bad" to "$_qname"
+Put "Defective Nuclear reactor rd-12" to "$_mname"
+Jump "@next"
+@normal
+Put "normal" to "$_qname"
+Put "Nuclear reactor rd-12" to "$_mname"
+Jump "@next"
+@up1
+Put "upgrade1" to "$_qname"
+Put "Nuclear reactor rd-12+" to "$_mname"
+Jump "@next"
+@up2
+Put "upgrade2" to "$_qname"
+Put "Nuclear reactor rd-12++" to "$_mname"
+Jump "@next"
+@up3
+Put "legendary" to "$_qname"
+Put "Nuclear reactor rd-12★" to "$_mname"
+Jump "@next"
+
+@next
+CreateSysModule "$_p" "My_module" 
+EditItemProperties "$_p" "2" "3" "1002" "none" "$_mname"
+EditItemConstructableProperties "$_p" "$_key" "$_q" "$_qname"
+EditModuleProperties "$_p" "system" "core" "large" "0" "0" "1"
+
+CreateModStatEffect "$_effect" "ship" "powerSupply" "$_pA" "0" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+
+CreateModStatEffect "$_effect" "ship" "highPowerSupply" "$_pB" "0" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+
+CreateModStatEffect "$_effect" "ship" "actionPoints" "$_pD" "0" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+
+CreateModStatEffect "$_effect" "ship" "hull" "$_pC" "0" "0" "0"
+ApplyEffectToSysModule "$_effect" "$_p"
+
+PutToPointer "$_p" "$_arg2"
+
+// End section
+Terminate
+
+#registerFunction "$EXT:ItemTemplates:1002"

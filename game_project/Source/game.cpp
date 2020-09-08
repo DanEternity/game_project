@@ -6,6 +6,9 @@
 #include "mainMenu.h"
 #include "adventureModeCore.h"
 #include "adventureUI.h"
+#include "worldGenerator.h"
+#include "spaceBattleCore.h"
+#include "gameOverGamemode.h"
 
 void updateGameCycle(double deltaTime)
 {
@@ -24,6 +27,16 @@ void updateGameCycle(double deltaTime)
 		case gameMode::mainMenuMode:
 			updateMainMenu();
 			break;
+		case gameMode::adventureMode:
+			//updateAdventureGameMode(deltaTime);
+			//updateAdventureUI();
+			
+			drawAdventureGameMode(deltaTime);
+			DrawAdventureUI();
+			break;
+		case gameMode::spaceBattleMode:
+
+			break;
 		default:
 			// invalid game mode
 			// Probably critical error
@@ -41,8 +54,17 @@ void updateGameCycle(double deltaTime)
 			updateLoadingMode();
 			break;
 		case gameMode::adventureMode:
-			updateAdventureGameMode();
+			updateAdventureGameMode(deltaTime);
 			updateAdventureUI();
+			break;
+		case gameMode::spaceBattleMode:
+			// Due to manual map segments calculation its not possible to draw it separately
+			// But it's possible to disable controls and freeze animations
+			updateSpaceBattle(deltaTime);
+			break;
+		case gameMode::gameover:
+			updateGameOverGamemode(deltaTime);
+			drawGameOverGamemode(deltaTime);
 			break;
 		default:
 			// invalid game mode
@@ -55,6 +77,7 @@ void updateGameCycle(double deltaTime)
 
 	if (gEnv->game.scriptSystemRequiresUpdate)
 	{
+		gEnv->scripts.scriptGui.draw();
 		scriptSystem->updateScriptEngine();
 	}
 
@@ -69,7 +92,7 @@ void updateGameCycle(double deltaTime)
 
 	if (gEnv->game.worldGeneratorRequiresUpdate)
 	{
-
+		worldGeneratorUpdate(deltaTime);
 	}
 
 	/* End of cycle update */

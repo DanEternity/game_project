@@ -1,0 +1,41 @@
+﻿#extLocal "local"
+#import "core.ItemModule"
+#extLinkRename "core.ItemModule->dbMod"
+
+#import "core.ItemResource"
+#extLinkRename "core.ItemResource->dbRes"
+
+#import "core.RewardPool"
+#extLinkRename "core.RewardPool->dbReward"
+
+// init section
+@init
+PutFromPointer "$_arg2" to "$EXT:local:key"
+
+ChangeScriptEntryPoint "$self" "@start" 
+PutFromPointer "$_arg1" "$_marker"
+LinkScriptToMarker "$self" to "$_marker"
+EditMarkerProperties "$_marker" "10" "5" "500" "500" "Test event" "Some info"
+Terminate 
+
+// start section
+@start
+
+Text "This is a test event created with key $EXT:local:key "
+
+Put "0" to "$_res"
+
+Call "$EXT:dbReward:lvl1-5CommonModule" "$EXT:local:key", "$_res";
+PutItemToPlayerInventory "$_res"
+
+Call "$EXT:dbReward:lvl1-5CommonResource" "$EXT:local:key", "$_res";
+PutItemToPlayerInventory "$_res"
+
+AddMoney "100"
+
+ChangeScriptEntryPoint "$self" "@alt"
+Terminate
+
+@alt
+Text "Here is nothing but star dust..."
+Terminate

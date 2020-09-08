@@ -1,0 +1,99 @@
+﻿#import "core.PropertiesCollection"
+#extLinkRename "core.PropertiesCollection->db"
+#extLocal "local"
+@init
+
+CreatePool "$EXT:local:pool" "9"
+
+// type 1
+// blue stat, one stat (left)
+
+AddToPool "$EXT:local:pool" "100" "1", "1", "hull", "50", "20",
+"0", "0", "0", "0";
+AddToPool "$EXT:local:pool" "100" "1", "1", "actionPoints", "10", "6",
+"0", "0", "0", "0";
+AddToPool "$EXT:local:pool" "100" "1", "2", "shield", "0.03", "0.01",
+"0", "0", "0", "0";
+AddToPool "$EXT:local:pool" "100" "1", "1", "sensorPower", "10", "6",
+"0", "0", "0", "0";
+AddToPool "$EXT:local:pool" "100" "1", "1", "hullResistPhysical", "5", "3",
+"0", "0", "0", "0";
+AddToPool "$EXT:local:pool" "100" "1", "1", "hullResistEnergy", "5", "3",
+"0", "0", "0", "0";
+
+// Type 2
+// blue stat , two stats
+
+//AddToPool "$EXT:local:pool" "100" "2", "2", "powerSupply", "0.15", "0.05",
+//"4", "stealth", "0.25", "0.05";
+
+changeScriptEntryPoint "$self" "@start"
+@start
+
+// INPUT: key, rarity, destType, dest1, dest2
+
+PutFromPointer "$_arg0" to "$_key"
+PutFromPointer "$_arg1" to "$_rarity"
+
+GetFromPool "$EXT:local:pool" "$_key" "$_type", "$_param1", "$_name1", "$_base1", 
+"$_delta1", "$_param2", "$_name2", "$_base2", "$_delta2";
+
+Ariphmetic "$_key * 14444" to "$_key1"
+Abs "$_key1" to "$_key1"
+Ariphmetic "$_key1 % 10000" to "$_key1"
+Ariphmetic "$_key1 / 10000" to "$_key1"
+Ariphmetic "$_delta1 * $_key1" to "$_delta1"
+Ariphmetic "$_base1 + $_delta1" to "$_base1"
+
+
+Ariphmetic "$_key * 37777" to "$_key2"
+Abs "$_key2" to "$_key2"
+Ariphmetic "$_key2 % 10000" to "$_key2"
+Ariphmetic "$_key2 / 10000" to "$_key2"
+Ariphmetic "$_delta2 * $_key2" to "$_delta2"
+Ariphmetic "$_base2 + $_delta2" to "$_base2"
+
+ifDoJump "$_param1 == 1" "@param1add"
+ifDoJump "$_param1 == 2" "@param1mul"
+ifDoJump "$_param1 == 3" "@param1sub"
+ifDoJump "$_param1 == 4" "@param1negMul"
+jump "@next3"
+@param1add
+CreateModStatEffect "$_effect" "ship" "$_name1" "$_base1" "0" "0" "0"
+jump "@next3"
+@param1mul
+CreateModStatEffect "$_effect" "ship" "$_name1" "0" "$_base1" "0" "0"
+jump "@next3"
+@param1sub
+CreateModStatEffect "$_effect" "ship" "$_name1" "0" "0" "$_base1" "0"
+jump "@next3"
+@param1negMul
+CreateModStatEffect "$_effect" "ship" "$_name1" "0" "0" "0" "$_base1"
+@next3
+
+ifDoJump "$_param2 == 1" "@param2add"
+ifDoJump "$_param2 == 2" "@param2mul"
+ifDoJump "$_param2 == 3" "@param2sub"
+ifDoJump "$_param2 == 4" "@param2negMul"
+jump "@next4"
+@param2add
+CreateModStatEffect "$_effect2" "ship" "$_name2" "$_base2" "0" "0" "0"
+jump "@next4"
+@param2mul
+CreateModStatEffect "$_effect2" "ship" "$_name2" "0" "$_base2" "0" "0"
+jump "@next4"
+@param2sub
+CreateModStatEffect "$_effect2" "ship" "$_name2" "0" "0" "$_base2" "0"
+jump "@next4"
+@param2negMul
+CreateModStatEffect "$_effect2" "ship" "$_name2" "0" "0" "0" "$_base2"
+@next4
+
+PutToPointer "$_type" "$_arg2"
+PutToPointer "$_effect" "$_arg3"
+PutToPointer "$_effect2" "$_arg4"
+
+// End section
+Terminate
+
+#registerFunction "$EXT:db:1021"

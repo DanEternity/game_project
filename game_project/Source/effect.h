@@ -26,17 +26,22 @@ namespace statNames {
 
 	enum StatName {
 
+		null = 0,
+
+
 		powerSupply, // ship energy for module operation
 		highPowerSupply, // ship energy for module operation
 		actionPoints, // ship power condensator capacity
 
 		// defence stats
 		hull,
-		hullResist,
+		hullResistPhysical,
+		hullResistEnergy,
 		hullReg,
 		hullStructureStability,
 		shield,
-		shieldResist,
+		shieldResistPhysical,
+		shieldResistEnergy,
 		shieldReg,
 		shieldStructureStability,
 
@@ -59,6 +64,75 @@ namespace statNames {
 
 		fuel, // hyperdrive fuel
 
+		//character stats
+
+		characterHealth,
+		characterArmor,
+		characterShield,
+		characterBlock,
+		characterResist,
+		characterShieldReg,
+		characterActionPoints,
+		characterEnergy,
+		characterEnergyReg,
+		characterInitiative,
+
+		characterCombat,
+		characterScience,
+		characterAdaptation,
+		characterReflexes,
+		characterEngineering,
+		characterPerception,
+
+		characterSocial,
+
+		// weapon module stat
+
+		weaponActivationCost, // amount of ActionPoint required to fire with this weapon
+
+		weaponFullCooldown, // Amount of round required to refill ActivationLimit
+		weaponActivationsLimit, // Amount of activation this weapon can perform until full cooldown required
+		weaponActivationsPartial, // Amount of activation this weapon can perform before partial cooldown (usually 1-2 per round)
+		weaponPartialCooldown, // Required when activationsPartial exceeded (usually 1) (if 0 this mean that weapon does not have partial CD)
+
+		weaponBaseDamage, // Damage of single hit of this weapon
+		weaponProjectilesAmount, // Amount of projectiles per activation (Even if weapon laser type) cannot be 0,
+								// full damage per activation = baseDamage * projectilesAmount,
+
+
+		weaponOptimalDistance,
+		weaponAccuracy, // raw value - accuracy will degrade based on distance
+		weaponDamagePenalty, // when out of optimal range per one unit of distance
+		weaponAccuracyPenalty, // when out of optimal range per one unit of distance
+
+		weaponResistanceIgnoreHullFlat, // - resistance
+		weaponResistanceIgnoreHullPercent, // - %resistance
+
+		weaponResistanceIgnoreShieldFlat,
+		weaponResistanceIgnoreShieldPercent,
+
+		weaponCriticalChanceHull, // chance 1.0 = 100%
+		weaponCriticalDamageHull, // multiplier 1.0 = +100%
+
+		weaponCriticalChanceShield,
+		weaponCriticalDamageShield,
+
+		weaponAmmoMax, // (zero if ammo not used) (weapon always required 1 ammo per activation regardless of projectile count)
+
+		weaponChargeActivationCost,
+		weaponChargeFinalCost,
+		weaponChargeRoundsCount,
+
+
+
+		weaponMissileHealth, // def against flak
+		weaponMissileTier, // def against flak tier
+
+		// module
+
+		modulePowerConsumption,
+		moduleHighPowerConsumption,
+
 	};
 
 }
@@ -68,6 +142,7 @@ namespace targetType {
 	enum TargetType {
 		ship,
 		character,
+		module,
 	};
 
 }
@@ -93,6 +168,7 @@ public:
 	EffectObject()
 	{
 		this->objectType = objectType::effect;
+		this->memoryControl = memoryControl::fixed;
 	}
 
 };
@@ -114,8 +190,9 @@ public:
 	// This is not battle effect
 	// It shouldn't be used as battle effect 
 
-	StatModEffect()
+	StatModEffect() : EffectObject()
 	{
+		
 		this->effectGroup = effectGroups::statModifier;
 		this->objectType = objectType::effect;
 
@@ -125,7 +202,7 @@ public:
 		p_negMul = 0;
 	}
 
-	StatModEffect(targetType::TargetType target, statNames::StatName stat, float add, float mul, float sub, float negMul)
+	StatModEffect(targetType::TargetType target, statNames::StatName stat, float add, float mul, float sub, float negMul) : EffectObject()
 	{
 		this->effectGroup = effectGroups::statModifier;
 		this->objectType = objectType::effect;

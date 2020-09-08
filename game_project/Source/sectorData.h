@@ -16,7 +16,7 @@ public:
 	std::vector<MapDecoration*> objects;
 
 	// generation property
-	std::map<std::string, MapSectorPropertyTemplate*> vProperty;
+	std::map<std::wstring, MapSectorPropertyTemplate*> vProperty;
 
 	// region name
 	std::string regionName;
@@ -29,11 +29,16 @@ public:
 	int distance;
 
 	// unique key value
-	__int64 key;
+	int key;
+
+	// background
+	std::wstring backgroundImage;
 
 	MapSector()
 	{
 		this->objectType = objectType::mapSector;
+		this->memoryControl = memoryControl::fixed;
+		backgroundImage = L"";
 	}
 };
 

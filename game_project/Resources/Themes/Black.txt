@@ -144,9 +144,21 @@ Panel3 {
     BackgroundColor = rgb(59, 29, 81);
 }
 
+ScrollablePanel {
+    BackgroundColor = rgb(59, 29, 81);
+    Scrollbar                   = &Scrollbar;
+}
+
 ProgressBar {
     TextureBackground = "Black.png" Part(180, 64, 90, 40) Middle(20, 0, 50, 40);
     TextureFill       = "Black.png" Part(184, 108, 82, 32) Middle(16, 0, 50, 32);
+    TextColor         = rgb(190, 190, 190);
+    TextColorFilled   = rgb(250, 250, 250);
+}
+
+ProgressBar2 {
+    TextureBackground = "Black.png" Part(180, 64, 90, 40) Middle(20, 0, 50, 40);
+    TextureFill       = "Black.png" Part(186, 200, 82, 32) Middle(16, 0, 50, 32);
     TextColor         = rgb(190, 190, 190);
     TextColorFilled   = rgb(250, 250, 250);
 }

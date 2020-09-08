@@ -1,8 +1,7 @@
 #pragma once
 
-#include "enviroment.h"
-#include "item.h"
-#include "tableInventory.h"
+
+#include "ShipHandlers.h"
 /*
 class UIShipModules
 {
@@ -29,17 +28,15 @@ public:
 
 void BuildShipSchemeUI(int moduleSizeUI = 45);
 
-void UIbuttonWasClicked(int id, tgui::Widget::Ptr widget, const std::string& signalName);
-void rmPanelClickedShip(const int id, tgui::Widget::Ptr widget, const std::string& signalName);
-void rmPanelChoosenAdded(const int id, const int module_id, tgui::Widget::Ptr widget, const std::string& signalName);
 
 // handlers
-void handleShipModulesPanelEvent(const int id, tgui::Widget::Ptr widget, const std::string& signalName);
+
 
 //stats field
 void buildShipStats();
-void updateShipStatsScreen();
+void updateShipSchemeUI();
 
-void createShipModulePriorityPanel();
-void updateShipModulePriorityPanel();
-void changeShipModulePriority(int id, bool isUp);
+void createShipModulePriorityPanel(Ship *s);
+void changeShipModulePriority(int id, bool isUp, Ship *s);
+
+void applyModuleTooltipShipUI(int id);

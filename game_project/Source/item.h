@@ -8,6 +8,7 @@
 
 #include <string>
 #include "baseObject.h"
+#include "stat.h"
 #include "effect.h"
 #include <TGUI/tGui.hpp>
 
@@ -18,6 +19,7 @@ namespace itemType {
 		null,
 		module = 1,
 		equipment,
+		resource,
 
 	};
 } // itemType
@@ -33,6 +35,26 @@ namespace itemModifier {
 		legendary
 
 	};
+}
+
+namespace itemClass {
+
+	enum ItemClass
+	{
+		null,
+		miscellaneos, // category not specified
+		// ship modules section
+		core,
+		hyperdrive,
+		engine,
+		system,
+		shieldGenerator,
+		shieldAmplifier, // req shieldGenerator
+		sensorSystem,
+		sensorAmplifier, // req sensor
+
+	};
+
 }
 
 
@@ -94,15 +116,22 @@ namespace moduleSlot {
 class Item : public BaseObject
 {
 public:
-	int level;
-	int rarity;
+	int level; // level of item; used in generation
+	int rarity; // rarity of item; used in generation
 	int itemId;
 	itemType::ItemType itemType;
+	std::string itemClass; // item class for dependecies
 	std::wstring name;
-	tgui::Label::Ptr tooltipDescription = tgui::Label::create();
+	tgui::Panel::Ptr tooltipDescription; // Panel with description of module
+	bool tooltipWasCreated = false;
+	sf::Texture* icon;
 	Item()
 	{
+		tooltipDescription = tgui::Panel::create();
+		objectType = objectType::item;
 		itemType = itemType::null;
+		itemClass = "Not defined";
+		icon = NULL;
 	}
 };
 
@@ -110,15 +139,24 @@ class ItemConstructable : public Item
 {
 public:
 	// Constructor constructor;
-	__int64 key;
+	int key;
 	int quality;
 	itemModifier::ItemModifier modifier;
+
+	float positiveMultiplier;
+	float negativeMultiplier;
+
+	ItemConstructable() : Item()
+	{
+
+	}
+
 };
 
 class ItemEquipable : public ItemConstructable
 {
 public:
-	ItemEquipable()
+	ItemEquipable() : ItemConstructable()
 	{
 		ItemConstructable();
 		itemType = itemType::equipment;
@@ -135,36 +173,74 @@ public:
 	std::vector<EffectObject*> effects;
 
 	bool online;
-	float powerSupply;
-	float highPowerSupply;
+
+	Stat powerSupply;
+	Stat highPowerSupply;
 
 	int powerPriority; // lower is better
 
-	Module()
+	Module() : ItemEquipable()
 	{
 		ItemEquipable();
 		itemType = itemType::module;
+		memoryControl = memoryControl::fixed;
+		moduleType = moduleType::system;
 		online = false;
-		powerSupply = 0;
+		powerSupply.baseValue = 0;
 		powerPriority = 1;
-		highPowerSupply = 0;
+		highPowerSupply.baseValue = 0;
 	}
 
 	Module(std::wstring name, moduleType::ModuleType moduleType,
-		moduleSlot::ModuleSlotType moduleSlot, moduleSlot::ModuleSlotSize moduleSize)
+		moduleSlot::ModuleSlotType moduleSlot, moduleSlot::ModuleSlotSize moduleSize) : ItemEquipable()
 	{
 		this->itemType = itemType::module;
+		this->memoryControl = memoryControl::fixed;
+		this->moduleType = moduleType::system;
 		this->name = name;
 		this->moduleType = moduleType;
 		this->slot = moduleSlot;
 		this->size = moduleSize;
-		for (auto i = 0; i < sizeof(effects) / sizeof(StatModEffect); i++)
-		{
-			this->effects.push_back(effects[i]);
-		}
 	}
 
-	
+	void CalcPowerSupply()
+	{
+		powerSupply.clear();
+		highPowerSupply.clear();
+
+		for (int i(0); i<effects.size(); i++)
+			if (effects[i] != NULL)
+			{
+				if (effects[i]->effectGroup == effectGroups::statModifier)
+				{
+					StatModEffect * p = static_cast<StatModEffect*>(effects[i]);
+					if (p->targetType == targetType::module)
+					{
+						if (p->statName == statNames::modulePowerConsumption)
+						{
+							powerSupply.increment += p->p_add;
+							powerSupply.multiplier += p->p_mul;
+							powerSupply.decrement += p->p_sub;
+							powerSupply.debuffMultiplier *= (1 - p->p_negMul);
+						}
+						if (p->statName == statNames::moduleHighPowerConsumption)
+						{
+							highPowerSupply.increment += p->p_add;
+							highPowerSupply.multiplier += p->p_mul;
+							highPowerSupply.decrement += p->p_sub;
+							highPowerSupply.debuffMultiplier *= (1 - p->p_negMul);
+						}
+					}
+				}
+
+			}
+
+		powerSupply.calcTotal();
+		highPowerSupply.calcTotal();
+		powerSupply.total = std::max(0.0f, powerSupply.total);
+		highPowerSupply.total = std::max(0.0f, highPowerSupply.total);
+	}
+
 };
 
 class Equipment : public ItemEquipable
@@ -172,15 +248,249 @@ class Equipment : public ItemEquipable
 public:
 	equipmentType::EquipmentType equipmentType;
 	equipmentSlot::EquipmentSlotType equipmentSlotType;
-	Equipment()
+
+	std::vector<EffectObject*> effects;
+
+	Equipment() : ItemEquipable()
 	{
-		ItemEquipable();
+		tooltipDescription = tgui::Panel::create();
 		itemType = itemType::equipment;
+		this->memoryControl = memoryControl::fixed;
+	}
+
+	Equipment(std::wstring name, equipmentSlot::EquipmentSlotType type) : ItemEquipable()
+	{
+		tooltipDescription = tgui::Panel::create();
+		this->name = name;
+		itemType = itemType::equipment;
+		this->memoryControl = memoryControl::fixed;
+		this->equipmentSlotType = type;
 	}
 };
+
+namespace weaponModuleState
+{
+	enum WeaponModuleState
+	{
+		normal,
+		disabled,
+		partialCooldown,
+		fullCooldown,
+		charging,
+		fullCharge,
+
+	};
+}
 
 class WeaponModule : public Module
 {
 public:
+/*  reference
+	int fullCooldown; // Amount of round required to refill ActivationLimit
+	int activationsLimit; // Amount of activation this weapon can perform until full cooldown required
+	int activationsPartial; // Amount of activation this weapon can perform before partial cooldown (usually 1-2 per round)
+	int partialCooldown; // Required when activationsPartial exceeded (usually 1) (if 0 this mean that weapon does not have partial CD)
 
+	int activationsRemainingPartial; // Until partial CD
+	int activationsRemainingFull; // Until full cooldown
+
+	float baseDamage; // Damage of single hit of this weapon
+	int projectilesAmount; // Amount of projectiles per activation (Even if weapon laser type) cannot be 0;
+	// full damage per activation = baseDamage * projectilesAmount;
+
+	int damageType; // 0 - null, 1 - physical, 2 - energy;
+
+	float optimalDistance;
+	float accuracy; // raw value - accuracy will degrade based on distance
+	float damagePenalty; // when out of optimal range per one unit of distance
+	float accuracyPenalty; // when out of optimal range per one unit of distance
+
+	float resistanceIgnoreHullFlat; // - resistance
+	float resistanceIgnoreHullPercent; // - %resistance
+
+	float resistanceIgnoreShieldFlat;
+	float resistanceIgnoreShieldPercent;
+
+	float criticalChanceHull; // chance 1.0 = 100%
+	float criticalDamageHull; // multiplier 1.0 = +100%
+
+	float criticalChanceShield;
+	float criticalDamageShield;
+
+	int weaponAmmo; // current
+	int weaponMaxAmmo; // (zero if ammo not used) (weapon always required 1 ammo per activation regardless of projectile count)
+*/
+
+	int weaponType;
+
+	Stat activationCost; // amount of ActionPoint required to fire with this weapon
+
+	Stat fullCooldown; // Amount of round required to refill ActivationLimit
+	Stat activationsLimit; // Amount of activation this weapon can perform until full cooldown required
+	Stat activationsPartial; // Amount of activation this weapon can perform before partial cooldown (usually 1-2 per round)
+	Stat partialCooldown; // Required when activationsPartial exceeded (usually 1) (if 0 this mean that weapon does not have partial CD)
+
+	Stat baseDamage; // Damage of single hit of this weapon
+	Stat projectilesAmount; // Amount of projectiles per activation (Even if weapon laser type) cannot be 0;
+						   // full damage per activation = baseDamage * projectilesAmount;
+	int damageType; // 0 - null, 1 - physical, 2 - energy;
+
+	Stat optimalDistance;
+	Stat accuracy; // raw value - accuracy will degrade based on distance
+	Stat damagePenalty; // when out of optimal range per one unit of distance
+	Stat accuracyPenalty; // when out of optimal range per one unit of distance
+
+	Stat resistanceIgnoreHullFlat; // - resistance
+	Stat resistanceIgnoreHullPercent; // - %resistance
+
+	Stat resistanceIgnoreShieldFlat;
+	Stat resistanceIgnoreShieldPercent;
+
+	Stat criticalChanceHull; // chance 1.0 = 100%
+	Stat criticalDamageHull; // multiplier 1.0 = +100%
+
+	Stat criticalChanceShield;
+	Stat criticalDamageShield;
+	
+	Stat weaponAmmoMax; // (zero if ammo not used) (weapon always required 1 ammo per activation regardless of projectile count)
+
+	Stat chargeActivationCost;
+	Stat chargeFinalCost;
+	Stat chargeRoundsCount;
+
+	bool chargeRequired; // weapon required to be charged before fire
+
+	Stat missileHealth; // def against flak
+	Stat missileTier; // def against flak tier
+
+	bool isMissile; // should weapon check enemy missile defence
+
+	int weaponAmmo; // current
+	int activations;
+	//int cooldownPartial;
+	//int cooldownFull;
+	int currentCooldown;
+	int activationsRemainingPartial; // Until partial CD
+	int activationsRemainingFull; // Until full cooldown
+	weaponModuleState::WeaponModuleState weaponState; // change to ENUM
+	int chargingRemaining; // if chargeRequired = true
+
+	WeaponModule() : Module()
+	{
+		moduleType = moduleType::weapon;
+		weaponType = 1;
+	}
+
+	Stat * getStat(statNames::StatName statName)
+	{
+		auto p = statName;
+		switch (p)
+		{
+		case statNames::weaponActivationCost:
+			return &activationCost;
+			break;
+		case statNames::weaponFullCooldown:
+			return &fullCooldown;
+			break;
+		case statNames::weaponActivationsLimit:
+			return &activationsLimit;
+			break;
+		case statNames::weaponActivationsPartial:
+			return &activationsPartial;
+			break;
+		case statNames::weaponPartialCooldown:
+			return &partialCooldown;
+			break;
+		case statNames::weaponBaseDamage:
+			return &baseDamage;
+			break;
+		case statNames::weaponProjectilesAmount:
+			return &projectilesAmount;
+			break;
+		case statNames::weaponOptimalDistance:
+			return &optimalDistance;
+			break;
+		case statNames::weaponAccuracy:
+			return &accuracy;
+			break;
+		case statNames::weaponDamagePenalty:
+			return &damagePenalty;
+			break;
+		case statNames::weaponAccuracyPenalty:
+			return &accuracyPenalty;
+			break;
+		case statNames::weaponResistanceIgnoreHullFlat:
+			return &resistanceIgnoreHullFlat;
+			break;
+		case statNames::weaponResistanceIgnoreHullPercent:
+			return &resistanceIgnoreHullPercent;
+			break;
+		case statNames::weaponResistanceIgnoreShieldFlat:
+			return &resistanceIgnoreShieldFlat;
+			break;
+		case statNames::weaponResistanceIgnoreShieldPercent:
+			return &resistanceIgnoreShieldPercent;
+			break;
+		case statNames::weaponCriticalChanceHull:
+			return &criticalChanceHull;
+			break;
+		case statNames::weaponCriticalDamageHull:
+			return &criticalDamageHull;
+			break;
+		case statNames::weaponCriticalChanceShield:
+			return &criticalChanceShield;
+			break;
+		case statNames::weaponCriticalDamageShield:
+			return &criticalDamageShield;
+			break;
+		case statNames::weaponAmmoMax:
+			return &weaponAmmoMax;
+			break;
+		case statNames::weaponChargeActivationCost:
+			return &chargeActivationCost;
+			break;
+		case statNames::weaponChargeFinalCost:
+			return &chargeFinalCost;
+			break;
+		case statNames::weaponChargeRoundsCount:
+			return &chargeRoundsCount;
+			break;
+		case statNames::weaponMissileHealth:
+			return &missileHealth;
+			break;
+		case statNames::weaponMissileTier:
+			return &missileTier;
+			break;
+		default:
+			return NULL;
+			break;
+		}
+	}
+
+	void CalcStats()
+	{
+		statNames::StatName i = statNames::weaponActivationCost;
+		
+		while (i <= statNames::weaponMissileTier)
+		{
+			getStat(i)->calcTotal();
+			i = statNames::StatName(int(i) + 1);
+		}
+	}
+
+};
+
+class ItemResource : public Item
+{
+public:
+	
+	int count;
+	int maxCount;
+
+	ItemResource() : Item()
+	{
+		memoryControl = memoryControl::fixed;
+		tooltipDescription = tgui::Panel::create();
+		itemType = itemType::resource;
+	}
 };

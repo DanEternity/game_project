@@ -16,12 +16,15 @@ public:
 		this->objectType = objectType::integer;
 	}
 
-	IntObject(int value)
+	IntObject(int value, bool temp = false)
 	{
 		BaseObject();
 		this->objectType = objectType::integer;
 		this->value = value;
+		if (temp)
+			this->memoryControl = memoryControl::singleUse;
 	}
+
 };
 
 class StringObject : public BaseObject
@@ -32,6 +35,12 @@ public:
 	{
 		this->objectType = objectType::string;
 	}
+
+	StringObject(std::wstring arg)
+	{
+		this->objectType = objectType::string;
+		value = arg;
+	}
 };
 
 class FloatObject : public BaseObject
@@ -41,6 +50,12 @@ public:
 	FloatObject()
 	{
 		this->objectType = objectType::real;
+	}
+
+	FloatObject(float x)
+	{
+		this->objectType = objectType::real;
+		this->value = x;
 	}
 };
 

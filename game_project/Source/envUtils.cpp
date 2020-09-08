@@ -170,7 +170,12 @@ BaseScript * createScriptCommand(scriptType::ScriptType type)
 
 bool addScriptToQueue(ScriptDescriptor * sd)
 {
-	gEnv->scripts.queue.push_back(sd);
+	auto * p = new StackElement();
+	p->scriptId = sd;
+	p->returnPoint = sd->entryPoint;
+	// new memory
+	p->localMemory.clear();
+	gEnv->scripts.queue.push_back(p);
 	return true;
 }
 
@@ -184,4 +189,41 @@ std::wstring createExternalTable()
 	gEnv->extTables[internalId] = new ExternalTable();
 
 	return internalId;
+}
+
+void deleteExternalTable(std::wstring id)
+{
+	auto t = gEnv->extTables[id];
+
+	for (auto q = t->p_memory.begin(); q != t->p_memory.end(); q++)
+	{
+		auto mt = q->second->memoryControl;
+		if (mt == memoryControl::free)
+		{
+			auto obj = q->second;
+			delete obj;
+		}
+	}
+
+	delete (t);
+
+	gEnv->extTables.erase(id);
+}
+
+void addScriptToPreloadQueue(std::string filename, std::wstring familyId)
+{
+	ScriptLoaderInfo q;
+	q.filename = filename;
+	q.familyId = familyId;
+	gEnv->game.loader.scriptFilenames.push_back(q);
+}
+
+bool addScriptToQueueWithMemory(ScriptDescriptor * sd)
+{
+	auto * p = new StackElement();
+	p->scriptId = sd;
+	p->returnPoint = sd->entryPoint;
+	p->localMemory = sd->localMemory;
+	gEnv->scripts.queue.push_back(p);
+	return true;
 }

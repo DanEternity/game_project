@@ -19,6 +19,12 @@ class Ship : public BaseObject
 {
 public:
 
+	// Game data
+	int factionId = 0; // indicates ship battle faction
+	sf::Sprite * model = NULL; // ship visual model
+	bool largeShip = false;
+	std::wstring name; // ship name 
+
 	// links section
 
 	std::vector<Module*> modules;
@@ -27,7 +33,9 @@ public:
 	// links to characters binded to this ship
 	// this vector does not represent all characters available for player control
 	// only characters that affect this ship stats and functions
-	std::vector<Character*> crew;
+	
+	std::vector<characterRole::Role> characterRoleSlots;
+	std::vector<Character*> characterPosition;
 
 	// stats section
 
@@ -41,11 +49,13 @@ public:
 	
 	// defence stats
 	Stat hull;
-	Stat hullResist;
+	Stat hullResistPhysical;
+	Stat hullResistEnergy;
 	Stat hullReg;
 	Stat hullStructureStability;
 	Stat shield;
-	Stat shieldResist;
+	Stat shieldResistPhysical;
+	Stat shieldResistEnergy;
 	Stat shieldReg;
 	Stat shieldStructureStability;
 
@@ -74,17 +84,22 @@ public:
 	Ship()
 	{
 
+		this->memoryControl = memoryControl::fixed;
+		this->objectType = objectType::ship;
+
 		shipStats[statNames::powerSupply] = &powerSupply;
 		shipStats[statNames::highPowerSupply] = &highPowerSupply;
 		shipStats[statNames::actionPoints] = &actionPoints;
 
 		shipStats[statNames::hull] = &hull;
-		shipStats[statNames::hullResist] = &hullResist;
+		shipStats[statNames::hullResistPhysical] = &hullResistPhysical;
+		shipStats[statNames::hullResistEnergy] = &hullResistEnergy;
 		shipStats[statNames::hullReg] = &hullReg;
 		shipStats[statNames::hullStructureStability] = &hullStructureStability;
 
 		shipStats[statNames::shield] = &shield;
-		shipStats[statNames::shieldResist] = &shieldResist;
+		shipStats[statNames::shieldResistPhysical] = &shieldResistPhysical;
+		shipStats[statNames::shieldResistEnergy] = &shieldResistEnergy;
 		shipStats[statNames::shieldReg] = &shieldReg;
 		shipStats[statNames::shieldStructureStability] = &shieldStructureStability;
 
@@ -105,7 +120,10 @@ public:
 
 		shipStats[statNames::fuel] = &fuel;
 
-
+		characterPosition.resize(4, nullptr);
+		characterRoleSlots.resize(4, characterRole::noneRole);
+		characterRoleSlots[0] = characterRole::captain;
+		
 	}
 
 };

@@ -31,9 +31,6 @@
     <Filter Include="Adventure">
       <UniqueIdentifier>{d9b42055-73de-404a-a000-a92776962c59}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Adventure\UI">
-      <UniqueIdentifier>{2a3ca394-ba26-4db3-9526-1cdeec9f3873}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Adventure\Core">
       <UniqueIdentifier>{17c0416a-a010-4ef1-8249-ea2e7f2f9302}</UniqueIdentifier>
     </Filter>
@@ -42,6 +39,24 @@
     </Filter>
     <Filter Include="Файлы ресурсов\Locales">
       <UniqueIdentifier>{db6b2cdc-b9a0-4314-a777-3bb91f773b5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ScriptEngine\Compiler">
+      <UniqueIdentifier>{087cac6f-810b-4b13-ad92-4e4b5e1e39ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Adventure\UI">
+      <UniqueIdentifier>{2a3ca394-ba26-4db3-9526-1cdeec9f3873}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Adventure\UI\General">
+      <UniqueIdentifier>{38ca44f3-3534-434c-a9cc-b43d03ae120e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Adventure\UI\Handlers">
+      <UniqueIdentifier>{37e2aed1-fad3-49b8-9ace-daf04598bf32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SpaceBattle">
+      <UniqueIdentifier>{7bdaae38-0fd0-4e5d-b27e-29ce3ba0c34e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SpaceBattle\UI">
+      <UniqueIdentifier>{f764cb03-8cca-4441-9c96-edebf040f5ed}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -81,20 +96,8 @@
     <ClCompile Include="Source\scriptUtilsUI.cpp">
       <Filter>ScriptEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Source\scriptCompiler.cpp">
-      <Filter>ScriptEngine</Filter>
-    </ClCompile>
     <ClCompile Include="Source\enviromentVariablesAccess.cpp">
       <Filter>ScriptEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\shipModulesUI.cpp">
-      <Filter>Adventure\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\tableInventory.cpp">
-      <Filter>Adventure\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\personEquipmentUI.cpp">
-      <Filter>Adventure\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\adventureModeCore.cpp">
       <Filter>Adventure\Core</Filter>
@@ -102,23 +105,101 @@
     <ClCompile Include="Source\sectorDrawUtility.cpp">
       <Filter>Adventure\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\adventureUI.cpp">
-      <Filter>Adventure\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Source\generationUtility.cpp">
       <Filter>WorldGenerator</Filter>
     </ClCompile>
     <ClCompile Include="Source\worldGenerator.cpp">
       <Filter>WorldGenerator</Filter>
     </ClCompile>
-    <ClCompile Include="Source\storageStuff.cpp">
-      <Filter>Adventure\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Source\LocaleLoader.cpp">
       <Filter>Enviroment</Filter>
     </ClCompile>
     <ClCompile Include="Source\shipManagement.cpp">
       <Filter>Adventure\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameLogicCore.cpp">
+      <Filter>Adventure\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\scriptCompiler.cpp">
+      <Filter>ScriptEngine\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\scriptCompilerTemplates.cpp">
+      <Filter>ScriptEngine\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\scriptCompilerUtilityParsers.cpp">
+      <Filter>ScriptEngine\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\scriptWorkflowUtility.cpp">
+      <Filter>ScriptEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\characterManagement.cpp">
+      <Filter>Adventure\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\postUpdate.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\adventureUI.cpp">
+      <Filter>Adventure\UI\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CraftUI.cpp">
+      <Filter>Adventure\UI\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\itemUtils.cpp">
+      <Filter>Adventure\UI\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\map.cpp">
+      <Filter>Adventure\UI\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\personEquipmentUI.cpp">
+      <Filter>Adventure\UI\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\shipModulesUI.cpp">
+      <Filter>Adventure\UI\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\tableInventory.cpp">
+      <Filter>Adventure\UI\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UIExtensions.cpp">
+      <Filter>Adventure\UI\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\InventoryHandlers.cpp">
+      <Filter>Adventure\UI\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ShipHandlers.cpp">
+      <Filter>Adventure\UI\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PersonHandlers.cpp">
+      <Filter>Adventure\UI\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Shop.cpp">
+      <Filter>Adventure\UI\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\spaceBattleCore.cpp">
+      <Filter>SpaceBattle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\spaceBattleMechanics.cpp">
+      <Filter>SpaceBattle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\spaceBattleTgui.cpp">
+      <Filter>SpaceBattle\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\spaceBattleUI.cpp">
+      <Filter>SpaceBattle\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hangarUI.cpp">
+      <Filter>Adventure\UI\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HangarHandlers.cpp">
+      <Filter>Adventure\UI\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\rewardPanelUI.cpp">
+      <Filter>Adventure\UI\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RewardsHandlers.cpp">
+      <Filter>Adventure\UI\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\gameOverGamemode.cpp">
+      <Filter>Adventure</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,9 +263,6 @@
     <ClInclude Include="Source\scriptUtilsUI.h">
       <Filter>ScriptEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Source\scriptCompiler.h">
-      <Filter>ScriptEngine</Filter>
-    </ClInclude>
     <ClInclude Include="Source\scriptDescriptorGroups.h">
       <Filter>ScriptEngine</Filter>
     </ClInclude>
@@ -212,20 +290,11 @@
     <ClInclude Include="Source\ship.h">
       <Filter>Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Source\shipModulesUI.h">
-      <Filter>Adventure\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\tableInventory.h">
-      <Filter>Adventure\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Source\shipManagement.h">
       <Filter>Adventure\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\uiData.h">
       <Filter>Enviroment</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\personEquipmentUI.h">
-      <Filter>Adventure\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\character.h">
       <Filter>Objects</Filter>
@@ -248,9 +317,6 @@
     <ClInclude Include="Source\generationUtility.h">
       <Filter>WorldGenerator</Filter>
     </ClInclude>
-    <ClInclude Include="Source\adventureUI.h">
-      <Filter>Adventure\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Source\sectorData.h">
       <Filter>WorldGenerator</Filter>
     </ClInclude>
@@ -266,12 +332,6 @@
     <ClInclude Include="Source\worldGenerator.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="Source\adventureUI.h">
-      <Filter>Adventure\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\storageStuff.h">
-      <Filter>Adventure\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Source\localization.h">
       <Filter>Enviroment</Filter>
     </ClInclude>
@@ -284,13 +344,147 @@
     <ClInclude Include="Source\effect.h">
       <Filter>Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Source\gameLogic.h">
+      <Filter>Enviroment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameLogicCore.h">
+      <Filter>Adventure\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\compilerTemplatesFormat.h">
+      <Filter>ScriptEngine\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\scriptCompiler.h">
+      <Filter>ScriptEngine\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\scriptCompilerTemplates.h">
+      <Filter>ScriptEngine\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\scriptCompilerUtilityParsers.h">
+      <Filter>ScriptEngine\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\objectStorage.h">
+      <Filter>Enviroment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\scriptWorkflowUtility.h">
+      <Filter>ScriptEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\plan.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\characterManagement.h">
+      <Filter>Adventure\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\passiveSkill.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\poolObject.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\sectorGeneratorTemplate.h">
+      <Filter>WorldGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\postUpdate.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\adventureUI.h">
+      <Filter>Adventure\UI\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CraftUI.h">
+      <Filter>Adventure\UI\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\itemUtils.h">
+      <Filter>Adventure\UI\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\map.h">
+      <Filter>Adventure\UI\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\personEquipmentUI.h">
+      <Filter>Adventure\UI\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\shipModulesUI.h">
+      <Filter>Adventure\UI\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\tableInventory.h">
+      <Filter>Adventure\UI\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UIExtensions.h">
+      <Filter>Adventure\UI\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\InventoryHandlers.h">
+      <Filter>Adventure\UI\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ShipHandlers.h">
+      <Filter>Adventure\UI\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PersonHandlers.h">
+      <Filter>Adventure\UI\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\adventureUI.h">
+      <Filter>Adventure\UI\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shop.h">
+      <Filter>Adventure\UI\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\shopClass.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\spaceBattleCore.h">
+      <Filter>SpaceBattle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\spaceBattleData.h">
+      <Filter>SpaceBattle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\spaceBattleSegment.h">
+      <Filter>SpaceBattle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\spaceBattleMechanics.h">
+      <Filter>SpaceBattle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\spaceBattleUI.h">
+      <Filter>SpaceBattle\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\spaceBattleTgui.h">
+      <Filter>SpaceBattle\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\itemScheme.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hangarUI.h">
+      <Filter>Adventure\UI\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HangarHandlers.h">
+      <Filter>Adventure\UI\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\rewardPanelUI.h">
+      <Filter>Adventure\UI\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RewardsHandlers.h">
+      <Filter>Adventure\UI\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\spaceBattleAnimationData.h">
+      <Filter>SpaceBattle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\gameOverGamemode.h">
+      <Filter>Adventure</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Resources\Scripts\Test\Test.txt">
-      <Filter>Файлы ресурсов</Filter>
-    </Text>
     <Text Include="Resources\Localization\ru_ru.txt">
       <Filter>Файлы ресурсов\Locales</Filter>
     </Text>
+    <Text Include="Resources\Scripts\Test\Test.esl">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="Resources\Scripts\Test\Test2.esl">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="Resources\Scripts\Test\TestCoreItem.esl">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Scripts\ESL_CORE.esl">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
   </ItemGroup>
 </Project>

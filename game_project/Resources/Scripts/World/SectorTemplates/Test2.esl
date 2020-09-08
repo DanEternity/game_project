@@ -1,0 +1,146 @@
+﻿
+// init section
+@init
+
+ChangeScriptEntryPoint "$self" "@start"
+Terminate
+
+
+// start section
+@start
+
+CreateDecoration "$_d" "asteroidsSample" "1" "1" "45" "0" "0"
+AddDecorationToSector "$_d" "$_sector"
+AddBackgroundToSector "testBackgroundSpace" "$_sector"
+
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_x"
+Ariphmetic "$_x - 1000" to "$_x"
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_y"
+Ariphmetic "$_y - 1000" to "$_y"
+
+CreateMarker "$_marker"
+CallMarkerInit "\Resources\Scripts\World\MarkerTemplates\Basic\MarkerEvent06.esl" 
+"$_sector", "$_marker", "$_key";
+SetMarkerPosition "$_marker" "$_x" "$_y"
+AddMarkerToSector "$_marker" "$_sector"
+
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_x"
+Ariphmetic "$_x - 1000" to "$_x"
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_y"
+Ariphmetic "$_y - 1000" to "$_y"
+
+CreateMarker "$_marker"
+CallMarkerInit "\Resources\Scripts\World\MarkerTemplates\Basic\MarkerEvent02.esl" 
+"$_sector", "$_marker", "$_key";
+SetMarkerPosition "$_marker" "$_x" "$_y"
+AddMarkerToSector "$_marker" "$_sector"
+
+Random "$_key"
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_x"
+Ariphmetic "$_x - 1000" to "$_x"
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_y"
+Ariphmetic "$_y - 1000" to "$_y"
+
+CreateMarker "$_marker"
+CallMarkerInit "\Resources\Scripts\World\MarkerTemplates\Basic\MarkerEvent01.esl" 
+"$_sector", "$_marker", "$_key";
+SetMarkerPosition "$_marker" "$_x" "$_y"
+AddMarkerToSector "$_marker" "$_sector"
+
+Random "$_key"
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_x"
+Ariphmetic "$_x - 1000" to "$_x"
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_y"
+Ariphmetic "$_y - 1000" to "$_y"
+
+
+CreateMarker "$_marker"
+CallMarkerInit "\Resources\Scripts\World\MarkerTemplates\Basic\MarkerEvent01.esl" 
+"$_sector", "$_marker", "$_key";
+SetMarkerPosition "$_marker" "$_x" "$_y"
+AddMarkerToSector "$_marker" "$_sector"
+
+Random "$_key"
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_x"
+Ariphmetic "$_x - 1000" to "$_x"
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_y"
+Ariphmetic "$_y - 1000" to "$_y"
+
+
+CreateMarker "$_marker"
+CallMarkerInit "\Resources\Scripts\World\MarkerTemplates\Basic\MarkerEvent01.esl" 
+"$_sector", "$_marker", "$_key";
+SetMarkerPosition "$_marker" "$_x" "$_y"
+AddMarkerToSector "$_marker" "$_sector"
+
+
+Random "$_key"
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_x"
+Ariphmetic "$_x - 1000" to "$_x"
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_y"
+Ariphmetic "$_y - 1000" to "$_y"
+
+
+CreateMarker "$_marker"
+CallMarkerInit "\Resources\Scripts\World\MarkerTemplates\Basic\MarkerEvent01.esl" 
+"$_sector", "$_marker", "$_key";
+SetMarkerPosition "$_marker" "$_x" "$_y"
+AddMarkerToSector "$_marker" "$_sector"
+
+Random "$_key"
+Ariphmetic "$_key % 100" to "$_check"
+IfDoJump "$_check < 75" "@end"
+ 
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_x"
+Ariphmetic "$_x - 1000" to "$_x"
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_y"
+Ariphmetic "$_y - 1000" to "$_y"
+
+
+CreateMarker "$_marker"
+CallMarkerInit "\Resources\Scripts\World\MarkerTemplates\Basic\MarkerEvent03.esl" 
+"$_sector", "$_marker", "$_key";
+SetMarkerPosition "$_marker" "$_x" "$_y"
+AddMarkerToSector "$_marker" "$_sector"
+
+CreateDecoration "$_d" "decorationSpaceBeacon" "1" "1" "0" "$_x" "$_y"
+AddDecorationToSector "$_d" "$_sector"
+
+@end
+
+Random "$_key"
+Ariphmetic "$_key % 100" to "$_check"
+IfDoJump "$_check < 75" "@end2"
+ 
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_x"
+Ariphmetic "$_x - 1000" to "$_x"
+Random "$_w"
+Ariphmetic "$_w % 2000" to "$_y"
+Ariphmetic "$_y - 1000" to "$_y"
+
+
+CreateMarker "$_marker"
+CallMarkerInit "\Resources\Scripts\World\MarkerTemplates\Basic\MarkerEvent05.esl" 
+"$_sector", "$_marker", "$_key";
+SetMarkerPosition "$_marker" "$_x" "$_y"
+AddMarkerToSector "$_marker" "$_sector"
+
+@end2
+
+Terminate
+

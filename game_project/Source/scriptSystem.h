@@ -2,6 +2,14 @@
 
 #include "enviroment.h"
 #include "scriptUtilsUI.h"
+#include "generationUtility.h"
+#include "scriptWorkflowUtility.h"
+#include "scriptCompiler.h"
+#include "characterManagement.h"
+#include "shipModulesUI.h"
+#include "personEquipmentUI.h"
+#include "Shop.h"
+#include "hangarUI.h"
 #include <stack>
 //#include "scriptDescriptor.h"
 
@@ -33,8 +41,8 @@ private:
 	p_sysStatus::Status p_s;
 	// target descriptor 
 	ScriptDescriptor * p_d;
-	// stack
-	std::stack<StackElement*> p_stack;
+	//// stack
+	//std::stack<StackElement*> p_stack;
 	// terminate flag
 	bool p_terminate;
 	// chache flag;
@@ -80,6 +88,12 @@ private:
 
 	std::wstring p_getGlobalValueAsString(std::wstring ValueName);
 
+	// Utility
+	bool GetObjectOrConstFromMemory(std::wstring src, BaseObject ** obj);
+
+	void _CallFunction(StackElement * target, int entryPoint, RetContext * retContext);
+	void _RetFunction(StackElement * target);
+
 	// commands
 	void p_processText(TextScript * command);
 	void p_processPut(PutScript * command);
@@ -91,6 +105,63 @@ private:
 	void p_processChangeScriptEntryPoint(ChangeScriptEntryPointScript * command);
 	void p_processSpendTime(SpendTimeScript * command);
 	void p_processInitRewardBuffer(InitRewardBufferScript * command);
+	void p_processPutToPointer(PutToPointerScript * command);
+	void p_processCall(CallScript * command);
+	void p_processPutFromPointer(PutFromPointerScript * command);
+	void p_processRandom(RandomScript * command);
+	void p_processCreateSysModule(CreateSysModuleScript * command);
+	void p_processCreateModStatEffect(CreateModStatEffectScript * command);
+	void p_processApplyEffectToSysModule(ApplyEffectScript * command);
+	void p_processPutItemToPlayerInventory(PutItemToPlayerInventoryScript * command);
+	void p_processEditItemProperties(EditItemPropertiesScript * command);
+	void p_processEditModuleProperties(EditModulePropertiesScript * command);
+	void p_processEditItemConstructableProperties(EditItemConstructablePropertiesScript * command);
+	void p_processCreateResourceItem(CreateResourceItemScript * command);
+	void p_processEditEquipmentProperties(EditEquipmentPropertiesScript * command); // not finished
+	void p_processCreateEquipmentItem(CreateEquipmentItemScript * command);
+	void p_processApplyEffectEquipment(ApplyEffectScript * command);
+	void p_processCreatePool(CreatePoolScript * command);
+	void p_processAddToPool(AddToPoolScript * command);
+	void p_processGetFromPool(GetFromPoolScript * command);
+	void p_processStringConcat(StringConcatScript * command);
+	void p_processCreateExternalTable(CreateExternalTableScript * command);
+	void p_processPutToExternalTable(PutToExternalTableScript * command);
+	void p_processPutFromExternalTable(PutFromExternalTableScript * command);
+	void p_processCreateMarker(CreateMarkerScript * command);
+	void p_processAddMarkerToSector(AddMarkerToSectorScript * command);
+	void p_processEditMarkerProperties(EditMarkerPropertiesScript * command);
+	void p_processCallCustom(CallCustomScript * command);
+	void p_processLinkScriptToMarker(LinkScriptToMarkerScript * command);
+	void p_processSetMarkerPosition(SetMarkerPositionScript * command);
+	void p_processCreateDecoration(CreateDecorationScript * command);
+	void p_processAddDecorationToSector(AddDecorationToSectorScript * command);
+	void p_processAddBackgroundToSector(AddBackgroundToSectorScript * command);
+	void p_processEquipModule(EquipModuleScript * command);
+	void p_processAbs(AbsScript * command);
+	void p_processGetShipStat(GetShipStatScript * command);
+	void p_processGetResourceCountFromPlayerInventory(GetResourceCountFromPlayerInventoryScript * command);
+	void p_processRemoveResourcesFromPlayerInventory(RemoveResourcesFromPlayerInventoryScript * command);
+	void p_processGlobalVariableModifier(GlobalVariableModifierScript * command);
+	void p_processGetCharacterStat(GetCharacterStatScript * command);
+	void p_processInitCharacterStats(InitCharacterStatsScript * command);
+	void p_processCreateCharacter(CreateCharacterScript * command);
+	void p_processAddCharacterToPlayerCrew(AddCharacterToPlayerCrewScript * command);
+	void p_processCreateWeaponModule(CreateWeaponModuleScript * command);
+	void p_processEditWeaponModuleProperties(EditWeaponModulePropertiesScript * command);
+	void p_processCalcParamStd(CalcParamStdScript * command);
+	void p_processCreateShop(CreateShopScript * command);
+	void p_processAddGoodsToShop(AddGoodsToShopScript * command);
+	void p_processShowShop(ShowShopScript * command);
+	void p_processCreateShip(CreateShipScript * command);
+	void p_processEditShipStats(EditShipStatsScript * command);
+	void p_processAddSlotToShip(AddSlotToShipScript * command);
+	void p_processAddShipToPlayerHangar(AddShipToPlayerHangarScript * command);
+	void p_processInitSpaceBattleBuffer(InitSpaceBattleBufferScript * command);
+	void p_processAddShipToBattle(AddShipToBattleScript * command);
+	void p_processAddPlayerShipsToBattle(AddPlayerShipsToBattleScript * command);
+	void p_processStartSpaceBattle(StartSpaceBattleScript * command);
+	void p_processSetShipDurabilityFull(SetShipDurabilityFullScript * command);
+	void p_processSetShipCurrentHull(SetShipCurrentHullScript * command);
 };
 
 extern ScriptSystem * scriptSystem;

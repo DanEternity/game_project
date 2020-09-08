@@ -1,0 +1,72 @@
+﻿#extLocal "local"
+#import "core.ItemModule"
+#extLinkRename "core.ItemModule->dbMod"
+
+#import "core.ItemResource"
+#extLinkRename "core.ItemResource->dbRes"
+
+#import "core.RewardPool"
+#extLinkRename "core.RewardPool->dbReward"
+
+// init section
+@init
+PutFromPointer "$_arg2" to "$EXT:local:key"
+
+ChangeScriptEntryPoint "$self" "@start" 
+PutFromPointer "$_arg1" "$_marker"
+LinkScriptToMarker "$self" to "$_marker"
+EditMarkerProperties "$_marker" "10" "5" "500" "500" "Help signal" "Some info"
+
+
+Terminate 
+
+// start section
+@start
+
+Text "This is a test event created with key $EXT:local:key "
+
+Choose "You see a rescue capsule, would you like to pick up it on board?"
+[true]"Yes"[@ye], [true]"No"[@no];
+
+@ye
+
+Put "100" to "$_health"
+Put "0" to "$_armor"
+Put "0" to "$_shield"
+Put "0" to "$_block"
+
+Put "0" to "$_resist"
+Put "0" to "$_shieldReg"
+
+Put "3" to "$_actionPoints"
+Put "100" to "$_energy"
+Put "5" to "$_energyReg"
+
+Put "10" to "$_initiative"
+
+Put "10" to "$_combat"
+Put "15" to "$_science"
+Put "10" to "$_adaptation"
+Put "10" to "$_reflexes"
+Put "10" to "$_perception"
+Put "10" to "$_engineerig"
+
+Put "0" to "$_social"
+
+CreateCharacter "$_char" "QWERTY QWERTY" "Human" "Engineer" "NULL"
+
+InitCharacterStats "$_char" "$_health" "$_armor" "$_shield" "$_block" 
+"$_resist" "$_shieldReg" "$_actionPoints" "$_energy" "$_energyReg" "$_initiative" 
+"$_combat" "$_science" "$_adaptation" "$_reflexes" "$_engineerig" "$_perception" "$_social"
+
+AddCharacterToPlayerCrew "$_char"
+
+ChangeScriptEntryPoint "$self" "@alt" 
+
+@no
+Terminate
+@alt
+Text "Here is nothing but star dust..."
+Terminate
+
+

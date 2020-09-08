@@ -106,3 +106,34 @@ bool addScriptToQueue(ScriptDescriptor * sd);
 ///
 std::wstring createExternalTable();
 #pragma endregion
+
+#pragma region deleteExternalTable(std::wstring id)
+///
+/// <summary> Deletes external table and all "free" objects inside
+/// 
+/// </summary>
+/// 
+///
+void deleteExternalTable(std::wstring id);
+#pragma endregion
+
+
+//
+// Preload script
+//
+
+void addScriptToPreloadQueue(std::string filename, std::wstring familyId);
+
+
+
+
+#pragma region addScriptToQueueWithMemory(ScriptDescriptor * sd)
+///
+/// <summary> Adds ScriptDescriptor to the global script queue.
+/// This will result that script will be executed when script system is ready.
+/// Memory will not be cleared.
+/// </summary>
+/// 
+///
+bool addScriptToQueueWithMemory(ScriptDescriptor * sd);
+#pragma endregion

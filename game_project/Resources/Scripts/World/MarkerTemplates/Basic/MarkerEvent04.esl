@@ -1,0 +1,40 @@
+﻿#extLocal "local"
+#import "core.ItemModule"
+#extLinkRename "core.ItemModule->dbMod"
+
+#import "core.ItemResource"
+#extLinkRename "core.ItemResource->dbRes"
+
+#import "core.RewardPool"
+#extLinkRename "core.RewardPool->dbReward"
+
+// init section
+@init
+PutFromPointer "$_arg2" to "$EXT:local:key"
+
+ChangeScriptEntryPoint "$self" "@start" 
+PutFromPointer "$_arg1" "$_marker"
+LinkScriptToMarker "$self" to "$_marker"
+EditMarkerProperties "$_marker" "10" "5" "500" "500" "Trading station" "Some info"
+
+
+Terminate 
+
+// start section
+@start
+
+Text "This is a test event created with key $EXT:local:key "
+
+Text "You see a damaged star beacon. Would you try to hack it?"
+GetCharacterStat "$captain" "characterScience" "$_int"
+Choose "Hack it?" [true]"Yeah"[@not_ok],[$_int >= 15]"Bad idea, lets move on"[@ok];
+@not_ok
+Text "You trying to hack beacon system, but trigger it self defence weapons. Prepare to fight."
+
+@ok
+ChangeScriptEntryPoint "$self" "@alt"
+Terminate
+
+@alt
+Text "Here is damaged star beacon. It is completely useless."
+Terminate

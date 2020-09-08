@@ -17,6 +17,14 @@ namespace objectType {
 		mapDecoration,
 		mapSector,
 		effect,
+		item,
+		pool,
+		skillObject,
+		sectorTemplate,
+		ship,
+		character,
+		shop,
+		itemScheme,
 	};
 
 } // namespace objectType
@@ -53,4 +61,10 @@ public:
 		objectType = objectType::undefined;
 		memoryControl = memoryControl::free;
 	}
+
+	bool singleUse()
+	{
+		return ((memoryControl & memoryControl::singleUse) != 0);
+	}
+
 };

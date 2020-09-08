@@ -11,7 +11,7 @@ void updateMainMenu()
 	{
 		gEnv->globalGui.draw();
 
-		gEnv->scripts.scriptGui.draw();
+		//gEnv->scripts.scriptGui.draw();
 		
 	}
 
@@ -198,8 +198,9 @@ void createMenuButtons()
 
 	auto testbox = tgui::TextBox::create();
 	testbox->setRenderer(gEnv->globalTheme.getRenderer("TextBox"));
-	testbox->setText(L"ROFLAN EBALO WWWW");
-	testbox->setPosition({ 50,50 });
+	testbox->setText(L"Script text message");
+	testbox->setPosition("50% - (width / 2)", "20% - (height / 2)");
+	testbox->setSize({ "500", "200" });
 	testbox->setReadOnly();
 	testbox->setVisible(false);
 	gEnv->scripts.scriptGui.add(testbox, "scriptTextMessage");
@@ -211,6 +212,12 @@ void createMenuButtons()
 	testButton->setPosition({ "90%", "10%" });
 	testButton->setText(L"TEST SCRIPT");
 	testButton->connect("MouseReleased", testFunctionExecScript);
+
+	/////
+	//testButton->setEnabled(false);
+	//testButton->setVisible(false);
+	/////
+
 	//testButton->connect("MouseReleased", testFunctionCreateScript);
 	gEnv->globalGui.add(testButton);
 	/* Do not delete endregion */
@@ -218,7 +225,7 @@ void createMenuButtons()
 	/*do not delete*/
 	auto testButton2 = tgui::Button::create();
 	testButton2->setRenderer(gEnv->globalTheme.getRenderer("Button"));
-	testButton2->setPosition({ "15%-40", "15%+50" });
+	testButton2->setPosition("50% + 250 - 80", "20% + 105");
 	testButton2->setSize({"80", "40"});
 	testButton2->setText(L"Next");
 	testButton2->setEnabled(false);
@@ -242,12 +249,19 @@ void createMenuButtons()
 
 void startClick()
 {
+	/*
 	gEnv->game.gameAdventureGUIRequiresUpdate = true;
 	gEnv->game.adventureUI.adventureUIDrawRequired = true;
-	disableAllMainMenuWidgets();
+	
 	gEnv->game.activeGameMode = gameMode::adventureMode;
 
 	startWorldGeneration();
+	*/
+
+	disableAllMainMenuWidgets();
+	gEnv->game.activeGameMode = gameMode::gameGenerationMode;
+	gEnv->game.worldGeneratorRequiresUpdate = true;
+	gEnv->game.adventureData.worldGeneratorData.task = "init";
 
 }
 
@@ -291,47 +305,61 @@ void testFunctionCreateScript()
 
 void testFunctionExecScript()
 {
-
+	/*
 	std::vector<std::wstring> t;
 
-	//t.push_back(L"Put """"25"""" to """"$_abc"""" ");
-
-	//t.push_back(L"Text ""Value abc = $_abc \n Sybmols: #%@%Y^H%&EIK*OO:"" ");
 
 	std::string filename;
 	filename = gEnv->game.workDir;
 	filename += "\\resources\\scripts\\test\\test.txt";
-	/*std::wifstream fin(filename);
 
-	while (!fin.eof())
-	{
-		std::wstring line;
-		std::getline(fin, line);
-		t.push_back(line);
-	}
-	fin.close();*/
 	std::wifstream wif(filename);
 	wif.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
 	std::wstringstream wss;
-	//while (!wif.eof())
-	//{
-	//	wss << wif.rdbuf();
-	//	t.push_back(std::wstring(wss.str()));
-	//	wss.clear();
-	//}
+
 	wss << wif.rdbuf();
 	t.push_back(std::wstring(wss.str()));
 	wss.clear();
 	ScriptCompiler * c = new ScriptCompiler();
-
+	c->setFamilyId(L"testMod");
 	c->compileScriptText(t);
 
-	addScriptToQueue(c->getScriptDescriptor());
+	addScriptToQueue(c->getScriptDescriptor());*/
+
+	ScriptCompiler * c;
+	ScriptDescriptor * q;
+	std::string filename;
+		
+	//filename = gEnv->game.workDir;
+	//filename += "\\resources\\scripts\\test\\ESL_CORE.esl";
+	//c = new ScriptCompiler();
+	//q = c->compileFile(filename, L"testMod");
+	//delete(c);
+
+	filename = gEnv->game.workDir;
+	filename += "\\resources\\scripts\\test\\TestProgress.esl";
+	c = new ScriptCompiler();
+	q = c->compileFile(filename, L"testMod");
+	delete(c);
+	/*
+	filename = gEnv->game.workDir;
+	filename += "\\resources\\scripts\\test\\testCoreItem.esl";
+	c = new ScriptCompiler();
+	q = c->compileFile(filename, L"testMod");
+	delete(c);
+	
+	filename = gEnv->game.workDir;
+	filename += "\\resources\\scripts\\test\\test.esl";
+	c = new ScriptCompiler();
+	q = c->compileFile(filename, L"testMod");
+	*/
+	if (q != NULL)
+		addScriptToQueue(q);
 
 }
 
 void btnNextPressed()
-{
+{ 
 	gEnv->scripts.buttonPressed = true;
 }
 

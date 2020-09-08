@@ -7,7 +7,7 @@ class MapSectorPropertyTemplate
 {
 public:
 	// initial parameter name. Used to input and display.
-	std::string srcName;
+	std::wstring srcName;
 
 	// base level 
 	int baseValue = 0;
@@ -24,14 +24,14 @@ public:
 	int valueWeight;
 	
 	// value list of prohibited properties
-	std::set<std::string> conflictProperties;
+	std::set<std::wstring> conflictProperties;
 
 	// this property will not have any effect unless these properties connected
-	std::set<std::string> requiredProperties;
+	std::set<std::wstring> requiredProperties;
 	// Sector should have all properties from this list in order to activate this property
 
 	// region specific condition 
-	std::string regionCondition = "";
+	std::wstring regionCondition = L"";
 	// Does not have special format yet
 	// Probably region name
 
@@ -51,5 +51,17 @@ public:
 		return 0;
 	}
 
+	MapSectorPropertyTemplate()
+	{
+	}
 
+	MapSectorPropertyTemplate(std::wstring name, int base, int distribution, int weight)
+	{
+
+		this->baseValue = base;
+		this->srcName = name;
+		this->valueDistribution = distribution;
+		this->valueWeight = weight;
+
+	}
 };

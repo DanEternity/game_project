@@ -8,6 +8,8 @@
 #include "playerData.h"
 #include "uiData.h"
 #include "localization.h"
+#include "gameLogic.h"
+#include "spaceBattleData.h"
 
 namespace menuState
 {
@@ -52,6 +54,7 @@ class AdventureUI
 {
 public:
 	bool isInventoryOpen = false;
+	bool isMapOpen = false;
 	bool adventureUIUpdateRequired;
 	bool adventureUIDrawRequired;
 	bool widgetDisable;
@@ -59,6 +62,12 @@ public:
 	std::vector<tgui::Widget::Ptr> adventureUIWidgets;
 
 	AdventureUIState adventureUIState;
+};
+
+struct ScriptLoaderInfo
+{
+	std::string filename;
+	std::wstring familyId;
 };
 
 // Loader variables
@@ -69,6 +78,9 @@ public:
 	std::map<std::wstring, ModelDescriptor *>::iterator pointer;
 
 	std::string task = "null";
+
+	std::vector<ScriptLoaderInfo> scriptFilenames;
+	int scriptFilenameId;
 
 };
 
@@ -86,6 +98,7 @@ namespace gameMode
 		groundBattleMode,
 		mainMenuMode,
 		menuOverlay,
+		gameover,
 	};
 
 } // namespace gameMode
@@ -127,13 +140,23 @@ public:
 	bool globalGUIeventsRequiresUpdate = false;
 	// Does game should display adventure
 	bool gameAdventureGUIRequiresUpdate = false;
-	
+	// Does game should update space battle ui
+	bool gameSpaceBattleGUIRequiresUpdate = false;
+	// WASD controls
+	bool gameCanPlayerMoveWASD = false;
+	// Can trigger markers
+	bool gameCanPlayerTriggerMarkers = false;
+	// For space bar based actions
+	bool gameSpaceBarPressed = false;
 
 	// Active game mode
 	gameMode::GameMode activeGameMode = gameMode::blankMode;
 
 	// Can be used to locate return point if needed
 	gameMode::GameMode lastActiveGameMode = gameMode::blankMode;
+
+	// Gamemode flag
+	bool endGameFlag = false;
 
 	// gameloader.h section
 
@@ -162,6 +185,12 @@ public:
 
 	// localization
 	LocaleData locale;
+
+	// game logic data
+	GameLogicData gameLogic;
+
+	// space battle info
+	SpaceBattleData spaceBattle;
 
 	// generation utility
 
