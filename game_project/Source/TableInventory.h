@@ -60,3 +60,4 @@ void InventoryGridPanelEventHandler(const int id, tgui::Widget::Ptr widget, cons
 
 void applyTooltip(int id);
 void createTooltip(Item * m);
+void disableTooltips();

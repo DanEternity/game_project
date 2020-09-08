@@ -447,6 +447,7 @@ void RebuildInventoryGridPanel()
 		else
 			gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->
 			setText(L"");
+		disableTooltips();
 		gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(id))->connect("MouseEntered", applyTooltip, id);
 	}
 
@@ -686,5 +687,13 @@ void createTooltip(Item * m)
 		m->tooltipDescription->setRenderer(gEnv->globalTheme.getRenderer("Label"));
 		first = false;
 		str = L"";
+	}
+}
+
+void disableTooltips()
+{
+	for (int i = 0; i < gEnv->game.player.inventory.size(); i++)
+	{
+		gEnv->game.adventureGUI.get<tgui::Button>("InventoryItem" + std::to_string(i))->setToolTip(NULL);
 	}
 }
