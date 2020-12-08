@@ -202,68 +202,7 @@ void buildFigtherModules(int id)
 	}
 
 	updateShipValues(gEnv->game.player.fighterPlanes[id]);
-	std::string render = "Label";
-	int y = 5;
-	int yDif = 23;
-	//Hull
-	pan->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Hull") + L": " + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->hull.current) + L"/" + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->hull.total) + L" (+" + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->hullReg.total) + L" / round; NONE / day)")), "shipStatHull");
-	tgui::Label::Ptr lab = tgui::Label::create();
-	lab->setTextSize(18);
-	lab->setRenderer(gEnv->globalTheme.getRenderer("Label"));
-	lab->setText("The strength of the ship's hull plating.\nIf the durability drops to 0, the core will be destroyed and the ship will explode.");
-	gEnv->game.adventureGUI.get<tgui::Label>("shipStatHull")->setToolTip(lab);
-	y += yDif;
-	//Shield
-	pan->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield") + L": " + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->shield.current) + L"/" + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->shield.total) + L" (+" + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->shieldReg.total) + L" / round; NONE / day)")), "shipStatShield");
-	y += yDif;
-	//Power Supply
-	pan->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Energy used") + L": " + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->powerSupply.current) + L"/" + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->powerSupply.total))), "shipStatPowerSupply");
-	y += yDif;
-	//High Power Supply
-	pan->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("High energy limit used") + L": " + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->highPowerSupply.current) + L"/" + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->highPowerSupply.total))), "shipStatHighPowerSupply");
-	y += yDif;
-	//Battle Action Points
-	pan->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Action points in battle") + L": " + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->actionPoints.total))), "shipStatActionPoints");
-	y += yDif;
-	//Hull resist to damgage
-	pan->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Hull resistance") + L": "
-		+ std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->hullResistPhysical.total)
-		+ L"/" + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->hullResistEnergy.total)
-		+ L"/" + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->hullStructureStability.total)
-		+ L" (Physical: "
-		+ std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->hullResistPhysical.total != 0 ? (int)((gEnv->game.player.fighterPlanes[id]->hullResistPhysical.total / (gEnv->game.player.fighterPlanes[id]->hullResistPhysical.total + 100)) * 100) : 0)
-		+ L"%; Energy: "
-		+ std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->hullResistEnergy.total != 0 ? (int)((gEnv->game.player.fighterPlanes[id]->hullResistEnergy.total / (gEnv->game.player.fighterPlanes[id]->hullResistEnergy.total + 100)) * 100) : 0)
-		+ L"%; Crit: "
-		+ std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->hullStructureStability.total != 0 ? (int)((gEnv->game.player.fighterPlanes[id]->hullStructureStability.total / (gEnv->game.player.fighterPlanes[id]->hullStructureStability.total + 100)) * 100) : 0)
-		+ L"%)")), "shipStatHullResist");
-	y += yDif;
-	//Shield resist to damage
-	pan->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield resistance") + L": "
-		+ std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->shieldResistPhysical.total)
-		+ L"/" + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->shieldResistEnergy.total)
-		+ L"/" + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->shieldStructureStability.total)
-		+ L" (Physical: "
-		+ std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->shieldResistPhysical.total != 0 ? (int)((gEnv->game.player.fighterPlanes[id]->shieldResistPhysical.total / (gEnv->game.player.fighterPlanes[id]->shieldResistPhysical.total + 100)) * 100) : 0)
-		+ L"%; Energy: "
-		+ std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->shieldResistEnergy.total != 0 ? (int)((gEnv->game.player.fighterPlanes[id]->shieldResistEnergy.total / (gEnv->game.player.fighterPlanes[id]->shieldResistEnergy.total + 100)) * 100) : 0)
-		+ L"%; Crit: "
-		+ std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->shieldStructureStability.total != 0 ? (int)((gEnv->game.player.fighterPlanes[id]->shieldStructureStability.total / (gEnv->game.player.fighterPlanes[id]->shieldStructureStability.total + 100)) * 100) : 0)
-		+ L"%)")), "shipStatShieldResistPhysical");
-	y += yDif;
-	//Stealth, evasion, sensors and missileDefence
-	pan->add(createWidgetLabel(render, "5", std::to_string(y), 18, GetString("Sensor power: ") + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->sensorPower.total) + L";"), "shipStatSensors");
-	pan->add(createWidgetLabel(render, "250", std::to_string(y), 18, GetString("Sensor tier: ") + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->sensorTier.total), "shipStatSensorsTier"));
-	y += yDif;
-	pan->add(createWidgetLabel(render, "5", std::to_string(y), 18, GetString("Stealth power: ") + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->stealth.total) + L";"));
-	pan->add(createWidgetLabel(render, "250", std::to_string(y), 18, GetString("Stealth tier: ") + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->stealthTier.total), "shipStatStealthTier"));
-	y += yDif;
-	pan->add(createWidgetLabel(render, "5", std::to_string(y), 18, GetString("Evasion: ") + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->evasion.total) + L";"), "shipStatEvasion");
-	pan->add(createWidgetLabel(render, "250", std::to_string(y), 18, GetString("Mobility: ") + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->mobility.total), "shipStatMobility"));
-	y += yDif;
-	pan->add(createWidgetLabel(render, "5", std::to_string(y), 18, GetString("Missile defence power: ") + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->missileDefense.total) + L";"), "shipStatMissileDefence");
-	pan->add(createWidgetLabel(render, "250", std::to_string(y), 18, GetString("Missile defence tier: ") + std::to_wstring((int)gEnv->game.player.fighterPlanes[id]->missileDefenseTier.total), "shipStatMissileDefenceTier"));
-
+	createShipStatPanel(gEnv->game.player.fighterPlanes[id], pan);
 }
 
 void applyFighterTooltipUI(int fighterId, int moduleId)

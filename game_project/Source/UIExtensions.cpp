@@ -44,6 +44,73 @@ tgui::Label::Ptr createWidgetLabel(std::string render, std::string posX, std::st
 	return label;
 }
 
+void createShipStatPanel(Ship* s, tgui::Panel::Ptr panel)
+{
+	panel->removeAllWidgets();
+	std::string render = "Label";
+	int y = 5;
+	int yDif = 23;
+	//Hull
+	panel->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Hull") + L": " + std::to_wstring((int)s->hull.current) + L"/" + std::to_wstring((int)s->hull.total) + L" (+" + std::to_wstring((int)s->hullReg.total) + L" / round; NONE / day)")), "shipStatHull");
+	tgui::Label::Ptr lab = tgui::Label::create();
+	lab->setTextSize(18);
+	lab->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	lab->setText("The strength of the ship's hull plating.\nIf the durability drops to 0, the core will be destroyed and the ship will explode.");
+	lab->setToolTip(lab);
+	y += yDif;
+	//Shield
+	panel->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield") + L": " + std::to_wstring((int)s->shield.current) + L"/" + std::to_wstring((int)s->shield.total) + L" (+" + std::to_wstring((int)s->shieldReg.total) + L" / round; NONE / day)")), "shipStatShield");
+	y += yDif;
+	//Power Supply
+	panel->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Energy used") + L": " + std::to_wstring((int)s->powerSupply.current) + L"/" + std::to_wstring((int)s->powerSupply.total))), "shipStatPowerSupply");
+	y += yDif;
+	//High Power Supply
+	panel->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("High energy limit used") + L": " + std::to_wstring((int)s->highPowerSupply.current) + L"/" + std::to_wstring((int)s->highPowerSupply.total))), "shipStatHighPowerSupply");
+	y += yDif;
+	//Battle Action Points
+	panel->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Action points in battle") + L": " + std::to_wstring((int)s->actionPoints.total))), "shipStatActionPoints");
+	y += yDif;
+	//Hull resist to damgage
+	panel->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Hull resistance") + L": "
+		+ std::to_wstring((int)s->hullResistPhysical.total)
+		+ L"/" + std::to_wstring((int)s->hullResistEnergy.total)
+		+ L"/" + std::to_wstring((int)s->hullStructureStability.total)
+		+ L" (Physical: "
+		+ std::to_wstring((int)s->hullResistPhysical.total != 0 ? (int)((s->hullResistPhysical.total / (s->hullResistPhysical.total + 100)) * 100) : 0)
+		+ L"%; Energy: "
+		+ std::to_wstring((int)s->hullResistEnergy.total != 0 ? (int)((s->hullResistEnergy.total / (s->hullResistEnergy.total + 100)) * 100) : 0)
+		+ L"%; Crit: "
+		+ std::to_wstring((int)s->hullStructureStability.total != 0 ? (int)((s->hullStructureStability.total / (s->hullStructureStability.total + 100)) * 100) : 0)
+		+ L"%)")), "shipStatHullResist");
+	y += yDif;
+	//Shield resist to damage
+	panel->add(createWidgetLabel(render, "5", std::to_string(y), 18, (GetString("Shield resistance") + L": "
+		+ std::to_wstring((int)s->shieldResistPhysical.total)
+		+ L"/" + std::to_wstring((int)s->shieldResistEnergy.total)
+		+ L"/" + std::to_wstring((int)s->shieldStructureStability.total)
+		+ L" (Physical: "
+		+ std::to_wstring((int)s->shieldResistPhysical.total != 0 ? (int)((s->shieldResistPhysical.total / (s->shieldResistPhysical.total + 100)) * 100) : 0)
+		+ L"%; Energy: "
+		+ std::to_wstring((int)s->shieldResistEnergy.total != 0 ? (int)((s->shieldResistEnergy.total / (s->shieldResistEnergy.total + 100)) * 100) : 0)
+		+ L"%; Crit: "
+		+ std::to_wstring((int)s->shieldStructureStability.total != 0 ? (int)((s->shieldStructureStability.total / (s->shieldStructureStability.total + 100)) * 100) : 0)
+		+ L"%)")), "shipStatShieldResistPhysical");
+	y += yDif;
+	//Stealth, evasion, sensors and missileDefence
+	panel->add(createWidgetLabel(render, "5", std::to_string(y), 18, GetString("Sensor power: ") + std::to_wstring((int)s->sensorPower.total) + L";"), "shipStatSensors");
+	panel->add(createWidgetLabel(render, "250", std::to_string(y), 18, GetString("Sensor tier: ") + std::to_wstring((int)s->sensorTier.total), "shipStatSensorsTier"));
+	y += yDif;
+	panel->add(createWidgetLabel(render, "5", std::to_string(y), 18, GetString("Stealth power: ") + std::to_wstring((int)s->stealth.total) + L";"));
+	panel->add(createWidgetLabel(render, "250", std::to_string(y), 18, GetString("Stealth tier: ") + std::to_wstring((int)s->stealthTier.total), "shipStatStealthTier"));
+	y += yDif;
+	panel->add(createWidgetLabel(render, "5", std::to_string(y), 18, GetString("Evasion: ") + std::to_wstring((int)s->evasion.total) + L";"), "shipStatEvasion");
+	panel->add(createWidgetLabel(render, "250", std::to_string(y), 18, GetString("Mobility: ") + std::to_wstring((int)s->mobility.total), "shipStatMobility"));
+	y += yDif;
+	panel->add(createWidgetLabel(render, "5", std::to_string(y), 18, GetString("Missile defence power: ") + std::to_wstring((int)s->missileDefense.total) + L";"), "shipStatMissileDefence");
+	panel->add(createWidgetLabel(render, "250", std::to_string(y), 18, GetString("Missile defence tier: ") + std::to_wstring((int)s->missileDefenseTier.total), "shipStatMissileDefenceTier"));
+
+}
+
 void enableWidget(tgui::Widget::Ptr widget, bool enable)
 {
 	if (widget != NULL)

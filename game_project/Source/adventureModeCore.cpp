@@ -541,9 +541,9 @@ void drawAdventureGameMode(double deltaTime)
 		int posX = ((marker->pos.x - gEnv->game.player.shipPosition.x) / 15) + lab->getSize().x / 2 - 7.5;
 		int posY = ((marker->pos.y - gEnv->game.player.shipPosition.y) / 10) + lab->getSize().y / 2 - 7.5;
 		if (posX < 0) posX = 0;
-		if (posX > 385) posX = 385;
+		if (posX > gEnv->game.adventureGUI.get<tgui::Panel>("minimap")->getSize().x - 15) posX = gEnv->game.adventureGUI.get<tgui::Panel>("minimap")->getSize().x - 15;
 		if (posY < 0) posY = 0;
-		if (posY > 285) posY = 285;
+		if (posY > gEnv->game.adventureGUI.get<tgui::Panel>("minimap")->getSize().y - 15) posY = gEnv->game.adventureGUI.get<tgui::Panel>("minimap")->getSize().y - 15;
 		but->setPosition(posX, posY);
 		gEnv->game.adventureGUI.get<tgui::Panel>("minimap")->add(but);
 	}
