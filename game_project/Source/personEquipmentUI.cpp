@@ -399,66 +399,88 @@ void skillUp(Character *c, PassiveSkill *p, int treeNumber, tgui::Widget::Ptr wi
 
 void giveRoleFind(int id, tgui::Widget::Ptr widget, const std::string& signalName)
 {
-	if (!gEnv->game.ui.rmWasClicked)
+	if (gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel") != nullptr)
 	{
-		int x = sf::Mouse::getPosition(gEnv->globalWindow).x;
-		int y = sf::Mouse::getPosition(gEnv->globalWindow).y - 5;
-		gEnv->game.adventureGUI.add(createWidget(WidgetType::Panel, "Panel", "0", "0", std::to_string(x), std::to_string(y)), "tempRightPanel");
-		gEnv->game.ui.rmWasClicked = true;
+		gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->removeAllWidgets();
+		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
+	}
 
-		int count = 0;
-		for (int i = 0; i < gEnv->game.player.crew.characters.size(); i++)
-		{
-			if (!gEnv->game.player.crew.characters[i]->haveRole)
-			{
-				tgui::Button::Ptr but = createWidget(WidgetType::Button, "Button", "120", "30", "-10", std::to_string(30*count))->cast<tgui::Button>();
-				count++;
-				but->setText(gEnv->game.player.crew.characters[i]->name);
-				gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->add(but);
-				const int constButtonId = id;
-				but->connect("MouseReleased", giveRole, &(*gEnv->game.player.crew.characters[i]), constButtonId);
-			}
-		}
-		gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->setSize(100, 30 * (count + 1));
+	int x = sf::Mouse::getPosition(gEnv->globalWindow).x;
+	int y = sf::Mouse::getPosition(gEnv->globalWindow).y - 5;
+	gEnv->game.adventureGUI.add(createWidget(WidgetType::Panel, "Panel", "0", "0", std::to_string(x), std::to_string(y)), "tempRightPanel");
 
-		if (count == 0) {
-			gEnv->game.ui.rmWasClicked = false;
-			gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
-		}
-		else
+	int count = 0;
+	for (int i = 0; i < gEnv->game.player.crew.characters.size(); i++)
+	{
+		if (!gEnv->game.player.crew.characters[i]->haveRole)
 		{
 			tgui::Button::Ptr but = createWidget(WidgetType::Button, "Button", "120", "30", "-10", std::to_string(30*count))->cast<tgui::Button>();
-			but->setText("Cancel");
+			count++;
+			but->setText(gEnv->game.player.crew.characters[i]->name);
 			gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->add(but);
 			const int constButtonId = id;
-			but->connect("MouseReleased", giveRole, nullptr, constButtonId);
+			but->connect("MouseReleased", giveRole, &(*gEnv->game.player.crew.characters[i]), constButtonId);
 		}
+	}
+	gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->setSize(100, 30 * (count + 1));
+
+	if (gEnv->game.player.ship->characterPosition[id] != NULL)
+	{
+		tgui::BitmapButton::Ptr but = createWidget(WidgetType::BitmapButton, "Button", "120", "30", "-10", std::to_string(30 * count))->cast<tgui::BitmapButton>();
+		count++;
+		but->setText("Unassign character");
+		gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->add(but);
+		const int constButtonId = id;
+		but->connect("MouseReleased", giveRole, nullptr, constButtonId);
+	}
+
+	if (count == 0) {
+		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
+	}
+	else
+	{
+		tgui::Button::Ptr but = createWidget(WidgetType::Button, "Button", "120", "30", "-10", std::to_string(30*count))->cast<tgui::Button>();
+		but->setText("Cancel");
+		gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->add(but);
+		const int constButtonId = id;
+		but->connect("MouseReleased", giveRole, nullptr, constButtonId);
 	}
 }
 
 void giveRole(Character *c, int buttonId, tgui::Widget::Ptr widget, const std::string& signalName)
 {
+	gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->removeAllWidgets();
+	gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
+
 	std::string str = widget->cast<tgui::Button>()->getText();
+
 	if (str == "Cancel")
 	{
-		gEnv->game.ui.rmWasClicked = false;
 		gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->removeAllWidgets();
 		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
+		return;
 	}
-	else
+	else if (str == "Unassign character")
 	{
-		gEnv->game.ui.rmWasClicked = false;
-		gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->removeAllWidgets();
-		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
-
-		gEnv->game.adventureGUI.get<tgui::Button>("buttonChangeRole" + std::to_string(buttonId))->setText(c->name);
-		c->haveRole = true;
-		c->role = gEnv->game.player.ship->characterRoleSlots[buttonId];
-		gEnv->game.player.ship->characterPosition[buttonId] = c;
-
+		gEnv->game.player.ship->characterPosition[buttonId]->haveRole = false;
+		gEnv->game.player.ship->characterPosition[buttonId]->role = characterRole::noneRole;
+		gEnv->game.player.ship->characterPosition[buttonId] = NULL;
+		gEnv->game.adventureGUI.get<tgui::Button>("buttonChangeRole" + std::to_string(buttonId))->setText("");
 		updateShipValues(gEnv->game.player.ship);
-		buildShipStats();
+		return;
 	}
+	if (gEnv->game.player.ship->characterPosition[buttonId] != NULL)
+	{
+		gEnv->game.player.ship->characterPosition[buttonId]->haveRole = false;
+		gEnv->game.player.ship->characterPosition[buttonId]->role = characterRole::noneRole;
+	}
+
+	gEnv->game.adventureGUI.get<tgui::Button>("buttonChangeRole" + std::to_string(buttonId))->setText(c->name);
+	c->haveRole = true;
+	c->role = gEnv->game.player.ship->characterRoleSlots[buttonId];
+	gEnv->game.player.ship->characterPosition[buttonId] = c;
+	updateShipValues(gEnv->game.player.ship);
+	buildShipStats();
 }
 
 void giveRoleCaptain(Character *c, int buttonId = 0)

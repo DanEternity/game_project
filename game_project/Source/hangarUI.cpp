@@ -109,7 +109,6 @@ void placePilotToFighter(Character *c, int id, bool isUnassigned)
 		c->haveRole = true;
 		c->role = gEnv->game.player.fighterPlanes[id]->characterRoleSlots[0];
 		gEnv->game.player.fighterPlanes[id]->characterPosition[0] = c;
-		updateShipValues(gEnv->game.player.fighterPlanes[id]);
 		gEnv->game.adventureGUI.get<tgui::BitmapButton>("pilotFighterButton" + std::to_string(id))->setText(c->name);
 		updateShipValues(gEnv->game.player.fighterPlanes[id]);
 	}
@@ -121,7 +120,6 @@ void placePilotToFighter(Character *c, int id, bool isUnassigned)
 		c->haveRole = true;
 		c->role = gEnv->game.player.fighterPlanes[id]->characterRoleSlots[0];
 		gEnv->game.player.fighterPlanes[id]->characterPosition[0] = c;
-		updateShipValues(gEnv->game.player.fighterPlanes[id]);
 		gEnv->game.adventureGUI.get<tgui::BitmapButton>("pilotFighterButton" + std::to_string(id))->setText(c->name);
 		updateShipValues(gEnv->game.player.fighterPlanes[id]);
 	}
