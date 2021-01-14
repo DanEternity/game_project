@@ -51,6 +51,12 @@ void BuildSchemeRoles()
 		case characterRole::captain:
 			text = L"Captain";
 			break;
+		case characterRole::scientist:
+			text = L"Scientist";
+			break;
+		case characterRole::engineer:
+			text = L"Engineer";
+			break;
 		default:
 			text = L"N\A Role";
 		}
@@ -386,7 +392,7 @@ void skillUp(Character *c, PassiveSkill *p, int treeNumber, tgui::Widget::Ptr wi
 	p->active = true;
 	if (p->effect->targetType == targetType::ship)
 	{
-		c->effectsForShip.push_back(p->effect);
+		c->skillForShip.push_back(p->effect);
 		updateShipValues(gEnv->game.player.ship);
 		buildShipStats();
 	}

@@ -9,7 +9,7 @@ public:
 	std::wstring name;
 	int level;
 	bool active;
-	StatModEffect* effect;
+	StatModEffectSkill* effect;
 
 	PassiveSkill(std::wstring name, int level)
 	{

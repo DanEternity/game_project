@@ -8,6 +8,7 @@
 
 #include "baseObject.h"
 #include <string>
+#include "character.h"
 
 namespace effectGroups {
 
@@ -216,4 +217,16 @@ public:
 		this->p_negMul = negMul;
 	}
 
+};
+
+class StatModEffectSkill : public StatModEffect
+{
+public:
+	characterRole::Role targetRole;
+
+	StatModEffectSkill(targetType::TargetType target, statNames::StatName stat, float add, float mul, float sub, float negMul, characterRole::Role role)
+		: StatModEffect(target, stat, add, mul, sub, negMul)
+	{
+		this->targetRole = role;
+	}
 };

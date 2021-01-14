@@ -123,7 +123,9 @@ public:
 		characterPosition.resize(4, nullptr);
 		characterRoleSlots.resize(4, characterRole::noneRole);
 		characterRoleSlots[0] = characterRole::captain;
-		
+		characterRoleSlots[1] = characterRole::scientist;
+		characterRoleSlots[2] = characterRole::engineer;
+		characterRoleSlots[3] = characterRole::engineer;
 	}
 
 };
