@@ -15,18 +15,6 @@ namespace characterAspect
 	};
 }
 
-namespace characterRole
-{
-	enum Role
-	{
-		noneRole,
-		captain,
-		scientist,
-		engineer,
-		pilot,
-	};
-}
-
 class Character : public BaseObject
 {
 private:
@@ -37,7 +25,7 @@ public:
 
 	std::wstring name;
 
-	characterRole::Role characterClass;
+	std::wstring characterClass;
 	std::wstring characterRace;
 	characterAspect::Aspect aspect = characterAspect::noneAspect;
 	characterRole::Role role = characterRole::noneRole;
@@ -91,7 +79,7 @@ public:
 		this->objectType = objectType::character;
 		this->memoryControl = memoryControl::fixed;
 		this->name = name;
-		this->characterClass = characterRole::engineer;
+		this->characterClass = L"None";
 		this->characterRace = L"Human";
 		this->health.baseValue = 100;
 		slot.resize(7);

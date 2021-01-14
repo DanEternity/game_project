@@ -78,7 +78,8 @@ void BuildPersonSchemeUI(int equipSizeUI, int crewPersonNumber)
 
 	for (int i(0); i < gEnv->game.player.crew.characters[crewPersonNumber]->equipment.size(); i++)
 	{
-		tgui::BitmapButton::Ptr btn = createWidget(WidgetType::BitmapButton, "Button", std::to_string(equipSizeUI), std::to_string(equipSizeUI), std::to_string(i <= 3 ? 30 : 600 - 30 - equipSizeUI), std::to_string(i <= 3 ? 40 + 65 * i : 40 + 65 * (i - 4)))->cast<tgui::BitmapButton>();
+		float parentSizeY = gEnv->game.adventureGUI.get<tgui::Panel>("PersonSchemeEquipPanel" + std::to_string(crewPersonNumber))->getSize().y;
+		tgui::BitmapButton::Ptr btn = createWidget(WidgetType::BitmapButton, "Button", std::to_string(equipSizeUI), std::to_string(equipSizeUI), i <= 3 ? "5%" : "80%", i <= 3 ? std::to_string((int)(parentSizeY * ((float)(i + 1) * 0.2f))) : std::to_string((int)(parentSizeY * ((float)(i - 3) * 0.2f))))->cast<tgui::BitmapButton>();
 		if (gEnv->game.player.crew.characters[crewPersonNumber]->equipment[i] != NULL)
 		{
 			if (gEnv->game.player.crew.characters[crewPersonNumber]->equipment[i]->icon != nullptr)
@@ -181,6 +182,8 @@ void BuildPersonSkillTree(int crewPersonNumber)
 					}
 					break;
 				}
+				button->connect("MouseEntered", applySkillTooltipUI, &(*j));
+				button->setToolTip(gEnv->game.ui.tooltipDescription);
 				mainPersonPanel2->add(button);
 				button->setText(j->name);
 
@@ -428,7 +431,6 @@ void giveRoleFind(int id, tgui::Widget::Ptr widget, const std::string& signalNam
 			but->connect("MouseReleased", giveRole, &(*gEnv->game.player.crew.characters[i]), constButtonId);
 		}
 	}
-	gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->setSize(100, 30 * (count + 1));
 
 	if (gEnv->game.player.ship->characterPosition[id] != NULL)
 	{
@@ -439,6 +441,7 @@ void giveRoleFind(int id, tgui::Widget::Ptr widget, const std::string& signalNam
 		const int constButtonId = id;
 		but->connect("MouseReleased", giveRole, nullptr, constButtonId);
 	}
+	gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->setSize(100, 30 * (count + 1));
 
 	if (count == 0) {
 		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
@@ -462,8 +465,6 @@ void giveRole(Character *c, int buttonId, tgui::Widget::Ptr widget, const std::s
 
 	if (str == "Cancel")
 	{
-		gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->removeAllWidgets();
-		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
 		return;
 	}
 	else if (str == "Unassign character")
@@ -573,6 +574,44 @@ void applyEquipmentTooltipPersonUI(int id)
 	if (gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id] != NULL)
 	{
 		createEquipmentTooltip(gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id]);
+		gEnv->game.ui.tooltipDescription->setVisible(true);
+	}
+	else gEnv->game.ui.tooltipDescription->setVisible(false);
+}
+
+void createSkillTooltip(PassiveSkill* p)
+{
+	gEnv->game.ui.tooltipDescription->removeAllWidgets();
+	gEnv->game.ui.tooltipDescription->setSize(300, 250);
+	gEnv->game.ui.tooltipDescription->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
+
+	tgui::Panel::Ptr pan = createWidget(WidgetType::Panel, "Panel2", "300", "&.height", "0", "0")->cast<tgui::Panel>();
+	gEnv->game.ui.tooltipDescription->add(pan);
+
+	tgui::Button::Ptr button = createWidget(WidgetType::Button, "Button", "300", "30", "0", "0")->cast<tgui::Button>();
+	switch (p->effect->targetRole)
+	{
+	case characterRole::noneRole:
+		button->setText("No requirements on role");
+		break;
+	case characterRole::engineer:
+		button->setText("Only on role Engineer");
+		break;
+	case characterRole::scientist:
+		button->setText("Only on role Scientist");
+
+	default:
+		button->setText("Don't have definition");
+	}
+	pan->add(button, "nameButtonTooltip");
+
+}
+
+void applySkillTooltipUI(PassiveSkill* p)
+{
+	if (p != NULL)
+	{
+		createSkillTooltip(p);
 		gEnv->game.ui.tooltipDescription->setVisible(true);
 	}
 	else gEnv->game.ui.tooltipDescription->setVisible(false);

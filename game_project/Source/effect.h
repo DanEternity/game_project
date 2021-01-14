@@ -8,7 +8,6 @@
 
 #include "baseObject.h"
 #include <string>
-#include "character.h"
 
 namespace effectGroups {
 
@@ -219,6 +218,18 @@ public:
 
 };
 
+namespace characterRole
+{
+	enum Role
+	{
+		noneRole,
+		captain,
+		scientist,
+		engineer,
+		pilot,
+	};
+}
+
 class StatModEffectSkill : public StatModEffect
 {
 public:
@@ -230,3 +241,4 @@ public:
 		this->targetRole = role;
 	}
 };
+

@@ -28,5 +28,6 @@ void giveRoleCaptain(Character *c, int buttonId);
 void registerPlayerCharacter(Character *c);
 void unregisterPlayerCharacter(int id);
 
-
+void createSkillTooltip(PassiveSkill* p);
+void applySkillTooltipUI(PassiveSkill* p);
 void applyEquipmentTooltipPersonUI(int id);
