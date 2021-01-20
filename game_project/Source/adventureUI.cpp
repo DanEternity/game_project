@@ -303,7 +303,13 @@ void disableAllAdventureUI()
 		gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->removeAllWidgets();
 		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
 	}
+	if (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("crewBonusesPanel") != nullptr)
+	{
+		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("crewBonusesPanel")->removeAllWidgets();
+		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("crewBonusesPanel"));
+	}
 }
+
 
 void updateCategoryFilters()
 {

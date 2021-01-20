@@ -257,3 +257,125 @@ std::wstring createFloatString(float number)
 		return str;
 	}
 }
+
+std::wstring createStringByStatName(statNames::StatName stat)
+{
+	std::wstring str = L"";
+
+	switch (stat)
+	{
+	case statNames::hull:
+		str += GetString("Hull") + L" ";
+		break;
+	case statNames::actionPoints:
+		str += GetString("Action points in battle") + L" ";
+		break;
+	case statNames::additionalWeaponAccuracy:
+		str += GetString("Additional weapon accuracy") + L" ";
+		break;
+	case statNames::evasion:
+		str += GetString("Evasion rating") + L" ";
+		break;
+	case statNames::fuel:
+		str += GetString("Fuel") + L" ";
+		break;
+	case statNames::highPowerSupply:
+		str += GetString("High power supply") + L" ";
+		break;
+	case statNames::hullReg:
+		str += GetString("Hull regeneration") + L" ";
+		break;
+	case statNames::hullResistPhysical:
+		str += GetString("Hull physical resist") + L" ";
+		break;
+	case statNames::hullResistEnergy:
+		str += GetString("Hull energy resist") + L" ";
+		break;
+	case statNames::hullStructureStability:
+		str += GetString("Hull structure stability") + L" ";
+		break;
+	case statNames::hyperDriveFuelEfficiency:
+		str += GetString("Hyper drive fuel efficiency") + L" ";
+		break;
+	case statNames::hyperDrivePower:
+		str += GetString("Hyper drive power") + L" ";
+		break;
+	case statNames::hyperDriveTier:
+		str += GetString("Hyper drive tier") + L" ";
+		break;
+	case statNames::missileDefense:
+		str += GetString("Missile defence") + L" ";
+		break;
+	case statNames::missileDefenseTier:
+		str += GetString("Misile defence tier") + L" ";
+		break;
+	case statNames::mobility:
+		str += GetString("Mobility") + L" ";
+		break;
+	case statNames::powerSupply:
+		str += GetString("Power supply") + L" ";
+		break;
+	case statNames::sensorPower:
+		str += GetString("Sensor power") + L" ";
+		break;
+	case statNames::sensorTier:
+		str += GetString("Sensor tier") + L" ";
+		break;
+	case statNames::shield:
+		str += GetString("Shield") + L" ";
+		break;
+	case statNames::shieldReg:
+		str += GetString("Shield regeneration") + L" ";
+		break;
+	case statNames::shieldResistPhysical:
+		str += GetString("Shield physical resist") + L" ";
+		break;
+	case statNames::shieldResistEnergy:
+		str += GetString("Shield energy resist") + L" ";
+		break;
+	case statNames::shieldStructureStability:
+		str += GetString("Shield structure stability") + L" ";
+		break;
+	case statNames::stealth:
+		str += GetString("Stealth") + L" ";
+		break;
+	case statNames::stealthTier:
+		str += GetString("Stealth tier") + L" ";
+		break;
+	case statNames::totalDamageMultiplier:
+		str += GetString("Total damage multiplier") + L" ";
+		break;
+	case statNames::characterHealth:
+		str += GetString("Health") + L" ";
+		break;
+	case statNames::characterArmor:
+		str += GetString("Armor") + L" ";
+		break;
+	case statNames::characterShield:
+		str += GetString("Shield") + L" ";
+		break;
+	case statNames::characterBlock:
+		str += GetString("Block") + L" ";
+		break;
+	case statNames::characterResist:
+		str += GetString("Resist") + L" ";
+		break;
+	case statNames::characterShieldReg:
+		str += GetString("Shield Regeneration") + L" ";
+		break;
+	case statNames::characterActionPoints:
+		str += GetString("Action Points") + L" ";
+		break;
+	case statNames::characterEnergy:
+		str += GetString("Energy") + L" ";
+		break;
+	case statNames::characterEnergyReg:
+		str += GetString("Energy Regeneration") + L" ";
+		break;
+	case statNames::characterInitiative:
+		str += GetString("Initiative") + L" ";
+		break;
+	}
+
+	return str;
+}

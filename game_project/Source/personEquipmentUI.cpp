@@ -34,6 +34,7 @@ void BuildSchemeRoles()
 
 	tgui::Button::Ptr showBonusesButton = createWidget(WidgetType::Button, "Button", "200", "50", "5%", "90%")->cast<tgui::Button>();
 	showBonusesButton->setText("Show Bonuses");
+	showBonusesButton->connect("MouseReleased", ShowBonuses);
 	gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->add(showBonusesButton, "CrewBonusesShow");
 
 	for (int i = 0; i < gEnv->game.player.ship->characterRoleSlots.size(); i++)
@@ -42,8 +43,11 @@ void BuildSchemeRoles()
 		tgui::Button::Ptr but = createWidget(WidgetType::Button, "Button", "100", "100", std::to_string(100 + i * 120), "50%")->cast<tgui::Button>();
 		if (gEnv->game.player.ship->characterPosition[i] != NULL) but->setText(gEnv->game.player.ship->characterPosition[i]->name);
 		gEnv->game.adventureGUI.get<tgui::Panel>("ShipSchemePersonRoles")->add(but, "buttonChangeRole" + std::to_string(i));
-		but->connect("RightMouseReleased", giveRoleFind, id);
-		but->connect("MouseReleased", giveRoleFind, id);
+		if (i != 0)
+		{
+			but->connect("RightMouseReleased", giveRoleFind, id);
+			but->connect("MouseReleased", giveRoleFind, id);
+		}
 
 		std::wstring text = L"";
 		switch (gEnv->game.player.ship->characterRoleSlots[i])
@@ -569,50 +573,50 @@ void unregisterPlayerCharacter(int id)
 	}
 }
 
-void applyEquipmentTooltipPersonUI(int id)
+void ShowBonuses()
 {
-	if (gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id] != NULL)
-	{
-		createEquipmentTooltip(gEnv->game.player.crew.characters[gEnv->game.ui.activeOpenPersonWindow]->equipment[id]);
-		gEnv->game.ui.tooltipDescription->setVisible(true);
+	if (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("crewBonusesPanel") == nullptr)
+		gEnv->game.adventureGUI.add(createWidget(WidgetType::ScrollablePanel, "Panel2", "20%", "55%", "((&.width - width) / 2) - 35%", "((&.height - height) / 2) - 5%"), "crewBonusesPanel");
+	else {
+		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("crewBonusesPanel")->removeAllWidgets();
+		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("crewBonusesPanel"));
+		return;
 	}
-	else gEnv->game.ui.tooltipDescription->setVisible(false);
+	
+	tgui::Label::Ptr label5 = tgui::Label::create();
+	label5->setRenderer(gEnv->globalTheme.getRenderer("Label"));
+	label5->setPosition(10, 10);
+	label5->setTextSize(18);
+	label5->setText("");
+	gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("crewBonusesPanel")->add(label5);
+
+	for (int i = 0; i < gEnv->game.player.crew.characters.size(); i++)
+	{
+		if (!gEnv->game.player.crew.characters[i]->haveRole) continue;
+		for (int j = 0; j < gEnv->game.player.crew.characters[i]->skillForShip.size(); j++)
+		{
+			std::wstring str = (gEnv->game.player.crew.characters[i]->role 
+				== gEnv->game.player.crew.characters[i]->skillForShip[j]->targetRole 
+				|| gEnv->game.player.crew.characters[i]->skillForShip[j]->targetRole == characterRole::noneRole) ? 
+				(gEnv->game.player.crew.characters[i]->name  + L" - ") :
+				L"(!)" + gEnv->game.player.crew.characters[i]->name + L" - ";
+
+			if (gEnv->game.player.crew.characters[i]->skillForShip[j]->effectGroup == effectGroups::statModifier)
+			{
+				str += createStringByStatName(gEnv->game.player.crew.characters[i]->skillForShip[j]->statName);
+
+				if (gEnv->game.player.crew.characters[i]->skillForShip[j]->p_add != 0)
+					str += L"+" + createFloatString(gEnv->game.player.crew.characters[i]->skillForShip[j]->p_add) + L" ";
+				if (gEnv->game.player.crew.characters[i]->skillForShip[j]->p_mul != 0)
+					str += L"+" + createFloatString(gEnv->game.player.crew.characters[i]->skillForShip[j]->p_mul * 100) + L"% ";
+				if (gEnv->game.player.crew.characters[i]->skillForShip[j]->p_sub != 0)
+					str += L"-" + createFloatString(gEnv->game.player.crew.characters[i]->skillForShip[j]->p_sub) + L" ";
+				if (gEnv->game.player.crew.characters[i]->skillForShip[j]->p_negMul != 0)
+					str += L"-" + createFloatString(gEnv->game.player.crew.characters[i]->skillForShip[j]->p_negMul * 100) + L"% ";
+
+				label5->setText(label5->getText() + str + L"\n");
+			}
+		}
+	}
 }
 
-void createSkillTooltip(PassiveSkill* p)
-{
-	gEnv->game.ui.tooltipDescription->removeAllWidgets();
-	gEnv->game.ui.tooltipDescription->setSize(300, 250);
-	gEnv->game.ui.tooltipDescription->setRenderer(gEnv->globalTheme.getRenderer("Panel2"));
-
-	tgui::Panel::Ptr pan = createWidget(WidgetType::Panel, "Panel2", "300", "&.height", "0", "0")->cast<tgui::Panel>();
-	gEnv->game.ui.tooltipDescription->add(pan);
-
-	tgui::Button::Ptr button = createWidget(WidgetType::Button, "Button", "300", "30", "0", "0")->cast<tgui::Button>();
-	switch (p->effect->targetRole)
-	{
-	case characterRole::noneRole:
-		button->setText("No requirements on role");
-		break;
-	case characterRole::engineer:
-		button->setText("Only on role Engineer");
-		break;
-	case characterRole::scientist:
-		button->setText("Only on role Scientist");
-
-	default:
-		button->setText("Don't have definition");
-	}
-	pan->add(button, "nameButtonTooltip");
-
-}
-
-void applySkillTooltipUI(PassiveSkill* p)
-{
-	if (p != NULL)
-	{
-		createSkillTooltip(p);
-		gEnv->game.ui.tooltipDescription->setVisible(true);
-	}
-	else gEnv->game.ui.tooltipDescription->setVisible(false);
-}
