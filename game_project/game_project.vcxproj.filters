@@ -49,14 +49,26 @@
     <Filter Include="Adventure\UI\General">
       <UniqueIdentifier>{38ca44f3-3534-434c-a9cc-b43d03ae120e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Adventure\UI\Handlers">
-      <UniqueIdentifier>{37e2aed1-fad3-49b8-9ace-daf04598bf32}</UniqueIdentifier>
-    </Filter>
     <Filter Include="SpaceBattle">
       <UniqueIdentifier>{7bdaae38-0fd0-4e5d-b27e-29ce3ba0c34e}</UniqueIdentifier>
     </Filter>
     <Filter Include="SpaceBattle\UI">
       <UniqueIdentifier>{f764cb03-8cca-4441-9c96-edebf040f5ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Adventure\UI\General\UITooltips">
+      <UniqueIdentifier>{fab8e5ec-c266-41a1-8426-db5cfbf9b132}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Adventure\UI\General\UIHelpers">
+      <UniqueIdentifier>{d25090e7-70d6-484e-8cb4-d225cbd46d54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Adventure\UI\General\UIShipPanel">
+      <UniqueIdentifier>{c18f9b5f-3322-43e9-8c94-402ae8a34d17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Adventure\UI\General\UIAdventureElements">
+      <UniqueIdentifier>{3591fdb8-d2ba-44ef-b07b-0d7b99d8cce7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Adventure\UI\UIHandlers">
+      <UniqueIdentifier>{37e2aed1-fad3-49b8-9ace-daf04598bf32}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -141,38 +153,14 @@
     <ClCompile Include="Source\adventureUI.cpp">
       <Filter>Adventure\UI\General</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CraftUI.cpp">
-      <Filter>Adventure\UI\General</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\itemUtils.cpp">
-      <Filter>Adventure\UI\General</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\map.cpp">
-      <Filter>Adventure\UI\General</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\personEquipmentUI.cpp">
-      <Filter>Adventure\UI\General</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\shipModulesUI.cpp">
-      <Filter>Adventure\UI\General</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\tableInventory.cpp">
-      <Filter>Adventure\UI\General</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UIExtensions.cpp">
-      <Filter>Adventure\UI\General</Filter>
-    </ClCompile>
     <ClCompile Include="Source\InventoryHandlers.cpp">
-      <Filter>Adventure\UI\Handlers</Filter>
+      <Filter>Adventure\UI\UIHandlers</Filter>
     </ClCompile>
     <ClCompile Include="Source\ShipHandlers.cpp">
-      <Filter>Adventure\UI\Handlers</Filter>
+      <Filter>Adventure\UI\UIHandlers</Filter>
     </ClCompile>
     <ClCompile Include="Source\PersonHandlers.cpp">
-      <Filter>Adventure\UI\Handlers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Shop.cpp">
-      <Filter>Adventure\UI\General</Filter>
+      <Filter>Adventure\UI\UIHandlers</Filter>
     </ClCompile>
     <ClCompile Include="Source\spaceBattleCore.cpp">
       <Filter>SpaceBattle</Filter>
@@ -186,17 +174,50 @@
     <ClCompile Include="Source\spaceBattleUI.cpp">
       <Filter>SpaceBattle\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Source\hangarUI.cpp">
-      <Filter>Adventure\UI\General</Filter>
-    </ClCompile>
     <ClCompile Include="Source\HangarHandlers.cpp">
-      <Filter>Adventure\UI\Handlers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\rewardPanelUI.cpp">
-      <Filter>Adventure\UI\General</Filter>
+      <Filter>Adventure\UI\UIHandlers</Filter>
     </ClCompile>
     <ClCompile Include="Source\RewardsHandlers.cpp">
-      <Filter>Adventure\UI\Handlers</Filter>
+      <Filter>Adventure\UI\UIHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\gameOverGamemode.cpp">
+      <Filter>Adventure</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CraftUI.cpp">
+      <Filter>Adventure\UI\General\UIShipPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hangarUI.cpp">
+      <Filter>Adventure\UI\General\UIShipPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\personEquipmentUI.cpp">
+      <Filter>Adventure\UI\General\UIShipPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\shipModulesUI.cpp">
+      <Filter>Adventure\UI\General\UIShipPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\tableInventory.cpp">
+      <Filter>Adventure\UI\General\UIShipPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\rewardPanelUI.cpp">
+      <Filter>Adventure\UI\General\UIAdventureElements</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Shop.cpp">
+      <Filter>Adventure\UI\General\UIAdventureElements</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\map.cpp">
+      <Filter>Adventure\UI\General\UIAdventureElements</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\itemUtils.cpp">
+      <Filter>Adventure\UI\General\UIHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UIExtensions.cpp">
+      <Filter>Adventure\UI\General\UIHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UITooltipsCreate.cpp">
+      <Filter>Adventure\UI\General\UITooltips</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UITooltipsApply.cpp">
+      <Filter>Adventure\UI\General\UITooltips</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -386,40 +407,16 @@
     <ClInclude Include="Source\adventureUI.h">
       <Filter>Adventure\UI\General</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CraftUI.h">
-      <Filter>Adventure\UI\General</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\itemUtils.h">
-      <Filter>Adventure\UI\General</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\map.h">
-      <Filter>Adventure\UI\General</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\personEquipmentUI.h">
-      <Filter>Adventure\UI\General</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\shipModulesUI.h">
-      <Filter>Adventure\UI\General</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\tableInventory.h">
-      <Filter>Adventure\UI\General</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UIExtensions.h">
-      <Filter>Adventure\UI\General</Filter>
-    </ClInclude>
     <ClInclude Include="Source\InventoryHandlers.h">
-      <Filter>Adventure\UI\Handlers</Filter>
+      <Filter>Adventure\UI\UIHandlers</Filter>
     </ClInclude>
     <ClInclude Include="Source\ShipHandlers.h">
-      <Filter>Adventure\UI\Handlers</Filter>
+      <Filter>Adventure\UI\UIHandlers</Filter>
     </ClInclude>
     <ClInclude Include="Source\PersonHandlers.h">
-      <Filter>Adventure\UI\Handlers</Filter>
+      <Filter>Adventure\UI\UIHandlers</Filter>
     </ClInclude>
     <ClInclude Include="Source\adventureUI.h">
-      <Filter>Adventure\UI\General</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Shop.h">
       <Filter>Adventure\UI\General</Filter>
     </ClInclude>
     <ClInclude Include="Source\shopClass.h">
@@ -446,20 +443,53 @@
     <ClInclude Include="Source\itemScheme.h">
       <Filter>Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Source\hangarUI.h">
-      <Filter>Adventure\UI\General</Filter>
-    </ClInclude>
     <ClInclude Include="Source\HangarHandlers.h">
-      <Filter>Adventure\UI\Handlers</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\rewardPanelUI.h">
-      <Filter>Adventure\UI\General</Filter>
+      <Filter>Adventure\UI\UIHandlers</Filter>
     </ClInclude>
     <ClInclude Include="Source\RewardsHandlers.h">
-      <Filter>Adventure\UI\Handlers</Filter>
+      <Filter>Adventure\UI\UIHandlers</Filter>
     </ClInclude>
     <ClInclude Include="Source\spaceBattleAnimationData.h">
       <Filter>SpaceBattle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\gameOverGamemode.h">
+      <Filter>Adventure</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CraftUI.h">
+      <Filter>Adventure\UI\General\UIShipPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hangarUI.h">
+      <Filter>Adventure\UI\General\UIShipPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\personEquipmentUI.h">
+      <Filter>Adventure\UI\General\UIShipPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\shipModulesUI.h">
+      <Filter>Adventure\UI\General\UIShipPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\tableInventory.h">
+      <Filter>Adventure\UI\General\UIShipPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shop.h">
+      <Filter>Adventure\UI\General\UIAdventureElements</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\rewardPanelUI.h">
+      <Filter>Adventure\UI\General\UIAdventureElements</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\map.h">
+      <Filter>Adventure\UI\General\UIAdventureElements</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\itemUtils.h">
+      <Filter>Adventure\UI\General\UIHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UIExtensions.h">
+      <Filter>Adventure\UI\General\UIHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UITooltipsCreate.h">
+      <Filter>Adventure\UI\General\UITooltips</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UITooltipsApply.h">
+      <Filter>Adventure\UI\General\UITooltips</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

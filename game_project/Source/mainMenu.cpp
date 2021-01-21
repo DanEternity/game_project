@@ -100,8 +100,9 @@ void createMenuButtons()
 	int i = 0;
 	for (const auto& widget : gEnv->game.mainMenu.mainMenuWidgets)
 	{
-		widget->setSize(300, 150);
-		widget->setPosition("(&.size - size) / 2", 200 + i * 200);
+		widget->setSize("25%", "20%");
+		int posY = widget->getParent()->getSize().y * 0.10 + widget->getParent()->getSize().y * 0.25 * i;
+		widget->setPosition("(&.size - size) / 2", posY);
 		widget->setRenderer(gEnv->globalTheme.getRenderer("Button"));
 		i++;
 	}

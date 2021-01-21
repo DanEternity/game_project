@@ -15,16 +15,6 @@ namespace characterAspect
 	};
 }
 
-namespace characterRole
-{
-	enum Role
-	{
-		noneRole,
-		captain,
-		pilot,
-	};
-}
-
 class Character : public BaseObject
 {
 private:
@@ -48,7 +38,7 @@ public:
 	// stats
 
 	std::map<statNames::StatName, Stat*> characterStats;
-	std::vector<StatModEffect*> effectsForShip;
+	std::vector<StatModEffectSkill*> skillForShip;
 
 	bool haveRole = false;
 
@@ -136,12 +126,12 @@ public:
 		skillLevels.push_back(2);
 		skillLevels.push_back(3);
 		skillLevels.push_back(3);
-		std::vector<StatModEffect*> effects;
-		effects.push_back(new StatModEffect(targetType::character, statNames::characterHealth, 10, 0, 0, 0));
-		effects.push_back(new StatModEffect(targetType::character, statNames::characterHealth, 20, 0, 0, 0));
-		effects.push_back(new StatModEffect(targetType::character, statNames::characterHealth, 30, 0, 0, 0));
-		effects.push_back(new StatModEffect(targetType::ship, statNames::hull, 0, 0.06, 0, 0));
-		effects.push_back(new StatModEffect(targetType::ship, statNames::powerSupply, 30, 0, 0, 0));
+		std::vector<StatModEffectSkill*> effects;
+		effects.push_back(new StatModEffectSkill(targetType::character, statNames::characterHealth, 10, 0, 0, 0, characterRole::noneRole));
+		effects.push_back(new StatModEffectSkill(targetType::character, statNames::characterHealth, 20, 0, 0, 0, characterRole::noneRole));
+		effects.push_back(new StatModEffectSkill(targetType::character, statNames::characterHealth, 30, 0, 0, 0, characterRole::noneRole));
+		effects.push_back(new StatModEffectSkill(targetType::ship, statNames::hull, 0, 0.06, 0, 0, characterRole::noneRole));
+		effects.push_back(new StatModEffectSkill(targetType::ship, statNames::powerSupply, 30, 0, 0, 0, characterRole::engineer));
 
 		createNewTree(addPassives(names, skillLevels, effects));
 
@@ -157,7 +147,7 @@ public:
 		skillTrees[treeCount++] = passives;
 	}
 
-	std::vector<PassiveSkill*> addPassives(std::vector<std::wstring> names, std::vector<int> levels, std::vector<StatModEffect*> effects)
+	std::vector<PassiveSkill*> addPassives(std::vector<std::wstring> names, std::vector<int> levels, std::vector<StatModEffectSkill*> effects)
 	{
 		std::vector<PassiveSkill*> vct;
 		if (names.size() != effects.size()) return vct;

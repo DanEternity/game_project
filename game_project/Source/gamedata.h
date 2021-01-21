@@ -98,6 +98,7 @@ namespace gameMode
 		groundBattleMode,
 		mainMenuMode,
 		menuOverlay,
+		gameover,
 	};
 
 } // namespace gameMode
@@ -153,6 +154,9 @@ public:
 
 	// Can be used to locate return point if needed
 	gameMode::GameMode lastActiveGameMode = gameMode::blankMode;
+
+	// Gamemode flag
+	bool endGameFlag = false;
 
 	// gameloader.h section
 

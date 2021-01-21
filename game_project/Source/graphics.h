@@ -4,7 +4,7 @@
 class Graphics
 {
 public:
-	int windowSizeX = 1920;
-	int windowSizeY = 1080;
+	int windowSizeX = 1440;
+	int windowSizeY = 768;
 	bool fullscreen = false;
 };

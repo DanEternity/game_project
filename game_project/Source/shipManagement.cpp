@@ -117,9 +117,10 @@ void collectModules(Ship * p)
 	{
 		if (c != NULL)
 		{
-			for (auto e : c->effectsForShip)
+			for (auto e : c->skillForShip)
 			{
-				applyStatEffect(p, e);
+				if (c->role == e->targetRole || e->targetRole == characterRole::noneRole)
+					applyStatEffect(p, e);
 			}
 		}
 	}

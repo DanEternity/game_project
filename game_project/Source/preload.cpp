@@ -58,6 +58,10 @@ void preloadModels()
 	createModelDescriptor(L"spaceBattleParticleBase", "\\resources\\textures\\Battle\\particleBase.png");
 	createModelDescriptor(L"spaceBattleParticleBaseRed", "\\resources\\textures\\Battle\\particleBaseRed.png");
 	//createModelDescriptor(L"fsfa", "fsaf", true);
+
+	// System textures
+	createModelDescriptor(L"systemGameOverTest", "\\resources\\textures\\System\\gameover.png");
+
 }
 
 void preloadScripts()

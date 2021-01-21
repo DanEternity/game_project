@@ -8,6 +8,7 @@
 #include "adventureUI.h"
 #include "worldGenerator.h"
 #include "spaceBattleCore.h"
+#include "gameOverGamemode.h"
 
 void updateGameCycle(double deltaTime)
 {
@@ -60,6 +61,10 @@ void updateGameCycle(double deltaTime)
 			// Due to manual map segments calculation its not possible to draw it separately
 			// But it's possible to disable controls and freeze animations
 			updateSpaceBattle(deltaTime);
+			break;
+		case gameMode::gameover:
+			updateGameOverGamemode(deltaTime);
+			drawGameOverGamemode(deltaTime);
 			break;
 		default:
 			// invalid game mode

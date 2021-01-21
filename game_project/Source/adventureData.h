@@ -36,4 +36,8 @@ public:
 
 	sf::Sprite * bgImage = NULL;
 
+	// special
+
+	sf::Sprite * sysImage = NULL;
+
 };
