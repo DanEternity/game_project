@@ -222,9 +222,9 @@ void updateAdventureGameMode(double delteTime)
 			gEnv->game.player.PlayerShipMoving = true;
 			gEnv->game.player.shipModel = gEnv->game.player.shipModelMove;
 			float angle = 0;
-			if (qMove.x == 1)
+			if (qMove.x == 3)
 			{
-				if (qMove.y == 1)
+				if (qMove.y == 3)
 				{
 					angle = 45;
 				}
@@ -244,7 +244,7 @@ void updateAdventureGameMode(double delteTime)
 
 			if (qMove.x == 0)
 			{
-				if (qMove.y == 1)
+				if (qMove.y == 3)
 				{
 					angle = 90;
 				}
@@ -257,9 +257,9 @@ void updateAdventureGameMode(double delteTime)
 				}
 			}
 
-			if (qMove.x == -1)
+			if (qMove.x == -3)
 			{
-				if (qMove.y == 1)
+				if (qMove.y == 3)
 				{
 					angle = 45+90;
 				}

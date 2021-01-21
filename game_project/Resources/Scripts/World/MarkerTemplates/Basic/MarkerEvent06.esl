@@ -18,7 +18,7 @@ LinkScriptToMarker "$self" to "$_marker"
 EditMarkerProperties "$_marker" "10" "5" "500" "500" "Unknown signal" "Something dangerous"
 
 
-Terminate 
+Terminate
 
 // start section
 @start
