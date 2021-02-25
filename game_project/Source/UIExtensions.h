@@ -47,4 +47,4 @@ void swapElements(TargetInventory::targetInventory target, int id);
 void rebuildAll();
 
 std::wstring createFloatString(float number);
-
+std::wstring createStringByStatName(statNames::StatName stat);

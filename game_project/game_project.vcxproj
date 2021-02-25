@@ -331,6 +331,8 @@
     <ClCompile Include="Source\tableInventory.cpp" />
     <ClCompile Include="Source\uiEventHandlers.cpp" />
     <ClCompile Include="Source\UIExtensions.cpp" />
+    <ClCompile Include="Source\UITooltipsApply.cpp" />
+    <ClCompile Include="Source\UITooltipsCreate.cpp" />
     <ClCompile Include="Source\worldGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -416,6 +418,8 @@
     <ClInclude Include="Source\uiData.h" />
     <ClInclude Include="Source\uiEventHandlers.h" />
     <ClInclude Include="Source\UIExtensions.h" />
+    <ClInclude Include="Source\UITooltipsApply.h" />
+    <ClInclude Include="Source\UITooltipsCreate.h" />
     <ClInclude Include="Source\valueObjects.h" />
     <ClInclude Include="Source\worldGenerator.h" />
     <ClInclude Include="Source\worldGeneratorData.h" />

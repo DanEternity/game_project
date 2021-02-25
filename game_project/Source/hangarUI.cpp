@@ -202,21 +202,3 @@ void buildFigtherModules(int id)
 	updateShipValues(gEnv->game.player.fighterPlanes[id]);
 	createShipStatPanel(gEnv->game.player.fighterPlanes[id], pan);
 }
-
-void applyFighterTooltipUI(int fighterId, int moduleId)
-{
-	if (gEnv->game.player.fighterPlanes[fighterId]->modules[moduleId] != NULL)
-	{
-		switch (gEnv->game.player.fighterPlanes[fighterId]->modules[moduleId]->moduleType)
-		{
-		case moduleType::system:
-			createModuleTooltip(static_cast<Module*>(gEnv->game.player.fighterPlanes[fighterId]->modules[moduleId]));
-			break;
-		case moduleType::weapon:
-			createWeaponModuleTooltip(static_cast<WeaponModule*>(gEnv->game.player.fighterPlanes[fighterId]->modules[moduleId]));
-			break;
-		}
-		gEnv->game.ui.tooltipDescription->setVisible(true);
-	}
-	else gEnv->game.ui.tooltipDescription->setVisible(false);
-}

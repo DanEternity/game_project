@@ -296,7 +296,20 @@ void disableAllAdventureUI()
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("fighterStats"), false);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::Panel>("priorityButton"), false);
 	enableWidget(gEnv->game.adventureGUI.get<tgui::BitmapButton>("swipeFighterLeft"), false);
-	enableWidget(gEnv->game.adventureGUI.get<tgui::BitmapButton>("swipeFighterRight"), false);}
+	enableWidget(gEnv->game.adventureGUI.get<tgui::BitmapButton>("swipeFighterRight"), false);
+	
+	if (gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel") != nullptr)
+	{
+		gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel")->removeAllWidgets();
+		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::Panel>("tempRightPanel"));
+	}
+	if (gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("crewBonusesPanel") != nullptr)
+	{
+		gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("crewBonusesPanel")->removeAllWidgets();
+		gEnv->game.adventureGUI.remove(gEnv->game.adventureGUI.get<tgui::ScrollablePanel>("crewBonusesPanel"));
+	}
+}
+
 
 void updateCategoryFilters()
 {

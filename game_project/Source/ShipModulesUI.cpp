@@ -126,21 +126,3 @@ void changeShipModulePriority(int id, bool isUp, Ship *s)
 	updateShipValues(s);
 	buildShipStats();
 }
-
-void applyModuleTooltipShipUI(int id)
-{
-	if (gEnv->game.player.ship->modules[id] != NULL)
-	{
-		switch (gEnv->game.player.ship->modules[id]->moduleType)
-		{
-		case moduleType::system:
-			createModuleTooltip(static_cast<Module*>(gEnv->game.player.ship->modules[id]));
-			break;
-		case moduleType::weapon:
-			createWeaponModuleTooltip(static_cast<WeaponModule*>(gEnv->game.player.ship->modules[id]));
-			break;
-		}
-		gEnv->game.ui.tooltipDescription->setVisible(true);
-	}
-	else gEnv->game.ui.tooltipDescription->setVisible(false);
-}
